@@ -16,6 +16,17 @@ Vector2D vector2;
 Vector2D projectionVector;
 Vector2D rejectionVector;
 
+Vector2D aVector;
+Vector2D bVector;
+Vector2D aMinusBVector;
+Vector2D aVectorLerpPortion;
+Vector2D bVectorLerpPortion;
+Vector2D lerpResultVector;
+
+Vector2D p;
+Vector2D n;
+Vector2D d;
+
 void MyBasicVectorEquationCallback(const BasicVectorEquationInfo& info)
 {
 	left = info.scalar1 * Vector2D(info.x1, info.y1);
@@ -56,13 +67,29 @@ void MyDotProductDataCollback(const DotProductData& data)
 	}
 }
 
+void MyLerpDataCallback(const LerpData& data)
+{
+	aVector = Vector2D(data.a_i, data.a_j);
+	bVector = Vector2D(data.b_i, data.b_j);
+	aMinusBVector = bVector-aVector;
+	aVectorLerpPortion = (1-data.beta)*aVector;
+	bVectorLerpPortion = data.beta * bVector;
+	lerpResultVector = LERP(aVector, bVector, data.beta);
+}
+
+//void myLineEquationDataCallback(const LineEquationData& data)
+//{
+//	n = Vector2D(data.n_i, data.n_j);
+//	p = Vector2D(data.p_x, data.n_i*data.p_x + data.d);
+//	//d = n.x*p.x + n.y*p.y;
+//	d = data.d;
+//}
 
 int main(int argc, char* argv[])
 {
 	Engine::Init();
 
 	RenderUI renderUI;
-
 	renderUI.setBasicVectorEquationData(
 		MyBasicVectorEquationCallback,
 		left, right, result);
@@ -74,6 +101,15 @@ int main(int argc, char* argv[])
 	renderUI.setDotProductData(
 		vector1, vector2, projectionVector, rejectionVector, 
 		MyDotProductDataCollback);
+
+	renderUI.setLerpData(
+		aVector, bVector, aMinusBVector, aVectorLerpPortion, 
+		bVectorLerpPortion, lerpResultVector, 
+		MyLerpDataCallback);
+
+	//renderUI.setLineEquationData(
+	//	p, n, d, myLineEquationDataCallback);
+
 	if( ! renderUI.initialize(argc, argv))
 		return -1;
 	return renderUI.run();

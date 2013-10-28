@@ -1,12 +1,15 @@
 #include "Math.h" 
+#include <iostream>
 #ifndef VECTOR2D_H
 #define VECTOR2D_H
+using std::cout;
+using std::endl;
 struct Vector2D
 {
 	float x;
 	float y;
 	Vector2D(float x = 0, float y = 0) : x(x), y(y) {}
-	friend Vector2D operator*(float scalar, const Vector2D& right);
+	
 	operator float*()
 	{
 		return &x;
@@ -16,9 +19,12 @@ struct Vector2D
 	{
 		return sqrt((this->x*this->x)+(this->y*this->y));
 	}
+	float lengthSquared()
+	{
+		return (this->x*this->x)+(this->y*this->y);
+	}
 	Vector2D perpCW()
 	{
-		//change x
 		return Vector2D(y, x*-1);
 	}
 	Vector2D perpCCW()
@@ -29,13 +35,17 @@ struct Vector2D
 	{
 		return Vector2D(1/length() * x, 1/length() * y);
 	}
+	Vector2D dot()
+	{
+		return x*x + y*y;
+	}
 };
 
-//std::ostream& operator<<(std::ostream& stream, const Vector& right)
-//{
-//	cout << "{" << right.x << ", " << right.y << "}";
-//	return stream;
-//}
+std::ostream& operator<<(std::ostream& stream, const Vector2D& right)
+{
+	cout << "{" << right.x << ", " << right.y << "}";
+	return stream;
+}
 
 
 Vector2D operator+(const Vector2D& left, const Vector2D& right)
@@ -67,4 +77,11 @@ float dot(const Vector2D& left, const Vector2D& right)
 {
 	return left.x*right.x + left.y*right.y;
 }
+
+
+Vector2D LERP(const Vector2D& left, const Vector2D& right, float beta)
+{
+	return ((1-beta)*left) + (beta*right);
+}
+
 #endif

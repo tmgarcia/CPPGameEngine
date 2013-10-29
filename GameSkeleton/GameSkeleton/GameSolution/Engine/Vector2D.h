@@ -33,7 +33,7 @@ struct Vector2D
 	}
 	inline Vector2D normalized()
 	{
-		if(length!=0)
+		if(length()!=0)
 			return Vector2D(1/length() * x, 1/length() * y);
 		else
 			return Vector2D(0, 0);

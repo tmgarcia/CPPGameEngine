@@ -15,71 +15,80 @@ struct Vector2D
 		return &x;
 	}
 
-	float length()
+	inline float length() const
 	{
 		return sqrt((this->x*this->x)+(this->y*this->y));
 	}
-	float lengthSquared()
+	inline float lengthSquared() const
 	{
 		return (this->x*this->x)+(this->y*this->y);
 	}
-	Vector2D perpCW()
+	inline Vector2D perpCW()
 	{
 		return Vector2D(y, x*-1);
 	}
-	Vector2D perpCCW()
+	inline Vector2D perpCCW()
 	{
 		return Vector2D(y*-1, x);
 	}
-	Vector2D normalized()
+	inline Vector2D normalized()
 	{
-		return Vector2D(1/length() * x, 1/length() * y);
+		if(length!=0)
+			return Vector2D(1/length() * x, 1/length() * y);
 	}
-	Vector2D dot()
+	inline float selfDot()
 	{
 		return x*x + y*y;
 	}
+	inline float dot(const Vector2D& right)
+	{
+		return x*right.x + y*right.y;
+	}
+	inline Vector2D projectOnto(const Vector2D& right)
+	{
+		return Vector2D((dot(right)*right.x)/right.lengthSquared(), (dot(right)*right.y)/right.lengthSquared());
+	}
 };
 
-std::ostream& operator<<(std::ostream& stream, const Vector2D& right)
+inline std::ostream& operator<<(std::ostream& stream, const Vector2D& right)
 {
 	cout << "{" << right.x << ", " << right.y << "}";
 	return stream;
 }
 
 
-Vector2D operator+(const Vector2D& left, const Vector2D& right)
+inline Vector2D operator+(const Vector2D& left, const Vector2D& right)
 {
 	return Vector2D(left.x + right.x, left.y + right.y);
 }
 
-Vector2D operator-(const Vector2D& left, const Vector2D& right)
+inline Vector2D operator-(const Vector2D& left, const Vector2D& right)
 {
 	return Vector2D(left.x + (-1*right.x), left.y + (-1*right.y));
 }
 
-Vector2D operator*(float scalar, const Vector2D& right)
+inline Vector2D operator*(float scalar, const Vector2D& right)
 {
 	return Vector2D(scalar * right.x, scalar * right.y);
 }
 
-Vector2D operator*(const Vector2D& left, float scalar)
+inline Vector2D operator*(const Vector2D& left, float scalar)
 {
 	return Vector2D(left.x * scalar, left.y * scalar);
 }
 
-Vector2D operator/(const Vector2D& left, float scalar)
+inline Vector2D operator/(const Vector2D& left, float scalar)
 {
 	return Vector2D(left.x/scalar, left.y/scalar);
 }
 
-float dot(const Vector2D& left, const Vector2D& right)
+inline float dot(const Vector2D& left, const Vector2D& right)
 {
 	return left.x*right.x + left.y*right.y;
 }
 
 
-Vector2D LERP(const Vector2D& left, const Vector2D& right, float beta)
+inline Vector2D LERP(const Vector2D& left, const Vector2D& right, float beta)
 {
 	return ((1-beta)*left) + (beta*right);
 }

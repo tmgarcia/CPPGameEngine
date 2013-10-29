@@ -57,12 +57,14 @@ void MyDotProductDataCollback(const DotProductData& data)
 	vector2 = Vector2D(data.v2i, data.v2j);
 	if(data.projectOntoLeftVector)
 	{
-		projectionVector = dot(vector2, vector1.normalized())*vector1.normalized();
+		//projectionVector = dot(vector2, vector1.normalized())*vector1.normalized();
+		projectionVector = vector2.projectOnto(vector1);
 		rejectionVector = vector2 - projectionVector;
 	}
 	else
 	{
-		projectionVector = dot(vector1, vector2.normalized())*vector2.normalized();
+		//projectionVector = dot(vector1, vector2.normalized())*vector2.normalized();
+		projectionVector = vector1.projectOnto(vector2);
 		rejectionVector = vector1 - projectionVector;
 	}
 }

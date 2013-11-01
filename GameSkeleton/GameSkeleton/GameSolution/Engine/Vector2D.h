@@ -25,11 +25,13 @@ struct Vector2D
 	}
 	inline Vector2D perpCW()
 	{
-		return Vector2D(y, x*-1);
+		//return Vector2D(y, x*-1);
+		return Vector2D(y*-1, x);
 	}
 	inline Vector2D perpCCW()
 	{
-		return Vector2D(y*-1, x);
+		//return Vector2D(y*-1, x);
+		return Vector2D(y, x*-1);
 	}
 	inline Vector2D normalized()
 	{

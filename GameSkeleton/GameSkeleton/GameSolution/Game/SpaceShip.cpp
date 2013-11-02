@@ -84,6 +84,8 @@ Vector2D* lerperPoints[] =
 void SpaceShip::draw(Core::Graphics& g)
 {
 	g.SetBackgroundColor(RGB(25,25,25));
+
+
 	g.SetColor(RGB(150, 150, 150));
 	g.DrawString(50, 50, "Instructions");
 	g.DrawString(60, 65, "Movement:");

@@ -52,6 +52,10 @@ struct Vector2D
 	{
 		return Vector2D((dot(right)*right.x)/right.lengthSquared(), (dot(right)*right.y)/right.lengthSquared());
 	}
+	inline Vector2D rotate(float angle)
+	{
+		return Vector2D((x*cos(angle)) - (y*sin(angle)), (x*sin(angle)) + (y*cos(angle)));
+	}
 };
 
 inline std::ostream& operator<<(std::ostream& stream, const Vector2D& right)

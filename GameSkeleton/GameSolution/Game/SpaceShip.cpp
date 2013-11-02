@@ -195,7 +195,7 @@ void SpaceShip::update(float dt)
 	{
 		velocity.y += dt * velocityScale;
 	}
-	if(Core::Input::IsPressed('W')
+	if(Core::Input::IsPressed('W'))
 	{
 		velocity.y -= dt * velocityScale;
 	}

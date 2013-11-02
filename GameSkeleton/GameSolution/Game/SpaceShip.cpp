@@ -138,21 +138,21 @@ void SpaceShip::draw(Core::Graphics& g)
 void SpaceShip::update(float dt)
 {
 	//Switching between wrapping and bouncing
-	if(Core::Input::IsPressed(Core::Input::KEY_1))
+	if(Core::Input::IsPressed('1'))
 	{
 		bouncing = true;
 		wrapping = false;
 		walls = false;
 		position = Vector2D(800/2, 600/2);
 	}
-	if(Core::Input::IsPressed(Core::Input::KEY_2))
+	if(Core::Input::IsPressed('2'))
 	{
 		bouncing = false;
 		wrapping = true;
 		walls = false;
 		position = Vector2D(800/2, 600/2);
 	}
-	if(Core::Input::IsPressed(Core::Input::KEY_3))
+	if(Core::Input::IsPressed('3'))
 	{
 		bouncing = false;
 		wrapping = false;
@@ -183,19 +183,19 @@ void SpaceShip::update(float dt)
 	float velocityScale = 50;
 
 	//WASD movement controls
-	if(Core::Input::IsPressed(Core::Input::KEY_D))
+	if(Core::Input::IsPressed('D'))
 	{
 		velocity.x += dt * velocityScale;
 	}
-	if(Core::Input::IsPressed(Core::Input::KEY_A))
+	if(Core::Input::IsPressed('A'))
 	{
 		velocity.x -= dt * velocityScale;
 	}
-	if(Core::Input::IsPressed(Core::Input::KEY_S))
+	if(Core::Input::IsPressed('S'))
 	{
 		velocity.y += dt * velocityScale;
 	}
-	if(Core::Input::IsPressed(Core::Input::KEY_W))
+	if(Core::Input::IsPressed('W')
 	{
 		velocity.y -= dt * velocityScale;
 	}

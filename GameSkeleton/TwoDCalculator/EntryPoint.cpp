@@ -86,7 +86,7 @@ void MyLerpDataCallback(const LerpData& data)
 Vector2D linResult;
 void MyLinearTransformationCallback(const LinearTransformationData& data)
 {
-	Matrix2D op = Matrix2D(Vector2D(data.m00,data.m10), Vector2D(data.m01, data.m11));
+	Matrix2D op = Matrix2D(data.m00,data.m01, data.m10, data.m11);
 	Vector2D v = Vector2D(data.v0, data.v1);
 	linResult = op*v;
 }
@@ -95,15 +95,15 @@ Vector3D affResult[5];
 void MyAffineTransformationCallback(const AffineTransformationData& data)
 {
 	Matrix3D mat;
-	mat.a.x = data.data[0];
-	mat.b.x = data.data[1];
-	mat.c.x = data.data[2];
-	mat.a.y = data.data[3];
-	mat.b.y = data.data[4];
-	mat.c.y = data.data[5];
-	mat.a.z = data.data[6];
-	mat.b.z = data.data[7];
-	mat.c.z = data.data[8];
+	mat.ax = data.data[0];
+	mat.bx = data.data[1];
+	mat.cx = data.data[2];
+	mat.ay = data.data[3];
+	mat.by = data.data[4];
+	mat.cy = data.data[5];
+	mat.az = data.data[6];
+	mat.bz = data.data[7];
+	mat.cz = data.data[8];
 
 	affResult[0].x = data.data[9];
 	affResult[0].y = data.data[10];
@@ -154,7 +154,6 @@ Matrix3D currentTransform;
 
 void MyMatrixTransformCallback2D(const MatrixTransformData2D& data)
 {
-
 	Matrix3D temp = 
 		scale(data.scaleX, data.scaleY) * 
 		rotate(data.rotate) *
@@ -204,7 +203,8 @@ int main(int argc, char* argv[])
 		affResult[0], MyAffineTransformationCallback);
 
 	renderUI.set2DMatrixVerticesTransformData(
-		lines[0], numLines, reinterpret_cast<float*>(&matrices), reinterpret_cast<float*>(&currentTransform), 
+		lines[0], numLines, reinterpret_cast<float*>(&matrices), 
+		reinterpret_cast<float*>(&currentTransform), 
 		MyMatrixTransformCallback2D);
 		  
 	//renderUI.setLineEquationData(

@@ -3,42 +3,54 @@
 
 struct Matrix3D
 {
-	Vector3D a;
-	Vector3D b;
-	Vector3D c;
-	Matrix3D(Vector3D a = Vector3D(1,0,0), Vector3D b = Vector3D(0,1,0), Vector3D c = Vector3D(0,0,1)) : a(a), b(b), c(c) {}
+	union
+	{
+		float values[3][3];
+		struct
+		{
+			float ax;
+			float bx;
+			float cx;
+			float ay;
+			float by;
+			float cy;
+			float az;
+			float bz;
+			float cz;
+		};
+	};
+	Matrix3D(float ax = 1, float bx = 0, float cx = 0, float ay = 0, float by = 1, float cy = 0, float az = 0, float bz = 0, float cz = 1) : ax(ax), bx(bx), cx(cx), ay(ay), by(by), cy(cy), az(az), bz(bz), cz(cz){}
 };
 
 inline Matrix3D operator*(const Matrix3D& left, const Matrix3D&right)
 {
-	return Matrix3D(
-		Vector3D(
-			left.a.x*right.a.x + left.b.x*right.a.y + left.c.x*right.a.z,
-			left.a.y*right.a.x + left.b.y*right.a.y + left.c.y*right.a.z,
-			left.a.z*right.a.x + left.b.z*right.a.y + left.c.z*right.a.z),
-		Vector3D(
-			left.a.x*right.b.x + left.b.x*right.b.y + left.c.x*right.b.z,
-			left.a.y*right.b.x + left.b.y*right.b.y + left.c.y*right.b.z,
-			left.a.z*right.b.x + left.b.z*right.b.y + left.c.z*right.b.z),
-		Vector3D(
-			left.a.x*right.c.x + left.b.x*right.c.y + left.c.x*right.c.z,
-			left.a.y*right.c.x + left.b.y*right.c.y + left.c.y*right.c.z,
-			left.a.z*right.c.x + left.b.z*right.c.y + left.c.z*right.c.z));
+	Matrix3D result;
+		result.ax = left.ax*right.ax + left.bx*right.ay + left.cx*right.az;
+		result.ay = left.ay*right.ax + left.by*right.ay + left.cy*right.az;
+		result.az = left.az*right.ax + left.bz*right.ay + left.cz*right.az;
+		result.bx = left.ax*right.bx + left.bx*right.by + left.cx*right.bz;
+		result.by = left.ay*right.bx + left.by*right.by + left.cy*right.bz;
+		result.bz = left.az*right.bx + left.bz*right.by + left.cz*right.bz;
+		result.cx = left.ax*right.cx + left.bx*right.cy + left.cx*right.cz;
+		result.cy = left.ay*right.cx + left.by*right.cy + left.cy*right.cz;
+		result.cz = left.az*right.cx + left.bz*right.cy + left.cz*right.cz;
+
+	return result;
 }
 
 inline Vector3D operator*(const Matrix3D& left, const Vector3D&right)
 {
 	return Vector3D(
-			left.a.x*right.x + left.b.x*right.y + left.c.x*right.z, 
-			left.a.y*right.x + left.b.y*right.y + left.c.y*right.z,
-			left.a.z*right.x + left.b.z*right.y + left.c.z*right.z); 
+			left.ax*right.x + left.bx*right.y + left.cx*right.z, 
+			left.ay*right.x + left.by*right.y + left.cy*right.z,
+			left.az*right.x + left.bz*right.y + left.cz*right.z); 
 }
 
 inline Matrix3D scale(float sx, float sy)
 {
 	Matrix3D scaled;
-	scaled.a.x = sx;
-	scaled.b.y = sy;
+	scaled.ax = sx;
+	scaled.by = sy;
 
 	return scaled;
 }
@@ -48,17 +60,17 @@ inline Matrix3D rotate(float angle)
 	Matrix3D rotated;
 	float s = sin(angle);
 	float c = cos(angle);
-	rotated.a.x = c;
-	rotated.a.y = s;
-	rotated.b.x = -s;
-	rotated.b.y = c;
+	rotated.ax = c;
+	rotated.ay = s;
+	rotated.bx = -s;
+	rotated.by = c;
 	return rotated;
 }
 
 inline Matrix3D translate(float tx, float ty)
 {
 	Matrix3D translated;
-	translated.c.x = tx;
-	translated.c.y = ty;
+	translated.cx = tx;
+	translated.cy = ty;
 	return translated;
 }

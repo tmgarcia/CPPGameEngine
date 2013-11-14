@@ -3,20 +3,58 @@
 
 
 //Ship's shape
-Vector3D* shipPoints[] =
+//Vector3D* shipPoints[] = 
+//{
+//	new Vector3D(16.0f, 32.0f),
+//	new Vector3D(16.0f, -20.0f),
+//	new Vector3D(12.0f, -20.0f),
+//	new Vector3D(12.0f, -28.0f),
+//	new Vector3D(2.0f, -28.0f),
+//	new Vector3D(2.0f, -32.0f),
+//	new Vector3D(-2.0f, -32.0f),
+//	new Vector3D(-2.0f, -28.0f),
+//	new Vector3D(-12.0f, -28.0f),
+//	new Vector3D(-12.0f, -20.0f),
+//	new Vector3D(-16.0f, -20.0f),
+//	new Vector3D(-16.0f, 32.0f),
+//};
+
+Vector3D* shipPoints[] = 
 {
-	new Vector3D(16.0f, 32.0f),
-	new Vector3D(16.0f, -20.0f),
-	new Vector3D(12.0f, -20.0f),
-	new Vector3D(12.0f, -28.0f),
-	new Vector3D(2.0f, -28.0f),
-	new Vector3D(2.0f, -32.0f),
-	new Vector3D(-2.0f, -32.0f),
-	new Vector3D(-2.0f, -28.0f),
-	new Vector3D(-12.0f, -28.0f),
-	new Vector3D(-12.0f, -20.0f),
-	new Vector3D(-16.0f, -20.0f),
-	new Vector3D(-16.0f, 32.0f),
+	new Vector3D(0.0f, -24.0f),
+	new Vector3D(10.0f, -20.0f),
+	new Vector3D(12.0f, -10.0f),
+	new Vector3D(17.0f, -10.0f),
+	new Vector3D(22.0f, -6.0f),
+	new Vector3D(22.0f, 1.0f),
+	new Vector3D(17.0f, 6.0f),
+	new Vector3D(15.0f, 12.0f),
+	new Vector3D(16.0f, 18.0f),
+	new Vector3D(13.0f, 23.0f),
+	new Vector3D(6.0f, 23.0f),
+	new Vector3D(0.0f, 20.0f),
+	new Vector3D(-6.0f, 23.0f),
+	new Vector3D(-13.0f, 23.0f),
+	new Vector3D(-16.0f, 18.0f),
+	new Vector3D(-15.0f, 12.0f),
+	new Vector3D(-17.0f, 6.0f),
+	new Vector3D(-22.0f, 1.0f),
+	new Vector3D(-22.0f, -6.0f),
+	new Vector3D(-17.0f, -10.0f),
+	new Vector3D(-12.0f, -10.0f),
+	new Vector3D(-10.0f, -20.0f),
+};
+
+Vector3D* shellPoints[] = 
+{
+	new Vector3D(0.0f, -14.0f),
+	new Vector3D(12.0f, -10.0f),
+	new Vector3D(17.0f, 2.0f),
+	new Vector3D(12.0f, 16.0f),
+	new Vector3D(0.0f, 20.0f),
+	new Vector3D(-12.0f, 16.0f),
+	new Vector3D(-17.0f, 2.0f),
+	new Vector3D(-12.0f, -10.0f),
 };
 
 //Wall's shape
@@ -90,13 +128,21 @@ void SpaceShip::draw(Core::Graphics& g)
 	g.DrawString(150, 80, "[3] Toggle Walls");
 
 	//Drawing the Ship
-	g.SetColor(RGB(100, 100, 255));
+	g.SetColor(RGB(100, 255, 100));
 	const unsigned int NUM_POINTS = sizeof(shipPoints) / sizeof(*shipPoints);
 	const Matrix3D transform = translate(position.x, position.y) * rotate(orientation);
 	for(unsigned int i = 0; i< NUM_POINTS; i++)
 	{
 		const Vector3D& p1 = transform * *shipPoints[i];
 		const Vector3D& p2 = transform * *shipPoints [(i+1) % NUM_POINTS];
+		g.DrawLine(p1.x, p1.y, p2.x, p2.y);
+	}
+	g.SetColor(RGB(50, 150, 50));
+	const unsigned int NUM_SH_POINTS = sizeof(shellPoints) / sizeof(*shellPoints);
+	for(unsigned int i = 0; i< NUM_SH_POINTS; i++)
+	{
+		const Vector3D& p1 = transform * *shellPoints[i];
+		const Vector3D& p2 = transform * *shellPoints [(i+1) % NUM_SH_POINTS];
 		g.DrawLine(p1.x, p1.y, p2.x, p2.y);
 	}
 

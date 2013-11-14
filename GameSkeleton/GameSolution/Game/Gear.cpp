@@ -34,11 +34,11 @@ Vector3D* gearPoints[] =
 	new Vector3D(-50.2f, -32.53f),
 	new Vector3D(-32.53f, -50.2f),
 	new Vector3D(-21.92f, -39.6f),
+	new Vector3D(-12.5f, -43.5f),
 };
 
 void Gear::draw(Core::Graphics& g, Vector3D parentPos)
 {
-	g.SetColor(RGB(50,50,50));
 	const unsigned int NUM_POINTS = sizeof(gearPoints) / sizeof(*gearPoints);
 	const Matrix3D transform = 
 		scale(gscale,gscale) * 

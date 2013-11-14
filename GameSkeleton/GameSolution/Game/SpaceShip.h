@@ -14,7 +14,7 @@ public:
 	SpaceShip(bool bouncing = true) : bouncing(bouncing){missilesLaunched = 0; }
 	Vector3D position;
 	Vector3D velocity;
-	Missile* missiles[20];
+	Missile* missiles[50];
 	Turret gun;
 	float missilesLaunched;
 	float orientation;

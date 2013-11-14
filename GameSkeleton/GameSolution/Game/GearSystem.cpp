@@ -31,6 +31,7 @@ void GearSystem::createGear(int i)
 
 void GearSystem::draw(Core::Graphics& g)
 {
+	g.SetColor(RGB(100,100,100));
 	for(unsigned int i = 0; i < NUM_GEARS; i++)
 	{
 		if(i==0)

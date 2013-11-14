@@ -15,6 +15,7 @@ Vector3D* turretPoints[] =
 
 void Turret::draw(Core::Graphics& g, Vector3D shipPosition)
 {
+	g.SetColor(RGB(117, 76, 36));
 	//Drawing the turret
 	const unsigned int NUM_T_POINTS = sizeof(turretPoints) / sizeof(*turretPoints);
 	Vector3D mouse = Vector3D((float)Core::Input::GetMouseX(), (float)Core::Input::GetMouseY());

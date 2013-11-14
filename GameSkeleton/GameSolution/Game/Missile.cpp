@@ -5,10 +5,14 @@
 Vector3D* missilePoints[] = 
 {
 	new Vector3D(0,0),
-	new Vector3D(0, 10),
+	new Vector3D(2.5f, 5.56f),
+	new Vector3D(0.0f, 15.0f),
+	new Vector3D(-2.5f, 5.56f),
+
 };
 void Missile::draw(Core::Graphics& g)
 {
+	g.SetColor(RGB(100, 100, 200));
 	if(firing)
 	{
 		const unsigned int NUM_POINTS = sizeof(missilePoints) / sizeof(*missilePoints);

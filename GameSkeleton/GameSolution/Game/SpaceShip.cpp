@@ -1,64 +1,58 @@
 #include "SpaceShip.h"
+#include "Matrix3D.h"
 
 
-
-//Vectors that make up the ship's shape
-Vector2D* shipPoints[] =
+//Ship's shape
+Vector3D* shipPoints[] =
 {
-	new Vector2D(16.0f, 32.0f),
-	new Vector2D(16.0f, -20.0f),
-	new Vector2D(12.0f, -20.0f),
-	new Vector2D(12.0f, -28.0f),
-	new Vector2D(2.0f, -28.0f),
-	new Vector2D(2.0f, -32.0f),
-	new Vector2D(-2.0f, -32.0f),
-	new Vector2D(-2.0f, -28.0f),
-	new Vector2D(-12.0f, -28.0f),
-	new Vector2D(-12.0f, -20.0f),
-	new Vector2D(-16.0f, -20.0f),
-	new Vector2D(-16.0f, 32.0f),
+	new Vector3D(16.0f, 32.0f),
+	new Vector3D(16.0f, -20.0f),
+	new Vector3D(12.0f, -20.0f),
+	new Vector3D(12.0f, -28.0f),
+	new Vector3D(2.0f, -28.0f),
+	new Vector3D(2.0f, -32.0f),
+	new Vector3D(-2.0f, -32.0f),
+	new Vector3D(-2.0f, -28.0f),
+	new Vector3D(-12.0f, -28.0f),
+	new Vector3D(-12.0f, -20.0f),
+	new Vector3D(-16.0f, -20.0f),
+	new Vector3D(-16.0f, 32.0f),
 };
 
-//Arbitrary wall points (to be changed & added to)
-Vector2D* meWall[] = 
+//Wall's shape
+Vector3D* meWall[] = 
 {
-	//T Shape
-	/*new Vector2D(100.0f, 50.0f),
-	new Vector2D(700.0f, 50.0f),
-	new Vector2D(700.0f, 200.0f),
-	new Vector2D(500.0f, 200.0f),
-	new Vector2D(500.0f, 550.0f),
-	new Vector2D(300.0f, 550.0f),
-	new Vector2D(300.0f, 200.0f),
-	new Vector2D(100.0f, 200.0f),*/
-
-	//Square
-	/*new Vector2D(100, 100),
-	new Vector2D(700, 100),
-	new Vector2D(700, 500),
-	new Vector2D(100, 500),*/
-
 	//Diamond
-	new Vector2D(400, 50),
-	new Vector2D(750, 300),
-	new Vector2D(400, 550),
-	new Vector2D(50, 300),
+	new Vector3D(400, 50, 0),
+	new Vector3D(750, 300, 0),
+	new Vector3D(400, 550, 0),
+	new Vector3D(50, 300, 0),
 };
 
-Vector2D* lerpPoints[] = 
+//Lerper's lerping direction
+Vector3D* lerpPoints[] = 
 {
-	new Vector2D(100.0f, 100.0f),
-	new Vector2D(700.0f, 100.0f),
-	new Vector2D(700.0f, 500.0f),
-	new Vector2D(100.0f, 500.0f),
+	new Vector3D(100.0f, 100.0f),
+	new Vector3D(700.0f, 100.0f),
+	new Vector3D(700.0f, 500.0f),
+	new Vector3D(100.0f, 500.0f),
 };
 
-Vector2D lerperPosition = *lerpPoints[0];
+//Lerper's shape
+Vector3D* lerperPoints[] = 
+{
+	new Vector3D(0.0f, 0.0f),
+	new Vector3D(25.0f, 0.0f),
+	new Vector3D(25.0f, 25.0f),
+	new Vector3D(0.0f, 25.0f),
+};
+
+//Lerper pathing
+Vector3D lerperPosition = *lerpPoints[0];
 unsigned int sourceLerpPoint = 0;
 unsigned int destinationLerpPoint = 1;
 float alpha = 0.0f;
 const unsigned int NUM_LERP_POINTS = sizeof(lerpPoints) / sizeof(*lerpPoints);
-
 void lerpTheLerper(float dt)
 {
 	lerperPosition = LERP(*lerpPoints[sourceLerpPoint], *lerpPoints[destinationLerpPoint], alpha);
@@ -71,21 +65,14 @@ void lerpTheLerper(float dt)
 	}
 }
 
-Vector2D* lerperPoints[] = 
-{
-	new Vector2D(0.0f, 0.0f),
-	new Vector2D(25.0f, 0.0f),
-	new Vector2D(25.0f, 25.0f),
-	new Vector2D(0.0f, 25.0f),
+GearSystem ge = GearSystem(Vector3D(300, 300, 1));
 
-};
-
-//Draw Spaceship and arbitrary wall
+//DRAW
 void SpaceShip::draw(Core::Graphics& g)
 {
 	g.SetBackgroundColor(RGB(25,25,25));
 
-
+	//On-screen instructions
 	g.SetColor(RGB(150, 150, 150));
 	g.DrawString(50, 50, "Instructions");
 	g.DrawString(60, 65, "Movement:");
@@ -98,106 +85,122 @@ void SpaceShip::draw(Core::Graphics& g)
 	g.DrawString(90, 130, "v");
 	g.DrawString(50, 140, "[<-] Rotate left");
 	g.DrawString(50, 150, "[->] Rotate right");
-
 	g.DrawString(150, 50, "[1] Toggle Bouncing");
 	g.DrawString(150, 65, "[2] Toggle Wrapping");
 	g.DrawString(150, 80, "[3] Toggle Walls");
 
-
+	//Drawing the Ship
 	g.SetColor(RGB(100, 100, 255));
 	const unsigned int NUM_POINTS = sizeof(shipPoints) / sizeof(*shipPoints);
+	const Matrix3D transform = translate(position.x, position.y) * rotate(orientation);
 	for(unsigned int i = 0; i< NUM_POINTS; i++)
 	{
-		const Vector2D& p1 = position + *shipPoints[i];
-		const Vector2D& p2 = position + *shipPoints [(i+1) % NUM_POINTS];
+		const Vector3D& p1 = transform * *shipPoints[i];
+		const Vector3D& p2 = transform * *shipPoints [(i+1) % NUM_POINTS];
 		g.DrawLine(p1.x, p1.y, p2.x, p2.y);
 	}
+
+	gun.draw(g, position);
+
+	//Drawing the walls
 	if(walls)
 	{
 		g.SetColor(RGB(255, 100, 255));
 		const unsigned int NUM_WALL_POINTS = sizeof(meWall) / sizeof(*meWall);
 		for(unsigned int i = 0; i< NUM_WALL_POINTS; i++)
 		{
-			const Vector2D& w1 = *meWall[i];
-			const Vector2D& w2 = *meWall [(i+1) % NUM_WALL_POINTS];
+			const Vector3D& w1 = *meWall[i];
+			const Vector3D& w2 = *meWall [(i+1) % NUM_WALL_POINTS];
 			g.DrawLine(w1.x, w1.y, w2.x, w2.y);
 		}
 	}
+	//Drawing the lerper
 	g.SetColor(RGB(255, 255, 100));
 	const unsigned int NUM_LERPER_POINTS = sizeof(lerperPoints) / sizeof(*lerperPoints);
 	for(unsigned int i = 0; i< NUM_LERPER_POINTS; i++)
 	{
-		const Vector2D& l1 = lerperPosition + *lerperPoints[i];
-		const Vector2D& l2 = lerperPosition + *lerperPoints[(i+1) % NUM_LERPER_POINTS];
+		const Vector3D& l1 = lerperPosition + *lerperPoints[i];
+		const Vector3D& l2 = lerperPosition + *lerperPoints[(i+1) % NUM_LERPER_POINTS];
 		g.DrawLine(l1.x, l1.y, l2.x, l2.y);
 	}
 
+	if(missilesLaunched>0)
+	{
+		for(int i = 0; i < (int)missilesLaunched; i++)
+		{
+			(*missiles[i]).draw(g);
+		}
+	}
+	ge.draw(g);
 }
 
 //SpaceShip update
 void SpaceShip::update(float dt)
 {
-	//Switching between wrapping and bouncing
+	ge.update(dt);
+	//Missile shooting
+	if(Core::Input::IsPressed(Core::Input::BUTTON_LEFT))
+	{
+		if(missilesLaunched<20)
+		{
+			missiles[(int)missilesLaunched] = new Missile(gun.tip, gun.turnTurret);
+			missilesLaunched++;
+		}
+	}
+	if(missilesLaunched>0)
+	{
+		for(int i = 0; i < (int)missilesLaunched; i++)
+		{
+			(*missiles[i]).update(dt);
+		}
+	}
+
+	//Switching between wrapping bouncing and the wall
 	if(Core::Input::IsPressed('1'))
 	{
 		bouncing = true;
 		wrapping = false;
 		walls = false;
-		position = Vector2D(800/2, 600/2);
+		position = Vector3D(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
 	}
 	if(Core::Input::IsPressed('2'))
 	{
 		bouncing = false;
 		wrapping = true;
 		walls = false;
-		position = Vector2D(800/2, 600/2);
+		position = Vector3D(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
 	}
 	if(Core::Input::IsPressed('3'))
 	{
 		bouncing = false;
 		wrapping = false;
 		walls = true;
-		position = Vector2D(800/2, 600/2);
+		position = Vector3D(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
 	}
 
 	//Rotate right
-	if(Core::Input::IsPressed(Core::Input::KEY_RIGHT))
+	if(Core::Input::IsPressed('D'))
 	{
-		const unsigned int NUM_POINTS = sizeof(shipPoints) / sizeof(*shipPoints);
-		for(unsigned int i = 0; i< NUM_POINTS; i++)
-		{
-			*shipPoints[i] = (*shipPoints[i]).rotate(0.03f);
-		}
+		orientation += .05f;
 	}
 
 	//Rotate left
-	if(Core::Input::IsPressed(Core::Input::KEY_LEFT))
-	{
-		const unsigned int NUM_POINTS = sizeof(shipPoints) / sizeof(*shipPoints);
-		for(unsigned int i = 0; i< NUM_POINTS; i++)
-		{
-			*shipPoints[i] = (*shipPoints[i]).rotate(-0.03f);
-		}
-	}
-
-	float velocityScale = 50;
-
-	//WASD movement controls
-	if(Core::Input::IsPressed('D'))
-	{
-		velocity.x += dt * velocityScale;
-	}
 	if(Core::Input::IsPressed('A'))
 	{
-		velocity.x -= dt * velocityScale;
+		orientation -= .05f;
 	}
+
+	//WASD movement controls
+	float velocityScale = 50;
+	Vector3D acc = Vector3D(0, velocityScale, 0);
+	Vector3D dir = rotate(orientation)*acc;
 	if(Core::Input::IsPressed('S'))
 	{
-		velocity.y += dt * velocityScale;
+		velocity = velocity + dt*dir;
 	}
 	if(Core::Input::IsPressed('W'))
 	{
-		velocity.y -= dt * velocityScale;
+		velocity = velocity - dt*dir;
 	}
 	position = position + velocity * dt;
 
@@ -207,29 +210,31 @@ void SpaceShip::update(float dt)
 		const unsigned int NUM_WALLPOINTS = sizeof(meWall) / sizeof(*meWall);
 		for(unsigned int i = 0; i< NUM_WALLPOINTS; i++)
 		{
-			Vector2D wallVertexOne = *meWall[i];
-			Vector2D wallToShip = position - wallVertexOne;
-			Vector2D wallVertexTwo = *meWall[(i+1) % NUM_WALLPOINTS];
-			Vector2D wall = wallVertexTwo - wallVertexOne;
-			Vector2D wallNormal = wall.perpCW();
+			Vector3D wallVertexOne = *meWall[i];
+			Vector3D wallToShip = position - wallVertexOne;
+			Vector3D wallVertexTwo = *meWall[(i+1) % NUM_WALLPOINTS];
+			Vector3D wall = wallVertexTwo - wallVertexOne;
+			Vector3D wallNormal = wall.perpCW();
 			float dotResult = dot(wallToShip, wallNormal);
 			if(dotResult<0)
 			{
-				Vector2D normalizedNormal = wallNormal.normalized();
-				Vector2D projectedVector = velocity.projectOnto(normalizedNormal);
+				Vector3D normalizedNormal = wallNormal.normalized();
+				Vector3D projectedVector = velocity.projectOnto(normalizedNormal);
 				velocity = velocity+(-2*projectedVector);
 			}
 		}
 	}
+
+	//Collision with screen
 	if(bouncing)
 	{
 		if(position.x <0)
 			velocity.x *= -1;
-		if(position.x > 800)
+		if(position.x > SCREEN_WIDTH)
 			velocity.x *= -1;
 		if(position.y <0)
 			velocity.y *= -1;
-		if(position.y > 600)
+		if(position.y > SCREEN_HEIGHT)
 			velocity.y *= -1;
 	}
 	
@@ -237,13 +242,15 @@ void SpaceShip::update(float dt)
 	else
 	{
 	if(position.x <0-32)
-		position.x = 800+16;
-	if(position.x > 800+16)
+		position.x = SCREEN_WIDTH+16;
+	if(position.x > SCREEN_WIDTH+16)
 		position.x  = 0-16;
 	if(position.y <0-32)
-		position.y = 600+32;
-	if(position.y > 600+32)
+		position.y = SCREEN_HEIGHT+32;
+	if(position.y > SCREEN_HEIGHT+32)
 		position.y = 0-32;
 	}
 	lerpTheLerper(dt);
+
+
 }

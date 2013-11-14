@@ -3,8 +3,17 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SpaceShip.cpp" />
+    <ClCompile Include="Missile.cpp" />
+    <ClCompile Include="Turret.cpp" />
+    <ClCompile Include="Gear.cpp" />
+    <ClCompile Include="GearSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SpaceShip.h" />
+    <ClInclude Include="Missile.h" />
+    <ClInclude Include="Turret.h" />
+    <ClInclude Include="Gear.h" />
+    <ClInclude Include="ScreenInfo.h" />
+    <ClInclude Include="GearSystem.h" />
   </ItemGroup>
 </Project>

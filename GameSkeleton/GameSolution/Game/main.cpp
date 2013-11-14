@@ -1,13 +1,14 @@
 #include "Engine.h"
 #include "Core.h"
 #include "SpaceShip.h"
+#include "ScreenInfo.h"
 //using Core::Graphics;
 
+
+
+//const int SCREEN_WIDTH = 800;
+//const int SCREEN_HEIGHT= 600;
 SpaceShip meShip;
-
-const int SCREEN_WIDTH = 800;
-const int SCREEN_HEIGHT= 600;
-
 bool Update( float dt)
 {
 	if( Core::Input::IsPressed( Core::Input::KEY_ESCAPE ) )
@@ -25,7 +26,7 @@ void Draw( Core::Graphics& graphics)
 
 int main()
 {
-	meShip.position = Vector2D(75, 300);
+	meShip.position = Vector3D(75, 300);
 	Core::Init( "Example", SCREEN_WIDTH, SCREEN_HEIGHT);
 	Core::RegisterUpdateFn( Update);
 	Core::RegisterDrawFn( Draw );

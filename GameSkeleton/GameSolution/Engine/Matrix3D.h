@@ -3,22 +3,16 @@
 
 struct Matrix3D
 {
-	union
-	{
-		float values[3][3];
-		struct
-		{
-			float ax;
-			float bx;
-			float cx;
-			float ay;
-			float by;
-			float cy;
-			float az;
-			float bz;
-			float cz;
-		};
-	};
+	float ax;
+	float bx;
+	float cx;
+	float ay;
+	float by;
+	float cy;
+	float az;
+	float bz;
+	float cz;
+
 	Matrix3D(float ax = 1, float bx = 0, float cx = 0, float ay = 0, float by = 1, float cy = 0, float az = 0, float bz = 0, float cz = 1) : ax(ax), bx(bx), cx(cx), ay(ay), by(by), cy(cy), az(az), bz(bz), cz(cz){}
 };
 

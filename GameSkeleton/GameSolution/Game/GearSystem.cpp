@@ -20,7 +20,7 @@ void GearSystem::createGear(int i)
 	else
 	{
 		//offset = (float)(((NUM_GEARS-(i-1))/NUM_GEARS)*116)+5;
-		offset = 10;
+		offset = 10.0f;
 	}
 	gears[i] = new Gear(gscale, offset);
 	if(i<NUM_GEARS)
@@ -31,15 +31,16 @@ void GearSystem::createGear(int i)
 
 void GearSystem::draw(Core::Graphics& g)
 {
-	g.SetColor(RGB(100,100,100));
-	for(unsigned int i = 0; i < NUM_GEARS; i++)
-	{
-		if(i==0)
-			(*gears[i]).draw(g, origin);
-		else
-			(*gears[i]).draw(g, (*gears[i-1]).currentPosition);
-			//(*gears[i]).draw(g, origin);
-	}
+    g.SetColor(RGB(100,100,100));
+    Vector3D nextOrigin = origin;
+    for(unsigned int i = 0; i < NUM_GEARS; i++)
+    {
+        if(i ==0)
+            g.SetColor(RGB(255,0,0));
+        else
+            g.SetColor(RGB(255,255,255));
+        nextOrigin = gears[i]->draw(g, nextOrigin);
+    }
 }
 
 void GearSystem::update(float dt)

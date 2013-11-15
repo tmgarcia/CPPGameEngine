@@ -37,21 +37,27 @@ Vector3D* gearPoints[] =
 	new Vector3D(-12.5f, -43.5f),
 };
 
-void Gear::draw(Core::Graphics& g, Vector3D parentPos)
+Vector3D Gear::draw(Core::Graphics& g, Vector3D parentPos)
 {
-	const unsigned int NUM_POINTS = sizeof(gearPoints) / sizeof(*gearPoints);
-	const Matrix3D transform = 
-		scale(gscale,gscale) * 
-		translate(parentPos.x, parentPos.y) * 
-		rotate(orientation) * 
-		translate(offset, offset);
-	for(unsigned int i = 0; i< NUM_POINTS; i++)
-	{
-		const Vector3D& g1 = transform * *gearPoints[i];
-		const Vector3D& g2 = transform * *gearPoints [(i+1) % NUM_POINTS];
-		g.DrawLine(g1.x, g1.y, g2.x, g2.y);
-	}
-	currentPosition = transform * currentPosition;
+    const unsigned int NUM_POINTS = sizeof(gearPoints) / sizeof(*gearPoints);
+    const Matrix3D transform =
+        translate(parentPos.x, parentPos.y) *
+        rotate(orientation) *
+        translate(offset, offset) * 
+		scale(gscale,gscale);
+    for(unsigned int i = 0; i< NUM_POINTS; i++)
+    {
+        const Vector3D& g1 = transform * *gearPoints[i];
+        const Vector3D& g2 = transform * *gearPoints [(i+1) % NUM_POINTS];
+        g.DrawLine(g1.x, g1.y, g2.x, g2.y);
+    }
+    //return translate(offset, offset) * parentPos; orbits around incremental offsets from the origin
+	//return parentPos; only orbits origin
+	//return transform * parentPos; gears are drawn at an offset equal to the origin's position, regardless of an offset translation existing
+	/*return rotate(orientation) * orbits at varying speeds around corner of the screen
+			translate(offset, offset) * 
+			scale(gscale,gscale) * 
+			parentPos;*/
 }
 void Gear::update(float dt)
 {

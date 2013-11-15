@@ -6,11 +6,10 @@ class Gear
 {
 public:
 	//116 w & h
-	Gear(float gscale = 1, float offset = 10) : gscale(gscale), offset(offset){orientation = 0; currentPosition=Vector3D(0,0,1);}
+	Gear(float gscale = 1, float offset = 4) : gscale(gscale), offset(offset){orientation = 0;}
 	float gscale;
 	float offset;
-	void draw(Core::Graphics& g, Vector3D parentPos);
+	Vector3D draw(Core::Graphics& g, Vector3D parentPos);
 	void update(float dt);
 	float orientation;
-	Vector3D currentPosition;
 };

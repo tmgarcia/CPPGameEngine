@@ -51,10 +51,13 @@ Vector3D Gear::draw(Core::Graphics& g, Vector3D parentPos)
         const Vector3D& g2 = transform * *gearPoints [(i+1) % NUM_POINTS];
         g.DrawLine(g1.x, g1.y, g2.x, g2.y);
     }
-    //return translate(offset, offset) * parentPos; orbits around incremental offsets from the origin
-	//return parentPos; only orbits origin
-	//return transform * parentPos; gears are drawn at an offset equal to the origin's position, regardless of an offset translation existing
-	/*return rotate(orientation) * orbits at varying speeds around corner of the screen
+	//return transform * Vector3D(1,1,1); //--Orbits around first gear
+	//return transform * Vector3D(0,0,1); //--Orbits around first gear
+	//return transform * Vector3D(0,0,0); //--Orbits around origin
+    //return translate(offset, offset) * parentPos; //--orbits around incremental offsets from the origin
+	//return parentPos; --Orbits origin
+	//return transform * parentPos; //--gears are drawn at an offset equal to the origin's position, regardless of an offset translation existing
+	/*return rotate(orientation) * //--orbits at varying speeds around corner of the screen
 			translate(offset, offset) * 
 			scale(gscale,gscale) * 
 			parentPos;*/

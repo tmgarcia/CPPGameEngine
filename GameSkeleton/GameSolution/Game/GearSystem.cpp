@@ -20,7 +20,7 @@ void GearSystem::createGear(int i)
 	else
 	{
 		//offset = (float)(((NUM_GEARS-(i-1))/NUM_GEARS)*116)+5;
-		offset = 10.0f;
+		offset = 100.0f;
 	}
 	gears[i] = new Gear(gscale, offset);
 	if(i<NUM_GEARS)

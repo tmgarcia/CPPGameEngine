@@ -12,5 +12,5 @@ public:
 	Vector3D origin;
 	void draw(Core::Graphics& g);
 	void update(float dt);
-	void createGear(int i);
+	void createGear(int i, float rotationalSpeed);
 };

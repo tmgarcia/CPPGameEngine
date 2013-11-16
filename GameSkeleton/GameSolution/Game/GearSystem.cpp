@@ -1,14 +1,14 @@
 #include "GearSystem.h"
 
-Gear* gears[3];
+Gear* gears[5];
 const unsigned int NUM_GEARS = sizeof(gears) / sizeof(*gears);
 void GearSystem::buildSystem()
 {
 	unsigned int i = 0;
-	createGear(i);
+	createGear(i, 0.6f);
 }
 
-void GearSystem::createGear(int i)
+void GearSystem::createGear(int i, float rotationalSpeed)
 {
 	float gscale = (float)(NUM_GEARS-i)/NUM_GEARS;
 	float offset;
@@ -19,26 +19,22 @@ void GearSystem::createGear(int i)
 	}
 	else
 	{
-		//offset = (float)(((NUM_GEARS-(i-1))/NUM_GEARS)*116)+5;
-		offset = 100.0f;
+		offset = (gears[i-1]->gscale*58)+10;
+		//offset = 100.0f;
 	}
-	gears[i] = new Gear(gscale, offset);
+	gears[i] = new Gear(gscale, offset, rotationalSpeed);
 	if(i<NUM_GEARS)
 	{
-		createGear(i+1);
+		createGear(i+1, rotationalSpeed*1.5f);
 	}
 }
 
 void GearSystem::draw(Core::Graphics& g)
 {
-    g.SetColor(RGB(100,100,100));
+    g.SetColor(RGB(107, 66, 26));
     Vector3D nextOrigin = origin;
     for(unsigned int i = 0; i < NUM_GEARS; i++)
     {
-        if(i ==0)
-            g.SetColor(RGB(255,0,0));
-        else
-            g.SetColor(RGB(255,255,255));
         nextOrigin = gears[i]->draw(g, nextOrigin);
     }
 }

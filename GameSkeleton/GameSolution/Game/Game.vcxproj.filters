@@ -7,6 +7,11 @@
     <ClCompile Include="Turret.cpp" />
     <ClCompile Include="Gear.cpp" />
     <ClCompile Include="GearSystem.cpp" />
+    <ClCompile Include="..\Engine\ParticleEffect.cpp" />
+    <ClCompile Include="Lerper.cpp" />
+    <ClCompile Include="Walls.cpp" />
+    <ClCompile Include="Instructions.cpp" />
+    <ClCompile Include="ParticleSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SpaceShip.h" />
@@ -15,5 +20,10 @@
     <ClInclude Include="Gear.h" />
     <ClInclude Include="ScreenInfo.h" />
     <ClInclude Include="GearSystem.h" />
+    <ClInclude Include="..\Engine\ParticleEffect.h" />
+    <ClInclude Include="Lerper.h" />
+    <ClInclude Include="Walls.h" />
+    <ClInclude Include="Instructions.h" />
+    <ClInclude Include="ParticleSystem.h" />
   </ItemGroup>
 </Project>

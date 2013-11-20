@@ -15,14 +15,18 @@ class ParticleSystem
 {
 public:
 	unsigned int numActiveEffects;
-	ParticleSystem()
-	{
-		numActiveEffects = 0;
-	}
 	vector<ParticleEffect*> effectList;
 	void draw(Core::Graphics& g);
 	void update(float dt);
 	void addNewEffect(Vector3D origin, RGB color, int numParticles, int effectType, float orientation);
 	void deleteEffect(int i);
+	ParticleSystem()
+	{
+		numActiveEffects = 0;
+	}
+	~ParticleSystem()
+	{
+		effectList.clear();
+	}
 };
 

@@ -5,17 +5,25 @@
 #include "Core.h"
 #include "Missile.h"
 #include "Turret.h"
+#include "Lerper.h"
 #include "GearSystem.h"
 #include "ScreenInfo.h"
+#include "Walls.h"
+#include "Instructions.h"
+#include "ParticleSystem.h"
 
 class SpaceShip
 {
 public:
-	SpaceShip(bool bouncing = true) : bouncing(bouncing){missilesLaunched = 0; }
+	SpaceShip(bool walls = true) : walls(walls){missilesLaunched = 0; }
 	Vector3D position;
 	Vector3D velocity;
 	Missile* missiles[50];
 	Turret gun;
+	Lerper lerp;
+	Walls wall;
+	Instructions i;
+	ParticleSystem ps;
 	float missilesLaunched;
 	float orientation;
 	bool bouncing;

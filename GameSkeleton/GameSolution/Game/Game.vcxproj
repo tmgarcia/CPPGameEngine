@@ -86,20 +86,30 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\Engine\ParticleEffect.cpp" />
     <ClCompile Include="Gear.cpp" />
     <ClCompile Include="GearSystem.cpp" />
+    <ClCompile Include="Instructions.cpp" />
+    <ClCompile Include="Lerper.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Missile.cpp" />
+    <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="SpaceShip.cpp" />
     <ClCompile Include="Turret.cpp" />
+    <ClCompile Include="Walls.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Engine\ParticleEffect.h" />
     <ClInclude Include="Gear.h" />
     <ClInclude Include="GearSystem.h" />
+    <ClInclude Include="Instructions.h" />
+    <ClInclude Include="Lerper.h" />
+    <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="ScreenInfo.h" />
     <ClInclude Include="Missile.h" />
     <ClInclude Include="SpaceShip.h" />
     <ClInclude Include="Turret.h" />
+    <ClInclude Include="Walls.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

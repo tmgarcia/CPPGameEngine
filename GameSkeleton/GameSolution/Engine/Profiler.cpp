@@ -1,4 +1,14 @@
 #include "Profiler.h"
+
+Profiler Profiler::theInstance;
+
+Profiler& Profiler::getInstance()
+{
+	return theInstance;
+}
+
+
+#ifdef PROFILING_ON
 #include <cassert>
 #include <fstream>
 
@@ -15,7 +25,7 @@ void Profiler::initialize(const char* fileName)
 
 void Profiler::shutdown()
 {
-
+	writeData();
 }
 char Profiler::getDelimiter(unsigned int index) const
 {
@@ -106,3 +116,5 @@ void Profiler::writeData()const
 	}
 	outStream.close();
 }
+
+#endif

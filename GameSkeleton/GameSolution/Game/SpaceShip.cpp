@@ -41,13 +41,8 @@ Vector3D* shellPoints[] =
 };
 
 
-GearSystem ge = GearSystem(Vector3D(500, 500, 1));
-
-//DRAW
 void SpaceShip::draw(Core::Graphics& g)
 {
-	g.SetBackgroundColor(RGB(25,25,30));
-	i.draw(g);
 	//Drawing the Ship
 	g.SetColor(RGB(100, 255, 100));
 	const unsigned int NUM_POINTS = sizeof(shipPoints) / sizeof(*shipPoints);
@@ -67,14 +62,8 @@ void SpaceShip::draw(Core::Graphics& g)
 		g.DrawLine(p1.x, p1.y, p2.x, p2.y);
 	}
 
-
-	lerp.draw(g);
 	gun.draw(g, position);
-	ge.draw(g);
-	ps.draw(g);
 
-	if(walls)
-		wall.draw(g);
 	if(missilesLaunched>0)
 	{
 		for(int i = 0; i < (int)missilesLaunched; i++)
@@ -104,32 +93,6 @@ void SpaceShip::update(float dt)
 		}
 	}
 
-	//Switching between wrapping bouncing and the wall
-	if(Core::Input::IsPressed('1'))
-	{
-		bouncing = true;
-		wrapping = false;
-		walls = false;
-		position = Vector3D(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
-		ps.addNewEffect(Vector3D(0,1),RGB(100,100,255),100,3, orientation);
-	}
-	if(Core::Input::IsPressed('2'))
-	{
-		bouncing = false;
-		wrapping = true;
-		walls = false;
-		position = Vector3D(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
-		ps.addNewEffect(Vector3D(0,1),RGB(100,100,255),100,3, orientation);
-	}
-	if(Core::Input::IsPressed('3'))
-	{
-		bouncing = false;
-		wrapping = false;
-		walls = true;
-		position = Vector3D(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
-		ps.addNewEffect(Vector3D(0,1),RGB(100,100,255),100,3, orientation);
-	}
-
 	//Rotate right
 	if(Core::Input::IsPressed('D'))
 	{
@@ -153,34 +116,33 @@ void SpaceShip::update(float dt)
 	if(Core::Input::IsPressed('W'))
 	{
 		velocity = velocity - dt*dir;
-		ps.addNewEffect(position,RGB(100,100,255),1,2, orientation);
 	}
 	position = position + velocity * dt;
+}
 
-	//Wall collision
-	if(walls)
-	{
-		if(wall.collided(position))
-		{
-			Vector3D projectedVector = velocity.projectOnto(wall.collidedNormal);
-			velocity = velocity+(-2*projectedVector);
-		}
-	}
-	//Collision with screen
-	else if(bouncing)
-	{
-		if(position.x <0)
-			velocity.x *= -1;
-		if(position.x > SCREEN_WIDTH)
-			velocity.x *= -1;
-		if(position.y <0)
-			velocity.y *= -1;
-		if(position.y > SCREEN_HEIGHT)
-			velocity.y *= -1;
-	}
-	//Wrap from one side of the screen to the other
-	else
-	{
+void SpaceShip::resetPosition(Vector3D newPosition)
+{
+	position = newPosition;
+}
+Vector3D SpaceShip::getPosition()
+{
+	return position;
+}
+void SpaceShip::bounceOffWall(Vector3D collidedNormal)
+{
+	Vector3D projectedVector = velocity.projectOnto(collidedNormal);
+	velocity = velocity+(-2*projectedVector);
+}
+void SpaceShip::reverseXVelocity()
+{
+	velocity.x *= -1;
+}
+void SpaceShip::reverseYVelocity()
+{
+	velocity.y *= -1;
+}
+void SpaceShip::wrap()
+{
 	if(position.x <0-32)
 		position.x = SCREEN_WIDTH+16;
 	if(position.x > SCREEN_WIDTH+16)
@@ -189,8 +151,4 @@ void SpaceShip::update(float dt)
 		position.y = SCREEN_HEIGHT+32;
 	if(position.y > SCREEN_HEIGHT+32)
 		position.y = 0-32;
-	}
-	ge.update(dt);
-	lerp.update(dt);
-	ps.update(dt);
 }

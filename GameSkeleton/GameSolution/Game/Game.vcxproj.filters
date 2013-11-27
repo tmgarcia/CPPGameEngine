@@ -2,28 +2,72 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="SpaceShip.cpp" />
-    <ClCompile Include="Missile.cpp" />
-    <ClCompile Include="Turret.cpp" />
     <ClCompile Include="Gear.cpp" />
     <ClCompile Include="GearSystem.cpp" />
-    <ClCompile Include="..\Engine\ParticleEffect.cpp" />
     <ClCompile Include="Lerper.cpp" />
     <ClCompile Include="Walls.cpp" />
     <ClCompile Include="Instructions.cpp" />
-    <ClCompile Include="ParticleSystem.cpp" />
+    <ClCompile Include="BubbleEffect.cpp">
+      <Filter>ParticleEffects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Engine\ParticleEffect.cpp">
+      <Filter>ParticleEffects</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleSystem.cpp">
+      <Filter>ParticleEffects</Filter>
+    </ClCompile>
+    <ClCompile Include="Missile.cpp">
+      <Filter>ShipStuff</Filter>
+    </ClCompile>
+    <ClCompile Include="Turret.cpp">
+      <Filter>ShipStuff</Filter>
+    </ClCompile>
+    <ClCompile Include="SpaceShip.cpp">
+      <Filter>ShipStuff</Filter>
+    </ClCompile>
+    <ClCompile Include="Control.cpp" />
+    <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="BinaryWaveEffect.cpp">
+      <Filter>ParticleEffects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="SpaceShip.h" />
-    <ClInclude Include="Missile.h" />
-    <ClInclude Include="Turret.h" />
     <ClInclude Include="Gear.h" />
     <ClInclude Include="ScreenInfo.h" />
     <ClInclude Include="GearSystem.h" />
-    <ClInclude Include="..\Engine\ParticleEffect.h" />
     <ClInclude Include="Lerper.h" />
     <ClInclude Include="Walls.h" />
     <ClInclude Include="Instructions.h" />
-    <ClInclude Include="ParticleSystem.h" />
+    <ClInclude Include="BubbleEffect.h">
+      <Filter>ParticleEffects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Engine\ParticleEffect.h">
+      <Filter>ParticleEffects</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleSystem.h">
+      <Filter>ParticleEffects</Filter>
+    </ClInclude>
+    <ClInclude Include="Missile.h">
+      <Filter>ShipStuff</Filter>
+    </ClInclude>
+    <ClInclude Include="Turret.h">
+      <Filter>ShipStuff</Filter>
+    </ClInclude>
+    <ClInclude Include="SpaceShip.h">
+      <Filter>ShipStuff</Filter>
+    </ClInclude>
+    <ClInclude Include="Control.h" />
+    <ClInclude Include="Timer.h" />
+    <ClInclude Include="BinaryWaveEffect.h">
+      <Filter>ParticleEffects</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="ParticleEffects">
+      <UniqueIdentifier>{701b2c87-2e54-43e7-a75c-992b5c9c816e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShipStuff">
+      <UniqueIdentifier>{ab615d83-0867-4497-ab63-039a406f5bb9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

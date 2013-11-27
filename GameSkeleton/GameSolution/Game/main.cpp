@@ -4,27 +4,27 @@
 #include "ScreenInfo.h"
 #include "Random.h"
 #include "ParticleEffect.h"
+#include "Control.h"
 
 using Core::RGB;
 
-SpaceShip meShip;
+Control con;
 
 bool Update( float dt)
 {
 	if( Core::Input::IsPressed( Core::Input::KEY_ESCAPE ) )
 		return true;
-	meShip.update(dt);
+	con.update(dt);
 	return false;
 }
 
 void Draw( Core::Graphics& graphics)
 {
-	meShip.draw(graphics);
+	con.draw(graphics);
 }
 
 int main()
 {
-	meShip.position = Vector3D(75, 300);
 	Core::Init( "Example", SCREEN_WIDTH, SCREEN_HEIGHT);
 	Core::RegisterUpdateFn( Update);
 	Core::RegisterDrawFn( Draw );

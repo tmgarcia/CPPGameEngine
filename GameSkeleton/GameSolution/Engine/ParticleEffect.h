@@ -10,20 +10,17 @@ class ParticleEffect
 {
 public:
 	int numParticles;
-	int particleType;
-	int effectType;
 	RGB color;
 	Vector3D origin;
 	Particle* particles;
 	Random generator;
-	float orientation;
-	void buildParticles();
-	ParticleEffect(Vector3D origin, RGB color, int numParticles, int effectType, float orientation = 0) : numParticles(numParticles), origin(origin), color(color), effectType(effectType), orientation(orientation)
+	virtual void buildParticles();
+	ParticleEffect(Vector3D origin, RGB color, int numParticles) : numParticles(numParticles), origin(origin), color(color)
 	{
-		buildParticles();
 	}
-	bool update(float dt);
-	void draw(Core::Graphics& g);
+	virtual bool update(float dt);
+	virtual void draw(Core::Graphics& g);
+	bool checkAlive();
 	~ParticleEffect()
 	{
 		delete []particles;

@@ -19,7 +19,7 @@ public:
 	}
 	Vector3D randomUnitVectorRange(float minAngle, float maxAngle)
 	{
-		float angle = randomFloat() * (maxAngle*minAngle+1)+minAngle;
+		float angle = randomIntRange(minAngle,maxAngle);
 		Vector3D vec(cos(angle), sin(angle));
 		return vec;
 	}

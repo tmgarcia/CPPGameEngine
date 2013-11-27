@@ -19,11 +19,13 @@ void ParticleSystem::update(float dt)
 				deleteEffect(i);
 	}
 }
-void ParticleSystem::addNewEffect(Vector3D origin, RGB color, int numParticles, int effectType, float orientation)
+void ParticleSystem::addNewEffect(ParticleEffect* pe)
 {
-	ParticleEffect* pEffect = new ParticleEffect(origin, color, numParticles, effectType, orientation);
-	effectList.push_back( pEffect );
-	numActiveEffects++;
+	if(numActiveEffects<MAX_EFFECTS)
+	{
+		effectList.push_back(pe);
+		numActiveEffects++;
+	}
 }
 void ParticleSystem::deleteEffect(int i)
 {

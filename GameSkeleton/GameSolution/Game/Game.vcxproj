@@ -119,6 +119,9 @@
     <ClInclude Include="Turret.h" />
     <ClInclude Include="Walls.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="gameprofile.csv" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

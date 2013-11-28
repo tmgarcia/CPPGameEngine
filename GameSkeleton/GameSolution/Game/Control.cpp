@@ -6,18 +6,26 @@ GearSystem ge = GearSystem(Vector3D(500, 500, 1));
 void Control::draw(Core::Graphics& g)
 {
 	g.SetBackgroundColor(RGB(25,25,30));
+	timer.Start();
 	instructs.draw(g);
-
+	profiler.addEntry("Instructions Draw", timer.Interval());
 	ge.draw(g);
+	profiler.addEntry("Gear System Draw", timer.Interval());
 	particleSyst.draw(g);
+	profiler.addEntry("ParticleSystem Draw", timer.Interval());
+	timer.Stop();
 	lerp.draw(g);
+	timer.Start();
 	ship.draw(g);
+	profiler.addEntry("Ship Draw", timer.Stop());
 	if(collisionType == 2)
 		wall.draw(g);
 }
 
 void Control::update(float dt)
 {
+	profiler.newFrame();
+	timer.Start();
 	if(Core::Input::IsPressed('1'))
 	{
 		collisionType = 1;
@@ -40,6 +48,7 @@ void Control::update(float dt)
 	{
 		particleSyst.addNewEffect(new BubbleEffect(ship.position,RGB(100,100,255),1,ship.orientation));
 	}
+	profiler.addEntry("Ship Movement Update", timer.Stop());
 	//Wall collision
 	if(collisionType == 2)
 	{
@@ -60,7 +69,12 @@ void Control::update(float dt)
 		ship.wrap();
 	}
 	ship.update(dt);
+	timer.Start();
 	ge.update(dt);
+	profiler.addEntry("Gear System Update", timer.Interval());
 	lerp.update(dt);
+	profiler.addEntry("Lerper Update", timer.Interval());
 	particleSyst.update(dt);
+	profiler.addEntry("ParticleSystem Update", timer.Interval());
+	timer.Stop();
 }

@@ -6,7 +6,7 @@
 class _declspec(dllexport) Profiler
 {
 public: 
-	static const unsigned int MAX_FRAME_SAMPLES = 5;
+	static const unsigned int MAX_FRAME_SAMPLES = 500;
 	static Profiler& getInstance();
 private:
 	Profiler() {}

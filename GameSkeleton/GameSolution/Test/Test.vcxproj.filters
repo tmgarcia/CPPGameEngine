@@ -20,8 +20,11 @@
     <ClCompile Include="..\gtest\src\gtest-all.cc">
       <Filter>gtest</Filter>
     </ClCompile>
-    <ClCompile Include="SampleTest.cpp">
+    <ClCompile Include="ProfileTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="profiles.csv" />
   </ItemGroup>
 </Project>

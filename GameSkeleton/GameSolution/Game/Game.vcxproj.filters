@@ -70,4 +70,7 @@
       <UniqueIdentifier>{ab615d83-0867-4497-ab63-039a406f5bb9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="gameprofile.csv" />
+  </ItemGroup>
 </Project>

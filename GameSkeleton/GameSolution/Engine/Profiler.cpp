@@ -42,7 +42,7 @@ void Profiler::newFrame()
 void Profiler::addEntry(const char* category, float time)
 {
 	assert(categoryIndex < MAX_PROFILE_CATEGORIES);
-	ProfileCategory& pc = categories[categoryIndex++];
+	ProfileCategory& pc = categories[categoryIndex];
 
 	if(frameIndex==0)
 	{
@@ -68,6 +68,7 @@ void Profiler::writeFrame(unsigned int frameNumber) const
 	for(unsigned int category=0; category< numUsedCategories; category++)
 	{
 		outStream << categories[category].samples[frameNumber];
+		outStream << getDelimiter(category);
 	}
 }
 

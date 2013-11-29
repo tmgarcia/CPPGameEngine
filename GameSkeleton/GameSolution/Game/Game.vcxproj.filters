@@ -30,6 +30,15 @@
     <ClCompile Include="BinaryWaveEffect.cpp">
       <Filter>ParticleEffects</Filter>
     </ClCompile>
+    <ClCompile Include="OpeningSplash.cpp">
+      <Filter>ParticleEffects</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="MissileAmmo.cpp">
+      <Filter>ShipStuff</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyLegion.cpp" />
+    <ClCompile Include="ExplosionEffect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Gear.h" />
@@ -61,6 +70,15 @@
     <ClInclude Include="BinaryWaveEffect.h">
       <Filter>ParticleEffects</Filter>
     </ClInclude>
+    <ClInclude Include="OpeningSplash.h">
+      <Filter>ParticleEffects</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="MissileAmmo.h">
+      <Filter>ShipStuff</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyLegion.h" />
+    <ClInclude Include="ExplosionEffect.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="ParticleEffects">

@@ -4,17 +4,17 @@
 #include "Core.h"
 #include "Missile.h"
 #include "Turret.h"
+#include "MissileAmmo.h"
 
 
 class SpaceShip
 {
 public:
-	SpaceShip() {missilesLaunched = 0;}
+	SpaceShip(MissileAmmo* ammo, Vector3D start) {this->ammo = ammo; position = start;}
 	Vector3D position;
 	Vector3D velocity;
-	Missile* missiles[50];
+	MissileAmmo* ammo;
 	Turret gun;
-	float missilesLaunched;
 	float orientation;
 	void draw(Core::Graphics&);
 	void update(float dt);

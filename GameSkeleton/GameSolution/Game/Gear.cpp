@@ -51,7 +51,8 @@ Vector3D Gear::draw(Core::Graphics& g, Vector3D parentPos)
         const Vector3D& g2 = transform * *gearPoints [(i+1) % NUM_POINTS];
         g.DrawLine(g1.x, g1.y, g2.x, g2.y);
     }
-	return transform * Vector3D(0,0,1);
+	position = transform * Vector3D(0,0,1);
+	return position;
 
 }
 void Gear::update(float dt)

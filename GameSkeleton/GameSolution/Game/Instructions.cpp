@@ -23,6 +23,7 @@ void Instructions::draw(Core::Graphics& g)
 
 	float spfTime = timer.Interval();
 	string spfStr = std::to_string(spfTime);
+	g.SetColor(RGB(200, 200, 200));
 	string spfLabel = "SPF: " + spfStr;
 	char *sstr = &spfLabel[0];
 

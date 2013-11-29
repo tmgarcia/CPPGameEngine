@@ -64,13 +64,7 @@ void SpaceShip::draw(Core::Graphics& g)
 
 	gun.draw(g, position);
 
-	if(missilesLaunched>0)
-	{
-		for(int i = 0; i < (int)missilesLaunched; i++)
-		{
-			(*missiles[i]).draw(g);
-		}
-	}
+	ammo->draw(g);
 }
 
 //SpaceShip update
@@ -79,19 +73,10 @@ void SpaceShip::update(float dt)
 	//Missile shooting
 	if(Core::Input::IsPressed(Core::Input::BUTTON_LEFT))
 	{
-		if(missilesLaunched<20)
-		{
-			missiles[(int)missilesLaunched] = new Missile(gun.tip, gun.turnTurret);
-			missilesLaunched++;
-		}
+		ammo->addMissile(new Missile(gun.tip, gun.turnTurret));
 	}
-	if(missilesLaunched>0)
-	{
-		for(int i = 0; i < (int)missilesLaunched; i++)
-		{
-			(*missiles[i]).update(dt);
-		}
-	}
+
+	ammo->update(dt);
 
 	//Rotate right
 	if(Core::Input::IsPressed('D'))

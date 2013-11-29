@@ -46,3 +46,13 @@ void GearSystem::update(float dt)
 		(*gears[i]).update(dt);
 	}
 }
+
+int GearSystem::getNumGears()
+{
+	return NUM_GEARS;
+}
+
+Vector3D GearSystem::getIndexedGearPosition(int i)
+{
+	return gears[i]->position;
+}

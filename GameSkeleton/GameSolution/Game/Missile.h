@@ -13,7 +13,7 @@ struct Missile
 	Matrix3D orientation;
 	bool firing;
 	void draw(Core::Graphics& g);
-	void update(float dt);
+	bool update(float dt);
 	
 };
 

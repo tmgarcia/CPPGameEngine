@@ -13,4 +13,5 @@ public:
 	void update(float dt);
 	float orientation;
 	float rotationalSpeed;
+	Vector3D position;
 };

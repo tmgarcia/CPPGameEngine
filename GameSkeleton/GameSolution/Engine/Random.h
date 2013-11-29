@@ -11,6 +11,10 @@ public:
 	{
 		return (float)rand()/RAND_MAX;
 	}
+	int randomInt()
+	{
+		return (int)rand()/RAND_MAX;
+	}
 	Vector3D randomUnitVector()
 	{
 		float angle = TWO_PI*randomFloat();
@@ -26,5 +30,9 @@ public:
 	float randomIntRange(float min, float max)
 	{
 		return randomFloat() * (max*(min+1))+min;
+	}
+	int randomRangedInt(int min, int max)
+	{
+		return randomInt() * (max*(min+1))+min;
 	}
 };

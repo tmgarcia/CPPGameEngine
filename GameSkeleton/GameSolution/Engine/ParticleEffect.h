@@ -17,6 +17,7 @@ public:
 	virtual void buildParticles();
 	ParticleEffect(Vector3D origin, RGB color, int numParticles) : numParticles(numParticles), origin(origin), color(color)
 	{
+		buildParticles();
 	}
 	virtual bool update(float dt);
 	virtual void draw(Core::Graphics& g);

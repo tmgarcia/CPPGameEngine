@@ -26,11 +26,11 @@ void Missile::draw(Core::Graphics& g)
 	}
 }
 
-void Missile::update(float dt)
+bool Missile::update(float dt)
 {
 	if(firing)
 	{
-		float fireVelocity = 50;
+		float fireVelocity = 500;
 		Vector3D acc = Vector3D(fireVelocity, 0, 0);
 		Vector3D dir = (orientation * acc).perpCCW();
 		position = position + (dt * dir);
@@ -38,4 +38,5 @@ void Missile::update(float dt)
 		if(position.x <0 || position.x > SCREEN_WIDTH || position.y <0 || position.y > SCREEN_HEIGHT)
 			firing = false;
 	}
+	return firing;
 }

@@ -1,11 +1,22 @@
 #include "Control.h"
 
-GearSystem ge = GearSystem(Vector3D(500, 500, 1));
+GearSystem ge1 = GearSystem(Vector3D(200, 200, 1));
+GearSystem ge2 = GearSystem(Vector3D(400, 400, 1));
+
 
 MissileAmmo ammo;
 SpaceShip ship = SpaceShip(&ammo, Vector3D(50, 50));
 
 Grid grid = Grid(RGB(0,200,200),10,10);
+
+void Control::fillGrid()
+{
+	unsigned int numEnemies = 5;
+	for(unsigned int i = 0; i<numEnemies; i++)
+	{
+		grid.addEnemyAt((int)generator.randomIntRange(0,9), (int)generator.randomIntRange(0,9));
+	}
+}
 
 void Control::collisionCheck()
 {
@@ -13,7 +24,7 @@ void Control::collisionCheck()
 	{
 		if(grid.enemyCollisionCheck(ammo.getMissilePosition(i)))
 		{
-			particleSyst.addNewEffect( new ExplosionEffect(grid.collidedEnemy,RGB(255,100,100),50));
+			particleSyst.addNewEffect( new ExplosionEffect(grid.collidedEnemy,RGB(20,100,20),50));
 		}
 	}
 }
@@ -51,7 +62,8 @@ void Control::draw(Core::Graphics& g)
 		timer.Start();
 		instructs.draw(g);
 		profiler.addEntry("Instructions Draw", timer.Interval());
-		ge.draw(g);
+		ge1.draw(g);
+		ge2.draw(g);
 		profiler.addEntry("Gear System Draw", timer.Interval());
 		particleSyst.draw(g);
 		profiler.addEntry("ParticleSystem Draw", timer.Interval());
@@ -63,7 +75,6 @@ void Control::draw(Core::Graphics& g)
 		profiler.addEntry("Ship Draw", timer.Stop());
 		if(collisionType == 2)
 			wall.draw(g);
-		enemies.draw(g, ship.position);
 	}
 }
 
@@ -96,10 +107,6 @@ void Control::update(float dt)
 			ship.resetPosition(Vector3D(SCREEN_WIDTH/2, SCREEN_HEIGHT/2));
 			particleSyst.addNewEffect(new BinaryWaveEffect(Vector3D(0,1),RGB(100,100,255),100));
 		}
-		if(Core::Input::IsPressed('W'))
-		{
-			particleSyst.addNewEffect(new BubbleEffect(ship.position,RGB(100,100,255),1,ship.orientation));
-		}
 		profiler.addEntry("Ship Movement Update", timer.Stop());
 		//Wall collision
 		if(collisionType == 2)
@@ -122,19 +129,41 @@ void Control::update(float dt)
 		}
 		ship.update(dt);
 		timer.Start();
-		ge.update(dt);
+		ge1.update(dt);
+		ge2.update(dt);
 		profiler.addEntry("Gear System Update", timer.Interval());
 		lerp.update(dt);
+		particleSyst.addNewEffect(new LerperTrainEffect(lerp.position,1));
 		profiler.addEntry("Lerper Update", timer.Interval());
 		particleSyst.update(dt);
 		profiler.addEntry("ParticleSystem Update", timer.Interval());
 		timer.Stop();
-		if(grid.update(ship.position))
+		if(grid.update(ship.position, dt))
 		{
 			if(grid.collisionDirection==0)
-				ship.reverseXVelocity();
-			else if(grid.collisionDirection==1)
+			{
+				particleSyst.addNewEffect(new CollideWallEffect(ship.position,RGB(255,255,255),50,&grid));
+				ship.position.y+=2;
 				ship.reverseYVelocity();
+			}
+			else if(grid.collisionDirection==1)
+			{
+				particleSyst.addNewEffect(new CollideWallEffect(ship.position,RGB(255,255,255),50,&grid));
+				ship.position.y-=2;
+				ship.reverseYVelocity();
+			}
+			if(grid.collisionDirection==2)
+			{
+				particleSyst.addNewEffect(new CollideWallEffect(ship.position,RGB(255,255,255),50,&grid));
+				ship.position.x+=2;
+				ship.reverseXVelocity();
+			}
+			else if(grid.collisionDirection==3)
+			{
+				particleSyst.addNewEffect(new CollideWallEffect(ship.position,RGB(255,255,255),50,&grid));
+				ship.position.x-=2;
+				ship.reverseXVelocity();
+			}
 		}
 		collisionCheck();
 	}

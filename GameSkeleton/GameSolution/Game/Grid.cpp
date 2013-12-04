@@ -33,23 +33,30 @@ bool Grid::enemyCollisionCheck(Vector3D colliderPosition)
 
 void Grid::draw(Core::Graphics& g)
 {
-	for(int i = 0; i<numRows; i++)
+	/*for(int i = 0; i<numRows; i++)
 	{
 		for(int j = 0; j<numColumns; j++)
 		{
 			cells[i][j]->draw(g);
 		}
-	}
+	}*/
+	enemies.draw(g, Vector3D(100,100));
 }
 
-bool Grid::update(Vector3D shipPosition)
+bool Grid::update(Vector3D shipPosition, float dt)
+{
+	enemies.update(dt);
+	return wallCollision(shipPosition, 16);
+}
+
+bool Grid::wallCollision(Vector3D colliderPosition, float buffer)
 {
 	bool collided = false;
 	for(int i = 0; i<numRows; i++)
 	{
 		for(int j = 0; j<numColumns; j++)
 		{
-			if(cells[i][j]->checkCollision(shipPosition, 1))
+			if(cells[i][j]->checkCollision(colliderPosition, buffer))
 			{
 				collided = true;
 				collisionDirection = cells[i][j]->collisionDirection;
@@ -58,10 +65,6 @@ bool Grid::update(Vector3D shipPosition)
 	}
 	return collided;
 }
-Grid::~Grid(void)
-{
-}
-
 
 void Grid::buildWalls()
 {
@@ -142,11 +145,11 @@ void Grid::buildWalls()
 	cells[3][4]->addWall(1);
 	cells[3][5]->addWall(1);
 	cells[3][5]->addWall(2);
-	cells[3][6]->addWall(1);
+	cells[3][6]->addWall(0);
 	cells[3][6]->addWall(3);
 	cells[3][7]->addWall(2);
-	cells[3][7]->addWall(1);
-	cells[3][8]->addWall(1);
+	cells[3][7]->addWall(0);
+	cells[3][8]->addWall(0);
 	cells[3][8]->addWall(3);
 	cells[3][9]->addWall(3);
 	cells[3][9]->addWall(2);
@@ -276,6 +279,6 @@ void Grid::buildWalls()
 	cells[9][7]->addWall(1);
 	cells[9][7]->addWall(0);
 	cells[9][8]->addWall(1);
-	cells[9][7]->addWall(1);
-	cells[9][7]->addWall(3);
+	cells[9][9]->addWall(1);
+	cells[9][9]->addWall(3);
 }

@@ -9,8 +9,8 @@ void BubbleEffect::buildParticles()
 		particles[i].position = origin;
 		particles[i].velocity = generator.randomFloat()*(generator.randomUnitVectorRange(orientation-0.0001f, orientation+0.0001f).perpCW());
 		particles[i].color = color;
-		particles[i].size = generator.randomIntRange(.5, 2);
-		particles[i].lifetime = generator.randomIntRange(1, 1.5);
+		particles[i].size = generator.randomIntRange(.5, 1);
+		particles[i].lifetime = generator.randomIntRange(.5, 1);
 	}
 
 }

@@ -16,7 +16,7 @@ public:
 	bool leftWall;
 	bool rightWall;
 	float wallThickness;
-	int collisionDirection; //0 for horizontal (collided x) 1 for vertical (collided y)
+	int collisionDirection; //0 top 1 bottom 2 left 3 right
 	Vector3D position; //position of the top left corner of the cell
 	void addWall(int w); //0 top 1 bottom 2 left 3 right
 	bool checkCollision(Vector3D colliderPosition, float buffer);

@@ -6,6 +6,7 @@
 class Lerper
 {
 public:
+	Vector3D position;
 	void draw(Core::Graphics& g);
 	void update(float dt);
 };

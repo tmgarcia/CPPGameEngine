@@ -41,6 +41,12 @@
     <ClCompile Include="ExplosionEffect.cpp" />
     <ClCompile Include="GridCell.cpp" />
     <ClCompile Include="Grid.cpp" />
+    <ClCompile Include="LerperTrainEffect.cpp">
+      <Filter>ParticleEffects</Filter>
+    </ClCompile>
+    <ClCompile Include="CollideWallEffect.cpp">
+      <Filter>ParticleEffects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Gear.h" />
@@ -83,6 +89,12 @@
     <ClInclude Include="ExplosionEffect.h" />
     <ClInclude Include="GridCell.h" />
     <ClInclude Include="Grid.h" />
+    <ClInclude Include="LerperTrainEffect.h">
+      <Filter>ParticleEffects</Filter>
+    </ClInclude>
+    <ClInclude Include="CollideWallEffect.h">
+      <Filter>ParticleEffects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="ParticleEffects">

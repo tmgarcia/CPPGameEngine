@@ -31,7 +31,7 @@ void GearSystem::createGear(int i, float rotationalSpeed)
 
 void GearSystem::draw(Core::Graphics& g)
 {
-    g.SetColor(RGB(107, 66, 26));
+    g.SetColor(RGB(20, 20, 100));
     Vector3D nextOrigin = origin;
     for(unsigned int i = 0; i < NUM_GEARS; i++)
     {

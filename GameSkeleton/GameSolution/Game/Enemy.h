@@ -4,6 +4,7 @@
 #include "GearSystem.h"
 #include "Random.h"
 #include "ScreenInfo.h"
+#include "Matrix3D.h"
 
 class Enemy
 {
@@ -12,11 +13,16 @@ public:
 	float health;
 	Vector3D position;
 	Vector3D velocity;
-	float orientation;
+	float orientation1;
+	float orientation2;
 	void draw(Core::Graphics& g, Vector3D shipPosition);
 	void update(float dt);
 	Matrix3D rotation;
 
-	Enemy(Vector3D position): position(position){}
+	Enemy(Vector3D position): position(position)
+	{
+		orientation1 = 0;
+		orientation2 = 0;
+	}
 };
 

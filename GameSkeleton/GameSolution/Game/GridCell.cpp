@@ -39,10 +39,10 @@ bool GridCell::checkCollision(Vector3D colliderPosition, float buffer)
 			if(topWall)
 			{
 				float bottomOfWall = position.y + wallThickness;
-				if((colliderPosition.y+buffer) <= bottomOfWall)
+				if((colliderPosition.y-buffer) <= bottomOfWall)
 				{
 					collided = true;
-					collisionDirection = 1;
+					collisionDirection = 0;
 				}
 			}
 			if(bottomWall)
@@ -57,10 +57,10 @@ bool GridCell::checkCollision(Vector3D colliderPosition, float buffer)
 			if(leftWall)
 			{
 				float rightOfWall = position.x + wallThickness;
-				if((colliderPosition.x+buffer) <= rightOfWall)
+				if((colliderPosition.x-buffer) <= rightOfWall)
 				{
 					collided = true;
-					collisionDirection = 0;
+					collisionDirection = 2;
 				}
 			}
 			if(rightWall)
@@ -69,7 +69,7 @@ bool GridCell::checkCollision(Vector3D colliderPosition, float buffer)
 				if((colliderPosition.x+buffer) >= leftOfWall)
 				{
 					collided = true;
-					collisionDirection = 0;
+					collisionDirection = 3;
 				}
 			}
 		}

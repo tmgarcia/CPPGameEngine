@@ -89,6 +89,7 @@
     <ClCompile Include="..\Engine\ParticleEffect.cpp" />
     <ClCompile Include="BinaryWaveEffect.cpp" />
     <ClCompile Include="BubbleEffect.cpp" />
+    <ClCompile Include="CollideWallEffect.cpp" />
     <ClCompile Include="Control.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyLegion.cpp" />
@@ -99,6 +100,7 @@
     <ClCompile Include="GridCell.cpp" />
     <ClCompile Include="Instructions.cpp" />
     <ClCompile Include="Lerper.cpp" />
+    <ClCompile Include="LerperTrainEffect.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Missile.cpp" />
     <ClCompile Include="MissileAmmo.cpp" />
@@ -113,6 +115,7 @@
     <ClInclude Include="..\Engine\ParticleEffect.h" />
     <ClInclude Include="BinaryWaveEffect.h" />
     <ClInclude Include="BubbleEffect.h" />
+    <ClInclude Include="CollideWallEffect.h" />
     <ClInclude Include="Control.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyLegion.h" />
@@ -123,6 +126,7 @@
     <ClInclude Include="GridCell.h" />
     <ClInclude Include="Instructions.h" />
     <ClInclude Include="Lerper.h" />
+    <ClInclude Include="LerperTrainEffect.h" />
     <ClInclude Include="MissileAmmo.h" />
     <ClInclude Include="OpeningSplash.h" />
     <ClInclude Include="ParticleSystem.h" />

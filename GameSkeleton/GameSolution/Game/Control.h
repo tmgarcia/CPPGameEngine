@@ -16,7 +16,10 @@
 #include "EnemyLegion.h"
 #include "MissileAmmo.h"
 #include "ExplosionEffect.h"
+#include "LerperTrainEffect.h"
 #include "Grid.h"
+#include "Random.h"
+#include "CollideWallEffect.h"
 
 
 class Control
@@ -31,6 +34,7 @@ public:
 	CStopWatch timer;
 	CStopWatch enemyTimer;
 	void Control::collisionCheck();
+	Random generator;
 	bool splashRunning;
 	bool splashDraw;
 	int collisionType; //1=bouncing, 2=walls, 3=wrapping

@@ -15,16 +15,8 @@ public:
 	float orientation;
 	void draw(Core::Graphics& g, Vector3D shipPosition);
 	void update(float dt);
-	void createEnemy();
-	//GearSystem* gears;
-	int assignedGear;
 	Matrix3D rotation;
 
-	Enemy()
-	{
-		//this->gears = gears;
-		createEnemy();
-		position = Vector3D(generator.randomIntRange(0,(float)SCREEN_WIDTH), generator.randomIntRange(0,(float)SCREEN_HEIGHT));
-	}
+	Enemy(Vector3D position): position(position){}
 };
 

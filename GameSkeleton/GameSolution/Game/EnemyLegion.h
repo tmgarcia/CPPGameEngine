@@ -18,7 +18,7 @@ public:
 	unsigned int numActiveTroops;
 	void draw(Core::Graphics& g, Vector3D shipPosition);
 	void update(float dt);
-	void addEnemy();
+	void addEnemy(Vector3D position);
 	void deleteEnemy(int i);
 	Vector3D collidedPosition;
 	EnemyLegion()

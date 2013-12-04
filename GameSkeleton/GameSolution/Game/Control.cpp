@@ -1,18 +1,19 @@
 #include "Control.h"
 
-EnemyLegion enemies;
 GearSystem ge = GearSystem(Vector3D(500, 500, 1));
 
 MissileAmmo ammo;
-SpaceShip ship = SpaceShip(&ammo, Vector3D(SCREEN_WIDTH/2, SCREEN_HEIGHT/2));
+SpaceShip ship = SpaceShip(&ammo, Vector3D(50, 50));
+
+Grid grid = Grid(RGB(0,200,200),10,10);
 
 void Control::collisionCheck()
 {
 	for(unsigned int i=0; i < ammo.numActiveMissiles; i++)
 	{
-		if(enemies.checkCollide(ammo.getMissilePosition(i)))
+		if(grid.enemyCollisionCheck(ammo.getMissilePosition(i)))
 		{
-			particleSyst.addNewEffect( new ExplosionEffect(enemies.collidedPosition,RGB(255,100,100),50));
+			particleSyst.addNewEffect( new ExplosionEffect(grid.collidedEnemy,RGB(255,100,100),50));
 		}
 	}
 }
@@ -46,7 +47,7 @@ void Control::draw(Core::Graphics& g)
 	}
 	else
 	{
-		g.SetBackgroundColor(RGB(25,25,50));
+		g.SetBackgroundColor(RGB(0,0,10));
 		timer.Start();
 		instructs.draw(g);
 		profiler.addEntry("Instructions Draw", timer.Interval());
@@ -55,6 +56,7 @@ void Control::draw(Core::Graphics& g)
 		particleSyst.draw(g);
 		profiler.addEntry("ParticleSystem Draw", timer.Interval());
 		timer.Stop();
+		grid.draw(g);
 		lerp.draw(g);
 		timer.Start();
 		ship.draw(g);
@@ -75,6 +77,7 @@ void Control::update(float dt)
 	{
 		profiler.newFrame();
 		timer.Start();
+		
 		if(Core::Input::IsPressed('1'))
 		{
 			collisionType = 1;
@@ -126,12 +129,13 @@ void Control::update(float dt)
 		particleSyst.update(dt);
 		profiler.addEntry("ParticleSystem Update", timer.Interval());
 		timer.Stop();
-		if(enemyTimer.Stop()>2)
+		if(grid.update(ship.position))
 		{
-			enemyTimer.Start();
-			enemies.addEnemy();
+			if(grid.collisionDirection==0)
+				ship.reverseXVelocity();
+			else if(grid.collisionDirection==1)
+				ship.reverseYVelocity();
 		}
-		enemies.update(dt);
 		collisionCheck();
 	}
 }

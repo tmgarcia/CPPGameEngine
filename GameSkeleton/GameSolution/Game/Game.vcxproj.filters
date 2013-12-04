@@ -39,6 +39,8 @@
     </ClCompile>
     <ClCompile Include="EnemyLegion.cpp" />
     <ClCompile Include="ExplosionEffect.cpp" />
+    <ClCompile Include="GridCell.cpp" />
+    <ClCompile Include="Grid.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Gear.h" />
@@ -79,6 +81,8 @@
     </ClInclude>
     <ClInclude Include="EnemyLegion.h" />
     <ClInclude Include="ExplosionEffect.h" />
+    <ClInclude Include="GridCell.h" />
+    <ClInclude Include="Grid.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="ParticleEffects">

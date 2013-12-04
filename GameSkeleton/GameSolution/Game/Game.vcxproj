@@ -95,6 +95,8 @@
     <ClCompile Include="ExplosionEffect.cpp" />
     <ClCompile Include="Gear.cpp" />
     <ClCompile Include="GearSystem.cpp" />
+    <ClCompile Include="Grid.cpp" />
+    <ClCompile Include="GridCell.cpp" />
     <ClCompile Include="Instructions.cpp" />
     <ClCompile Include="Lerper.cpp" />
     <ClCompile Include="main.cpp" />
@@ -117,6 +119,8 @@
     <ClInclude Include="ExplosionEffect.h" />
     <ClInclude Include="Gear.h" />
     <ClInclude Include="GearSystem.h" />
+    <ClInclude Include="Grid.h" />
+    <ClInclude Include="GridCell.h" />
     <ClInclude Include="Instructions.h" />
     <ClInclude Include="Lerper.h" />
     <ClInclude Include="MissileAmmo.h" />

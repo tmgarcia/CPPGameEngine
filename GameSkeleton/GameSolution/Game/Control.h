@@ -16,6 +16,7 @@
 #include "EnemyLegion.h"
 #include "MissileAmmo.h"
 #include "ExplosionEffect.h"
+#include "Grid.h"
 
 
 class Control
@@ -33,6 +34,7 @@ public:
 	bool splashRunning;
 	bool splashDraw;
 	int collisionType; //1=bouncing, 2=walls, 3=wrapping
+	void fillGrid();
 	void draw(Core::Graphics& g);
 	void update(float dt);
 	Control()
@@ -41,7 +43,7 @@ public:
 		splashRunning = true; 
 		splashDraw = true;
 		particleSyst.addNewEffect(new OpeningSplash(Vector3D(1,0), RGB(20,20,200), 2500));
-		enemyTimer.Start();
+		fillGrid();
 	}
 };
 

@@ -44,7 +44,7 @@ Vector3D* shellPoints[] =
 void SpaceShip::draw(Core::Graphics& g)
 {
 	//Drawing the Ship
-	g.SetColor(RGB(100, 255, 100));
+	g.SetColor(RGB(255, 255, 255));
 	const unsigned int NUM_POINTS = sizeof(shipPoints) / sizeof(*shipPoints);
 	const Matrix3D transform = translate(position.x, position.y) * rotate(orientation);
 	for(unsigned int i = 0; i< NUM_POINTS; i++)
@@ -53,7 +53,7 @@ void SpaceShip::draw(Core::Graphics& g)
 		const Vector3D& p2 = transform * *shipPoints [(i+1) % NUM_POINTS];
 		g.DrawLine(p1.x, p1.y, p2.x, p2.y);
 	}
-	g.SetColor(RGB(50, 150, 50));
+	g.SetColor(RGB(0, 250, 250));
 	const unsigned int NUM_SH_POINTS = sizeof(shellPoints) / sizeof(*shellPoints);
 	for(unsigned int i = 0; i< NUM_SH_POINTS; i++)
 	{

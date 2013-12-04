@@ -12,18 +12,11 @@ Vector3D* enemyPoints[] =
 	new Vector3D(-12.0f, -10.0f),
 };
 
-void Enemy::createEnemy()
-{
-	//assignedGear = generator.randomRangedInt(0, (gears->getNumGears()-1));
-	assignedGear = 3;
-}
 
 void Enemy::draw(Core::Graphics& g, Vector3D shipPosition)
 {
 	g.SetColor(RGB(255,100,100));
 	const unsigned int NUM_E_POINTS = sizeof(enemyPoints) / sizeof(*enemyPoints);
-	//Vector3D targetPosition = gears->getIndexedGearPosition(assignedGear);
-	//Vector3D ptm = targetPosition-position;
 	Vector3D ptm = shipPosition-position;
 	Vector3D bmt = ptm.normalized(); //b
 	Vector3D bmtperp = bmt.perpCCW(); //a

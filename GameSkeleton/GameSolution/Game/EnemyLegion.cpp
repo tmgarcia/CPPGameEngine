@@ -17,11 +17,11 @@ void EnemyLegion::update(float dt)
 			troops[i]->update(dt);
 	}
 }
-void EnemyLegion::addEnemy()
+void EnemyLegion::addEnemy(Vector3D position)
 {
 	if(numActiveTroops<MAX_ENEMIES)
 	{
-		troops.push_back(new Enemy());
+		troops.push_back(new Enemy(position));
 		numActiveTroops++;
 	}
 }

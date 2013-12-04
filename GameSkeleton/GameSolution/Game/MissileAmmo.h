@@ -3,6 +3,7 @@
 #include "Missile.h"
 #include <vector>
 #include "Core.h"
+#include "Grid.h"
 using std::vector;
 
 const int MAX_MISSILES = 500;
@@ -17,7 +18,8 @@ public:
 	void addMissile(Missile* m);
 	void deleteMissile(int i);
 	Vector3D getMissilePosition(int i);
-	MissileAmmo()
+	Grid* grid;
+	MissileAmmo(Grid* grid): grid(grid)
 	{
 		numActiveMissiles = 0;
 	}

@@ -3,6 +3,8 @@
 #include "ScreenInfo.h"
 #include "Control.h"
 #include "Profiler.h"
+#include <stdlib.h>
+#include <time.h>
 
 using Core::RGB;
 bool running=true;
@@ -26,6 +28,7 @@ void Draw( Core::Graphics& graphics)
 
 int main()
 {
+	srand((unsigned)time(NULL));
 	Core::Init( "Example", SCREEN_WIDTH, SCREEN_HEIGHT);
 	profiler.initialize("gameprofile.csv");
 	Core::RegisterUpdateFn( Update);

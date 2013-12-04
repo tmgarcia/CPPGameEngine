@@ -3,15 +3,15 @@
 GearSystem ge1 = GearSystem(Vector3D(200, 200, 1));
 GearSystem ge2 = GearSystem(Vector3D(400, 400, 1));
 
-
-MissileAmmo ammo;
-SpaceShip ship = SpaceShip(&ammo, Vector3D(50, 50));
-
 Grid grid = Grid(RGB(0,200,200),10,10);
+
+
+MissileAmmo ammo(&grid);
+SpaceShip ship = SpaceShip(&ammo, Vector3D(50, 50));
 
 void Control::fillGrid()
 {
-	unsigned int numEnemies = 5;
+	unsigned int numEnemies = 10;
 	for(unsigned int i = 0; i<numEnemies; i++)
 	{
 		grid.addEnemyAt((int)generator.randomIntRange(0,9), (int)generator.randomIntRange(0,9));
@@ -35,7 +35,10 @@ void Control::drawSplash(Core::Graphics& g)
 	g.DrawString(415, 515, "PRESS ENTER TO BEGIN");
 
 	if(!splashDraw)
+	{
 		splashRunning = false;
+		PlaySound(NULL,0,0);
+	}
 	particleSyst.draw(g);
 }
 
@@ -168,3 +171,16 @@ void Control::update(float dt)
 		collisionCheck();
 	}
 }
+//void Control::playMusic()
+//{
+//	if(!musicPlaying)
+//	{
+//		musicTimer.Start();
+//		PlaySound(TEXT("HourChime.wav"),NULL, SND_FILENAME | SND_ASYNC );
+//		musicPlaying = true;
+//	}
+//	if(musicPlaying&&musicTimer.getElapsedTime()>90)
+//	{
+//
+//	}
+//}

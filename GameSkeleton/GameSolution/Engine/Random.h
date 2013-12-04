@@ -1,6 +1,7 @@
 #pragma once
 #include <stdlib.h>
 #include "Vector2D.h"
+#include <time.h>
 
 const float TWO_PI = 2 * 3.14159f;
 
@@ -29,7 +30,16 @@ public:
 	}
 	float randomIntRange(float min, float max)
 	{
-		return randomFloat() * (max*(min+1))+min;
+		if(min == 0)
+		{
+			return randomFloat() * (max*(min+1))+min;
+		}
+
+		else
+		{
+			return randomFloat() * (max*(min))+min;
+		}
+		
 	}
 	int randomRangedInt(int min, int max)
 	{

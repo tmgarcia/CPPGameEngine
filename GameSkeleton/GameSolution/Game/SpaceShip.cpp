@@ -91,7 +91,7 @@ void SpaceShip::update(float dt)
 	}
 
 	//WASD movement controls
-	float velocityScale = 50;
+	float velocityScale =60;
 	Vector3D acc = Vector3D(0, velocityScale, 0);
 	Vector3D dir = rotate(orientation)*acc;
 	if(Core::Input::IsPressed('S'))
@@ -102,6 +102,14 @@ void SpaceShip::update(float dt)
 	{
 		velocity = velocity - dt*dir;
 	}
+	if(velocity.x>100)
+		velocity.x=100;
+	if(velocity.x<-100)
+		velocity.x=-100;
+	if(velocity.y>100)
+		velocity.y=100;
+	if(velocity.y<-100)
+		velocity.y=-100;
 	position = position + velocity * dt;
 }
 
@@ -120,11 +128,11 @@ void SpaceShip::bounceOffWall(Vector3D collidedNormal)
 }
 void SpaceShip::reverseXVelocity()
 {
-	velocity.x *= -1;
+	velocity.x *= -.5f;
 }
 void SpaceShip::reverseYVelocity()
 {
-	velocity.y *= -1;
+	velocity.y *= -.5f;
 }
 void SpaceShip::wrap()
 {

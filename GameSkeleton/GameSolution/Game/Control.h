@@ -20,7 +20,9 @@
 #include "Grid.h"
 #include "Random.h"
 #include "CollideWallEffect.h"
-
+#include "windows.h"
+#include "mmsystem.h"
+#include "playsoundapi.h"
 
 class Control
 {
@@ -33,21 +35,26 @@ public:
 	Lerper lerp;
 	CStopWatch timer;
 	CStopWatch enemyTimer;
+	CStopWatch musicTimer;
 	void Control::collisionCheck();
 	Random generator;
 	bool splashRunning;
 	bool splashDraw;
+	bool musicPlaying;
 	int collisionType; //1=bouncing, 2=walls, 3=wrapping
 	void fillGrid();
 	void draw(Core::Graphics& g);
 	void update(float dt);
+	void playMusic();
 	Control()
 	{
+		musicPlaying = false;
 		collisionType=1; 
 		splashRunning = true; 
 		splashDraw = true;
 		particleSyst.addNewEffect(new OpeningSplash(Vector3D(1,0), RGB(20,20,200), 2500));
 		fillGrid();
+		//PlaySound(TEXT("HourChime.wav"),NULL, SND_FILENAME | SND_ASYNC );
 	}
 };
 

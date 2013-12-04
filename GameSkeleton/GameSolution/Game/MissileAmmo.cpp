@@ -14,7 +14,7 @@ void MissileAmmo::update(float dt)
 	for (unsigned int i=0; i<numActiveMissiles; i++)
 	{
 		if (missiles[i] != NULL )
-			if(!missiles[i]->update(dt))
+			if(!missiles[i]->update(dt) || grid->wallCollision(missiles[i]->position, 1))
 				deleteMissile(i);
 	}
 }

@@ -107,4 +107,9 @@
   <ItemGroup>
     <None Include="gameprofile.csv" />
   </ItemGroup>
+  <ItemGroup>
+    <Media Include="dupstep.mp3" />
+    <Media Include="dupstep_1.wav" />
+    <Media Include="HourChime.wav" />
+  </ItemGroup>
 </Project>

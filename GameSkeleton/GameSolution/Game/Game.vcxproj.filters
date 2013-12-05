@@ -47,6 +47,7 @@
     <ClCompile Include="CollideWallEffect.cpp">
       <Filter>ParticleEffects</Filter>
     </ClCompile>
+    <ClCompile Include="OpeningSplash2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Gear.h" />
@@ -95,6 +96,7 @@
     <ClInclude Include="CollideWallEffect.h">
       <Filter>ParticleEffects</Filter>
     </ClInclude>
+    <ClInclude Include="OpeningSplash2.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="ParticleEffects">

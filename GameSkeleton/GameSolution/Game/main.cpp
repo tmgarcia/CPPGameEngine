@@ -28,7 +28,6 @@ void Draw( Core::Graphics& graphics)
 
 int main()
 {
-	srand((unsigned)time(NULL));
 	Core::Init( "Example", SCREEN_WIDTH, SCREEN_HEIGHT);
 	profiler.initialize("gameprofile.csv");
 	Core::RegisterUpdateFn( Update);

@@ -105,6 +105,7 @@
     <ClCompile Include="Missile.cpp" />
     <ClCompile Include="MissileAmmo.cpp" />
     <ClCompile Include="OpeningSplash.cpp" />
+    <ClCompile Include="OpeningSplash2.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="SpaceShip.cpp" />
     <ClCompile Include="Timer.cpp" />
@@ -129,6 +130,7 @@
     <ClInclude Include="LerperTrainEffect.h" />
     <ClInclude Include="MissileAmmo.h" />
     <ClInclude Include="OpeningSplash.h" />
+    <ClInclude Include="OpeningSplash2.h" />
     <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="ScreenInfo.h" />
     <ClInclude Include="Missile.h" />

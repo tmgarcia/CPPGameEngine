@@ -10,6 +10,7 @@
 #include "BinaryWaveEffect.h"
 #include "BubbleEffect.h"
 #include "OpeningSplash.h"
+#include "OpeningSplash2.h"
 #include "SpaceShip.h"
 #include "Profiler.h"
 #include "Timer.h"
@@ -28,10 +29,15 @@ class Control
 {
 	void drawSplash(Core::Graphics& g);
 	void updateSplash(float dt);
+	void drawPause(Core::Graphics& g);
+	void updatePause(float dt);
+	void drawIntro(Core::Graphics& g);
+	void updateIntro(float dt);
 public:
 	Walls wall;
 	Instructions instructs;
 	ParticleSystem particleSyst;
+	ParticleSystem pauseSyst;
 	Lerper lerp;
 	CStopWatch timer;
 	CStopWatch enemyTimer;
@@ -40,6 +46,10 @@ public:
 	Random generator;
 	bool splashRunning;
 	bool splashDraw;
+	bool paused;
+	bool pauseDraw;
+	bool introRunning;
+	bool introDraw;
 	bool musicPlaying;
 	int collisionType; //1=bouncing, 2=walls, 3=wrapping
 	void fillGrid();
@@ -48,9 +58,14 @@ public:
 	void playMusic();
 	Control()
 	{
+		srand((unsigned)time(NULL));
 		musicPlaying = false;
 		collisionType=1; 
-		splashRunning = true; 
+		splashRunning = true;
+		introRunning = false;
+		introDraw = false;
+		paused = false;
+		pauseDraw = false;
 		splashDraw = true;
 		particleSyst.addNewEffect(new OpeningSplash(Vector3D(1,0), RGB(20,20,200), 2500));
 		fillGrid();

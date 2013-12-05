@@ -7,14 +7,16 @@ Grid grid = Grid(RGB(0,200,200),10,10);
 
 
 MissileAmmo ammo(&grid);
-SpaceShip ship = SpaceShip(&ammo, Vector3D(50, 50));
+SpaceShip ship = SpaceShip(&ammo, Vector3D((float)SCREEN_WIDTH-50, (float)SCREEN_HEIGHT-50));
+
+
 
 void Control::fillGrid()
 {
 	unsigned int numEnemies = 10;
 	for(unsigned int i = 0; i<numEnemies; i++)
 	{
-		grid.addEnemyAt((int)generator.randomIntRange(0,9), (int)generator.randomIntRange(0,9));
+		grid.addEnemyAt((int)generator.randomIntRange(1,9), (int)generator.randomIntRange(1,9));
 	}
 }
 
@@ -29,6 +31,46 @@ void Control::collisionCheck()
 	}
 }
 
+void Control::drawPause(Core::Graphics& g)
+{
+	pauseSyst.draw(g);
+	g.SetBackgroundColor(RGB(20,20,100));
+	instructs.draw(g, 1);
+	if(!paused)
+	{
+		pauseDraw = false;
+	}
+}
+
+void Control::updatePause(float dt)
+{
+	pauseSyst.update(dt);
+	pauseDraw = true;
+	if(Core::Input::IsPressed('U'))
+	{
+		paused = false;
+	}
+	dt;
+}
+
+void Control::drawIntro(Core::Graphics& g)
+{
+	pauseSyst.draw(g);
+	instructs.draw(g, 0);
+	if(!introDraw)
+	{
+		introRunning= false;
+	}
+}
+void Control::updateIntro(float dt)
+{
+	pauseSyst.update(dt);
+	if( Core::Input::IsPressed( Core::Input::BUTTON_SPACE ) )
+		{
+			introDraw = false;
+		}
+}
+
 void Control::drawSplash(Core::Graphics& g)
 {
 	g.SetColor(RGB(255,255,255));
@@ -37,7 +79,10 @@ void Control::drawSplash(Core::Graphics& g)
 	if(!splashDraw)
 	{
 		splashRunning = false;
-		PlaySound(NULL,0,0);
+		/*PlaySound(NULL,0,0);*/
+		introRunning = true;
+		introDraw = true;
+		pauseSyst.addNewEffect(new OpeningSplash2(Vector3D(1,0),(RGB(0,0,0)),2000));
 	}
 	particleSyst.draw(g);
 }
@@ -48,8 +93,7 @@ void Control::updateSplash(float dt)
 	{
 		splashDraw = false;
 	}
-	float o = dt;
-	o++;
+	dt;
 	particleSyst.update(dt);
 }
 
@@ -59,11 +103,18 @@ void Control::draw(Core::Graphics& g)
 	{
 		drawSplash(g);
 	}
+	else if(introRunning)
+	{
+		drawIntro(g);
+	}
+	else if(pauseDraw)
+	{
+		drawPause(g);
+	}
 	else
 	{
 		g.SetBackgroundColor(RGB(0,0,10));
 		timer.Start();
-		instructs.draw(g);
 		profiler.addEntry("Instructions Draw", timer.Interval());
 		ge1.draw(g);
 		ge2.draw(g);
@@ -87,11 +138,22 @@ void Control::update(float dt)
 	{
 		updateSplash(dt);
 	}
+	else if(introRunning)
+	{
+		updateIntro(dt);
+	}
+	else if (paused)
+	{
+		updatePause(dt);
+	}
 	else
 	{
 		profiler.newFrame();
 		timer.Start();
-		
+		if(Core::Input::IsPressed('P'))
+		{
+			paused = true;
+		}
 		if(Core::Input::IsPressed('1'))
 		{
 			collisionType = 1;

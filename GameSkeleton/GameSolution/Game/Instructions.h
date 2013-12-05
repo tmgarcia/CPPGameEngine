@@ -9,6 +9,7 @@ class Instructions
 {
 public:
 	CStopWatch timer;
-	void draw(Core::Graphics& g);
+	int instructionType; //0=intro instructions 1=pause instructions
+	void draw(Core::Graphics& g, int type);
 	Instructions(){timer.Start();}
 };

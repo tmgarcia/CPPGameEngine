@@ -33,13 +33,13 @@ bool Grid::enemyCollisionCheck(Vector3D colliderPosition)
 
 void Grid::draw(Core::Graphics& g)
 {
-	/*for(int i = 0; i<numRows; i++)
+	for(int i = 0; i<numRows; i++)
 	{
 		for(int j = 0; j<numColumns; j++)
 		{
 			cells[i][j]->draw(g);
 		}
-	}*/
+	}
 	enemies.draw(g, Vector3D(100,100));
 }
 

@@ -143,11 +143,6 @@
     <None Include="gameprofile.csv" />
     <None Include="logging.html" />
   </ItemGroup>
-  <ItemGroup>
-    <Media Include="dupstep.mp3" />
-    <Media Include="dupstep_1.wav" />
-    <Media Include="HourChime.wav" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

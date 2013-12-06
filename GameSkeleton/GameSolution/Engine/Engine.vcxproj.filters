@@ -12,6 +12,7 @@
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="Profiler.cpp" />
+    <ClCompile Include="Logger.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Vector2D.h">
@@ -33,5 +34,8 @@
     <ClInclude Include="ExportHeader.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="Profiler.h" />
+    <ClInclude Include="List.h" />
+    <ClInclude Include="Logger.h" />
+    <ClInclude Include="Assert.h" />
   </ItemGroup>
 </Project>

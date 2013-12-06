@@ -40,14 +40,34 @@ Vector3D* shellPoints[] =
 	new Vector3D(-12.0f, -10.0f),
 };
 
+Vector3D* arrowHead[] =
+{
+	new Vector3D(-10, -15),
+	new Vector3D(-10, -30),
+	new Vector3D(-20, -30),
+	new Vector3D(0, -40),
+	new Vector3D(20, -30),
+	new Vector3D(10, -30),
+	new Vector3D(10, -15),
+};
 
 void SpaceShip::draw(Core::Graphics& g)
 {
 	//Drawing the Ship
+	const Matrix3D transform = translate(position.x, position.y) * rotate(orientation);
+
+
+	g.SetColor(RGB(50,50,50));
+	const unsigned int NUM_A_POINTS = sizeof(arrowHead) / sizeof(*arrowHead);
+	for(unsigned int i = 0; i< NUM_A_POINTS; i++)
+	{
+		const Vector3D& p1 = transform * *arrowHead[i];
+		const Vector3D& p2 = transform * *arrowHead [(i+1) % NUM_A_POINTS];
+		g.DrawLine(p1.x, p1.y, p2.x, p2.y);
+	}
 	float green = (health/fullHealth)*255;
 	g.SetColor(RGB(255, green, green));
 	const unsigned int NUM_POINTS = sizeof(shipPoints) / sizeof(*shipPoints);
-	const Matrix3D transform = translate(position.x, position.y) * rotate(orientation);
 	for(unsigned int i = 0; i< NUM_POINTS; i++)
 	{
 		const Vector3D& p1 = transform * *shipPoints[i];

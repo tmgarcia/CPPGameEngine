@@ -20,7 +20,7 @@ Vector3D* mousePoints[] =
 
 void Instructions::draw(Core::Graphics& g, int type)
 {
-	/*float spfTime = timer.Interval();
+	float spfTime = timer.Interval();
 	string spfStr = std::to_string(spfTime);
 	g.SetColor(RGB(200, 200, 200));
 	string spfLabel = "SPF: " + spfStr;
@@ -31,23 +31,23 @@ void Instructions::draw(Core::Graphics& g, int type)
 	float fpsTime = 1/spfTime;
 	string fpsStr = std::to_string(fpsTime);
 	string fpsLabel = "FPS: " + fpsStr;
-	char *fstr = &fpsLabel[0];*/
+	char *fstr = &fpsLabel[0];
 
-	//g.DrawString(20,515, fstr);
+	g.DrawString(20,515, fstr);
 	if(type==0)
 	{
-		g.SetBackgroundColor(RGB(0,0,255));
-		g.SetColor(RGB(255, 255, 255));
+		g.SetColor(RGB(200, 200, 200));
 		g.DrawString(150,200, "Welcome AGENT_DEBUGGER");
 		g.DrawString(150,220, "As usual we're dealing with a rogue programmer who has clearly never even heard of TOP_AGENT_HALLADAY.");
 		g.DrawString(150,235, "The bugs in his code are rutheless and unforgiving.");
 		g.DrawString(150,250, "There isn't a line of documentation, so once again we're sending you in blind.");
 		g.DrawString(150,265, "We've sent AGENT_INTELLISENSE in first.");
 		g.DrawString(150,280, "We know he isn't all that useful but hopefully his running around through the code will help you.");
-		g.DrawString(150,295, "REMEMBER:");
-		g.DrawString(165,310, "DO NOT compile until all bugs have been eliminated from the program.");
-		g.DrawString(165,325, "DO NOT let the bugs get to you, or we'll have a full scale RUNTIME_ERROR on our hands.");
-		g.DrawString(150,340, "Good luck.");
+		g.DrawString(150,295, "If not, you might just have to stumble through yourself and try to get your own picture of what's doing what.");
+		g.DrawString(150,310, "REMEMBER:");
+		g.DrawString(165,325, "DO NOT compile until all bugs have been cleaned from the program.");
+		g.DrawString(165,340, "DO NOT let the bugs get to you, or we'll have a full scale RUNTIME_ERROR on our hands.");
+		g.DrawString(150,355, "Good luck.");
 
 
 

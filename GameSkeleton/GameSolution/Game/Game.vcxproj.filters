@@ -108,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="gameprofile.csv" />
+    <None Include="logging.html" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="dupstep.mp3" />

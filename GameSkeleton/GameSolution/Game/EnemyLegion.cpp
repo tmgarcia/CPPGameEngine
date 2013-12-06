@@ -33,17 +33,18 @@ void EnemyLegion::deleteEnemy(int i)
 	numActiveTroops--;
 }
 
-bool EnemyLegion::checkCollide(Vector3D colliderPosition)
+bool EnemyLegion::checkCollide(Vector3D colliderPosition, int type, int b)
 {
 	bool collided = false;
-	int buffer =  5;
+	int buffer =  b;
 	for(unsigned int i=0; i<numActiveTroops; i++)
 	{
 		if(((colliderPosition.x>(troops[i]->position.x-buffer)) && (colliderPosition.x<(troops[i]->position.x+buffer))) && ((colliderPosition.y>(troops[i]->position.y-buffer))&&(colliderPosition.y<(troops[i]->position.y+buffer))))
 		{
 			collided = true;
 			collidedPosition = Vector3D(troops[i]->position.x, troops[i]->position.y);
-			deleteEnemy(i);
+			if(type==1)
+				deleteEnemy(i);
 		}
 	}
 	return collided;

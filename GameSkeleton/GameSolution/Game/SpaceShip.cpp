@@ -44,7 +44,8 @@ Vector3D* shellPoints[] =
 void SpaceShip::draw(Core::Graphics& g)
 {
 	//Drawing the Ship
-	g.SetColor(RGB(255, 255, 255));
+	float green = (health/fullHealth)*255;
+	g.SetColor(RGB(255, green, green));
 	const unsigned int NUM_POINTS = sizeof(shipPoints) / sizeof(*shipPoints);
 	const Matrix3D transform = translate(position.x, position.y) * rotate(orientation);
 	for(unsigned int i = 0; i< NUM_POINTS; i++)
@@ -144,4 +145,11 @@ void SpaceShip::wrap()
 		position.y = SCREEN_HEIGHT+32;
 	if(position.y > SCREEN_HEIGHT+32)
 		position.y = 0-32;
+}
+
+void SpaceShip::loseHealth(float damage)
+{
+	health-=damage;
+	if(health<=0)
+		dead = true;
 }

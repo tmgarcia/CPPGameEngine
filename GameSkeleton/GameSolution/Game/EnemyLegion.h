@@ -14,7 +14,7 @@ class EnemyLegion
 {
 public:
 	vector<Enemy*> troops;
-	bool EnemyLegion::checkCollide(Vector3D colliderPosition);
+	bool EnemyLegion::checkCollide(Vector3D colliderPosition, int type, int buffer);//type - 1=lethal 0=nonlethal
 	unsigned int numActiveTroops;
 	void draw(Core::Graphics& g, Vector3D shipPosition);
 	void update(float dt);

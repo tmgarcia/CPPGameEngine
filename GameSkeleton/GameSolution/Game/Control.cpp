@@ -10,13 +10,61 @@ MissileAmmo ammo(&grid);
 SpaceShip ship = SpaceShip(&ammo, Vector3D((float)SCREEN_WIDTH-50, (float)SCREEN_HEIGHT-50));
 
 
+void Control::drawRunError(Core::Graphics& g)
+{
+	g.SetBackgroundColor(RGB(0,0,255));
+	g.SetColor(RGB(255,255,255));
+	g.DrawString(400,300,"RUNTIME_ERROR");
+	g.DrawString(400,315,"AGENT_DEBUGGER:TERMINATED");
+}
+void Control::updateRunError(float dt)
+{
+	dt;
+}
+
+void Control::drawCompiled(Core::Graphics& g)
+{
+
+	if(compiledErrors)
+	{
+		g.SetBackgroundColor(RGB(0,0,255));
+		g.SetColor(RGB(255,255,255));
+		g.DrawString(400,300,"COMPILER_ERROR");
+		g.DrawString(400,315,"MISSION FAILED");
+	}
+	else
+	{
+		g.DrawString(300,385, "CODE DEBUGGED AND COMPILED SUCCESSFULLY");
+		g.SetColor(RGB(255,255,255));
+		string tStr = std::to_string((int)endTime);
+		string tLabel = "Total Time: " + tStr + " seconds";
+		char *ttstr = &tLabel[0];
+		g.DrawString(300,400, ttstr);
+	}
+
+}
+
+void Control::updateCompiled(float dt)
+{
+	dt;
+}
 
 void Control::fillGrid()
 {
 	unsigned int numEnemies = 10;
 	for(unsigned int i = 0; i<numEnemies; i++)
 	{
-		grid.addEnemyAt((int)generator.randomIntRange(1,9), (int)generator.randomIntRange(1,9));
+		bool foundGoodLocation = false;
+		int iv=0;
+		int jv=0;
+		while(!foundGoodLocation)
+		{
+			iv= (int)generator.randomIntRange(1,9);
+			jv = (int)generator.randomIntRange(1,9);
+			if(!(iv==9&&jv==0) && !(iv==9&&jv==9))
+				foundGoodLocation = true;
+		}
+		grid.addEnemyAt(iv, jv);
 	}
 }
 
@@ -24,9 +72,9 @@ void Control::collisionCheck()
 {
 	for(unsigned int i=0; i < ammo.numActiveMissiles; i++)
 	{
-		if(grid.enemyCollisionCheck(ammo.getMissilePosition(i)))
+		if(grid.enemyCollisionCheck(ammo.getMissilePosition(i), 1, 5))
 		{
-			particleSyst.addNewEffect( new ExplosionEffect(grid.collidedEnemy,RGB(20,100,20),50));
+			particleSyst.addNewEffect( new ExplosionEffect(grid.collidedEnemy,RGB(100,20,20),50));
 		}
 	}
 }
@@ -55,6 +103,7 @@ void Control::updatePause(float dt)
 
 void Control::drawIntro(Core::Graphics& g)
 {
+	g.SetBackgroundColor(RGB(20,20,100));
 	pauseSyst.draw(g);
 	instructs.draw(g, 0);
 	if(!introDraw)
@@ -111,6 +160,14 @@ void Control::draw(Core::Graphics& g)
 	{
 		drawPause(g);
 	}
+	else if(compiled || compiledErrors)
+	{
+		drawCompiled(g);
+	}
+	else if(playerDead)
+	{
+		drawRunError(g);
+	}
 	else
 	{
 		g.SetBackgroundColor(RGB(0,0,10));
@@ -129,6 +186,12 @@ void Control::draw(Core::Graphics& g)
 		profiler.addEntry("Ship Draw", timer.Stop());
 		if(collisionType == 2)
 			wall.draw(g);
+		compiled =  grid.playerCompile;
+		compiledErrors = grid.playerCompileErrors;
+		if(compiled || compiledErrors)
+			endTime = gamePlayTimer.Stop();
+		if(ship.dead)
+			playerDead = true;
 	}
 }
 
@@ -145,6 +208,14 @@ void Control::update(float dt)
 	else if (paused)
 	{
 		updatePause(dt);
+	}
+	else if(compiled || compiledErrors)
+	{
+		updateCompiled(dt);
+	}
+	else if(playerDead)
+	{
+		updateRunError(dt);
 	}
 	else
 	{
@@ -231,6 +302,8 @@ void Control::update(float dt)
 			}
 		}
 		collisionCheck();
+		if(grid.enemyCollisionCheck(ship.position, 0, 16))
+			ship.loseHealth(1);
 	}
 }
 //void Control::playMusic()

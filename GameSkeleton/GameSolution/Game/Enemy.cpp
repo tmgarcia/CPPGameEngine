@@ -26,7 +26,8 @@ Vector3D* enemyPoints[] =
 
 void Enemy::draw(Core::Graphics& g, Vector3D shipPosition)
 {
-	g.SetColor(RGB(50,200,50));
+	g.SetColor(RGB(200,50,50));
+	g.DrawString((int)position.x-3, (int)position.y-5, "E");
 	const unsigned int NUM_E_POINTS = sizeof(enemyPoints) / sizeof(*enemyPoints);
 	Matrix3D rotator1 = rotate(orientation1);
 	Matrix3D transform1 = translate(position.x, position.y) * rotator1;
@@ -37,7 +38,6 @@ void Enemy::draw(Core::Graphics& g, Vector3D shipPosition)
 		g.DrawLine(t1.x, t1.y, t2.x, t2.y);
 	}
 
-	g.SetColor(RGB(50,200,50));
 	Matrix3D rotator2 = rotate(orientation2);
 	Matrix3D transform2 = translate(position.x, position.y) * rotator2;
 	for(unsigned int i = 0; i<NUM_E_POINTS; i++)
@@ -47,7 +47,6 @@ void Enemy::draw(Core::Graphics& g, Vector3D shipPosition)
 		g.DrawLine(t1.x, t1.y, t2.x, t2.y);
 	}
 
-	g.SetColor(RGB(50,200,50));
 	Matrix3D transform3 = translate(position.x, position.y) * rotator1 * scale(0.4f,0.4f);
 	for(unsigned int i = 0; i<NUM_E_POINTS; i++)
 	{
@@ -56,7 +55,6 @@ void Enemy::draw(Core::Graphics& g, Vector3D shipPosition)
 		g.DrawLine(t1.x, t1.y, t2.x, t2.y);
 	}
 
-	g.SetColor(RGB(50,200,50));
 	Matrix3D transform4 = translate(position.x, position.y) * rotator2 * scale(0.4f,0.4f);
 	for(unsigned int i = 0; i<NUM_E_POINTS; i++)
 	{

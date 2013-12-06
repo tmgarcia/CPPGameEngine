@@ -15,18 +15,22 @@ public:
 	RGB wallColor;
 	void buildCells();
 	void buildWalls();
+	bool playerCompileErrors;
+	bool playerCompile;
 	EnemyLegion enemies;
 	Vector3D collidedEnemy;
 	int collisionDirection; //0 for horizontal (collided x) 1 for vertical (collided y)
 	void draw(Core::Graphics& g);
 	bool update(Vector3D shipPosition, float dt);
-	bool enemyCollisionCheck(Vector3D colliderPosition);
+	bool enemyCollisionCheck(Vector3D colliderPosition, int type, int buffer);//type - 0=nonlethal 1=lethal
 	void addEnemyAt(int i, int j);
 	bool wallCollision(Vector3D colliderPosition, float buffer);
 	Grid(RGB wallColor, int numRows=10, int numColumns=10) : wallColor(wallColor), numRows(numRows), numColumns(numColumns)
 	{
 		buildCells();
 		buildWalls();
+		playerCompile = false;
+		playerCompileErrors = false;
 	}
 	~Grid(){}
 };

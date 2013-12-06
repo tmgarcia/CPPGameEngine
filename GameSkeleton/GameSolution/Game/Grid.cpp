@@ -1,4 +1,5 @@
 #include "Grid.h"
+#include "Assert.h"
 
 GridCell* cells[10][10];
 const unsigned int NUM_CELLS = sizeof(cells) / sizeof(*cells);
@@ -16,14 +17,18 @@ void Grid::buildCells()
 
 void Grid::addEnemyAt(int i, int j)
 {
+	Assert(i>=0);
+	Assert(i<=9);
+	Assert(j>=0);
+	Assert(j<=9);
 	Vector3D spot = Vector3D(cells[i][j]->position.x+(cells[i][j]->width/2), cells[i][j]->position.y+(cells[i][j]->height/2));
 	enemies.addEnemy(spot);
 }
 
-bool Grid::enemyCollisionCheck(Vector3D colliderPosition)
+bool Grid::enemyCollisionCheck(Vector3D colliderPosition, int type, int buffer)
 {
 	bool collided=false;
-	if(enemies.checkCollide(colliderPosition))
+	if(enemies.checkCollide(colliderPosition, type, buffer))
 	{
 		collidedEnemy = enemies.collidedPosition;
 		collided = true;
@@ -33,19 +38,37 @@ bool Grid::enemyCollisionCheck(Vector3D colliderPosition)
 
 void Grid::draw(Core::Graphics& g)
 {
-	for(int i = 0; i<numRows; i++)
+	/*for(int i = 0; i<numRows; i++)
 	{
 		for(int j = 0; j<numColumns; j++)
 		{
 			cells[i][j]->draw(g);
 		}
+	}*/
+	if(enemies.numActiveTroops==0)
+	{
+		g.SetColor(RGB(50,255,50));
 	}
+	else
+		g.SetColor(RGB(200,50,50));
+	g.DrawString((int)(cells[9][0]->position.x+(cells[9][0]->width/2))-30,(int)(cells[9][0]->position.y+(cells[9][0]->height/2))-10, "COMPILE");
+	g.DrawLine(cells[9][0]->position.x, cells[9][0]->position.y, cells[9][0]->position.x+cells[9][0]->width, cells[9][0]->position.y);
+	g.DrawLine(cells[9][0]->position.x+cells[9][0]->width, cells[9][0]->position.y, cells[9][0]->position.x+cells[9][0]->width, cells[9][0]->position.y+cells[9][0]->height);
 	enemies.draw(g, Vector3D(100,100));
 }
 
 bool Grid::update(Vector3D shipPosition, float dt)
 {
 	enemies.update(dt);
+
+	if(cells[9][0]->isWithinCell(shipPosition))
+	{
+		if(enemies.numActiveTroops!=0)
+			playerCompileErrors = true;
+		else
+			playerCompile = true;
+	}
+
 	return wallCollision(shipPosition, 16);
 }
 
@@ -63,6 +86,7 @@ bool Grid::wallCollision(Vector3D colliderPosition, float buffer)
 			}
 		}
 	}
+
 	return collided;
 }
 

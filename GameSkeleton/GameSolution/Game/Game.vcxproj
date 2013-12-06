@@ -51,7 +51,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>PROFILING_ON;WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>ASSERT_ON;LOG_ON;PROFILING_ON;WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)\Engine;$(SolutionDir)\Core\include</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
@@ -141,6 +141,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="gameprofile.csv" />
+    <None Include="logging.html" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="dupstep.mp3" />

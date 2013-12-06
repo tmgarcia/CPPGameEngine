@@ -10,17 +10,21 @@
 class SpaceShip
 {
 public:
-	SpaceShip(MissileAmmo* ammo, Vector3D start) {this->ammo = ammo; position = start;}
+	SpaceShip(MissileAmmo* ammo, Vector3D start) {this->ammo = ammo; position = start; fullHealth = 100; health = fullHealth; dead = false;}
 	Vector3D position;
 	Vector3D velocity;
 	MissileAmmo* ammo;
 	Turret gun;
 	float orientation;
+	float health;
+	float fullHealth;
+	bool dead;
 	void draw(Core::Graphics&);
 	void update(float dt);
 	void resetPosition(Vector3D newPosition);
 	Vector3D getPosition();
 	void bounceOffWall(Vector3D collidedNormal);
+	void loseHealth(float damage);
 	void reverseXVelocity();
 	void reverseYVelocity();
 	void wrap();

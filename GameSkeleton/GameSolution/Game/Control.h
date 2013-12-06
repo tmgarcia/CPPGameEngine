@@ -24,6 +24,9 @@
 #include "windows.h"
 #include "mmsystem.h"
 #include "playsoundapi.h"
+#include <string>
+
+using std::string;
 
 class Control
 {
@@ -33,6 +36,10 @@ class Control
 	void updatePause(float dt);
 	void drawIntro(Core::Graphics& g);
 	void updateIntro(float dt);
+	void updateCompiled(float dt);
+	void drawCompiled(Core::Graphics& g);
+	void updateRunError(float dt);
+	void drawRunError(Core::Graphics& g);
 public:
 	Walls wall;
 	Instructions instructs;
@@ -42,6 +49,7 @@ public:
 	CStopWatch timer;
 	CStopWatch enemyTimer;
 	CStopWatch musicTimer;
+	CStopWatch gamePlayTimer;
 	void Control::collisionCheck();
 	Random generator;
 	bool splashRunning;
@@ -51,6 +59,10 @@ public:
 	bool introRunning;
 	bool introDraw;
 	bool musicPlaying;
+	bool compiled;
+	bool compiledErrors;
+	bool playerDead;
+	float endTime;
 	int collisionType; //1=bouncing, 2=walls, 3=wrapping
 	void fillGrid();
 	void draw(Core::Graphics& g);
@@ -58,6 +70,7 @@ public:
 	void playMusic();
 	Control()
 	{
+		gamePlayTimer.Start();
 		srand((unsigned)time(NULL));
 		musicPlaying = false;
 		collisionType=1; 
@@ -67,6 +80,7 @@ public:
 		paused = false;
 		pauseDraw = false;
 		splashDraw = true;
+		playerDead = false;
 		particleSyst.addNewEffect(new OpeningSplash(Vector3D(1,0), RGB(20,20,200), 2500));
 		fillGrid();
 		//PlaySound(TEXT("HourChime.wav"),NULL, SND_FILENAME | SND_ASYNC );

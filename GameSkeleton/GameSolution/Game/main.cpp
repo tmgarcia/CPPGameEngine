@@ -5,6 +5,7 @@
 #include "Profiler.h"
 #include <stdlib.h>
 #include <time.h>
+#include "Assert.h"
 
 
 using Core::RGB;
@@ -33,6 +34,7 @@ int main()
 	LOG(Warning, "Warning <TEST_WARNING>");
 	LOG(Error, "Error <TEST_ERROR>");
 	LOG(Severe, "Severe<TEST_SEVERE>");
+	//Assert((false), "It just didn't work.");
 	Core::Init( "Example", SCREEN_WIDTH, SCREEN_HEIGHT);
 	profiler.initialize("gameprofile.csv");
 	Core::RegisterUpdateFn( Update);

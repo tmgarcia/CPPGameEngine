@@ -10,6 +10,14 @@ MissileAmmo ammo(&grid);
 SpaceShip ship = SpaceShip(&ammo, Vector3D((float)SCREEN_WIDTH-50, (float)SCREEN_HEIGHT-50));
 
 
+void Control::clearOut()
+{
+	//ge2.~GearSystem();
+	ammo.~MissileAmmo();
+	ge1.~GearSystem();
+	ship.~SpaceShip();
+}
+
 void Control::drawRunError(Core::Graphics& g)
 {
 	g.SetBackgroundColor(RGB(0,0,255));
@@ -131,7 +139,7 @@ void Control::drawSplash(Core::Graphics& g)
 		/*PlaySound(NULL,0,0);*/
 		introRunning = true;
 		introDraw = true;
-		pauseSyst.addNewEffect(new OpeningSplash2(Vector3D(1,0),(RGB(0,0,0)),2000));
+		//pauseSyst.addNewEffect(new OpeningSplash2(Vector3D(1,0),(RGB(0,0,0)),2000));
 	}
 	particleSyst.draw(g);
 }
@@ -193,6 +201,8 @@ void Control::draw(Core::Graphics& g)
 		if(ship.dead)
 			playerDead = true;
 	}
+	_CrtMemCheckpoint(bob);
+	instructs.drawDebugInfo(g, bob->lCounts[_CLIENT_BLOCK], bob->lSizes[_CLIENT_BLOCK], bob->lHighWaterCount);
 }
 
 void Control::update(float dt)

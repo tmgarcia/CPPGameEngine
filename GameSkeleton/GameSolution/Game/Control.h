@@ -25,6 +25,7 @@
 #include "mmsystem.h"
 #include "playsoundapi.h"
 #include <string>
+#include "DebugMemory.h"
 
 using std::string;
 
@@ -68,8 +69,11 @@ public:
 	void draw(Core::Graphics& g);
 	void update(float dt);
 	void playMusic();
+	_CrtMemState* bob;
+	void clearOut();
 	Control()
 	{
+		bob = new _CrtMemState;
 		gamePlayTimer.Start();
 		srand((unsigned)time(NULL));
 		musicPlaying = false;
@@ -84,6 +88,10 @@ public:
 		particleSyst.addNewEffect(new OpeningSplash(Vector3D(1,0), RGB(20,20,200), 2500));
 		fillGrid();
 		//PlaySound(TEXT("HourChime.wav"),NULL, SND_FILENAME | SND_ASYNC );
+	}
+	~Control()
+	{
+		clearOut();
 	}
 };
 

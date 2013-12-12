@@ -1,20 +1,5 @@
 #include "Enemy.h"
 
-//Vector3D* enemyPoints[] = 
-//{
-//	new Vector3D(0.0f, -14.0f),
-//	new Vector3D(12.0f, -10.0f),
-//
-//	new Vector3D(17.0f, 2.0f),
-//	new Vector3D(12.0f, 16.0f),
-//
-//	new Vector3D(0.0f, 20.0f),
-//	new Vector3D(-12.0f, 16.0f),
-//
-//	new Vector3D(-17.0f, 2.0f),
-//	new Vector3D(-12.0f, -10.0f),
-//};
-
 Vector3D* enemyPoints[] = 
 {
 	new Vector3D(-10, -15),
@@ -22,13 +7,20 @@ Vector3D* enemyPoints[] =
 	new Vector3D(10, 15),
 	new Vector3D(-10, 15),
 };
+const unsigned int NUM_E_POINTS = sizeof(enemyPoints) / sizeof(*enemyPoints);
 
+void Enemy::clear()
+{
+	for(int i=0; i< NUM_E_POINTS; i++)
+	{
+		delete enemyPoints[i];
+	}
+}
 
 void Enemy::draw(Core::Graphics& g, Vector3D shipPosition)
 {
 	g.SetColor(RGB(200,50,50));
 	g.DrawString((int)position.x-3, (int)position.y-5, "E");
-	const unsigned int NUM_E_POINTS = sizeof(enemyPoints) / sizeof(*enemyPoints);
 	Matrix3D rotator1 = rotate(orientation1);
 	Matrix3D transform1 = translate(position.x, position.y) * rotator1;
 	for(unsigned int i = 0; i<NUM_E_POINTS; i++)

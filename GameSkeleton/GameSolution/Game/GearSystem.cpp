@@ -8,6 +8,14 @@ void GearSystem::buildSystem()
 	createGear(i, 0.6f);
 }
 
+void GearSystem::clearGears()
+{
+	gears[0]->clear();
+	for(int i=0; i < 5; i++)
+	{
+		delete gears[i];
+	}
+}
 void GearSystem::createGear(int i, float rotationalSpeed)
 {
 	float gscale = (float)(NUM_GEARS-i)/NUM_GEARS;

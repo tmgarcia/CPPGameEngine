@@ -2,11 +2,7 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Gear.cpp" />
-    <ClCompile Include="GearSystem.cpp" />
     <ClCompile Include="Lerper.cpp" />
-    <ClCompile Include="Walls.cpp" />
-    <ClCompile Include="Instructions.cpp" />
     <ClCompile Include="BubbleEffect.cpp">
       <Filter>ParticleEffects</Filter>
     </ClCompile>
@@ -38,24 +34,39 @@
       <Filter>ShipStuff</Filter>
     </ClCompile>
     <ClCompile Include="EnemyLegion.cpp" />
-    <ClCompile Include="ExplosionEffect.cpp" />
-    <ClCompile Include="GridCell.cpp" />
-    <ClCompile Include="Grid.cpp" />
     <ClCompile Include="LerperTrainEffect.cpp">
       <Filter>ParticleEffects</Filter>
     </ClCompile>
     <ClCompile Include="CollideWallEffect.cpp">
       <Filter>ParticleEffects</Filter>
     </ClCompile>
-    <ClCompile Include="OpeningSplash2.cpp" />
+    <ClCompile Include="ExplosionEffect.cpp">
+      <Filter>ParticleEffects</Filter>
+    </ClCompile>
+    <ClCompile Include="OpeningSplash2.cpp">
+      <Filter>ParticleEffects</Filter>
+    </ClCompile>
+    <ClCompile Include="Gear.cpp">
+      <Filter>MapStuff</Filter>
+    </ClCompile>
+    <ClCompile Include="GearSystem.cpp">
+      <Filter>MapStuff</Filter>
+    </ClCompile>
+    <ClCompile Include="Grid.cpp">
+      <Filter>MapStuff</Filter>
+    </ClCompile>
+    <ClCompile Include="GridCell.cpp">
+      <Filter>MapStuff</Filter>
+    </ClCompile>
+    <ClCompile Include="Instructions.cpp">
+      <Filter>MapStuff</Filter>
+    </ClCompile>
+    <ClCompile Include="Walls.cpp">
+      <Filter>MapStuff</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Gear.h" />
-    <ClInclude Include="ScreenInfo.h" />
-    <ClInclude Include="GearSystem.h" />
     <ClInclude Include="Lerper.h" />
-    <ClInclude Include="Walls.h" />
-    <ClInclude Include="Instructions.h" />
     <ClInclude Include="BubbleEffect.h">
       <Filter>ParticleEffects</Filter>
     </ClInclude>
@@ -87,16 +98,39 @@
       <Filter>ShipStuff</Filter>
     </ClInclude>
     <ClInclude Include="EnemyLegion.h" />
-    <ClInclude Include="ExplosionEffect.h" />
-    <ClInclude Include="GridCell.h" />
-    <ClInclude Include="Grid.h" />
     <ClInclude Include="LerperTrainEffect.h">
       <Filter>ParticleEffects</Filter>
     </ClInclude>
     <ClInclude Include="CollideWallEffect.h">
       <Filter>ParticleEffects</Filter>
     </ClInclude>
-    <ClInclude Include="OpeningSplash2.h" />
+    <ClInclude Include="ExplosionEffect.h">
+      <Filter>ParticleEffects</Filter>
+    </ClInclude>
+    <ClInclude Include="OpeningSplash2.h">
+      <Filter>ParticleEffects</Filter>
+    </ClInclude>
+    <ClInclude Include="Gear.h">
+      <Filter>MapStuff</Filter>
+    </ClInclude>
+    <ClInclude Include="GearSystem.h">
+      <Filter>MapStuff</Filter>
+    </ClInclude>
+    <ClInclude Include="Grid.h">
+      <Filter>MapStuff</Filter>
+    </ClInclude>
+    <ClInclude Include="GridCell.h">
+      <Filter>MapStuff</Filter>
+    </ClInclude>
+    <ClInclude Include="Instructions.h">
+      <Filter>MapStuff</Filter>
+    </ClInclude>
+    <ClInclude Include="Walls.h">
+      <Filter>MapStuff</Filter>
+    </ClInclude>
+    <ClInclude Include="ScreenInfo.h">
+      <Filter>MapStuff</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="ParticleEffects">
@@ -104,6 +138,9 @@
     </Filter>
     <Filter Include="ShipStuff">
       <UniqueIdentifier>{ab615d83-0867-4497-ab63-039a406f5bb9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MapStuff">
+      <UniqueIdentifier>{f12787ab-6bfd-4d0c-9b59-612417823149}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

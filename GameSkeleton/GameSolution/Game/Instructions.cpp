@@ -2,7 +2,6 @@
 #include <string>
 
 using std::string;
-
 Vector3D* mousePoints[] = 
 {
 	new Vector3D(0.0f, 0.0f),
@@ -16,24 +15,50 @@ Vector3D* mousePoints[] =
 	new Vector3D(-4.48f, -7.6f),
 	new Vector3D(-0.22f, -10.0f),
 };
+const unsigned int NUM_M_POINTS = sizeof(mousePoints) / sizeof(*mousePoints);
 
+void Instructions::clear()
+{
+	for(int i=0; i< NUM_M_POINTS; i++)
+	{
+		delete mousePoints[i];
+	}
+}
 
-void Instructions::draw(Core::Graphics& g, int type)
+void Instructions::drawDebugInfo(Core::Graphics& g, size_t counts, size_t size, size_t high)
 {
 	float spfTime = timer.Interval();
 	string spfStr = std::to_string(spfTime);
 	g.SetColor(RGB(200, 200, 200));
 	string spfLabel = "SPF: " + spfStr;
 	char *sstr = &spfLabel[0];
-
 	g.DrawString(20,500, sstr);
 
 	float fpsTime = 1/spfTime;
 	string fpsStr = std::to_string(fpsTime);
 	string fpsLabel = "FPS: " + fpsStr;
 	char *fstr = &fpsLabel[0];
-
 	g.DrawString(20,515, fstr);
+
+	string count = std::to_string(counts);
+	string cLabel = "Counts: " + count;
+	char *costr = &cLabel[0];
+	g.DrawString(20,530, costr);
+
+	string si = std::to_string(size);
+	string siLabel = "Sizes: " + si;
+	char *sistr = &siLabel[0];
+	g.DrawString(20,545, sistr);
+
+	string hi = std::to_string(high);
+	string hiLabel = "Highwater: " + hi;
+	char *histr = &hiLabel[0];
+	g.DrawString(20,560, histr);
+
+}
+
+void Instructions::draw(Core::Graphics& g, int type)
+{
 	if(type==0)
 	{
 		g.SetColor(RGB(200, 200, 200));
@@ -69,7 +94,6 @@ void Instructions::draw(Core::Graphics& g, int type)
 		g.DrawString(350,580, "[PRESS SPACE TO ENTER PROGRAM]");
 
 
-		const unsigned int NUM_M_POINTS = sizeof(mousePoints) / sizeof(*mousePoints);
 		const Matrix3D mtrans = translate(450, 510);
 		for(unsigned int i = 0; i< NUM_M_POINTS; i++)
 		{

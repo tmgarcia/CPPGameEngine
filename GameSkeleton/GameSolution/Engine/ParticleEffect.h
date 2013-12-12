@@ -4,6 +4,7 @@
 #include "Core.h"
 #include "Random.h"
 #include "Matrix3D.h"
+#include "DebugMemory.h"
 using::Core::RGB;
 
 class ParticleEffect

@@ -1,44 +1,47 @@
 #include "Missile.h"
 
-
-
-//Vector3D* missilePoints[] = 
-//{
-//	new Vector3D(0,0),
-//	new Vector3D(2.5f, 5.56f),
-//	new Vector3D(0.0f, 15.0f),
-//	new Vector3D(-2.5f, 5.56f),
-//
-//};
-
 Vector3D* missilePoints[] = 
+{
+	new Vector3D(0.0f, -5.0f),
+	new Vector3D(3.5f, -3.5f),
+	new Vector3D(5.0f, 0.0f),
+	new Vector3D(3.5f, 3.5f),
+	new Vector3D(0.0f, 5.0f),
+	new Vector3D(-3.5f, 3.5f),
+	new Vector3D(-5.0f, 0.0f),
+	new Vector3D(-3.5f, -3.5f),
+};
+Vector3D* whitePoints[] = 
+{
+	new Vector3D(-2.0f, -3.0f),
+	new Vector3D(-1.3f, -2.1f),
+	new Vector3D(-1.0f, 0.0f),
+	new Vector3D(-1.3f, 2.1f),
+	new Vector3D(-2.0f, 3.0f),
+	new Vector3D(-2.7f, 2.1f),
+	new Vector3D(-3.0f, -0.0f),
+	new Vector3D(-2.7f, -2.1f),
+};
+const unsigned int NUM_POINTS = sizeof(missilePoints) / sizeof(*missilePoints);
+bool missilesCleared = false;
+void Missile::clear()
+{
+	if(!missilesCleared)
 	{
-		new Vector3D(0.0f, -5.0f),
-		new Vector3D(3.5f, -3.5f),
-		new Vector3D(5.0f, 0.0f),
-		new Vector3D(3.5f, 3.5f),
-		new Vector3D(0.0f, 5.0f),
-		new Vector3D(-3.5f, 3.5f),
-		new Vector3D(-5.0f, 0.0f),
-		new Vector3D(-3.5f, -3.5f),
-	};
-	Vector3D* whitePoints[] = 
-	{
-		new Vector3D(-2.0f, -3.0f),
-		new Vector3D(-1.3f, -2.1f),
-		new Vector3D(-1.0f, 0.0f),
-		new Vector3D(-1.3f, 2.1f),
-		new Vector3D(-2.0f, 3.0f),
-		new Vector3D(-2.7f, 2.1f),
-		new Vector3D(-3.0f, -0.0f),
-		new Vector3D(-2.7f, -2.1f),
-	};
+		for(int i=0; i< NUM_POINTS; i++)
+		{
+			delete missilePoints[i];
+			delete whitePoints[i];
+		}
+		missilesCleared = true;
+	}
+}
+
 void Missile::draw(Core::Graphics& g)
 {
 	if(firing)
 	{
 		g.SetColor(RGB(100, 100, 200));
-		const unsigned int NUM_POINTS = sizeof(missilePoints) / sizeof(*missilePoints);
 		const Matrix3D transform = translate(position.x, position.y) * orientation;
 		for(unsigned int i = 0; i< NUM_POINTS; i++)
 		{

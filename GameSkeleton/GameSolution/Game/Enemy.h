@@ -5,6 +5,7 @@
 #include "Random.h"
 #include "ScreenInfo.h"
 #include "Matrix3D.h"
+#include "DebugMemory.h"
 
 class Enemy
 {
@@ -15,6 +16,7 @@ public:
 	Vector3D velocity;
 	float orientation1;
 	float orientation2;
+	void clear();
 	void draw(Core::Graphics& g, Vector3D shipPosition);
 	void update(float dt);
 	Matrix3D rotation;
@@ -24,5 +26,6 @@ public:
 		orientation1 = 0;
 		orientation2 = 0;
 	}
+	~Enemy(){clear();}
 };
 

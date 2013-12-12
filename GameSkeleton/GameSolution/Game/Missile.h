@@ -4,6 +4,7 @@
 #include "Matrix3D.h"
 #include "Core.h"
 #include "ScreenInfo.h"
+#include "DebugMemory.h"
 
 struct Missile
 {
@@ -14,6 +15,10 @@ struct Missile
 	bool firing;
 	void draw(Core::Graphics& g);
 	bool update(float dt);
-	
+	void clear();
+	~Missile()
+	{
+		clear();
+	}
 };
 

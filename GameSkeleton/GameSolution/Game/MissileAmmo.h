@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Missile.h"
+#include "DebugMemory.h"
 #include <vector>
 #include "Core.h"
 #include "Grid.h"

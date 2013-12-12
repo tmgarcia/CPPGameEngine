@@ -5,6 +5,7 @@
 #include "Core.h"
 #include "ParticleSystem.h"
 #include "BubbleEffect.h"
+#include "DebugMemory.h"
 
 using std::vector;
 

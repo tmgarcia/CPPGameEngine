@@ -5,12 +5,14 @@
 #include "Missile.h"
 #include "Turret.h"
 #include "MissileAmmo.h"
-
+#include "DebugMemory.h"
 
 class SpaceShip
 {
 public:
 	SpaceShip(MissileAmmo* ammo, Vector3D start) {this->ammo = ammo; position = start; fullHealth = 100; health = fullHealth; dead = false;}
+	~SpaceShip(){clear();}
+	void clear();
 	Vector3D position;
 	Vector3D velocity;
 	MissileAmmo* ammo;

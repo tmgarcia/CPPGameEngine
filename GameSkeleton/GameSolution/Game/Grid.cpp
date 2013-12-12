@@ -15,6 +15,17 @@ void Grid::buildCells()
 	}
 }
 
+void Grid::clear()
+{
+	for(int i = 0; i<numRows; i++)
+	{
+		for(int j = 0; j<numColumns; j++)
+		{
+			delete cells[i][j];
+		}
+	}
+}
+
 void Grid::addEnemyAt(int i, int j)
 {
 	Assert(i>=0);

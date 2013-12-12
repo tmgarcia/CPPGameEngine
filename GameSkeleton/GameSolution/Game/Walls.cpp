@@ -9,11 +9,20 @@ Vector3D* wallShape[] =
 	new Vector3D(400, 550, 0),
 	new Vector3D(50, 300, 0),
 };
+const unsigned int NUM_WALL_POINTS = 4;
+
+
+void Walls::clear()
+{
+	for(int i=0; i< NUM_WALL_POINTS; i++)
+	{
+		delete wallShape[i];
+	}
+}
 
 void Walls::draw(Core::Graphics& g)
 {
 	g.SetColor(RGB(255, 100, 255));
-	const unsigned int NUM_WALL_POINTS = 4;
 	for(unsigned int i = 0; i< NUM_WALL_POINTS; i++)
 	{
 		const Vector3D& w1 = *wallShape[i];

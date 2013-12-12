@@ -29,6 +29,6 @@ public:
 		leftWall = false;
 		rightWall = false;
 	}
-	~GridCell(void);
+	~GridCell(){}
 };
 

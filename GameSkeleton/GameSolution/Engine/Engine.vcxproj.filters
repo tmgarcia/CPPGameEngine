@@ -37,5 +37,6 @@
     <ClInclude Include="List.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="Assert.h" />
+    <ClInclude Include="DebugMemory.h" />
   </ItemGroup>
 </Project>

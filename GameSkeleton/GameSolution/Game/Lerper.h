@@ -2,6 +2,7 @@
 #include "Core.h"
 #include "Vector3D.h"
 #include "Matrix3D.h"
+#include "DebugMemory.h"
 
 class Lerper
 {

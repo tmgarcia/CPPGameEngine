@@ -1,6 +1,5 @@
 #include "Gear.h"
 
-
 Vector3D* gearPoints[] =
 {
 	new Vector3D(-12.5f, -58.5f),
@@ -36,10 +35,18 @@ Vector3D* gearPoints[] =
 	new Vector3D(-21.92f, -39.6f),
 	new Vector3D(-12.5f, -43.5f),
 };
+const unsigned int NUM_POINTS = sizeof(gearPoints) / sizeof(*gearPoints);
+
+void Gear::clear()
+{
+	for(int i=0; i < NUM_POINTS; i++)
+	{
+		delete gearPoints[i];
+	}
+}
 
 Vector3D Gear::draw(Core::Graphics& g, Vector3D parentPos)
 {
-    const unsigned int NUM_POINTS = sizeof(gearPoints) / sizeof(*gearPoints);
     const Matrix3D transform =
         translate(parentPos.x, parentPos.y) *
         rotate(orientation) *

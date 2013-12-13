@@ -1,7 +1,7 @@
 #include "GearSystem.h"
 
-Gear* gears[5];
-const unsigned int NUM_GEARS = sizeof(gears) / sizeof(*gears);
+Gear* GearSystem::gears[5];
+const unsigned int NUM_GEARS = sizeof(GearSystem::gears) / sizeof(*GearSystem::gears);
 void GearSystem::buildSystem()
 {
 	unsigned int i = 0;
@@ -10,10 +10,10 @@ void GearSystem::buildSystem()
 
 void GearSystem::clearGears()
 {
-	gears[0]->clear();
+	GearSystem::gears[0]->clear();
 	for(int i=0; i < 5; i++)
 	{
-		delete gears[i];
+		delete GearSystem::gears[i];
 	}
 }
 void GearSystem::createGear(int i, float rotationalSpeed)
@@ -27,10 +27,10 @@ void GearSystem::createGear(int i, float rotationalSpeed)
 	}
 	else
 	{
-		offset = (gears[i-1]->gscale*58)+10;
+		offset = (GearSystem::gears[i-1]->gscale*58)+10;
 		//offset = 100.0f;
 	}
-	gears[i] = new Gear(gscale, offset, rotationalSpeed);
+	GearSystem::gears[i] = new Gear(gscale, offset, rotationalSpeed);
 	if(i<NUM_GEARS)
 	{
 		createGear(i+1, rotationalSpeed*1.5f);
@@ -43,7 +43,7 @@ void GearSystem::draw(Core::Graphics& g)
     Vector3D nextOrigin = origin;
     for(unsigned int i = 0; i < NUM_GEARS; i++)
     {
-        nextOrigin = gears[i]->draw(g, nextOrigin);
+        nextOrigin = GearSystem::gears[i]->draw(g, nextOrigin);
     }
 }
 
@@ -51,7 +51,7 @@ void GearSystem::update(float dt)
 {
 	for(unsigned int i = 0; i < NUM_GEARS; i++)
 	{
-		(*gears[i]).update(dt);
+		(*GearSystem::gears[i]).update(dt);
 	}
 }
 
@@ -62,5 +62,5 @@ int GearSystem::getNumGears()
 
 Vector3D GearSystem::getIndexedGearPosition(int i)
 {
-	return gears[i]->position;
+	return GearSystem::gears[i]->position;
 }

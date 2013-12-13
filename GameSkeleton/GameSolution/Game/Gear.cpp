@@ -1,6 +1,6 @@
 #include "Gear.h"
 
-Vector3D* gearPoints[] =
+Vector3D* Gear::gearPoints[] =
 {
 	new Vector3D(-12.5f, -58.5f),
 	new Vector3D(12.5f, -58.5f),
@@ -35,13 +35,13 @@ Vector3D* gearPoints[] =
 	new Vector3D(-21.92f, -39.6f),
 	new Vector3D(-12.5f, -43.5f),
 };
-const unsigned int NUM_POINTS = sizeof(gearPoints) / sizeof(*gearPoints);
+const unsigned int NUM_POINTS = sizeof(Gear::gearPoints) / sizeof(*Gear::gearPoints);
 
 void Gear::clear()
 {
 	for(int i=0; i < NUM_POINTS; i++)
 	{
-		delete gearPoints[i];
+		delete Gear::gearPoints[i];
 	}
 }
 

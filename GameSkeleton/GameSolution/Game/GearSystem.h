@@ -16,6 +16,7 @@ public:
 	{
 		clearGears();
 	}
+	static Gear* gears[5];
 	void buildSystem();
 	Vector3D origin;
 	void draw(Core::Graphics& g);

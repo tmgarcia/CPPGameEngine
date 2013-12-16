@@ -36,8 +36,8 @@ int main()
 	//Particle * pa = new Particle();
 	//delete pa;
 	con = new Control();
-	int* a = new int[500];
-	a[-1] = 90;
+	//int* a = new int[500];
+	//a[-1] = 90;
 	//LOG(Info, "Info <TEST_INFO>");
 	//LOG(Warning, "Warning <TEST_WARNING>");
 	//LOG(Error, "Error <TEST_ERROR>");

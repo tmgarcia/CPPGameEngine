@@ -15,10 +15,6 @@ struct Missile
 	bool firing;
 	void draw(Core::Graphics& g);
 	bool update(float dt);
-	void clear();
-	~Missile()
-	{
-		clear();
-	}
+	~Missile(){}
 };
 

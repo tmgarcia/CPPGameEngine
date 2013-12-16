@@ -86,7 +86,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\Engine\ParticleEffect.cpp" />
     <ClCompile Include="BinaryWaveEffect.cpp" />
     <ClCompile Include="BubbleEffect.cpp" />
     <ClCompile Include="CollideWallEffect.cpp" />
@@ -106,6 +105,7 @@
     <ClCompile Include="MissileAmmo.cpp" />
     <ClCompile Include="OpeningSplash.cpp" />
     <ClCompile Include="OpeningSplash2.cpp" />
+    <ClCompile Include="ParticleEffect.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="SpaceShip.cpp" />
     <ClCompile Include="Timer.cpp" />
@@ -113,7 +113,6 @@
     <ClCompile Include="Walls.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Engine\ParticleEffect.h" />
     <ClInclude Include="BinaryWaveEffect.h" />
     <ClInclude Include="BubbleEffect.h" />
     <ClInclude Include="CollideWallEffect.h" />
@@ -131,6 +130,7 @@
     <ClInclude Include="MissileAmmo.h" />
     <ClInclude Include="OpeningSplash.h" />
     <ClInclude Include="OpeningSplash2.h" />
+    <ClInclude Include="ParticleEffect.h" />
     <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="ScreenInfo.h" />
     <ClInclude Include="Missile.h" />

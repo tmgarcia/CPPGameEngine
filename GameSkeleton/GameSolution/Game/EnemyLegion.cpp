@@ -49,3 +49,12 @@ bool EnemyLegion::checkCollide(Vector3D colliderPosition, int type, int b)
 	}
 	return collided;
 }
+
+void EnemyLegion::clearOut()
+{
+	for(unsigned int i=0; i < numActiveTroops; i++)
+	{
+		delete troops[i];
+	}
+	troops.clear();
+}

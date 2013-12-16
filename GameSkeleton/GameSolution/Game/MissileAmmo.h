@@ -18,6 +18,7 @@ public:
 	void update(float dt);
 	void addMissile(Missile* m);
 	void deleteMissile(int i);
+	void clearOut();
 	Vector3D getMissilePosition(int i);
 	Grid* grid;
 	MissileAmmo(Grid* grid): grid(grid)
@@ -26,6 +27,7 @@ public:
 	}
 	~MissileAmmo()
 	{
+		clearOut();
 		missiles.clear();
 	}
 };

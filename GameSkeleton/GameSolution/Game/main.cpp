@@ -12,7 +12,7 @@
 
 using Core::RGB;
 bool running=true;
-Control con;
+Control* con;
 
 bool Update( float dt)
 {
@@ -20,18 +20,19 @@ bool Update( float dt)
 	{
 		if( Core::Input::IsPressed( Core::Input::KEY_ESCAPE ) )
 			running = false;
-		con.update(dt);
+		con->update(dt);
 	}
 	return !running;
 }
 
 void Draw( Core::Graphics& graphics)
 {
-	con.draw(graphics);
+	con->draw(graphics);
 }
 
 int main()
 {
+	con = new Control();
 	_CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
 	//Particle * pa = new Particle();
 	//delete pa;
@@ -46,8 +47,8 @@ int main()
 	Core::RegisterUpdateFn( Update);
 	Core::RegisterDrawFn( Draw );
 	Core::GameLoop();
-	con.~Control();
 	profiler.shutdown();
+	delete con;
 	END_LOG
 }
 

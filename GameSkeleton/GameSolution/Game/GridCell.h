@@ -22,7 +22,7 @@ public:
 	bool checkCollision(Vector3D colliderPosition, float buffer);
 	void draw(Core::Graphics& g);
 	bool isWithinCell(Vector3D foreignerPosition);
-	GridCell(Vector3D position, float height, float width, float wallThickness, RGB wallColor): height(height), width(width), wallColor(wallColor), position(position), wallThickness(wallThickness)
+	GridCell(Vector3D position=Vector3D(200,200), float height=100, float width=100, float wallThickness=50, RGB wallColor=RGB(100,100,100)): height(height), width(width), wallColor(wallColor), position(position), wallThickness(wallThickness)
 	{
 		topWall = false;
 		bottomWall = false;

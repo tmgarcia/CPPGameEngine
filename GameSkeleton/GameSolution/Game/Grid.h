@@ -20,6 +20,8 @@ public:
 	bool playerCompile;
 	EnemyLegion enemies;
 	Vector3D collidedEnemy;
+	GridCell cells[10][10];
+	unsigned int NUM_CELLS;
 	int collisionDirection; //0 for horizontal (collided x) 1 for vertical (collided y)
 	void draw(Core::Graphics& g);
 	bool update(Vector3D shipPosition, float dt);
@@ -29,6 +31,7 @@ public:
 	void clear();
 	Grid(RGB wallColor, int numRows=10, int numColumns=10) : wallColor(wallColor), numRows(numRows), numColumns(numColumns)
 	{
+		NUM_CELLS = sizeof(cells) / sizeof(cells[0]);
 		buildCells();
 		buildWalls();
 		playerCompile = false;
@@ -36,6 +39,7 @@ public:
 	}
 	~Grid()
 	{
+		
 		clear();	
 	}
 };

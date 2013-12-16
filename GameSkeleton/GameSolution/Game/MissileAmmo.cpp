@@ -38,3 +38,11 @@ Vector3D MissileAmmo::getMissilePosition(int i)
 {
 	return missiles[i]->position;
 }
+
+void MissileAmmo::clearOut()
+{
+	for(unsigned int i = 0; i<numActiveMissiles; i++)
+	{
+		delete missiles[i];
+	}
+}

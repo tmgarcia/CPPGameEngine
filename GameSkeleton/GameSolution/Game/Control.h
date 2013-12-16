@@ -69,11 +69,11 @@ public:
 	void draw(Core::Graphics& g);
 	void update(float dt);
 	void playMusic();
-	_CrtMemState* bob;
+	_CrtMemState bob;
 	void clearOut();
 	Control()
 	{
-		bob = new _CrtMemState;
+		bob = _CrtMemState();
 		gamePlayTimer.Start();
 		srand((unsigned)time(NULL));
 		musicPlaying = false;
@@ -85,6 +85,8 @@ public:
 		pauseDraw = false;
 		splashDraw = true;
 		playerDead = false;
+		compiled = false;
+		compiledErrors = false;
 		particleSyst.addNewEffect(new OpeningSplash(Vector3D(1,0), RGB(20,20,200), 2500));
 		fillGrid();
 		//PlaySound(TEXT("HourChime.wav"),NULL, SND_FILENAME | SND_ASYNC );

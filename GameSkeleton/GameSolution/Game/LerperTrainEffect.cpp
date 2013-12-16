@@ -30,12 +30,12 @@ bool LerperTrainEffect::update(float dt)
 
 void LerperTrainEffect::draw(Core::Graphics& g)
 {
-	Vector3D* shapePoints[] = 
+	Vector3D shapePoints[] = 
 	{
-		new Vector3D(-15, -15),
-		new Vector3D(15, -15),
-		new Vector3D(15, 15),
-		new Vector3D(-15, 15),
+		Vector3D(-15, -15),
+		Vector3D(15, -15),
+		Vector3D(15, 15),
+		Vector3D(-15, 15),
 
 	};
 	for(int i = 0; i<numParticles; i++)
@@ -47,8 +47,8 @@ void LerperTrainEffect::draw(Core::Graphics& g)
 			const unsigned int NUM_POINTS = sizeof(shapePoints) / sizeof(*shapePoints);
 			for(int j = 0; j<NUM_POINTS; j++)
 			{
-				Vector3D v1 = trans * *shapePoints[j];
-				Vector3D v2 = trans * *shapePoints[(j+1) % NUM_POINTS];
+				Vector3D v1 = trans * shapePoints[j];
+				Vector3D v2 = trans * shapePoints[(j+1) % NUM_POINTS];
 				g.DrawLine(v1.x, v1.y, v2.x, v2.y);
 			}
 		}

@@ -24,27 +24,27 @@ bool ExplosionEffect::update(float dt)
 }
 void ExplosionEffect::draw(Core::Graphics& g)
 {
-	Vector3D* shapePoints[] = 
+	Vector3D shapePoints[] = 
 	{
-		new Vector3D(0.0f, -5.0f),
-		new Vector3D(3.5f, -3.5f),
-		new Vector3D(5.0f, 0.0f),
-		new Vector3D(3.5f, 3.5f),
-		new Vector3D(0.0f, 5.0f),
-		new Vector3D(-3.5f, 3.5f),
-		new Vector3D(-5.0f, 0.0f),
-		new Vector3D(-3.5f, -3.5f),
+		Vector3D(0.0f, -5.0f),
+		Vector3D(3.5f, -3.5f),
+		Vector3D(5.0f, 0.0f),
+		Vector3D(3.5f, 3.5f),
+		Vector3D(0.0f, 5.0f),
+		Vector3D(-3.5f, 3.5f),
+		Vector3D(-5.0f, 0.0f),
+		Vector3D(-3.5f, -3.5f),
 	};
-	Vector3D* whitePoints[] = 
+	Vector3D whitePoints[] = 
 	{
-		new Vector3D(-2.0f, -3.0f),
-		new Vector3D(-1.3f, -2.1f),
-		new Vector3D(-1.0f, 0.0f),
-		new Vector3D(-1.3f, 2.1f),
-		new Vector3D(-2.0f, 3.0f),
-		new Vector3D(-2.7f, 2.1f),
-		new Vector3D(-3.0f, -0.0f),
-		new Vector3D(-2.7f, -2.1f),
+		Vector3D(-2.0f, -3.0f),
+		Vector3D(-1.3f, -2.1f),
+		Vector3D(-1.0f, 0.0f),
+		Vector3D(-1.3f, 2.1f),
+		Vector3D(-2.0f, 3.0f),
+		Vector3D(-2.7f, 2.1f),
+		Vector3D(-3.0f, -0.0f),
+		Vector3D(-2.7f, -2.1f),
 	};
 	for(int i = 0; i<numParticles; i++)
 	{
@@ -52,18 +52,18 @@ void ExplosionEffect::draw(Core::Graphics& g)
 		if(particles[i].lifetime>0)
 		{
 			g.SetColor(particles[i].color);
-			const unsigned int NUM_POINTS = sizeof(shapePoints) / sizeof(*shapePoints);
+			const unsigned int NUM_POINTS = sizeof(shapePoints) / sizeof(shapePoints[0]);
 			for(int j = 0; j<NUM_POINTS; j++)
 			{
-				Vector3D v1 = trans * *shapePoints[j];
-				Vector3D v2 = trans * *shapePoints[(j+1) % NUM_POINTS];
+				Vector3D v1 = trans * shapePoints[j];
+				Vector3D v2 = trans * shapePoints[(j+1) % NUM_POINTS];
 				g.DrawLine(v1.x, v1.y, v2.x, v2.y);
 			}
 			g.SetColor(RGB(155,155,155));
 			for(int k = 0; k<NUM_POINTS; k++)
 			{
-				Vector3D v1 = trans * *whitePoints[k];
-				Vector3D v2 = trans * *whitePoints[(k+1) % NUM_POINTS];
+				Vector3D v1 = trans * whitePoints[k];
+				Vector3D v2 = trans * whitePoints[(k+1) % NUM_POINTS];
 				g.DrawLine(v1.x, v1.y, v2.x, v2.y);
 			}
 		}

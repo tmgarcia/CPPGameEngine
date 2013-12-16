@@ -26,6 +26,6 @@ public:
 		orientation1 = 0;
 		orientation2 = 0;
 	}
-	~Enemy(){clear();}
+	~Enemy(){}
 };
 

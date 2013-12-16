@@ -1,21 +1,14 @@
 #include "Enemy.h"
 
-Vector3D* enemyPoints[] = 
+Vector3D enemyPoints[] = 
 {
-	new Vector3D(-10, -15),
-	new Vector3D(10, -15),
-	new Vector3D(10, 15),
-	new Vector3D(-10, 15),
+	Vector3D(-10, -15),
+	Vector3D(10, -15),
+	Vector3D(10, 15),
+	Vector3D(-10, 15),
 };
-const unsigned int NUM_E_POINTS = sizeof(enemyPoints) / sizeof(*enemyPoints);
+const unsigned int NUM_E_POINTS = sizeof(enemyPoints) / sizeof(enemyPoints[0]);
 
-void Enemy::clear()
-{
-	for(int i=0; i< NUM_E_POINTS; i++)
-	{
-		delete enemyPoints[i];
-	}
-}
 
 void Enemy::draw(Core::Graphics& g, Vector3D shipPosition)
 {
@@ -25,8 +18,8 @@ void Enemy::draw(Core::Graphics& g, Vector3D shipPosition)
 	Matrix3D transform1 = translate(position.x, position.y) * rotator1;
 	for(unsigned int i = 0; i<NUM_E_POINTS; i++)
 	{
-		const Vector3D& t1 = transform1 * *enemyPoints[i];
-		const Vector3D& t2 = transform1 * *enemyPoints[(i+1) % NUM_E_POINTS];
+		const Vector3D& t1 = transform1 * enemyPoints[i];
+		const Vector3D& t2 = transform1 * enemyPoints[(i+1) % NUM_E_POINTS];
 		g.DrawLine(t1.x, t1.y, t2.x, t2.y);
 	}
 
@@ -34,24 +27,24 @@ void Enemy::draw(Core::Graphics& g, Vector3D shipPosition)
 	Matrix3D transform2 = translate(position.x, position.y) * rotator2;
 	for(unsigned int i = 0; i<NUM_E_POINTS; i++)
 	{
-		const Vector3D& t1 = transform2 * *enemyPoints[i];
-		const Vector3D& t2 = transform2 * *enemyPoints[(i+1) % NUM_E_POINTS];
+		const Vector3D& t1 = transform2 * enemyPoints[i];
+		const Vector3D& t2 = transform2 * enemyPoints[(i+1) % NUM_E_POINTS];
 		g.DrawLine(t1.x, t1.y, t2.x, t2.y);
 	}
 
 	Matrix3D transform3 = translate(position.x, position.y) * rotator1 * scale(0.4f,0.4f);
 	for(unsigned int i = 0; i<NUM_E_POINTS; i++)
 	{
-		const Vector3D& t1 = transform3 * *enemyPoints[i];
-		const Vector3D& t2 = transform3 * *enemyPoints[(i+1) % NUM_E_POINTS];
+		const Vector3D& t1 = transform3 * enemyPoints[i];
+		const Vector3D& t2 = transform3 * enemyPoints[(i+1) % NUM_E_POINTS];
 		g.DrawLine(t1.x, t1.y, t2.x, t2.y);
 	}
 
 	Matrix3D transform4 = translate(position.x, position.y) * rotator2 * scale(0.4f,0.4f);
 	for(unsigned int i = 0; i<NUM_E_POINTS; i++)
 	{
-		const Vector3D& t1 = transform4 * *enemyPoints[i];
-		const Vector3D& t2 = transform4 * *enemyPoints[(i+1) % NUM_E_POINTS];
+		const Vector3D& t1 = transform4 * enemyPoints[i];
+		const Vector3D& t2 = transform4 * enemyPoints[(i+1) % NUM_E_POINTS];
 		g.DrawLine(t1.x, t1.y, t2.x, t2.y);
 	}
 

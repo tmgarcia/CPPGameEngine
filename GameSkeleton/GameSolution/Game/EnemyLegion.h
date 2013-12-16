@@ -22,13 +22,15 @@ public:
 	void addEnemy(Vector3D position);
 	void deleteEnemy(int i);
 	Vector3D collidedPosition;
+	void clearOut();
 	EnemyLegion()
 	{
 		numActiveTroops = 0;
 	}
 	~EnemyLegion()
 	{
-		troops.clear();
+		//clearOut();
+		//troops.clear();
 	}
 };
 

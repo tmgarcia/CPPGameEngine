@@ -6,9 +6,6 @@
     <ClCompile Include="BubbleEffect.cpp">
       <Filter>ParticleEffects</Filter>
     </ClCompile>
-    <ClCompile Include="..\Engine\ParticleEffect.cpp">
-      <Filter>ParticleEffects</Filter>
-    </ClCompile>
     <ClCompile Include="ParticleSystem.cpp">
       <Filter>ParticleEffects</Filter>
     </ClCompile>
@@ -64,13 +61,11 @@
     <ClCompile Include="Walls.cpp">
       <Filter>MapStuff</Filter>
     </ClCompile>
+    <ClCompile Include="ParticleEffect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Lerper.h" />
     <ClInclude Include="BubbleEffect.h">
-      <Filter>ParticleEffects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Engine\ParticleEffect.h">
       <Filter>ParticleEffects</Filter>
     </ClInclude>
     <ClInclude Include="ParticleSystem.h">
@@ -131,6 +126,7 @@
     <ClInclude Include="ScreenInfo.h">
       <Filter>MapStuff</Filter>
     </ClInclude>
+    <ClInclude Include="ParticleEffect.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="ParticleEffects">

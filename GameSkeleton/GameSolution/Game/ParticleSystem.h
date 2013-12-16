@@ -17,12 +17,14 @@ public:
 	void update(float dt);
 	void addNewEffect(ParticleEffect* pe);
 	void deleteEffect(int i);
+	void clearOut();
 	ParticleSystem()
 	{
 		numActiveEffects = 0;
 	}
 	~ParticleSystem()
 	{
+		clearOut();
 		effectList.clear();
 	}
 };

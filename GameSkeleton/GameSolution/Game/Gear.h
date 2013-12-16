@@ -15,7 +15,6 @@ public:
 	{
 		//clear();
 	}
-	static Vector3D* gearPoints[];
 	float gscale;
 	float offset;
 	Vector3D draw(Core::Graphics& g, Vector3D parentPos);

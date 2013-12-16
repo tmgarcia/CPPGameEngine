@@ -13,9 +13,9 @@ SpaceShip ship = SpaceShip(&ammo, Vector3D((float)SCREEN_WIDTH-50, (float)SCREEN
 void Control::clearOut()
 {
 	//ge2.~GearSystem();
-	ammo.~MissileAmmo();
-	ge1.~GearSystem();
-	ship.~SpaceShip();
+	//ammo.~MissileAmmo();
+	//ge1.~GearSystem();
+	//ship.~SpaceShip();
 }
 
 void Control::drawRunError(Core::Graphics& g)
@@ -201,8 +201,8 @@ void Control::draw(Core::Graphics& g)
 		if(ship.dead)
 			playerDead = true;
 	}
-	_CrtMemCheckpoint(bob);
-	instructs.drawDebugInfo(g, bob->lCounts[_CLIENT_BLOCK], bob->lSizes[_CLIENT_BLOCK], bob->lHighWaterCount);
+	_CrtMemCheckpoint(&bob);
+	instructs.drawDebugInfo(g, bob.lCounts[_CLIENT_BLOCK], bob.lSizes[_CLIENT_BLOCK], bob.lHighWaterCount);
 }
 
 void Control::update(float dt)

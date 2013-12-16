@@ -10,19 +10,21 @@ class GearSystem
 public:
 	GearSystem(Vector3D origin): origin(origin) 
 	{
+		NUM_GEARS = sizeof(gears)/sizeof(gears[0]);
 		buildSystem();
 	}
 	~GearSystem()
 	{
 		clearGears();
 	}
-	static Gear* gears[5];
+	Gear gears[5];
 	void buildSystem();
 	Vector3D origin;
 	void draw(Core::Graphics& g);
 	void update(float dt);
 	void clearGears();
-	void createGear(int i, float rotationalSpeed);
+	void createGear(unsigned int i, float rotationalSpeed);
 	int getNumGears();
 	Vector3D getIndexedGearPosition(int i);
+	unsigned int NUM_GEARS;
 };

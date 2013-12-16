@@ -32,18 +32,18 @@ void Draw( Core::Graphics& graphics)
 
 int main()
 {
-	con = new Control();
-	_CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
+	_CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF | _CRTDBG_CHECK_ALWAYS_DF);
 	//Particle * pa = new Particle();
 	//delete pa;
-	//char* a = new char[500];
-	//a[-1] = 0;
-	LOG(Info, "Info <TEST_INFO>");
-	LOG(Warning, "Warning <TEST_WARNING>");
-	LOG(Error, "Error <TEST_ERROR>");
-	LOG(Severe, "Severe<TEST_SEVERE>");
-	Core::Init( "Example", SCREEN_WIDTH, SCREEN_HEIGHT);
+	con = new Control();
+	int* a = new int[500];
+	a[-1] = 90;
+	//LOG(Info, "Info <TEST_INFO>");
+	//LOG(Warning, "Warning <TEST_WARNING>");
+	//LOG(Error, "Error <TEST_ERROR>");
+	//LOG(Severe, "Severe<TEST_SEVERE>");
 	profiler.initialize("gameprofile.csv");
+	Core::Init( "Example", SCREEN_WIDTH, SCREEN_HEIGHT);
 	Core::RegisterUpdateFn( Update);
 	Core::RegisterDrawFn( Draw );
 	Core::GameLoop();

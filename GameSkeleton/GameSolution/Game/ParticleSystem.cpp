@@ -33,7 +33,6 @@ void ParticleSystem::addNewEffect(ParticleEffect* pe)
 }
 void ParticleSystem::deleteEffect(int i)
 {
-//	(*effectList[i]).~ParticleEffect();
 	delete effectList[i];
 	vector<ParticleEffect*>::iterator where = effectList.begin() + i;
 	effectList.erase( where );

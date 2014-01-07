@@ -1,39 +1,44 @@
 #include "RenderUI.h"
 #include "Engine.h"
-#include <Vector2D.h>
-#include <Matrix2D.h>
-#include <Vector3D.h>
-#include <Matrix3D.h>
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtx/transform.hpp"
 
-Vector2D left;
-Vector2D right;
-Vector2D result;
+using glm::vec2;
+using glm::vec3;
+using glm::mat2x2;
+using glm::mat3x3;
+using glm::mat4x4;
 
-Vector2D original;
-Vector2D normal;
-Vector2D cwPerp;
-Vector2D ccwPerp;
+vec2 left;
+vec2 right;
+vec2 result;
 
-Vector2D vector1;
-Vector2D vector2;
-Vector2D projectionVector;
-Vector2D rejectionVector;
+vec2 original;
+vec2 normal;
+vec2 cwPerp;
+vec2 ccwPerp;
 
-Vector2D aVector;
-Vector2D bVector;
-Vector2D aMinusBVector;
-Vector2D aVectorLerpPortion;
-Vector2D bVectorLerpPortion;
-Vector2D lerpResultVector;
+vec2 vector1;
+vec2 vector2;
+vec2 projectionVector;
+vec2 rejectionVector;
 
-Vector2D p;
-Vector2D n;
-Vector2D d;
+vec2 aVector;
+vec2 bVector;
+vec2 aMinusBVector;
+vec2 aVectorLerpPortion;
+vec2 bVectorLerpPortion;
+vec2 lerpResultVector;
+
+vec2 p;
+vec2 n;
+vec2 d;
 
 void MyBasicVectorEquationCallback(const BasicVectorEquationInfo& info)
 {
-	left = info.scalar1 * Vector2D(info.x1, info.y1);
-	right = info.scalar2 * Vector2D(info.x2, info.y2);
+	left = info.scalar1 * vec2(info.x1, info.y1);
+	right = info.scalar2 * vec2(info.x2, info.y2);
 
 	if(info.add)
 	{
@@ -48,53 +53,63 @@ void MyBasicVectorEquationCallback(const BasicVectorEquationInfo& info)
 
 void MyPerpendicularDataCallback(const PerpendicularData& data)
 {
-	original = Vector2D(data.x, data.y);
-	normal = original.normalized();
-	cwPerp = original.perpCW();
-	ccwPerp = original.perpCCW();
+	original = vec2(data.x, data.y);
+	normal = glm::normalize(original);
+	//cwPerp = original.perpCW();
+	cwPerp = vec2(original.y*-1, original.x);
+	//ccwPerp = original.perpCCW();
+	ccwPerp = vec2(original.y, original.x*-1);
+
 }
 
 void MyDotProductDataCollback(const DotProductData& data)
 {
-	vector1 = Vector2D(data.v1i, data.v1j);
-	vector2 = Vector2D(data.v2i, data.v2j);
+	vector1 = vec2(data.v1i, data.v1j);
+	vector2 = vec2(data.v2i, data.v2j);
 	if(data.projectOntoLeftVector)
 	{
 		//projectionVector = dot(vector2, vector1.normalized())*vector1.normalized();
-		projectionVector = vector2.projectOnto(vector1);
+		//x onto normal
+		//projectionVector = vector2.projectOnto(vector1);
+		projectionVector = glm::dot(vector2, vector1) / glm::dot(vector1, vector1) * vector1;
 		rejectionVector = vector2 - projectionVector;
 	}
 	else
 	{
 		//projectionVector = dot(vector1, vector2.normalized())*vector2.normalized();
-		projectionVector = vector1.projectOnto(vector2);
+		//projectionVector = vector1.projectOnto(vector2);
+		projectionVector = glm::dot(vector1, vector2) / glm::dot(vector2, vector2) * vector2;
 		rejectionVector = vector1 - projectionVector;
 	}
 }
 
 void MyLerpDataCallback(const LerpData& data)
 {
-	aVector = Vector2D(data.a_i, data.a_j);
-	bVector = Vector2D(data.b_i, data.b_j);
+	aVector = vec2(data.a_i, data.a_j);
+	bVector = vec2(data.b_i, data.b_j);
 	aMinusBVector = bVector-aVector;
 	aVectorLerpPortion = (1-data.beta)*aVector;
 	bVectorLerpPortion = data.beta * bVector;
-	lerpResultVector = LERP(aVector, bVector, data.beta);
+	//lerpResultVector = LERP(aVector, bVector, data.beta);
+	lerpResultVector = (((1-data.beta)*aVector) + (data.beta*bVector));
+	//((1-beta)*left) + (beta*right);
+	//lerpResultVector = LERP(aVector, bVector, data.beta);
+	//left right
 }
 
 
-Vector2D linResult;
+vec2 linResult;
 void MyLinearTransformationCallback(const LinearTransformationData& data)
 {
-	Matrix2D op = Matrix2D(data.m00,data.m01, data.m10, data.m11);
-	Vector2D v = Vector2D(data.v0, data.v1);
+	mat2x2 op = mat2x2(data.m00,data.m01, data.m10, data.m11);
+	vec2 v = vec2(data.v0, data.v1);
 	linResult = op*v;
 }
 
-Vector3D affResult[5];
+vec3 affResult[5];
 void MyAffineTransformationCallback(const AffineTransformationData& data)
 {
-	Matrix3D mat;
+	/*Matrix3D mat;
 	mat.ax = data.data[0];
 	mat.bx = data.data[1];
 	mat.cx = data.data[2];
@@ -103,7 +118,8 @@ void MyAffineTransformationCallback(const AffineTransformationData& data)
 	mat.cy = data.data[5];
 	mat.az = data.data[6];
 	mat.bz = data.data[7];
-	mat.cz = data.data[8];
+	mat.cz = data.data[8]*/
+	mat3x3 mat(data.data[0],data.data[3],data.data[6],data.data[1],data.data[4],data.data[7],data.data[2],data.data[5],data.data[8]);
 
 	affResult[0].x = data.data[9];
 	affResult[0].y = data.data[10];
@@ -132,13 +148,13 @@ void MyAffineTransformationCallback(const AffineTransformationData& data)
 }
 
 const float span = .3f;
-Vector2D bottomLeft(-span, -span);
-Vector2D topLeft(-span, span);
-Vector2D topRight(span, span);
-Vector2D bottomRight(span, -span);
-Vector2D roofTop(0, span + .25f);
+vec2 bottomLeft(-span, -span);
+vec2 topLeft(-span, span);
+vec2 topRight(span, span);
+vec2 bottomRight(span, -span);
+vec2 roofTop(0, span + .25f);
 
-Vector2D lines[] = { 
+vec2 lines[] = { 
 	bottomLeft, topLeft,
 	topLeft, topRight,
 	topRight, bottomRight,
@@ -149,30 +165,35 @@ Vector2D lines[] = {
 
 const int numLines = sizeof(lines) / (sizeof(*lines) * 2);
 const int numMatrices = 10;
-Matrix3D matrices[numMatrices];
-Matrix3D currentTransform;
+mat3x3 matrices[numMatrices];
+mat3x3 currentTransform;
 
 void MyMatrixTransformCallback2D(const MatrixTransformData2D& data)
 {
-	Matrix3D temp = 
-		scale(data.scaleX, data.scaleY) * 
-		rotate(data.rotate) *
-		translate(data.translateX, data.translateY);
-
+	mat4x4 temp4 =
+		//glm::scale(data.scaleX, data.scaleY, 0.0f) *
+		glm::scale(mat4x4(), vec3(data.scaleX, data.scaleY, 0)) *
+		//glm::rotate(data.rotate) *
+		glm::rotate(data.rotate,vec3()) *
+		//translate(data.translateX, data.translateY)
+		glm::translate(vec3(data.translateX,data.translateY,0));
+	mat3x3 temp;
+	for(int i = 0; i < 3; i++)
+	{
+		for(int j=0; j<3; j++)
+		{
+			temp[i][j] = temp4[i][j];
+		}
+	}
 	matrices[data.selectedMatrix] = temp;
-	currentTransform = Matrix3D();
+	currentTransform = mat3x3();
 	for(int i = 0; i < numMatrices; i++)
 	{
 		currentTransform = currentTransform * matrices[i];
 	}
 }
-//void myLineEquationDataCallback(const LineEquationData& data)
-//{
-//	n = Vector2D(data.n_i, data.n_j);
-//	p = Vector2D(data.p_x, data.n_i*data.p_x + data.d);
-//	//d = n.x*p.x + n.y*p.y;
-//	d = data.d;
-//}
+
+void set3DMatrixCallback(const float* matrices,const float* fulltransform,const char* fbxFileName,MatrixTransformCallback3D matrixTransformData3DCallback);
 
 int main(int argc, char* argv[])
 {
@@ -181,34 +202,34 @@ int main(int argc, char* argv[])
 	RenderUI renderUI;
 	renderUI.setBasicVectorEquationData(
 		MyBasicVectorEquationCallback,
-		left, right, result);
+		reinterpret_cast<float*>(&left), reinterpret_cast<float*>(&right), reinterpret_cast<float*>(&result));
 
 	renderUI.setPerpendicularData(
-		original, normal, cwPerp, ccwPerp, 
+		reinterpret_cast<float*>(&original), reinterpret_cast<float*>(&normal), reinterpret_cast<float*>(&cwPerp), reinterpret_cast<float*>(&ccwPerp), 
 		MyPerpendicularDataCallback);
 
 	renderUI.setDotProductData(
-		vector1, vector2, projectionVector, rejectionVector, 
+		reinterpret_cast<float*>(&vector1), reinterpret_cast<float*>(&vector2), reinterpret_cast<float*>(&projectionVector), reinterpret_cast<float*>(&rejectionVector), 
 		MyDotProductDataCollback);
 
 	renderUI.setLerpData(
-		aVector, bVector, aMinusBVector, aVectorLerpPortion, 
-		bVectorLerpPortion, lerpResultVector, 
+		reinterpret_cast<float*>(&aVector), reinterpret_cast<float*>(&bVector), reinterpret_cast<float*>(&aMinusBVector), reinterpret_cast<float*>(&aVectorLerpPortion), 
+		reinterpret_cast<float*>(&bVectorLerpPortion), reinterpret_cast<float*>(&lerpResultVector), 
 		MyLerpDataCallback);
 
 	renderUI.setLinearTransformationData(
-		linResult, MyLinearTransformationCallback);
+		reinterpret_cast<float*>(&linResult), MyLinearTransformationCallback);
 
 	renderUI.setAffineTransformationData(
-		affResult[0], MyAffineTransformationCallback);
-
+		reinterpret_cast<float*>(&affResult[0]), MyAffineTransformationCallback);
+	for(int i=0;i<numMatrices;i++)
+	{
+		matrices[i] = glm::transpose(matrices[i]);
+	}
 	renderUI.set2DMatrixVerticesTransformData(
-		lines[0], numLines, reinterpret_cast<float*>(&matrices), 
-		reinterpret_cast<float*>(&currentTransform), 
+		reinterpret_cast<float*>(&lines[0]), numLines, reinterpret_cast<float*>(&matrices), 
+		reinterpret_cast<float*>(&(glm::transpose(currentTransform))), 
 		MyMatrixTransformCallback2D);
-		  
-	//renderUI.setLineEquationData(
-	//	p, n, d, myLineEquationDataCallback);
 
 	if( ! renderUI.initialize(argc, argv))
 		return -1;

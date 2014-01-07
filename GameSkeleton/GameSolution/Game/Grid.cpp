@@ -17,13 +17,6 @@ void Grid::buildCells()
 
 void Grid::clear()
 {
-	//for(int i = 0; i<numRows; i++)
-	//{
-	//	for(int j = 0; j<numColumns; j++)
-	//	{
-	//		delete cells[i][j];
-	//	}
-	//}
 	enemies.clearOut();
 }
 
@@ -50,13 +43,13 @@ bool Grid::enemyCollisionCheck(Vector3D colliderPosition, int type, int buffer)
 
 void Grid::draw(Core::Graphics& g)
 {
-	/*for(int i = 0; i<numRows; i++)
+	for(int i = 0; i<numRows; i++)
 	{
 		for(int j = 0; j<numColumns; j++)
 		{
 			cells[i][j].draw(g);
 		}
-	}*/
+	}
 	if(enemies.numActiveTroops==0)
 	{
 		g.SetColor(RGB(50,255,50));

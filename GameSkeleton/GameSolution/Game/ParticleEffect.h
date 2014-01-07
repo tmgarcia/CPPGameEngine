@@ -16,10 +16,7 @@ public:
 	Particle* particles;
 	Random generator;
 	virtual void buildParticles();
-	ParticleEffect(Vector3D origin, RGB color, int numParticles) : numParticles(numParticles), origin(origin), color(color)
-	{
-		/*buildParticles();*/
-	}
+	ParticleEffect(Vector3D origin, RGB color, int numParticles) : numParticles(numParticles), origin(origin), color(color){}
 	virtual bool update(float dt);
 	virtual void draw(Core::Graphics& g);
 	bool checkAlive();

@@ -56,9 +56,7 @@ void MyPerpendicularDataCallback(const PerpendicularData& data)
 {
 	original = vec2(data.x, data.y);
 	normal = glm::normalize(original);
-	//cwPerp = original.perpCW();
 	cwPerp = vec2(original.y*-1, original.x);
-	//ccwPerp = original.perpCCW();
 	ccwPerp = vec2(original.y, original.x*-1);
 
 }
@@ -69,16 +67,11 @@ void MyDotProductDataCollback(const DotProductData& data)
 	vector2 = vec2(data.v2i, data.v2j);
 	if(data.projectOntoLeftVector)
 	{
-		//projectionVector = dot(vector2, vector1.normalized())*vector1.normalized();
-		//x onto normal
-		//projectionVector = vector2.projectOnto(vector1);
 		projectionVector = glm::dot(vector2, vector1) / glm::dot(vector1, vector1) * vector1;
 		rejectionVector = vector2 - projectionVector;
 	}
 	else
 	{
-		//projectionVector = dot(vector1, vector2.normalized())*vector2.normalized();
-		//projectionVector = vector1.projectOnto(vector2);
 		projectionVector = glm::dot(vector1, vector2) / glm::dot(vector2, vector2) * vector2;
 		rejectionVector = vector1 - projectionVector;
 	}
@@ -91,11 +84,7 @@ void MyLerpDataCallback(const LerpData& data)
 	aMinusBVector = bVector-aVector;
 	aVectorLerpPortion = (1-data.beta)*aVector;
 	bVectorLerpPortion = data.beta * bVector;
-	//lerpResultVector = LERP(aVector, bVector, data.beta);
 	lerpResultVector = (((1-data.beta)*aVector) + (data.beta*bVector));
-	//((1-beta)*left) + (beta*right);
-	//lerpResultVector = LERP(aVector, bVector, data.beta);
-	//left right
 }
 
 
@@ -110,16 +99,6 @@ void MyLinearTransformationCallback(const LinearTransformationData& data)
 vec3 affResult[5];
 void MyAffineTransformationCallback(const AffineTransformationData& data)
 {
-	/*Matrix3D mat;
-	mat.ax = data.data[0];
-	mat.bx = data.data[1];
-	mat.cx = data.data[2];
-	mat.ay = data.data[3];
-	mat.by = data.data[4];
-	mat.cy = data.data[5];
-	mat.az = data.data[6];
-	mat.bz = data.data[7];
-	mat.cz = data.data[8]*/
 	mat3x3 mat(data.data[0],data.data[3],data.data[6],data.data[1],data.data[4],data.data[7],data.data[2],data.data[5],data.data[8]);
 
 	affResult[0].x = data.data[9];
@@ -193,12 +172,9 @@ void MyMatrixTransformCallBack3D(const MatrixTransformData3D& data)
 {
 	mat4x4 temp;
 	mat4x4 scale = glm::scale(mat4x4(), vec3(data.scaleX,data.scaleY,data.scaleZ));
-	mat4x4 rotateX;
-	rotateX = glm::rotate(glm::degrees(data.rotateX), vec3(1,0,0));
-	mat4x4 rotateY;
-	rotateY = glm::rotate(glm::degrees(data.rotateY), vec3(0,1,0));
-	mat4x4 rotateZ;
-	rotateZ = glm::rotate(glm::degrees(data.rotateZ), vec3(0,0,1));
+	mat4x4 rotateX = glm::rotate(glm::degrees(data.rotateX), vec3(1,0,0));
+	mat4x4 rotateY = glm::rotate(glm::degrees(data.rotateY), vec3(0,1,0));
+	mat4x4 rotateZ = glm::rotate(glm::degrees(data.rotateZ), vec3(0,0,1));
 	mat4x4 totalRotate = rotateX*rotateY*rotateZ;
 	mat4x4 translate = glm::translate(vec3(data.translateX,data.translateY,data.translateZ));
 	temp = scale*totalRotate*translate;

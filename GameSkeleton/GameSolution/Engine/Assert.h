@@ -5,7 +5,7 @@
 #if ASSERT_ON
 #define Assert(expr,...) do { if(!(expr)) { LOG(Severe,#expr##":"##__VA_ARGS__);END_LOG exit(1); } } while(0)
 #else
-#define ASSERT(){}
+#define ASSERT(a){}
 #endif
 
 

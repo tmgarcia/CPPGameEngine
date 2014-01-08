@@ -1,3 +1,4 @@
+#define assert(a)
 #include "RenderUI.h"
 #include "Engine.h"
 #include "glm/glm.hpp"
@@ -170,21 +171,14 @@ mat3x3 currentTransform;
 
 void MyMatrixTransformCallback2D(const MatrixTransformData2D& data)
 {
-	mat4x4 temp4 =
-		//glm::scale(data.scaleX, data.scaleY, 0.0f) *
-		glm::scale(mat4x4(), vec3(data.scaleX, data.scaleY, 0)) *
-		//glm::rotate(data.rotate) *
-		glm::rotate(data.rotate,vec3()) *
-		//translate(data.translateX, data.translateY)
-		glm::translate(vec3(data.translateX,data.translateY,0));
 	mat3x3 temp;
-	for(int i = 0; i < 3; i++)
-	{
-		for(int j=0; j<3; j++)
-		{
-			temp[i][j] = temp4[i][j];
-		}
-	}
+	mat3x3 scalar = mat3x3(glm::scale(mat4x4(), vec3(data.scaleX, data.scaleY, 0)));
+	mat3x3 rotate = mat3x3(glm::rotate(glm::degrees(data.rotate),vec3(0,0,1)));
+	mat3x3 translate;
+	temp = scalar * rotate;
+	temp[0].z = data.translateX;
+	temp[1].z = data.translateY;
+	temp[2].z = 1.0f;
 	matrices[data.selectedMatrix] = temp;
 	currentTransform = mat3x3();
 	for(int i = 0; i < numMatrices; i++)
@@ -193,7 +187,28 @@ void MyMatrixTransformCallback2D(const MatrixTransformData2D& data)
 	}
 }
 
-void set3DMatrixCallback(const float* matrices,const float* fulltransform,const char* fbxFileName,MatrixTransformCallback3D matrixTransformData3DCallback);
+mat4x4 matrices3d[numMatrices];
+mat4x4 fullTransform;
+void MyMatrixTransformCallBack3D(const MatrixTransformData3D& data)
+{
+	mat4x4 temp;
+	mat4x4 scale = glm::scale(mat4x4(), vec3(data.scaleX,data.scaleY,data.scaleZ));
+	mat4x4 rotateX;
+	rotateX = glm::rotate(glm::degrees(data.rotateX), vec3(1,0,0));
+	mat4x4 rotateY;
+	rotateY = glm::rotate(glm::degrees(data.rotateY), vec3(0,1,0));
+	mat4x4 rotateZ;
+	rotateZ = glm::rotate(glm::degrees(data.rotateZ), vec3(0,0,1));
+	mat4x4 totalRotate = rotateX*rotateY*rotateZ;
+	mat4x4 translate = glm::translate(vec3(data.translateX,data.translateY,data.translateZ));
+	temp = scale*totalRotate*translate;
+	matrices3d[data.selectedMatrix] = temp;
+	fullTransform = mat4x4();
+	for(int i = 0; i< numMatrices; i++)
+	{
+		fullTransform = fullTransform * matrices3d[i];
+	}
+}
 
 int main(int argc, char* argv[])
 {
@@ -224,12 +239,19 @@ int main(int argc, char* argv[])
 		reinterpret_cast<float*>(&affResult[0]), MyAffineTransformationCallback);
 	for(int i=0;i<numMatrices;i++)
 	{
-		matrices[i] = glm::transpose(matrices[i]);
+		matrices[i] = matrices[i];
 	}
 	renderUI.set2DMatrixVerticesTransformData(
-		reinterpret_cast<float*>(&lines[0]), numLines, reinterpret_cast<float*>(&matrices), 
-		reinterpret_cast<float*>(&(glm::transpose(currentTransform))), 
+		reinterpret_cast<const float*>(&lines[0]), 
+		numLines, 
+		reinterpret_cast<const float*>(&matrices), 
+		reinterpret_cast<const float*>(&currentTransform), 
 		MyMatrixTransformCallback2D);
+
+	renderUI.set3DMatrixCallback(
+		reinterpret_cast<const float*>(&matrices3d),
+		reinterpret_cast<const float*>(&fullTransform),
+		MyMatrixTransformCallBack3D);
 
 	if( ! renderUI.initialize(argc, argv))
 		return -1;

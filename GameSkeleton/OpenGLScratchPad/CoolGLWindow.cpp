@@ -1,11 +1,44 @@
 #include <GL\glew.h>
 #include "CoolGLWindow.h"
+#include <Qt\qdebug.h>
+
+char* vertexShaderCode = 
+	"#version 400\r\n"
+	""
+	"in layout(location=0) vec2 position;"
+	"in layout(location=1) vec3 color;"
+	""
+	"out vec3 deColor;"
+	""
+	"void main()"
+	"{"
+	"	gl_Position = vec4(position, 1, 1);"
+	"	deColor = color;"
+	"}"
+	"";
+
+char* fragmentShaderCode = 
+	"#version 400\r\n"
+	""
+	"in vec3 deColor;"
+	"out vec3 theFinalColor;"
+	""
+	"void main()"
+	"{"
+	"	theFinalColor = deColor;"
+	"}";
 
 void CoolGLWindow::initializeGL()
 {
 	glewInit();
+	sendDataToHardware();
+	compileShaders();
 
-	GLfloat vertices[] = 
+}
+
+void CoolGLWindow::sendDataToHardware()
+{
+		GLfloat vertices[] = 
 	{
 		-0.3f, -0.1f,
 		+1.0f, +1.0f, +1.0f,
@@ -291,9 +324,47 @@ void CoolGLWindow::initializeGL()
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0,2,GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), 0);
 
-	glEnableVertexAttribArray(3);
-	glVertexAttribPointer(3,3,GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)(2 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1,3,GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)(2 * sizeof(GLfloat)));
+
 }
+
+void CoolGLWindow::compileShaders()
+{
+	GLuint vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
+	GLuint fragShaderID = glCreateShader(GL_FRAGMENT_SHADER);
+
+	const char* adapter[1];
+	adapter[0] = fragmentShaderCode;
+	glShaderSource(fragShaderID, 1, adapter, 0);
+	adapter[0] = vertexShaderCode;
+	glShaderSource(vertexShaderID, 1, adapter, 0);
+
+	glCompileShader(fragShaderID);
+	glCompileShader(vertexShaderID);
+
+	GLint compileStatus;
+	glGetShaderiv(vertexShaderID, GL_COMPILE_STATUS, &compileStatus);
+	if(compileStatus != GL_TRUE)
+	{
+		GLint logLength;
+		glGetShaderiv(vertexShaderID, GL_INFO_LOG_LENGTH, &logLength);
+		char* buffer = new char[logLength];
+		GLsizei bitBucket;
+		glGetShaderInfoLog(vertexShaderID, logLength, &bitBucket, buffer);
+		qDebug() << buffer;
+		delete [] buffer;
+	}
+
+	GLuint programID = glCreateProgram();
+	glAttachShader(programID, vertexShaderID);
+	glAttachShader(programID, fragShaderID);
+
+	glLinkProgram(programID);
+
+	glUseProgram(programID);
+}
+
 void CoolGLWindow::paintGL()
 {
 	glDrawArrays(GL_TRIANGLES, 0, 117);

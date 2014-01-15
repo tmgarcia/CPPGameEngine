@@ -1,18 +1,37 @@
 #include <GL\glew.h>
 #include "CoolGLWindow.h"
 #include <Qt\qdebug.h>
+#include "glm\glm.hpp"
+#include "glm\gtc\matrix_transform.hpp"
+#include "glm\gtx\transform.hpp"
 
+#include <iostream>
+using std::cout;
+using std::endl;
+
+using glm::vec3;
+using glm::mat3;
+using glm::mat4;
+
+GLuint programID;
+mat3 currentTransform;
+GLfloat angle = 0;
+vec3 position(0,0,1);
+//mat4 a = mat4(currentTransform);
 char* vertexShaderCode = 
 	"#version 400\r\n"
 	""
 	"in layout(location=0) vec2 position;"
 	"in layout(location=1) vec3 color;"
 	""
+	"uniform mat3 currentTransform;"
+	""
 	"out vec3 deColor;"
 	""
 	"void main()"
 	"{"
 	"	gl_Position = vec4(position, 1, 1);"
+	"	gl_Position = gl_Position*mat4(currentTransform);"
 	"	deColor = color;"
 	"}"
 	"";
@@ -38,281 +57,14 @@ void CoolGLWindow::initializeGL()
 
 void CoolGLWindow::sendDataToHardware()
 {
-		GLfloat vertices[] = 
+	GLfloat vertices[] = 
 	{
-		-0.3f, -0.1f,
-		+1.0f, +1.0f, +1.0f,
-		-0.1f, -0.6f,
-		+1.0f, +1.0f, +1.0f,
-		+0.1f, -0.1f,
-		+1.0f, +1.0f, +1.0f,
-
-		-0.3f, -0.1f,
-		+1.0f, +1.0f, +1.0f,
-		-0.1f, -0.6f,
-		+1.0f, +1.0f, +1.0f,
-		-0.3f, -0.5f,
-		+1.0f, +1.0f, +1.0f,
-
-		+0.1f, -0.1f,
-		+1.0f, +1.0f, +1.0f,
-		-0.1f, -0.6f,
-		+1.0f, +1.0f, +1.0f,
-		+0.1f, -0.5f,
-		+1.0f, +1.0f, +1.0f,
-
-		-0.4f, +0.1f,
-		+1.0f, +1.0f, +1.0f,
-		-0.2f, +0.0f,
-		+1.0f, +1.0f, +1.0f,
-		-0.35f, -0.35f,
-		+0.8f, +0.8f, +0.8f,
-
-		+0.2f, +0.1f,
-		+1.0f, +1.0f, +1.0f,
-		+0.0f, +0.0f,
-		+1.0f, +1.0f, +1.0f,
-		+0.15f, -0.35f,
-		+0.8f, +0.8f, +0.8f,
-
-		-0.2f, +0.0f,
-		+0.5255f, +0.3412f, +0.1294f,
-		-0.1f, -0.2f,
-		+0.5255f, +0.3412f, +0.1294f,
-		+0.0f, +0.0f,
-		+0.5255f, +0.3412f, +0.1294f,
-
-		+0.0f, +0.0f,
-		+0.5255f, +0.3412f, +0.1294f,
-		+0.1f, -0.24f,
-		+0.5255f, +0.3412f, +0.1294f,
-		-0.05f, -0.1f,
-		+0.5255f, +0.3412f, +0.1294f,
-
-		-0.15f, -0.1f,
-		+0.5255f, +0.3412f, +0.1294f,
-		-0.2f, -0.0f,
-		+0.5255f, +0.3412f, +0.1294f,
-		-0.3f, -0.24f,
-		+0.5255f, +0.3412f, +0.1294f,
-
-		-0.15f, -0.1f,
-		+0.5255f, +0.3412f, +0.1294f,
-		-0.3f, -0.5f,
-		+0.3255f, +0.1412f, +0.0094f,
-		-0.15f, -0.25f,
-		+0.5255f, +0.3412f, +0.1294f,
-
-		-0.05f, -0.1f,
-		+0.5255f, +0.3412f, +0.1294f,
-		-0.05f, -0.25f,
-		+0.5255f, +0.3412f, +0.1294f,
-		+0.1f, -0.5f,
-		+0.3255f, +0.1412f, +0.0094f,
-
-		-0.1f, -0.2f,
-		+0.5255f, +0.3412f, +0.1294f,
-		-0.15f, -0.25f,
-		+0.5255f, +0.3412f, +0.1294f,
-		-0.05f, -0.25f,
-		+0.5255f, +0.3412f, +0.1294f,
-
-		-0.3f, -0.24f,
-		+0.5255f, +0.3412f, +0.1294f,
-		-0.35f, -0.35f,
-		+0.3255f, +0.1412f, +0.0094f,
-		-0.3f, -0.5f,
-		+0.3255f, +0.1412f, +0.0094f,
-
-		+0.1f, -0.24f,
-		+0.5255f, +0.3412f, +0.1294f,
-		+0.15f, -0.35f,
-		+0.3255f, +0.1412f, +0.0094f,
-		+0.1f, -0.5f,
-		+0.3255f, +0.1412f, +0.0094f,
-
-		-0.3f, -0.5f,
-		+0.1608f, +0.0902f, +0.0f,
-		-0.1f, -0.6f,
-		+0.1608f, +0.0902f, +0.0f,
-		-0.3f, -1.0f,
-		+0.0608f, +0.0092f, +0.0f,
-
-		+0.1f, -1.0f,
-		+0.0608f, +0.0092f, +0.0f,
-		-0.1f, -0.6f,
-		+0.1608f, +0.0902f, +0.0f,
-		-0.3f, -1.0f,
-		+0.0608f, +0.0092f, +0.0f,
-
-		-0.1f, -0.6f,
-		+0.1608f, +0.0902f, +0.0f,
-		+0.1f, -0.5f,
-		+0.1608f, +0.0902f, +0.0f,
-		+0.1f, -1.0f,
-		+0.0608f, +0.0092f, +0.0f,
-
-		-0.15f, -0.4f,
-		+0.0f, +0.0f, +0.0f,
-		-0.1f, -0.5f,
-		+0.0f, +0.0f, +0.0f,
-		-0.05f, -0.4f,
-		+0.0f, +0.0f, +0.0f,
-		//------------------------------
-		-0.9f, +1.0f,
-		+0.2451f, +0.2882f, +0.0176f,
-		-0.7f, +1.0f,
-		+0.3451f, +0.5882f, +0.1176f,
-		-0.6f, +0.3f,
-		+0.3451f, +0.5882f, +0.1176f,
-
-		-0.9f, +0.9f,
-		+0.2451f, +0.2882f, +0.0176f,
-		-0.8f, +0.1f,
-		+0.2451f, +0.2882f, +0.0176f,
-		-0.6f, +0.2f,
-		+0.3451f, +0.5882f, +0.1176f,
-
-		-0.8f, +0.0f,
-		+0.2451f, +0.2882f, +0.0176f,
-		-0.6f, +0.1f,
-		+0.3451f, +0.5882f, +0.1176f,
-		-0.5f, -0.9f,
-		+0.3451f, +0.5882f, +0.1176f,
-
-		-0.8f, -0.1f,
-		+0.2451f, +0.2882f, +0.0176f,
-		-0.7f, -1.0f,
-		+0.2451f, +0.2882f, +0.0176f,
-		-0.5f, -1.0f,
-		+0.3451f, +0.5882f, +0.1176f,
-
-		+0.6f, +1.0f,
-		+0.2451f, +0.2882f, +0.0176f,
-		+0.5f, +1.0f,
-		+0.3451f, +0.5882f, +0.1176f,
-		+0.6f, +0.1f,
-		+0.2451f, +0.2882f, +0.0176f,
-
-		+0.5f, +0.8f,
-		+0.3451f, +0.5882f, +0.1176f,
-		+0.6f, +0.0f,
-		+0.2451f, +0.2882f, +0.0176f,
-		+0.5f, -0.9f,
-		+0.3451f, +0.5882f, +0.1176f,
-
-		+0.6f, -0.1f,
-		+0.2451f, +0.2882f, +0.0176f,
-		+0.5f, -1.0f,
-		+0.3451f, +0.5882f, +0.1176f,
-		+0.6f, -1.0f,
-		+0.2451f, +0.2882f, +0.0176f,
-
-		+0.7f, +1.0f,
-		+0.3451f, +0.5882f, +0.1176f,
-		+0.8f, +1.0f,
-		+0.2451f, +0.2882f, +0.0176f,
-		+0.6f, +0.5f,
-		+0.3451f, +0.5882f, +0.1176f,
-
-		+0.8f, +0.9f,
-		+0.2451f, +0.2882f, +0.0176f,
-		+0.6f, +0.4f,
-		+0.3451f, +0.5882f, +0.1176f,
-		+0.6f, +0.2f,
-		+0.2451f, +0.2882f, +0.0176f,
-
-		+0.5f, +0.2f,
-		+0.3451f, +0.5882f, +0.1176f,
-		+0.5f, +0.0f,
-		+0.2451f, +0.2882f, +0.0176f,
-		+0.2f, -0.9f,
-		+0.3451f, +0.5882f, +0.1176f,
-
-		+0.5f, -0.1f,
-		+0.2451f, +0.2882f, +0.0176f,
-		+0.3f, -1.0f,
-		+0.2451f, +0.2882f, +0.0176f,
-		+0.2f, -1.0f,
-		+0.3451f, +0.5882f, +0.1176f,
-
-		+0.7f, -0.4f,
-		+0.2451f, +0.2882f, +0.0176f,
-		+0.6f, -0.6f,
-		+0.2451f, +0.2882f, +0.0176f,
-		+0.6f, -0.7f,
-		+0.2451f, +0.2882f, +0.0176f,
-		//---------------------------------------------
-		-0.8f, -1.0f,
-		+0.3451f, +0.3922f, +0.0f,
-		-0.9f, -1.0f,
-		+0.1451f, +0.1922f, +0.0f,
-		-1.0f, -0.5f,
-		+0.1451f, +0.1922f, +0.0f,
-
-		-0.8f, -1.0f,
-		+0.1451f, +0.1922f, +0.0f,
-		-0.7f, -1.0f,
-		+0.3451f, +0.3922f, +0.0f,
-		-0.9f, -0.2f,
-		+0.1451f, +0.1922f, +0.0f,
-
-		-0.5f, +0.4f,
-		+0.3451f, +0.3922f, +0.0f,
-		-0.6f, +0.3f,
-		+0.1451f, +0.1922f, +0.0f,
-		-0.6f, +0.1f,
-		+0.1451f, +0.1922f, +0.0f,
-
-		-0.6f, +0.2f,
-		+0.1451f, +0.1922f, +0.0f,
-		-0.6f, +0.1f,
-		+0.1451f, +0.1922f, +0.0f,
-		-0.3f, +0.1f,
-		+0.3451f, +0.3922f, +0.0f,
-
-		-0.6f, +0.1f,
-		+0.1451f, +0.1922f, +0.0f,
-		-0.5f, +0.0f,
-		+0.3451f, +0.3922f, +0.0f,
-		-0.4f, -0.3f,
-		+0.3451f, +0.3922f, +0.0f,
-
-		+0.1f, -0.3f,
-		+0.3451f, +0.3922f, +0.0f,
-		+0.3f, -0.5f,
-		+0.1451f, +0.1922f, +0.0f,
-		+0.3f, -0.6f,
-		+0.1451f, +0.1922f, +0.0f,
-
+		-0.2f, -0.2f,
+		+1.0f, +0.0f, +0.0f,
+		+0.0f, +0.2f,
+		+0.0f, +1.0f, +0.0f,
 		+0.2f, -0.2f,
-		+0.3451f, +0.3922f, +0.0f,
-		+0.3f, -0.5f,
-		+0.1451f, +0.1922f, +0.0f,
-		+0.3f, -0.6f,
-		+0.1451f, +0.1922f, +0.0f,
-
-		+0.6f, -0.1f,
-		+0.1451f, +0.1922f, +0.0f,
-		+0.7f, -0.3f,
-		+0.1451f, +0.1922f, +0.0f,
-		+0.7f, -0.4f,
-		+0.1451f, +0.1922f, +0.0f,
-
-		+0.7f, -0.3f,
-		+0.1451f, +0.1922f, +0.0f,
-		+0.7f, -0.4f,
-		+0.1451f, +0.1922f, +0.0f,
-		+0.8f, +0.0f,
-		+0.1451f, +0.1922f, +0.0f,
-
-		+0.7f, -0.4f,
-		+0.1451f, +0.1922f, +0.0f,
-		+0.8f, -0.4f,
-		+0.1451f, +0.1922f, +0.0f,
-		+0.9f, -0.2f,
-		+0.1451f, +0.1922f, +0.0f,
-
+		+0.0f, +0.0f, +1.0f,
 	};
 
 	GLuint bufferID;
@@ -327,6 +79,34 @@ void CoolGLWindow::sendDataToHardware()
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1,3,GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)(2 * sizeof(GLfloat)));
 
+	connect(&myTimer, SIGNAL(timeout()), this, SLOT(myUpdate()));
+	myTimer.start(0);
+}
+
+void CoolGLWindow::myUpdate()
+{
+	float velocityScale = 0.05f;
+	vec3 acc = vec3(0, velocityScale, 0);
+	vec3 direction = mat3(glm::rotate(glm::degrees(-angle),vec3(0,0,1)))*acc;
+
+	if(GetAsyncKeyState(VK_LEFT)<0)
+	{
+		angle -= 0.05f;
+	}
+	if(GetAsyncKeyState(VK_RIGHT)<0)
+	{
+		angle += 0.05f;
+	}
+	if(GetAsyncKeyState(VK_UP)<0)
+	{
+		position = position + direction;
+	}
+	if(GetAsyncKeyState(VK_DOWN)<0)
+	{
+		position = position - direction;
+	}
+	
+	repaint();
 }
 
 void CoolGLWindow::compileShaders()
@@ -356,7 +136,7 @@ void CoolGLWindow::compileShaders()
 		delete [] buffer;
 	}
 
-	GLuint programID = glCreateProgram();
+	programID = glCreateProgram();
 	glAttachShader(programID, vertexShaderID);
 	glAttachShader(programID, fragShaderID);
 
@@ -367,5 +147,19 @@ void CoolGLWindow::compileShaders()
 
 void CoolGLWindow::paintGL()
 {
-	glDrawArrays(GL_TRIANGLES, 0, 117);
+	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+
+	mat3 temp;
+	mat3 scalar = mat3(glm::scale(glm::mat4(), vec3(2,1,0)));
+	mat3 rotator = mat3(glm::rotate(glm::degrees(angle),vec3(0,0,1)));
+	temp = scalar * rotator;
+	temp[0].z = position.x;
+	temp[1].z = position.y;
+	temp[2].z = 1.0f;
+	currentTransform = mat3();
+	currentTransform = currentTransform * temp;
+
+	GLint currentTransformLocation = glGetUniformLocation(programID, "currentTransform");
+	glUniformMatrix3fv(currentTransformLocation, 1, false, &(currentTransform[0][0]));
+	glDrawArrays(GL_TRIANGLES, 0, 3);
 }

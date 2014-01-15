@@ -52,19 +52,67 @@ void CoolGLWindow::initializeGL()
 	glewInit();
 	sendDataToHardware();
 	compileShaders();
-
 }
 
 void CoolGLWindow::sendDataToHardware()
 {
 	GLfloat vertices[] = 
 	{
-		-0.2f, -0.2f,
-		+1.0f, +0.0f, +0.0f,
-		+0.0f, +0.2f,
-		+0.0f, +1.0f, +0.0f,
-		+0.2f, -0.2f,
-		+0.0f, +0.0f, +1.0f,
+		+0.0f, +0.6f,
+		+0.0f, +0.5725f, +0.2706f,
+		+0.3f, +0.3f,
+		+0.0f, +0.5725f, +0.2706f,
+		-0.3f, +0.3f,
+		+0.0f, +0.5725f, +0.2706f,
+
+		-0.3f, +0.3f,
+		+0.0f, +0.5725f, +0.2706f,
+		+0.3f, +0.3f,
+		+0.0f, +0.5725f, +0.2706f,
+		+0.0f, +0.1f,
+		+0.0f, +0.3725f, +0.1706f,
+
+		-0.4f, +0.1f,
+		+0.0f, +0.5725f, +0.2706f,
+		+0.2f, +0.1f,
+		+0.0f, +0.3725f, +0.1706f,
+		-0.4f, -0.1f,
+		+0.0f, +0.3725f, +0.1706f,
+
+		+0.4f, +0.1f,
+		+0.0f, +0.5725f, +0.2706f,
+		+0.2f, +0.1f,
+		+0.0f, +0.3725f, +0.1706f,
+		+0.4f, -0.1f,
+		+0.0f, +0.3725f, +0.1706f,
+
+		-0.3f, -0.3f,
+		+0.0f, +0.3725f, +0.1706f,
+		-0.1f, -0.5f,
+		+0.0f, +0.3725f, +0.1706f,
+		-0.3f, -0.5f,
+		+0.0f, +0.5725f, +0.2706f,
+
+		+0.3f, -0.3f,
+		+0.0f, +0.3725f, +0.1706f,
+		+0.3f, -0.5f,
+		+0.0f, +0.5725f, +0.2706f,
+		+0.1f, -0.5f,
+		+0.0f, +0.3725f, +0.1706f,
+
+		+0.0f, +0.3f,
+		+0.0f, +0.4078f, +0.2157f,
+		+0.5f, -0.1f,
+		+0.0f, +0.4078f, +0.2157f,
+		-0.5f, -0.1f,
+		+0.0f, +0.4078f, +0.2157f,
+
+		-0.5f, -0.1f,
+		+0.0f, +0.4078f, +0.2157f,
+		+0.5f, -0.1f,
+		+0.0f, +0.4078f, +0.2157f,
+		+0.0f, -0.6f,
+		+0.0f, +0.4078f, +0.2157f,
 	};
 
 	GLuint bufferID;
@@ -148,9 +196,10 @@ void CoolGLWindow::compileShaders()
 void CoolGLWindow::paintGL()
 {
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+	glViewport(0,0,width(), height());
 
 	mat3 temp;
-	mat3 scalar = mat3(glm::scale(glm::mat4(), vec3(2,1,0)));
+	mat3 scalar = mat3(glm::scale(glm::mat4(), vec3(0.5f,0.5f,0)));
 	mat3 rotator = mat3(glm::rotate(glm::degrees(angle),vec3(0,0,1)));
 	temp = scalar * rotator;
 	temp[0].z = position.x;
@@ -161,5 +210,5 @@ void CoolGLWindow::paintGL()
 
 	GLint currentTransformLocation = glGetUniformLocation(programID, "currentTransform");
 	glUniformMatrix3fv(currentTransformLocation, 1, false, &(currentTransform[0][0]));
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+	glDrawArrays(GL_TRIANGLES, 0, 24);
 }

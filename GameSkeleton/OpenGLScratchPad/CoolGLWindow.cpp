@@ -10,6 +10,7 @@ using std::cout;
 using std::endl;
 
 using glm::vec3;
+using glm::vec4;
 using glm::mat3;
 using glm::mat4;
 
@@ -22,33 +23,34 @@ GLfloat p2Angle = 0;
 vec3 p1Position(-0.5f,0,1);
 vec3 p2Position(0.5f,0,1);
 vec3 p1Color(0.5f,0.0f,0.8f);
-vec3 p2Color(0.0f,0.5f,0.5f);
+vec3 p2Color(0.0f,0.5f,0.2f);
 
 //mat4 a = mat4(currentTransform);
 char* vertexShaderCode = 
 	"#version 400\r\n"
 	""
-	"in layout(location=0) vec2 position;"
-	"in layout(location=1) vec3 color;"
+	"in layout(location=0) vec4 position;"
+	"in layout(location=1) vec4 color;"
 	""
 	"uniform mat3 currentTransform;"
 	"uniform vec3 dominatingColor;"
 	""
-	"out vec3 deColor;"
+	"out vec4 deColor;"
 	""
 	"void main()"
 	"{"
-	"	gl_Position = vec4(position, 1, 1);"
+	"	gl_Position = position;"
 	"	gl_Position = gl_Position*mat4(currentTransform);"
-	"	deColor = dominatingColor;"
+	"	deColor = color;"
+	"	deColor.z = dominatingColor.z;"
 	"}"
 	"";
 
 char* fragmentShaderCode = 
 	"#version 400\r\n"
 	""
-	"in vec3 deColor;"
-	"out vec3 theFinalColor;"
+	"in vec4 deColor;"
+	"out vec4 theFinalColor;"
 	""
 	"void main()"
 	"{"
@@ -64,41 +66,61 @@ void CoolGLWindow::initializeGL()
 
 void CoolGLWindow::sendDataToHardware()
 {
-	GLfloat vertices[] = 
+	vec4 vertices[] = 
 	{
-		+0.0f, +0.6f, //0
+		vec4(+0.0f, +0.6f, +1.0f, +1.0f),//0
+			vec4(+0.0f, +0.5725f, +0.2706f, 1),
 
-		+0.3f, +0.3f, //1
-		-0.3f, +0.3f, //2
+		vec4(+0.3f, +0.3f, 1, 1), //1
+			vec4(+0.0f, +0.5725f, +0.2706f,1),
+		vec4(-0.3f, +0.3f, 1,1),//2
+			vec4(+0.0f, +0.5725f, +0.2706f, 1),
 
-		+0.0f, +0.1f, //3
+		vec4(+0.0f, +0.1f, 1, 1),//3
+			vec4(+0.0f, +0.3725f, +0.1706f,1),
 
 
-		-0.4f, +0.1f, //4
-		+0.2f, +0.1f,//5
-		-0.4f, -0.1f,//6
+		vec4(-0.4f, +0.1f, 1, 1), //4
+			vec4(+0.0f, +0.5725f, +0.2706f,1),
+		vec4(+0.2f, +0.1f, 1, 1),//5
+			vec4(+0.0f, +0.3725f, +0.1706f,1),
+		vec4(-0.4f, -0.1f, 1, 1),//6
+			vec4(+0.0f, +0.3725f, +0.1706f,1),
 
-		+0.4f, -0.1f,//7
-		+0.4f, +0.1f,//8
-		+0.2f, +0.1f,//9
+		vec4(+0.4f, -0.1f, 1, 1),//7
+			vec4(+0.0f, +0.5725f, +0.2706f,1),
+		vec4(+0.4f, +0.1f, 1, 1),//8
+			vec4(+0.0f, +0.3725f, +0.1706f,1),
+		vec4(+0.2f, +0.1f, 1, 1),//9
+			vec4(+0.0f, +0.3725f, +0.1706f,1),
 		
 
-		-0.3f, -0.3f,//10
-		-0.1f, -0.5f,//11
-		-0.3f, -0.5f,//12
+		vec4(-0.3f, -0.3f, 1, 1),//10
+			vec4(+0.0f, +0.3725f, +0.1706f,1),
+		vec4(-0.1f, -0.5f, 1, 1),//11
+			vec4(+0.0f, +0.3725f, +0.1706f,1),
+		vec4(-0.3f, -0.5f, 1, 1),//12
+			vec4(+0.0f, +0.5725f, +0.2706f,1),
 
-		+0.3f, -0.3f,//13
-		+0.3f, -0.5f,//14
-		+0.1f, -0.5f,//15
+		vec4(+0.3f, -0.3f, 1, 1),//13
+			vec4(+0.0f, +0.3725f, +0.1706f,1),
+		vec4(+0.3f, -0.5f, 1, 1),//14
+			vec4(+0.0f, +0.5725f, +0.2706f,1),
+		vec4(+0.1f, -0.5f, 1, 1),//15
+			vec4(+0.0f, +0.3725f, +0.1706f,1),
 
 		//
 
-		+0.0f, +0.3f,//16
+		vec4(+0.0f, +0.3f, 1, 1),//16
+			vec4(+0.0f, +0.4078f, +0.2157f,1),
 
-		+0.5f, -0.1f,//17
-		-0.5f, -0.1f,//18
+		vec4(+0.5f, -0.1f, 1, 1),//17
+			vec4(+0.0f, +0.4078f, +0.2157f,1),
+		vec4(-0.5f, -0.1f, 1, 1),//18
+			vec4(+0.0f, +0.4078f, +0.2157f,1),
 
-		+0.0f, -0.6f,//19
+		vec4(+0.0f, -0.6f, 1, 1),//19
+			vec4(+0.0f, +0.4078f, +0.2157f,1),
 	};
 
 	GLuint vertexBufferID;
@@ -108,11 +130,10 @@ void CoolGLWindow::sendDataToHardware()
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0,2,GL_FLOAT, GL_FALSE, 0, 0);
-	//glVertexAttribPointer(0,2,GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), 0);
+	glVertexAttribPointer(0,4,GL_FLOAT, GL_FALSE, 2 * sizeof(vec4), 0);
 
-	//glEnableVertexAttribArray(1);
-	//glVertexAttribPointer(1,3,GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)(2 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1,4,GL_FLOAT, GL_FALSE, 2 * sizeof(vec4), (void*)(1 * sizeof(vec4)));
 
 	connect(&myTimer, SIGNAL(timeout()), this, SLOT(myUpdate()));
 	myTimer.start(0);

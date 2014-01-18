@@ -20,6 +20,7 @@ protected:
 	void compileShaders();
 	void updatePlayer(vec3 position, GLfloat angle, bool isP1);
 	void updateHill();
+	std::string readShaderCode(const char *filename);
 private slots:
 	void myUpdate();
 public:

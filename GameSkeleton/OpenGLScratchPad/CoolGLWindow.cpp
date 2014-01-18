@@ -6,6 +6,7 @@
 #include "glm\gtx\transform.hpp"
 #include "Header.h"
 #include <time.h>
+#include <fstream>
 
 #include <iostream>
 using std::cout;
@@ -38,40 +39,7 @@ vec3 hillPosition(0,0,1);
 vec3 hillColor(0.0f, 0.0f, 0.0f);
 GLfloat hillZAdjust = 0.0f;
 
-#pragma region Shader Code
-char* vertexShaderCode = 
-	"#version 400\r\n"
-	""
-	"in layout(location=0) vec4 position;"
-	"in layout(location=1) vec4 color;"
-	""
-	"uniform mat3 currentTransform;"
-	"uniform vec3 dominatingColor;"
-	"uniform float zAdjustment;"
-	""
-	"out vec4 deColor;"
-	""
-	"void main()"
-	"{"
-	"	gl_Position = position;"
-	"	gl_Position = gl_Position*mat4(currentTransform);"
-	"	gl_Position.z = gl_Position.z + zAdjustment;"
-	"	deColor = color;"
-	"	deColor.z = dominatingColor.z;"
-	"}"
-	"";
 
-char* fragmentShaderCode = 
-	"#version 400\r\n"
-	""
-	"in vec4 deColor;"
-	"out vec4 theFinalColor;"
-	""
-	"void main()"
-	"{"
-	"	theFinalColor = deColor;"
-	"}";
-#pragma endregion 
 void CoolGLWindow::initializeGL()
 {
 	srand((unsigned)time(NULL));
@@ -162,7 +130,8 @@ void CoolGLWindow::updatePlayer(vec3 position, GLfloat angle, bool isP1)
 	temp[0].z = position.x;
 	temp[1].z = position.y;
 	temp[2].z = 1.0f;
-	bool addPoints= (position.x<(hillPosition.x+0.15f) && position.x>(hillPosition.x-0.15f) &&position.y<(hillPosition.y+0.15f) && position.y>(hillPosition.y-0.15f));
+	float buffer = 0.15f;
+	bool addPoints= (position.x<(hillPosition.x+buffer) && position.x>(hillPosition.x-buffer) &&position.y<(hillPosition.y+buffer) && position.y>(hillPosition.y-buffer));
 	
 	if(isP1)
 	{
@@ -204,15 +173,30 @@ void CoolGLWindow::updateHill()
 	hillTransform = hillTransform * temp;
 }
 
+std::string CoolGLWindow::readShaderCode(const char *filename)
+{
+	std::ifstream input(filename);
+	if(!input.good())
+	{
+		cout << "File failed to load: " << filename;
+		exit(1);
+	}
+	return std::string(
+		std::istreambuf_iterator<char>(input),
+		std::istreambuf_iterator<char>());
+}
+
 void CoolGLWindow::compileShaders()
 {
 	GLuint vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
 	GLuint fragShaderID = glCreateShader(GL_FRAGMENT_SHADER);
 
 	const char* adapter[1];
-	adapter[0] = fragmentShaderCode;
+	std::string temp = readShaderCode("FragmentShaderCode.glsl");	
+	adapter[0] = temp.c_str();
 	glShaderSource(fragShaderID, 1, adapter, 0);
-	adapter[0] = vertexShaderCode;
+	 temp = readShaderCode("VertexShaderCode.glsl");
+	adapter[0] = temp.c_str();
 	glShaderSource(vertexShaderID, 1, adapter, 0);
 
 	glCompileShader(fragShaderID);

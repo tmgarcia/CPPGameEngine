@@ -9,4 +9,8 @@
     <ClInclude Include="CoolGLWindow.h" />
     <ClInclude Include="Header.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="VertexShaderCode.glsl" />
+    <None Include="FragmentShaderCode.glsl" />
+  </ItemGroup>
 </Project>

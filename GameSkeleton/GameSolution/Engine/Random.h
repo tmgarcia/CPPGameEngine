@@ -5,6 +5,8 @@
 
 const float TWO_PI = 2 * 3.14159f;
 
+
+
 class Random
 {
 public:

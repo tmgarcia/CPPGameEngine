@@ -4,6 +4,8 @@
 #include "glm\glm.hpp"
 #include "glm\gtc\matrix_transform.hpp"
 #include "glm\gtx\transform.hpp"
+#include "Header.h"
+#include <time.h>
 
 #include <iostream>
 using std::cout;
@@ -14,18 +16,29 @@ using glm::vec4;
 using glm::mat3;
 using glm::mat4;
 
+GLint frameCount = 0;
 GLuint programID;
-mat3 currentTransform;
-mat3 p1Transform;
-mat3 p2Transform;
-GLfloat p1Angle = 0;
-GLfloat p2Angle = 0;
-vec3 p1Position(-0.5f,0,1);
-vec3 p2Position(0.5f,0,1);
-vec3 p1Color(0.5f,0.0f,0.8f);
-vec3 p2Color(0.0f,0.5f,0.2f);
 
-//mat4 a = mat4(currentTransform);
+mat3 p1Transform;
+GLfloat p1Angle = 0;
+vec3 p1Position(-0.5f,0,1);
+vec3 p1Color(0.5f,0.0f,0.8f);
+GLfloat p1ZAdjust;
+GLint p1Points=0;
+
+mat3 p2Transform;
+GLfloat p2Angle = 0;
+vec3 p2Position(0.0f,0,1);
+vec3 p2Color(0.0f,0.5f,0.2f);
+GLfloat p2ZAdjust;
+GLint p2Points=0;
+
+mat3 hillTransform;
+vec3 hillPosition(0,0,1);
+vec3 hillColor(0.0f, 0.0f, 0.0f);
+GLfloat hillZAdjust = 0.0f;
+
+#pragma region Shader Code
 char* vertexShaderCode = 
 	"#version 400\r\n"
 	""
@@ -34,6 +47,7 @@ char* vertexShaderCode =
 	""
 	"uniform mat3 currentTransform;"
 	"uniform vec3 dominatingColor;"
+	"uniform float zAdjustment;"
 	""
 	"out vec4 deColor;"
 	""
@@ -41,6 +55,7 @@ char* vertexShaderCode =
 	"{"
 	"	gl_Position = position;"
 	"	gl_Position = gl_Position*mat4(currentTransform);"
+	"	gl_Position.z = gl_Position.z + zAdjustment;"
 	"	deColor = color;"
 	"	deColor.z = dominatingColor.z;"
 	"}"
@@ -56,95 +71,36 @@ char* fragmentShaderCode =
 	"{"
 	"	theFinalColor = deColor;"
 	"}";
-
+#pragma endregion 
 void CoolGLWindow::initializeGL()
 {
+	srand((unsigned)time(NULL));
 	glewInit();
+	glEnable(GL_DEPTH_TEST);
 	sendDataToHardware();
 	compileShaders();
 }
 
 void CoolGLWindow::sendDataToHardware()
 {
-	vec4 vertices[] = 
-	{
-		vec4(+0.0f, +0.6f, +1.0f, +1.0f),//0
-			vec4(+0.0f, +0.5725f, +0.2706f, 1),
-
-		vec4(+0.3f, +0.3f, 1, 1), //1
-			vec4(+0.0f, +0.5725f, +0.2706f,1),
-		vec4(-0.3f, +0.3f, 1,1),//2
-			vec4(+0.0f, +0.5725f, +0.2706f, 1),
-
-		vec4(+0.0f, +0.1f, 1, 1),//3
-			vec4(+0.0f, +0.3725f, +0.1706f,1),
-
-
-		vec4(-0.4f, +0.1f, 1, 1), //4
-			vec4(+0.0f, +0.5725f, +0.2706f,1),
-		vec4(+0.2f, +0.1f, 1, 1),//5
-			vec4(+0.0f, +0.3725f, +0.1706f,1),
-		vec4(-0.4f, -0.1f, 1, 1),//6
-			vec4(+0.0f, +0.3725f, +0.1706f,1),
-
-		vec4(+0.4f, -0.1f, 1, 1),//7
-			vec4(+0.0f, +0.5725f, +0.2706f,1),
-		vec4(+0.4f, +0.1f, 1, 1),//8
-			vec4(+0.0f, +0.3725f, +0.1706f,1),
-		vec4(+0.2f, +0.1f, 1, 1),//9
-			vec4(+0.0f, +0.3725f, +0.1706f,1),
-		
-
-		vec4(-0.3f, -0.3f, 1, 1),//10
-			vec4(+0.0f, +0.3725f, +0.1706f,1),
-		vec4(-0.1f, -0.5f, 1, 1),//11
-			vec4(+0.0f, +0.3725f, +0.1706f,1),
-		vec4(-0.3f, -0.5f, 1, 1),//12
-			vec4(+0.0f, +0.5725f, +0.2706f,1),
-
-		vec4(+0.3f, -0.3f, 1, 1),//13
-			vec4(+0.0f, +0.3725f, +0.1706f,1),
-		vec4(+0.3f, -0.5f, 1, 1),//14
-			vec4(+0.0f, +0.5725f, +0.2706f,1),
-		vec4(+0.1f, -0.5f, 1, 1),//15
-			vec4(+0.0f, +0.3725f, +0.1706f,1),
-
-		//
-
-		vec4(+0.0f, +0.3f, 1, 1),//16
-			vec4(+0.0f, +0.4078f, +0.2157f,1),
-
-		vec4(+0.5f, -0.1f, 1, 1),//17
-			vec4(+0.0f, +0.4078f, +0.2157f,1),
-		vec4(-0.5f, -0.1f, 1, 1),//18
-			vec4(+0.0f, +0.4078f, +0.2157f,1),
-
-		vec4(+0.0f, -0.6f, 1, 1),//19
-			vec4(+0.0f, +0.4078f, +0.2157f,1),
-	};
-
 	GLuint vertexBufferID;
 	glGenBuffers(1, &vertexBufferID);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferID);
-
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Shape::vertices), Shape::vertices, GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0,4,GL_FLOAT, GL_FALSE, 2 * sizeof(vec4), 0);
 
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1,4,GL_FLOAT, GL_FALSE, 2 * sizeof(vec4), (void*)(1 * sizeof(vec4)));
-
-	connect(&myTimer, SIGNAL(timeout()), this, SLOT(myUpdate()));
-	myTimer.start(0);
-
-
-	GLushort indices[] = {0,1,2,  1,2,3,  4,5,6, 7,8,9, 10,11,12, 13,14,15, 16,17,18, 17,18,19};
+	
 	GLuint indexBufferID;
 	glGenBuffers(1, &indexBufferID);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferID);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Shape::indices), Shape::indices, GL_STATIC_DRAW);
 
+	connect(&myTimer, SIGNAL(timeout()), this, SLOT(myUpdate()));
+	myTimer.start(0);
 }
 
 void CoolGLWindow::myUpdate()
@@ -191,7 +147,9 @@ void CoolGLWindow::myUpdate()
 	
 	updatePlayer(p1Position, p1Angle, true);
 	updatePlayer(p2Position, p2Angle, false);
-
+	if(frameCount==0 || frameCount % 500==0)
+		updateHill();
+	frameCount++;
 	repaint();
 }
 
@@ -204,17 +162,46 @@ void CoolGLWindow::updatePlayer(vec3 position, GLfloat angle, bool isP1)
 	temp[0].z = position.x;
 	temp[1].z = position.y;
 	temp[2].z = 1.0f;
+	bool addPoints= (position.x<(hillPosition.x+0.15f) && position.x>(hillPosition.x-0.15f) &&position.y<(hillPosition.y+0.15f) && position.y>(hillPosition.y-0.15f));
+	
 	if(isP1)
 	{
 		p1Transform = mat3();
 		p1Transform = p1Transform * temp;
+		if(addPoints)
+			p1Points++;
+		p1ZAdjust = (p1Points>p2Points)? 0.0f: +0.1f;
 	}
 	else
 	{
 		p2Transform = mat3();
 		p2Transform = p2Transform * temp;
+		if(addPoints)
+		{
+			p2Points++;
+		}
+		p2ZAdjust = (p2Points>p1Points)? 0.0f: +0.1f;
 	}
 	
+}
+
+
+void CoolGLWindow::updateHill()
+{
+	//((float)rand()/RAND_MAX) * (max*(min+1))+min;
+	float angle = ((float)rand()/RAND_MAX) * (6.28*(0+1))+0;
+	hillPosition.x = (((float)rand()/RAND_MAX)*2) -1;
+	hillPosition.y = (((float)rand()/RAND_MAX)*2) -1;
+
+	mat3 temp;
+	mat3 scalar = mat3(glm::scale(glm::mat4(), vec3(0.4f,0.4f,0)));
+	mat3 rotator = mat3(glm::rotate(glm::degrees(angle),vec3(0,0,1)));
+	temp = scalar * rotator;
+	temp[0].z = hillPosition.x;
+	temp[1].z = hillPosition.y;
+	temp[2].z = 1.0f;
+	hillTransform = mat3();
+	hillTransform = hillTransform * temp;
 }
 
 void CoolGLWindow::compileShaders()
@@ -257,21 +244,34 @@ void CoolGLWindow::paintGL()
 {
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 	glViewport(0,0,width(), height());
-
+	GLfloat zAdjustment;
+	GLint zAdjustmentLocation = glGetUniformLocation(programID, "zAdjustment");
 	vec3 dominatingColor;
 	GLint dominatingColorLocation = glGetUniformLocation(programID, "dominatingColor");
-
+	mat3 currentTransform;
 	GLint currentTransformLocation = glGetUniformLocation(programID, "currentTransform");
 
 	dominatingColor = p1Color;
 	glUniform3fv(dominatingColorLocation, 1, &(dominatingColor[0]));
 	currentTransform = p1Transform;
 	glUniformMatrix3fv(currentTransformLocation, 1, false, &(currentTransform[0][0]));
+	zAdjustment = p1ZAdjust;
+	glUniform1f(zAdjustmentLocation, zAdjustment);
 	glDrawElements(GL_TRIANGLES, 24, GL_UNSIGNED_SHORT, 0);
 
 	dominatingColor = p2Color;
 	glUniform3fv(dominatingColorLocation, 1, &(dominatingColor[0]));
 	currentTransform = p2Transform;
 	glUniformMatrix3fv(currentTransformLocation, 1, false, &(currentTransform[0][0]));
+	zAdjustment = p2ZAdjust;
+	glUniform1f(zAdjustmentLocation, zAdjustment);
 	glDrawElements(GL_TRIANGLES, 24, GL_UNSIGNED_SHORT, 0);
+
+	dominatingColor = hillColor;
+	glUniform3fv(dominatingColorLocation, 1, &(dominatingColor[0]));
+	currentTransform = hillTransform;
+	glUniformMatrix3fv(currentTransformLocation, 1, false, &(currentTransform[0][0]));
+	zAdjustment = hillZAdjust;
+	glUniform1f(zAdjustmentLocation, zAdjustment);
+	glDrawElements(GL_TRIANGLES, 15, GL_UNSIGNED_SHORT, (void*)(24 * sizeof(GLushort)));
 }

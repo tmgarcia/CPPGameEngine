@@ -7,5 +7,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CoolGLWindow.h" />
+    <ClInclude Include="Header.h" />
   </ItemGroup>
 </Project>

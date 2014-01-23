@@ -19,8 +19,8 @@ using glm::mat4;
 
 GLint frameCount = 0;
 GLuint programID;
-GLfloat xAngle=0.0f;
-GLfloat yAngle=0.0f;
+GLfloat xAngle=0.9f;
+GLfloat yAngle=0.5f;
 GLfloat zAngle=0.0f;
 
 void CoolGLWindow::initializeGL()

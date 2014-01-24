@@ -5,8 +5,10 @@ int main(int argc, char* argv[])
 {
 	QApplication app(argc, argv);
 	CoolGLWindow widg;
-	widg.setFixedSize(800, 800);
-	widg.show();
+	widg.setFixedSize(900, 900);
+	widg.showFullScreen();
+	//widg.move(500,0);
+	//widg.show();
 
 	return app.exec();
 }

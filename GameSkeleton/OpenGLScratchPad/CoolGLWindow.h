@@ -15,12 +15,16 @@ class CoolGLWindow : public QGLWidget
 	QTimer myTimer;
 protected:
 	void initializeGL();
+	void transformShapes();
+	void transformColumns();
 	void paintGL();
 	void sendDataToHardware();
 	void compileShaders();
 	void updatePlayer(vec3 position, GLfloat angle, bool isP1);
 	void updateHill();
 	std::string readShaderCode(const char *filename);
+	void mouseMoveEvent(QMouseEvent*);
+	void keyPressEvent(QKeyEvent*);
 private slots:
 	void myUpdate();
 public:

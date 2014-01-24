@@ -4,10 +4,12 @@
     <ClCompile Include="TheMain.cpp" />
     <ClCompile Include="CoolGLWindow.cpp" />
     <ClCompile Include="CoolGLWindow_moc.cpp" />
+    <ClCompile Include="Camera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CoolGLWindow.h" />
     <ClInclude Include="Header.h" />
+    <ClInclude Include="Camera.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="VertexShaderCode.glsl" />

@@ -17,6 +17,8 @@ protected:
 	void initializeGL();
 	void transformShapes();
 	void transformColumns();
+	void transformWalls();
+	void continuousTransforms();
 	void paintGL();
 	void sendDataToHardware();
 	void compileShaders();

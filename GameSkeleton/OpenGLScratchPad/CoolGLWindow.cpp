@@ -51,7 +51,7 @@ GLuint wirePlaneVertexArrayObjectID;
 GLuint arrowVertexArrayObjectID;
 GLuint teapotVertexArrayObjectID;
 
-
+#pragma region Shape_Variables
 mat4 cubeTransform;
 mat4 sphereTransform;
 mat4 planeTransform;
@@ -141,6 +141,7 @@ GLfloat smokeScaleZ = 0.125f;
 GLfloat smokePosY = 0;
 
 mat4 potTransform;
+#pragma endregion
 
 GLuint frameCount=0;
 GLuint theBufferID;
@@ -542,9 +543,6 @@ void CoolGLWindow::sendDataToHardware()
 	wirePlaneIndexDataByteOffset = wirePlaneByteOffset + wirePlaneData.vertexBufferSize();
 	arrowIndexDataByteOffset = arrowByteOffset + arrowData.vertexBufferSize();
 	teapotIndexDataByteOffset = teapotByteOffset + teapotData.vertexBufferSize();
-
-	/*cubeData.cleanUp();
-	sphereData.cleanUp();*/
 
 	connect(&myTimer, SIGNAL(timeout()), this, SLOT(myUpdate()));
 	myTimer.start(0);

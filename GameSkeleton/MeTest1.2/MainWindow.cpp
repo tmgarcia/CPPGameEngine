@@ -46,7 +46,7 @@ const char* vertexShaderCode=
 	"	vec4 v = vec4(position, 1.0f);"
 	"	vec4 transformed = fullTransform * v;"
 	"	gl_Position = transformed;"
-	"	deColor = color;"
+	"	deColor = transformed;"
 	"}";
 
 const char* fragmentShaderCode=

@@ -36,11 +36,11 @@ public:
 		row1->addLayout(objectColors);
 
 		DebugSlider* objectR = new DebugSlider(0, 255, true);
-		objectR->setValue(254);
+		objectR->setValue(255);
 		DebugSlider* objectG = new DebugSlider(0, 255, true);
-		objectG->setValue(254);
+		objectG->setValue(255);
 		DebugSlider* objectB = new DebugSlider(0, 255, true);
-		objectB->setValue(254);
+		objectB->setValue(255);
 		QLabel* sectionLabel = new QLabel("Objects Color");
 		sectionLabel->setAlignment(Qt::AlignCenter);
 		objectColors->addWidget(sectionLabel);
@@ -101,7 +101,7 @@ public:
 		QLabel* section5Label = new QLabel("Diffusion Intensity");
 		section5Label->setAlignment(Qt::AlignCenter);
 		mainLayout->addWidget(section5Label);
-		DebugSlider* diffuseIntensity = new DebugSlider(0, 2, true);
+		DebugSlider* diffuseIntensity = new DebugSlider(0, 5, true);
 		diffuseIntensity->setValue(1);
 		mainLayout->addWidget(diffuseIntensity);
 

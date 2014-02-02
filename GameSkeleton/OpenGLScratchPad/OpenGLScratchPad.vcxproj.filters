@@ -5,11 +5,16 @@
     <ClCompile Include="CoolGLWindow.cpp" />
     <ClCompile Include="CoolGLWindow_moc.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="DebugSlider.cpp" />
+    <ClCompile Include="FullWidget.cpp" />
+    <ClCompile Include="DebugSlider_moc.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CoolGLWindow.h" />
     <ClInclude Include="Header.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="DebugSlider.h" />
+    <ClInclude Include="FullWidget.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="VertexShaderCode.glsl" />

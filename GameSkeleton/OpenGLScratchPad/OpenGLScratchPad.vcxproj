@@ -83,11 +83,16 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CoolGLWindow.cpp" />
     <ClCompile Include="CoolGLWindow_moc.cpp" />
+    <ClCompile Include="DebugSlider.cpp" />
+    <ClCompile Include="DebugSlider_moc.cpp" />
+    <ClCompile Include="FullWidget.cpp" />
     <ClCompile Include="TheMain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CoolGLWindow.h" />
+    <ClInclude Include="DebugSlider.h" />
+    <ClInclude Include="FullWidget.h" />
     <ClInclude Include="Header.h" />
   </ItemGroup>
   <ItemGroup>

@@ -144,6 +144,7 @@ GLfloat smokePosY = 0;
 mat4 potTransform;
 #pragma endregion
 
+#pragma region Shape_Rotations
 mat4 floorRotation = mat4();
 mat4 rugRotation = mat4();
 
@@ -212,7 +213,7 @@ mat4 column12Rotation = mat4();
 mat4 smokeRotation = mat4();
 
 mat4 potRotation = mat4();
-
+#pragma endregion
 GLuint frameCount=0;
 GLuint theBufferID;
 Camera camera;

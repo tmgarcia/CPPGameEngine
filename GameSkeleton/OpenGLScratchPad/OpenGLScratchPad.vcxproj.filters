@@ -8,6 +8,7 @@
     <ClCompile Include="DebugSlider.cpp" />
     <ClCompile Include="FullWidget.cpp" />
     <ClCompile Include="DebugSlider_moc.cpp" />
+    <ClCompile Include="FullWidget_moc.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CoolGLWindow.h" />

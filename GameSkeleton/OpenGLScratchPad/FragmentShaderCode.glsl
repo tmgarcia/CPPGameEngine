@@ -15,12 +15,13 @@ void main()
 { 
 	vec3 lightVector = normalize(lightPosition - thePosition);
 	float brightness = dot(lightVector, theNormal);
+	brightness *= diffusionIntensity;
 	if(isLightBulb==1.0f)
 	{
 		theFinalColor = vec4(1.0, 1.0f, 1.0f, 1.0f);
 	}
 	else
 	{
-		theFinalColor= objectColor*(ambientColor + (brightness*diffusionIntensity));
+		theFinalColor= objectColor*vec4(brightness, brightness, brightness, 1) + ambientColor;
 	}
 }

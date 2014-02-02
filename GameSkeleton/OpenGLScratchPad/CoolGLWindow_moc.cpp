@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'CoolGLWindow.h'
 **
-** Created: Mon Jan 13 15:47:39 2014
+** Created: Sat Feb 1 21:43:38 2014
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.0)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_CoolGLWindow[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-       1,   14, // methods
+      11,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -32,12 +32,32 @@ static const uint qt_meta_data_CoolGLWindow[] = {
 
  // slots: signature, parameters, type, tag, flags
       14,   13,   13,   13, 0x08,
+      34,   25,   13,   13, 0x0a,
+      59,   25,   13,   13, 0x0a,
+      86,   25,   13,   13, 0x0a,
+     112,   25,   13,   13, 0x0a,
+     138,   25,   13,   13, 0x0a,
+     166,   25,   13,   13, 0x0a,
+     193,   25,   13,   13, 0x0a,
+     218,   25,   13,   13, 0x0a,
+     243,   25,   13,   13, 0x0a,
+     268,   25,   13,   13, 0x0a,
 
        0        // eod
 };
 
 static const char qt_meta_stringdata_CoolGLWindow[] = {
-    "CoolGLWindow\0\0myUpdate()\0"
+    "CoolGLWindow\0\0myUpdate()\0newValue\0"
+    "setObjectColorRed(float)\0"
+    "setObjectColorGreen(float)\0"
+    "setObjectColorBlue(float)\0"
+    "setAmbientColorRed(float)\0"
+    "setAmbientColorGreen(float)\0"
+    "setAmbientColorBlue(float)\0"
+    "setLightPositionX(float)\0"
+    "setLightPositionY(float)\0"
+    "setLightPositionZ(float)\0"
+    "setDiffusionIntensity(float)\0"
 };
 
 void CoolGLWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -47,10 +67,19 @@ void CoolGLWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
         CoolGLWindow *_t = static_cast<CoolGLWindow *>(_o);
         switch (_id) {
         case 0: _t->myUpdate(); break;
+        case 1: _t->setObjectColorRed((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 2: _t->setObjectColorGreen((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 3: _t->setObjectColorBlue((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 4: _t->setAmbientColorRed((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 5: _t->setAmbientColorGreen((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 6: _t->setAmbientColorBlue((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 7: _t->setLightPositionX((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 8: _t->setLightPositionY((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 9: _t->setLightPositionZ((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 10: _t->setDiffusionIntensity((*reinterpret_cast< float(*)>(_a[1]))); break;
         default: ;
         }
     }
-    Q_UNUSED(_a);
 }
 
 const QMetaObjectExtraData CoolGLWindow::staticMetaObjectExtraData = {
@@ -85,9 +114,9 @@ int CoolGLWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 1)
+        if (_id < 11)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 1;
+        _id -= 11;
     }
     return _id;
 }

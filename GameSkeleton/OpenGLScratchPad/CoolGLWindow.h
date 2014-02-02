@@ -27,8 +27,22 @@ protected:
 	std::string readShaderCode(const char *filename);
 	void mouseMoveEvent(QMouseEvent*);
 	void keyPressEvent(QKeyEvent*);
+
 private slots:
 	void myUpdate();
+
+public slots:
+	void setObjectColorRed(float newValue);
+	void setObjectColorGreen(float newValue);
+	void setObjectColorBlue(float newValue);
+	void setAmbientColorRed(float newValue);
+	void setAmbientColorGreen(float newValue);
+	void setAmbientColorBlue(float newValue);
+	void setLightPositionX(float newValue);
+	void setLightPositionY(float newValue);
+	void setLightPositionZ(float newValue);
+	void setDiffusionIntensity(float newValue);
+
 public:
 
 };

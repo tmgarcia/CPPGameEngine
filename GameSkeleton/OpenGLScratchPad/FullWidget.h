@@ -22,7 +22,7 @@ public:
 		mainLayout->addLayout(row1);
 
 		QVBoxLayout* labels = new QVBoxLayout();
-
+		//Object Color Labels
 		QLabel* rLabel = new QLabel("Red");
 		QLabel* gLabel = new QLabel("Green");
 		QLabel* bLabel = new QLabel("Blue");
@@ -31,13 +31,16 @@ public:
 		labels->addWidget(bLabel);
 		labels->setMargin(0);
 		row1->addLayout(labels);
-
+		//Object Color Sliders
 		QVBoxLayout* objectColors = new QVBoxLayout();
 		row1->addLayout(objectColors);
+
 		DebugSlider* objectR = new DebugSlider(0, 255, true);
-		
+		objectR->setValue(254);
 		DebugSlider* objectG = new DebugSlider(0, 255, true);
+		objectG->setValue(254);
 		DebugSlider* objectB = new DebugSlider(0, 255, true);
+		objectB->setValue(254);
 		QLabel* sectionLabel = new QLabel("Objects Color");
 		sectionLabel->setAlignment(Qt::AlignCenter);
 		objectColors->addWidget(sectionLabel);
@@ -45,7 +48,7 @@ public:
 		objectColors->addWidget(objectG);
 		objectColors->addWidget(objectB);
 
-		
+		//Ambient Labels
 		QVBoxLayout* labels2 = new QVBoxLayout();
 		QLabel* rLabel2 = new QLabel("Red");
 		QLabel* gLabel2 = new QLabel("Green");
@@ -55,7 +58,7 @@ public:
 		labels2->addWidget(bLabel2);
 		labels2->setMargin(0);
 		row1->addLayout(labels2);
-
+		//Ambient Sliders
 		QVBoxLayout* ambientColors = new QVBoxLayout();
 		row1->addLayout(ambientColors);
 		DebugSlider* ambientR = new DebugSlider(0, 255, true);
@@ -68,6 +71,7 @@ public:
 		ambientColors->addWidget(ambientG);
 		ambientColors->addWidget(ambientB);
 
+		//Ligh position Labels
 		QVBoxLayout* labels3 = new QVBoxLayout();
 		QLabel* rLabel3 = new QLabel("X");
 		QLabel* gLabel3 = new QLabel("Y");
@@ -77,13 +81,15 @@ public:
 		labels3->addWidget(bLabel3);
 		labels3->setMargin(0);
 		row1->addLayout(labels3);
-
+		//Ligh position Sliders
 		QVBoxLayout* lightPosition = new QVBoxLayout();
 		row1->addLayout(lightPosition);
 		DebugSlider* lightX = new DebugSlider(-10, 10, true);
 		lightX->setValue(0);
 		DebugSlider* lightY = new DebugSlider(0, 8, true);
+		lightY->setValue(6);
 		DebugSlider* lightZ = new DebugSlider(0, -48, true);
+		lightZ->setValue(-20);
 		QLabel* section3Label = new QLabel("Light Source Position");
 		section3Label->setAlignment(Qt::AlignCenter);
 		lightPosition->addWidget(section3Label);
@@ -91,20 +97,34 @@ public:
 		lightPosition->addWidget(lightY);
 		lightPosition->addWidget(lightZ);
 
+		//Diffusion Intensity Label & Slider
 		QLabel* section5Label = new QLabel("Diffusion Intensity");
 		section5Label->setAlignment(Qt::AlignCenter);
 		mainLayout->addWidget(section5Label);
-		DebugSlider* diffuseIntensity = new DebugSlider(0, 100, true);
+		DebugSlider* diffuseIntensity = new DebugSlider(0, 2, true);
+		diffuseIntensity->setValue(1);
 		mainLayout->addWidget(diffuseIntensity);
 
+		//Scene display
 		CoolGLWindow* display = new CoolGLWindow();
 		display->setFixedSize(this->width(), this->height() * 0.7);
 		mainLayout->addWidget(display);
 
-		//mainLayout->addWidget(new QPushButton);
-		//mainLayout->addWidget(new QPushButton);
-		//row1->addWidget(new DebugSlider);
-		//row1->addWidget(new QCheckBox);
+		//Connecting the signals and slots
+		QObject::connect(objectR, SIGNAL(valueChanged(float)), display, SLOT(setObjectColorRed(float)));
+		QObject::connect(objectG, SIGNAL(valueChanged(float)), display, SLOT(setObjectColorGreen(float)));
+		QObject::connect(objectB, SIGNAL(valueChanged(float)), display, SLOT(setObjectColorBlue(float)));
+
+		QObject::connect(ambientR, SIGNAL(valueChanged(float)), display, SLOT(setAmbientColorRed(float)));
+		QObject::connect(ambientG, SIGNAL(valueChanged(float)), display, SLOT(setAmbientColorGreen(float)));
+		QObject::connect(ambientB, SIGNAL(valueChanged(float)), display, SLOT(setAmbientColorBlue(float)));
+
+		QObject::connect(lightX, SIGNAL(valueChanged(float)), display, SLOT(setLightPositionX(float)));
+		QObject::connect(lightY, SIGNAL(valueChanged(float)), display, SLOT(setLightPositionY(float)));
+		QObject::connect(lightZ, SIGNAL(valueChanged(float)), display, SLOT(setLightPositionZ(float)));
+		
+		QObject::connect(diffuseIntensity, SIGNAL(valueChanged(float)), display, SLOT(setDiffusionIntensity(float)));
+		
 	}
 };
 

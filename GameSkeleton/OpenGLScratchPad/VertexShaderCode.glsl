@@ -1,4 +1,4 @@
-#version 400 
+#version 430 
  
 in layout(location=0) vec3 position; 
 in layout(location=1) vec4 color; 
@@ -12,7 +12,8 @@ uniform mat4 modelToWorldMatrix;
  
 out vec3 theNormal;
 out vec3 thePosition;
-out vec4 deColor;
+out vec4 ambientColor;
+out vec4 objectColor;
 
 void main() 
 { 
@@ -20,5 +21,6 @@ void main()
 	gl_Position = fullTransformMatrix * v;
 	thePosition = vec3(modelToWorldMatrix * v);
 	theNormal = mat3(rotationMatrix) * normal;
-	deColor = vec4(ambientLight, 1.0f);
+	ambientColor = vec4(ambientLight, 1.0f);
+	objectColor = vec4(newColor, 1.0f);
 } 

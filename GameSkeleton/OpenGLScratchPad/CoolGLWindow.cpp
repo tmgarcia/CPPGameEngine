@@ -51,6 +51,10 @@ GLuint wirePlaneVertexArrayObjectID;
 GLuint arrowVertexArrayObjectID;
 GLuint teapotVertexArrayObjectID;
 
+vec3 newColor(1.0f,1.0f,1.0f);
+vec3 ambientLight(0.0f, 0.0f, 0.0f);
+vec3 lightPosition(0.0f, 6.0f, -20.0f);
+GLfloat diffusionIntensity = 1;
 
 #pragma region Shape_Variables
 mat4 cubeTransform;
@@ -327,7 +331,7 @@ void CoolGLWindow::transformWalls()
 	wall3Rotation= glm::rotate(-90.0f, vec3(1,0,0));
 
 	wall4Transform = glm::translate(mat4(), vec3(0.0f,4.0f,-48.0f));
-	wall4Transform *= glm::rotate(-90.0f, vec3(1,0,0));
+	wall4Transform *= glm::rotate(90.0f, vec3(1,0,0));
 	wall4Transform *= glm::scale(vec3(10.0f, 1.0f, 4.0f));
 	wall4Rotation= glm::rotate(90.0f, vec3(1,0,0));
 
@@ -402,7 +406,6 @@ void CoolGLWindow::transformShapes()
 
 	//Cube, sphere, arrow, teapot, plane, torus, wireframe plane, lines, 
 }
-
 void CoolGLWindow::continuousTransforms()
 {
 	pedestalTopperAtomE1 = glm::translate(vec3(7.5f,4.0f, -20.0f));
@@ -530,7 +533,6 @@ void CoolGLWindow::continuousTransforms()
 
 
 }
-
 void CoolGLWindow::sendDataToHardware()
 {
 	Neumont::ShapeData cubeData = Neumont::ShapeGenerator::makeCube();
@@ -746,6 +748,53 @@ void CoolGLWindow::myUpdate()
 	frameCount++;
 	repaint();
 }
+void CoolGLWindow::setObjectColorRed(float newValue)
+{
+	newColor.x = newValue/255;
+}
+void CoolGLWindow::setObjectColorGreen(float newValue)
+{
+	newColor.y = newValue/255;
+
+}
+void CoolGLWindow::setObjectColorBlue(float newValue)
+{
+	newColor.z = newValue/255;
+
+}
+void CoolGLWindow::setAmbientColorRed(float newValue)
+{
+	ambientLight.x = newValue/255;
+}
+void CoolGLWindow::setAmbientColorGreen(float newValue)
+{
+	ambientLight.y = newValue/255;
+
+}
+void CoolGLWindow::setAmbientColorBlue(float newValue)
+{
+	ambientLight.z = newValue/255;
+
+}
+void CoolGLWindow::setLightPositionX(float newValue)
+{
+	lightPosition.x = newValue;
+}
+void CoolGLWindow::setLightPositionY(float newValue)
+{
+	lightPosition.y = newValue;
+
+}
+void CoolGLWindow::setLightPositionZ(float newValue)
+{
+	lightPosition.z = newValue;
+
+}
+void CoolGLWindow::setDiffusionIntensity(float newValue)
+{
+	diffusionIntensity = newValue;
+}
+void setDiffusionIntensity(float newValue);
 void CoolGLWindow::mouseMoveEvent(QMouseEvent* e)
 {
 	camera.mouseUpdate(glm::vec2(e->x(), e->y()));
@@ -840,23 +889,20 @@ void CoolGLWindow::compileShaders()
 
 	glUseProgram(programID);
 }
-
-
 void CoolGLWindow::paintGL()
 {
-	//glm::perspective(fieldOfView, apsectRatio, Znear, Zfar);
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 	glViewport(0,0,width(), height());
 
-	vec3 lightPosition(0.0f, 6.0f, -20.0f);
 	GLint lightPositionUniformLocation = glGetUniformLocation(programID, "lightPosition");
 	glUniform3fv(lightPositionUniformLocation, 1, &lightPosition[0]);
 
+	GLint diffusionIntensityLocation = glGetUniformLocation(programID, "diffusionIntensity");
+	glUniform1f(diffusionIntensityLocation, diffusionIntensity);
+
 	GLint ambientLightUniformLocation = glGetUniformLocation(programID, "ambientLight");
-	vec3 ambientLight(0.2f, 0.1f, 0.3f);
 	glUniform3fv(ambientLightUniformLocation, 1, &ambientLight[0]);
 
-	vec3 newColor = vec3(0, 0, 0);
 	GLint newColorLocation = glGetUniformLocation(programID, "newColor");
 	glUniform3fv(newColorLocation, 1, &newColor[0]);
 
@@ -872,7 +918,7 @@ void CoolGLWindow::paintGL()
 	GLfloat isLightBulb;
 	GLint isLightBulbLocation = glGetUniformLocation(programID, "isLightBulb");
 
-	mat4 viewToProjectionMatrix = glm::perspective(60.0f, ((float)width()) / height(), 0.1f, 50.0f);
+	mat4 viewToProjectionMatrix = glm::perspective(90.0f, ((float)width()) / height(), 0.1f, 50.0f);
 	mat4 worldToViewMatrix = camera.getWorldToViewMatrix();
 	mat4 worldToProjectionMatrix = viewToProjectionMatrix * worldToViewMatrix;
 	
@@ -928,23 +974,23 @@ void CoolGLWindow::paintGL()
 	glUniformMatrix4fv(fullTransformMatrixLocation, 1, GL_FALSE, &fullTransformMatrix[0][0]);
 	glDrawElements(GL_TRIANGLES, planeNumIndices, GL_UNSIGNED_SHORT, (void*)planeIndexDataByteOffset);
 
-	fullTransformMatrix = worldToProjectionMatrix * wall3Transform;
-	glBindVertexArray(planeVertexArrayObjectID);
-	modelToWorldMatrix = wall3Transform;
-	glUniformMatrix4fv(modelToWorldMatrixLocation, 1, GL_FALSE, &modelToWorldMatrix[0][0]);
-	rotationMatrix = wall3Rotation;
-	glUniformMatrix4fv(rotationMatrixLocation, 1, GL_FALSE, &rotationMatrix[0][0]);
-	glUniformMatrix4fv(fullTransformMatrixLocation, 1, GL_FALSE, &fullTransformMatrix[0][0]);
-	glDrawElements(GL_TRIANGLES, planeNumIndices, GL_UNSIGNED_SHORT, (void*)planeIndexDataByteOffset);
+	//fullTransformMatrix = worldToProjectionMatrix * wall3Transform;
+	//glBindVertexArray(planeVertexArrayObjectID);
+	//modelToWorldMatrix = wall3Transform;
+	//glUniformMatrix4fv(modelToWorldMatrixLocation, 1, GL_FALSE, &modelToWorldMatrix[0][0]);
+	//rotationMatrix = wall3Rotation;
+	//glUniformMatrix4fv(rotationMatrixLocation, 1, GL_FALSE, &rotationMatrix[0][0]);
+	//glUniformMatrix4fv(fullTransformMatrixLocation, 1, GL_FALSE, &fullTransformMatrix[0][0]);
+	//glDrawElements(GL_TRIANGLES, planeNumIndices, GL_UNSIGNED_SHORT, (void*)planeIndexDataByteOffset);
 
-	fullTransformMatrix = worldToProjectionMatrix * wall4Transform;
-	glBindVertexArray(planeVertexArrayObjectID);
-	modelToWorldMatrix = wall4Transform;
-	glUniformMatrix4fv(modelToWorldMatrixLocation, 1, GL_FALSE, &modelToWorldMatrix[0][0]);
-	rotationMatrix = wall4Rotation;
-	glUniformMatrix4fv(rotationMatrixLocation, 1, GL_FALSE, &rotationMatrix[0][0]);
-	glUniformMatrix4fv(fullTransformMatrixLocation, 1, GL_FALSE, &fullTransformMatrix[0][0]);
-	glDrawElements(GL_TRIANGLES, planeNumIndices, GL_UNSIGNED_SHORT, (void*)planeIndexDataByteOffset);
+	//fullTransformMatrix = worldToProjectionMatrix * wall4Transform;
+	//glBindVertexArray(planeVertexArrayObjectID);
+	//modelToWorldMatrix = wall4Transform;
+	//glUniformMatrix4fv(modelToWorldMatrixLocation, 1, GL_FALSE, &modelToWorldMatrix[0][0]);
+	//rotationMatrix = wall4Rotation;
+	//glUniformMatrix4fv(rotationMatrixLocation, 1, GL_FALSE, &rotationMatrix[0][0]);
+	//glUniformMatrix4fv(fullTransformMatrixLocation, 1, GL_FALSE, &fullTransformMatrix[0][0]);
+	//glDrawElements(GL_TRIANGLES, planeNumIndices, GL_UNSIGNED_SHORT, (void*)planeIndexDataByteOffset);
 
 	fullTransformMatrix = worldToProjectionMatrix * ceilingTransform;
 	glBindVertexArray(planeVertexArrayObjectID);
@@ -955,23 +1001,23 @@ void CoolGLWindow::paintGL()
 	glUniformMatrix4fv(fullTransformMatrixLocation, 1, GL_FALSE, &fullTransformMatrix[0][0]);
 	glDrawElements(GL_TRIANGLES, planeNumIndices, GL_UNSIGNED_SHORT, (void*)planeIndexDataByteOffset);
 
-	fullTransformMatrix = worldToProjectionMatrix * door1Transform;
-	glBindVertexArray(cubeVertexArrayObjectID);
-	modelToWorldMatrix = door1Transform;
-	glUniformMatrix4fv(modelToWorldMatrixLocation, 1, GL_FALSE, &modelToWorldMatrix[0][0]);
-	rotationMatrix = door1Rotation;
-	glUniformMatrix4fv(rotationMatrixLocation, 1, GL_FALSE, &rotationMatrix[0][0]);
-	glUniformMatrix4fv(fullTransformMatrixLocation, 1, GL_FALSE, &fullTransformMatrix[0][0]);
-	glDrawElements(GL_TRIANGLES, cubeNumIndices, GL_UNSIGNED_SHORT, (void*)cubeIndexDataByteOffset);
+	//fullTransformMatrix = worldToProjectionMatrix * door1Transform;
+	//glBindVertexArray(cubeVertexArrayObjectID);
+	//modelToWorldMatrix = door1Transform;
+	//glUniformMatrix4fv(modelToWorldMatrixLocation, 1, GL_FALSE, &modelToWorldMatrix[0][0]);
+	//rotationMatrix = door1Rotation;
+	//glUniformMatrix4fv(rotationMatrixLocation, 1, GL_FALSE, &rotationMatrix[0][0]);
+	//glUniformMatrix4fv(fullTransformMatrixLocation, 1, GL_FALSE, &fullTransformMatrix[0][0]);
+	//glDrawElements(GL_TRIANGLES, cubeNumIndices, GL_UNSIGNED_SHORT, (void*)cubeIndexDataByteOffset);
 
-	fullTransformMatrix = worldToProjectionMatrix * door2Transform;
-	glBindVertexArray(cubeVertexArrayObjectID);
-	modelToWorldMatrix = door2Transform;
-	glUniformMatrix4fv(modelToWorldMatrixLocation, 1, GL_FALSE, &modelToWorldMatrix[0][0]);
-	rotationMatrix = door2Rotation;
-	glUniformMatrix4fv(rotationMatrixLocation, 1, GL_FALSE, &rotationMatrix[0][0]);
-	glUniformMatrix4fv(fullTransformMatrixLocation, 1, GL_FALSE, &fullTransformMatrix[0][0]);
-	glDrawElements(GL_TRIANGLES, cubeNumIndices, GL_UNSIGNED_SHORT, (void*)cubeIndexDataByteOffset);
+	//fullTransformMatrix = worldToProjectionMatrix * door2Transform;
+	//glBindVertexArray(cubeVertexArrayObjectID);
+	//modelToWorldMatrix = door2Transform;
+	//glUniformMatrix4fv(modelToWorldMatrixLocation, 1, GL_FALSE, &modelToWorldMatrix[0][0]);
+	//rotationMatrix = door2Rotation;
+	//glUniformMatrix4fv(rotationMatrixLocation, 1, GL_FALSE, &rotationMatrix[0][0]);
+	//glUniformMatrix4fv(fullTransformMatrixLocation, 1, GL_FALSE, &fullTransformMatrix[0][0]);
+	//glDrawElements(GL_TRIANGLES, cubeNumIndices, GL_UNSIGNED_SHORT, (void*)cubeIndexDataByteOffset);
 
 	fullTransformMatrix = worldToProjectionMatrix * pedestal1Transform;
 	glBindVertexArray(cubeVertexArrayObjectID);
@@ -1235,7 +1281,7 @@ void CoolGLWindow::paintGL()
 	glDrawElements(GL_TRIANGLES, sphereNumIndices, GL_UNSIGNED_SHORT, (void*)sphereIndexDataByteOffset);
 
 #pragma region Column_Draws
-	fullTransformMatrix = worldToProjectionMatrix * column1Transform;
+	/*fullTransformMatrix = worldToProjectionMatrix * column1Transform;
 	glBindVertexArray(cubeVertexArrayObjectID);
 	modelToWorldMatrix = column1Transform;
 	glUniformMatrix4fv(modelToWorldMatrixLocation, 1, GL_FALSE, &modelToWorldMatrix[0][0]);
@@ -1297,7 +1343,10 @@ void CoolGLWindow::paintGL()
 	modelToWorldMatrix = column8Transform;
 	glUniformMatrix4fv(modelToWorldMatrixLocation, 1, GL_FALSE, &modelToWorldMatrix[0][0]);
 	glUniformMatrix4fv(fullTransformMatrixLocation, 1, GL_FALSE, &fullTransformMatrix[0][0]);
-	glDrawElements(GL_TRIANGLES, cubeNumIndices, GL_UNSIGNED_SHORT, (void*)cubeIndexDataByteOffset);
+	glDrawElements(GL_TRIANGLES, cubeNumIndices, GL_UNSIGNED_SHORT, (void*)cubeIndexDataByteOffset);*/
+
+	rotationMatrix = column1Rotation;
+	glUniformMatrix4fv(rotationMatrixLocation, 1, GL_FALSE, &rotationMatrix[0][0]);
 
 	fullTransformMatrix = worldToProjectionMatrix * column9Transform;
 	glBindVertexArray(cubeVertexArrayObjectID);
@@ -1327,9 +1376,6 @@ void CoolGLWindow::paintGL()
 	glUniformMatrix4fv(fullTransformMatrixLocation, 1, GL_FALSE, &fullTransformMatrix[0][0]);
 	glDrawElements(GL_TRIANGLES, cubeNumIndices, GL_UNSIGNED_SHORT, (void*)cubeIndexDataByteOffset);
 #pragma endregion 
-
-	newColor = vec3(-0.5f, -0.8f, -0.5f);
-	glUniform3fv(newColorLocation, 1, &newColor[0]);
 
 	fullTransformMatrix = worldToProjectionMatrix * potTransform;
 	glBindVertexArray(teapotVertexArrayObjectID);

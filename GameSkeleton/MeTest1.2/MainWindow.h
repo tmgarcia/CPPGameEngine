@@ -10,6 +10,8 @@ protected:
 	void compileShaders();
 	void paintGL();
 	void transformModels();
+	void keyPressEvent(QKeyEvent* e);
+	void mouseMoveEvent(QMouseEvent* e);
 public:
 	void initializeGL();
 };

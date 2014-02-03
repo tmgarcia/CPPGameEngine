@@ -7,6 +7,8 @@
 #include <ShapeGenerator.h>
 #include "Camera.h"
 #include <iostream>
+#include <QtGUI\qmouseevent>
+#include <QtGUI\qkeyevent>
 
 using std::cout;
 using std::endl;
@@ -64,6 +66,36 @@ const char* fragmentShaderCode=
 mat4 cube1Transform;
 mat4 torus1Transform;
 mat4 plane1Transform;
+void MainWindow::mouseMoveEvent(QMouseEvent* e)
+{
+	camera.mouseUpdate(glm::vec2(e->x(), e->y()));
+	repaint();
+}
+void MainWindow::keyPressEvent(QKeyEvent* e)
+{
+	switch(e->key())
+	{
+	case Qt::Key::Key_W:
+		camera.moveForward();
+		break;
+	case Qt::Key::Key_S:
+		camera.moveBackward();
+		break;
+	case Qt::Key::Key_A:
+		camera.strafeLeft();
+		break;
+	case Qt::Key::Key_D:
+		camera.strafeRight();
+		break;
+	case Qt::Key::Key_R:
+		camera.moveUp();
+		break;
+	case Qt::Key::Key_F:
+		camera.moveDown();
+		break;
+	}
+	repaint();
+}
 
 void MainWindow::transformModels()
 {
@@ -77,6 +109,7 @@ void MainWindow::transformModels()
 void MainWindow::initializeGL()
 {
 	glewInit();
+	setMouseTracking(true);
 	glEnable(GL_DEPTH_BUFFER);
 	transformModels();
 	sendDataToHardware();
@@ -176,7 +209,7 @@ void MainWindow::compileShaders()
 		cout << buffer << endl;
 		delete [] buffer;
 	}
-
+	 
 	programID = glCreateProgram();
 	glAttachShader(programID, vertexShaderID);
 	glAttachShader(programID, fragmentShaderID);

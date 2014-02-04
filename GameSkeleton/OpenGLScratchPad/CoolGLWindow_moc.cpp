@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'CoolGLWindow.h'
 **
-** Created: Sat Feb 1 21:43:38 2014
+** Created: Tue Feb 4 09:19:00 2014
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.0)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_CoolGLWindow[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-      11,   14, // methods
+      15,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -42,6 +42,10 @@ static const uint qt_meta_data_CoolGLWindow[] = {
      218,   25,   13,   13, 0x0a,
      243,   25,   13,   13, 0x0a,
      268,   25,   13,   13, 0x0a,
+     297,   25,   13,   13, 0x0a,
+     324,   25,   13,   13, 0x0a,
+     353,   25,   13,   13, 0x0a,
+     381,   25,   13,   13, 0x0a,
 
        0        // eod
 };
@@ -58,6 +62,10 @@ static const char qt_meta_stringdata_CoolGLWindow[] = {
     "setLightPositionY(float)\0"
     "setLightPositionZ(float)\0"
     "setDiffusionIntensity(float)\0"
+    "setSpecularColorRed(float)\0"
+    "setSpecularColorGreen(float)\0"
+    "setSpecularColorBlue(float)\0"
+    "setSpecularExponent(float)\0"
 };
 
 void CoolGLWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -77,6 +85,10 @@ void CoolGLWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
         case 8: _t->setLightPositionY((*reinterpret_cast< float(*)>(_a[1]))); break;
         case 9: _t->setLightPositionZ((*reinterpret_cast< float(*)>(_a[1]))); break;
         case 10: _t->setDiffusionIntensity((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 11: _t->setSpecularColorRed((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 12: _t->setSpecularColorGreen((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 13: _t->setSpecularColorBlue((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 14: _t->setSpecularExponent((*reinterpret_cast< float(*)>(_a[1]))); break;
         default: ;
         }
     }
@@ -114,9 +126,9 @@ int CoolGLWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 11)
+        if (_id < 15)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 11;
+        _id -= 15;
     }
     return _id;
 }

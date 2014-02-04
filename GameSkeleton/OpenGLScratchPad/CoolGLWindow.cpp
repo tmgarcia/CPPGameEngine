@@ -55,6 +55,8 @@ vec3 newColor(1.0f,1.0f,1.0f);
 vec3 ambientLight(0.0f, 0.0f, 0.0f);
 vec3 lightPosition(0.0f, 6.0f, -20.0f);
 GLfloat diffusionIntensity = 1;
+vec4 specularColor(1.0f, 1.0f, 1.0f, 1.0f);
+GLfloat specularExponent = 10;
 
 #pragma region Shape_Variables
 mat4 cubeTransform;
@@ -794,7 +796,24 @@ void CoolGLWindow::setDiffusionIntensity(float newValue)
 {
 	diffusionIntensity = newValue;
 }
-void setDiffusionIntensity(float newValue);
+void CoolGLWindow::setSpecularColorRed(float newValue)
+{
+	specularColor.x = newValue/255;
+}
+void CoolGLWindow::setSpecularColorGreen(float newValue)
+{
+	specularColor.y = newValue/255;
+
+}
+void CoolGLWindow::setSpecularColorBlue(float newValue)
+{
+	specularColor.z = newValue/255;
+
+}
+void CoolGLWindow::setSpecularExponent(float newValue)
+{
+	specularExponent = newValue;
+}
 void CoolGLWindow::mouseMoveEvent(QMouseEvent* e)
 {
 	camera.mouseUpdate(glm::vec2(e->x(), e->y()));
@@ -905,6 +924,16 @@ void CoolGLWindow::paintGL()
 
 	GLint newColorLocation = glGetUniformLocation(programID, "newColor");
 	glUniform3fv(newColorLocation, 1, &newColor[0]);
+
+	vec3 eyePosition = camera.getPosition();
+	GLint eyePositionLocation = glGetUniformLocation(programID, "eyePosition");
+	glUniform3fv(eyePositionLocation, 1, &eyePosition[0]);
+
+	GLint specularColorLocation = glGetUniformLocation(programID, "specularColor");
+	glUniform4fv(specularColorLocation, 1, &specularColor[0]);
+
+	GLint specularExponentLocation = glGetUniformLocation(programID, "specularExponent");
+	glUniform1f(specularExponentLocation, specularExponent);
 
 	GLint rotationMatrixLocation = glGetUniformLocation(programID, "rotationMatrix");
 	mat4 rotationMatrix;

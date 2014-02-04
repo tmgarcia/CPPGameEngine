@@ -15,6 +15,11 @@ glm::mat4 Camera::getWorldToViewMatrix() const
 	return glm::lookAt(position, position + viewDirection, UP);
 }
 
+glm::vec3 Camera::getPosition() const
+{
+	return position;
+}
+
 void Camera::mouseUpdate(const glm::vec2& newMousePosition)
 {
 	glm::vec2 mouseDelta = newMousePosition-oldMousePosition;

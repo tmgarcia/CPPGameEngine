@@ -71,6 +71,56 @@ public:
 		ambientColors->addWidget(ambientG);
 		ambientColors->addWidget(ambientB);
 
+		//Specular color Labels
+		QVBoxLayout* specLabels = new QVBoxLayout();
+		QLabel* rLabel4 = new QLabel("Red");
+		QLabel* gLabel4 = new QLabel("Green");
+		QLabel* bLabel4 = new QLabel("Blue");
+		specLabels->addWidget(rLabel4);
+		specLabels->addWidget(gLabel4);
+		specLabels->addWidget(bLabel4);
+		specLabels->setMargin(0);
+		row1->addLayout(specLabels);
+		//Spec Color Sliders
+		QVBoxLayout* specSliders = new QVBoxLayout();
+		row1->addLayout(specSliders);
+		DebugSlider* specR = new DebugSlider(0, 255, true);
+		specR->setValue(255);
+		DebugSlider* specG = new DebugSlider(0, 255, true);
+		specG->setValue(255);
+		DebugSlider* specB = new DebugSlider(0, 255, true);
+		specB->setValue(255);
+		QLabel* specSectionLabel = new QLabel("Specularity Color");
+		specSectionLabel->setAlignment(Qt::AlignCenter);
+		specSliders->addWidget(specSectionLabel);
+		specSliders->addWidget(specR);
+		specSliders->addWidget(specG);
+		specSliders->addWidget(specB);
+
+
+		QHBoxLayout* row2 = new QHBoxLayout();
+		mainLayout->addLayout(row2);
+
+		QVBoxLayout* diffuseSlider = new QVBoxLayout();
+		//Diffusion Intensity Label & Slider
+		QLabel* section5Label = new QLabel("Diffusion Intensity");
+		section5Label->setAlignment(Qt::AlignCenter);
+		diffuseSlider->addWidget(section5Label);
+		DebugSlider* diffuseIntensity = new DebugSlider(0, 5, true);
+		diffuseIntensity->setValue(1);
+		diffuseSlider->addWidget(diffuseIntensity);
+		row2->addLayout(diffuseSlider);
+
+		//Specular exponent
+		QVBoxLayout* specularSlider = new QVBoxLayout();
+		QLabel* specSliderLabel = new QLabel("Specular Exponent");
+		specSliderLabel->setAlignment(Qt::AlignCenter);
+		specularSlider->addWidget(specSliderLabel);
+		DebugSlider* specularExponent = new DebugSlider(5, 500, true);
+		specularExponent ->setValue(10);
+		specularSlider->addWidget(specularExponent);
+		row2->addLayout(specularSlider);
+
 		//Ligh position Labels
 		QVBoxLayout* labels3 = new QVBoxLayout();
 		QLabel* rLabel3 = new QLabel("X");
@@ -80,33 +130,25 @@ public:
 		labels3->addWidget(gLabel3);
 		labels3->addWidget(bLabel3);
 		labels3->setMargin(0);
-		row1->addLayout(labels3);
+		row2->addLayout(labels3);
 		//Ligh position Sliders
 		QVBoxLayout* lightPosition = new QVBoxLayout();
-		row1->addLayout(lightPosition);
+		row2->addLayout(lightPosition);
 		DebugSlider* lightX = new DebugSlider(-10, 10, true);
 		lightX->setValue(0);
 		DebugSlider* lightY = new DebugSlider(0, 8, true);
 		lightY->setValue(6);
 		DebugSlider* lightZ = new DebugSlider(0, -48, true);
 		lightZ->setValue(-20);
-		QLabel* section3Label = new QLabel("Light Source Position");
+		QLabel* section3Label= new QLabel("Light Source Position");
 		section3Label->setAlignment(Qt::AlignCenter);
 		lightPosition->addWidget(section3Label);
 		lightPosition->addWidget(lightX);
 		lightPosition->addWidget(lightY);
 		lightPosition->addWidget(lightZ);
 
-		//Diffusion Intensity Label & Slider
-		QLabel* section5Label = new QLabel("Diffusion Intensity");
-		section5Label->setAlignment(Qt::AlignCenter);
-		mainLayout->addWidget(section5Label);
-		DebugSlider* diffuseIntensity = new DebugSlider(0, 5, true);
-		diffuseIntensity->setValue(1);
-		mainLayout->addWidget(diffuseIntensity);
-
 		//Scene display
-		CoolGLWindow* display = new CoolGLWindow();
+		display = new CoolGLWindow();
 		display->setFixedSize(this->width(), this->height() * 0.7);
 		mainLayout->addWidget(display);
 
@@ -122,9 +164,17 @@ public:
 		QObject::connect(lightX, SIGNAL(valueChanged(float)), display, SLOT(setLightPositionX(float)));
 		QObject::connect(lightY, SIGNAL(valueChanged(float)), display, SLOT(setLightPositionY(float)));
 		QObject::connect(lightZ, SIGNAL(valueChanged(float)), display, SLOT(setLightPositionZ(float)));
+
+		QObject::connect(specR, SIGNAL(valueChanged(float)), display, SLOT(setSpecularColorRed(float)));
+		QObject::connect(specG, SIGNAL(valueChanged(float)), display, SLOT(setSpecularColorGreen(float)));
+		QObject::connect(specB, SIGNAL(valueChanged(float)), display, SLOT(setSpecularColorBlue(float)));
 		
 		QObject::connect(diffuseIntensity, SIGNAL(valueChanged(float)), display, SLOT(setDiffusionIntensity(float)));
+		QObject::connect(specularExponent, SIGNAL(valueChanged(float)), display, SLOT(setSpecularExponent(float)));
+
 		
 	}
+		CoolGLWindow* display;
+	    void keyPressEvent(QKeyEvent *event);
 };
 

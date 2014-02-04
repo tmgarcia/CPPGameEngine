@@ -4,13 +4,14 @@ in vec3 theNormal;
 in vec3 thePosition;
 in vec4 ambientColor;
 in vec4 objectColor;
-in vec3 eyeNormal;
 
 uniform vec3 lightPosition;
 uniform float isLightBulb;
 uniform float diffusionIntensity;
 uniform vec4 specularColor;
 uniform float specularExponent;
+uniform vec3 eyePosition;
+
 
 out vec4 theFinalColor; 
  
@@ -19,6 +20,9 @@ void main()
 	vec3 lightVector = normalize(lightPosition - thePosition);
 	float brightness = dot(lightVector, theNormal);
 	brightness *= diffusionIntensity;
+
+
+	vec3 eyeNormal = normalize(eyePosition);
 
 	vec3 eyeVector = normalize(thePosition - eyeNormal);
 	vec3 reflectedLight = reflect(lightVector, theNormal);

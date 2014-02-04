@@ -219,7 +219,7 @@ mat4 column12Rotation = mat4();
 mat4 smokeRotation = mat4();
 
 mat4 potRotation = mat4();
-#pragma endregion
+#pragma endregione
 GLuint frameCount=0;
 GLuint theBufferID;
 Camera camera;
@@ -840,9 +840,6 @@ void CoolGLWindow::keyPressEvent(QKeyEvent* e)
 		break;
 	case Qt::Key::Key_F:
 		camera.moveDown();
-		break;
-	case Qt::Key::Key_Escape:
-		close();
 		break;
 	}
 	repaint();

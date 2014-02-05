@@ -21,12 +21,10 @@ void main()
 	float brightness = dot(lightVector, theNormal);
 	brightness *= diffusionIntensity;
 
-
-	vec3 eyeNormal = normalize(eyePosition);
-
-	vec3 eyeVector = normalize(thePosition - eyeNormal);
-	vec3 reflectedLight = reflect(lightVector, theNormal);
-	float specularAngle = clamp(dot(reflectedLight, eyeVector), 0, 1);
+	vec3 specularLightVector = normalize(thePosition - lightPosition);
+	vec3 eyeVector = normalize(thePosition - eyePosition);
+	vec3 reflectedLight = reflect(specularLightVector, theNormal);
+	float specularAngle = clamp(-dot(reflectedLight, eyeVector), 0, 1);
 
 	specularAngle = pow(specularAngle, specularExponent);
 

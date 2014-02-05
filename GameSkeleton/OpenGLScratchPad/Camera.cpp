@@ -6,9 +6,8 @@ const float Camera::MOVEMENT_SPEED = 0.1f;
 Camera::Camera() : 
 	viewDirection(0.0f, 0.0f, -1.0f),
 	UP(0.0f,1.0f,0.0f),
-	position(6.0f, 1.0f, -40.0f)
-{
-}
+	position(0.0f, 1.0f, 0.0f)
+{}
 
 glm::mat4 Camera::getWorldToViewMatrix() const
 {

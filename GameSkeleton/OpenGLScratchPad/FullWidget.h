@@ -116,7 +116,7 @@ public:
 		QLabel* specSliderLabel = new QLabel("Specular Exponent");
 		specSliderLabel->setAlignment(Qt::AlignCenter);
 		specularSlider->addWidget(specSliderLabel);
-		DebugSlider* specularExponent = new DebugSlider(5, 500, true);
+		DebugSlider* specularExponent = new DebugSlider(1, 150, true);
 		specularExponent ->setValue(10);
 		specularSlider->addWidget(specularExponent);
 		row2->addLayout(specularSlider);

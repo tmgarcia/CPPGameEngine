@@ -4,6 +4,7 @@ in vec3 theNormal;
 in vec3 thePosition;
 in vec4 ambientColor;
 in vec4 objectColor;
+in vec2 UV;
 
 uniform vec3 lightPosition;
 uniform float isLightBulb;
@@ -11,7 +12,8 @@ uniform float diffusionIntensity;
 uniform vec4 specularColor;
 uniform float specularExponent;
 uniform vec3 eyePosition;
-
+uniform sampler2D tex;
+uniform bool applyLighting;
 
 out vec4 theFinalColor; 
  
@@ -36,6 +38,14 @@ void main()
 	}
 	else
 	{
-		theFinalColor= (ambientColor + vec4(brightness, brightness, brightness, 1))* objectColor + specular;
+		if(applyLighting)
+		{
+			theFinalColor= (ambientColor + vec4(brightness, brightness, brightness, 1))* objectColor + specular;
+			theFinalColor= texture(tex, UV) * theFinalColor;
+		}
+		else
+		{
+			theFinalColor= texture(tex, UV);
+		}
 	}
 }

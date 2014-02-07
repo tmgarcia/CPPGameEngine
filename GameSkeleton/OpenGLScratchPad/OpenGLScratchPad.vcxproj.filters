@@ -21,4 +21,13 @@
     <None Include="VertexShaderCode.glsl" />
     <None Include="FragmentShaderCode.glsl" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="texturetestColors.bmp" />
+    <Image Include="textureNebula.bmp" />
+    <Image Include="textureStars.bmp" />
+    <Image Include="textureColors.bmp" />
+    <Image Include="textureBinary.bmp" />
+    <Image Include="textureBinaryInvert.bmp" />
+    <Image Include="textureSingleColor.bmp" />
+  </ItemGroup>
 </Project>

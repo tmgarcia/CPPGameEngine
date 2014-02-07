@@ -26,6 +26,8 @@ protected:
 	void updateHill();
 	std::string readShaderCode(const char *filename);
 	void mouseMoveEvent(QMouseEvent*);
+	void loadTextures();
+	void loadTextureImage(char* filename);
 
 private slots:
 	void myUpdate();
@@ -45,6 +47,7 @@ public slots:
 	void setSpecularColorGreen(float newValue);
 	void setSpecularColorBlue(float newValue);
 	void setSpecularExponent(float newValue);
+	void setApplyLighting(int newValue);
 
 public:
 	void keyPressEvent(QKeyEvent*);

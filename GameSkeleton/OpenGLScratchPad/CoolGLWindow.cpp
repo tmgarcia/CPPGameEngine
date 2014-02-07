@@ -12,6 +12,7 @@
 #include "Camera.h"
 #include <QtGUI\qmouseevent>
 #include <QtGUI\qkeyevent>
+#include <GL\GL.h>
 
 #include <iostream>
 using std::cout;
@@ -51,9 +52,11 @@ GLuint wirePlaneVertexArrayObjectID;
 GLuint arrowVertexArrayObjectID;
 GLuint teapotVertexArrayObjectID;
 
+bool applyLighting = true;
+
 vec3 newColor(1.0f,1.0f,1.0f);
 vec3 ambientLight(0.0f, 0.0f, 0.0f);
-vec3 lightPosition(0.0f, 6.0f, -20.0f);
+vec3 lightPosition(0.0f, 6.0f, -10.0f);
 GLfloat diffusionIntensity = 1;
 vec4 specularColor(1.0f, 1.0f, 1.0f, 1.0f);
 GLfloat specularExponent = 10;
@@ -219,7 +222,7 @@ mat4 column12Rotation = mat4();
 mat4 smokeRotation = mat4();
 
 mat4 potRotation = mat4();
-#pragma endregione
+#pragma endregion
 GLuint frameCount=0;
 GLuint theBufferID;
 Camera camera;
@@ -230,8 +233,10 @@ void CoolGLWindow::initializeGL()
 	srand((unsigned)time(NULL));
 	glewInit();
 	glEnable(GL_DEPTH_TEST);
+	glEnable( GL_TEXTURE_2D );
 	transformShapes();
 	sendDataToHardware();
+	loadTextures();
 	compileShaders();
 }
 void CoolGLWindow::transformColumns()
@@ -614,87 +619,103 @@ void CoolGLWindow::sendDataToHardware()
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
 	glEnableVertexAttribArray(2);
+	glEnableVertexAttribArray(3);
 	glBindBuffer(GL_ARRAY_BUFFER, theBufferID);
 	glVertexAttribPointer(0,3,GL_FLOAT, GL_FALSE, Neumont::Vertex::STRIDE, (void*)Neumont::Vertex::POSITION_OFFSET);
 	glVertexAttribPointer(1,4,GL_FLOAT, GL_FALSE, Neumont::Vertex::STRIDE, (void*)Neumont::Vertex::COLOR_OFFSET);
 	glVertexAttribPointer(2,3,GL_FLOAT, GL_FALSE, Neumont::Vertex::STRIDE, (void*)Neumont::Vertex::NORMAL_OFFSET);
+	glVertexAttribPointer(3,2,GL_FLOAT, GL_FALSE, Neumont::Vertex::STRIDE, (void*)Neumont::Vertex::UV_OFFSET);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, theBufferID);
 	
 	glBindVertexArray(sphereVertexArrayObjectID);
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
 	glEnableVertexAttribArray(2);
+	glEnableVertexAttribArray(3);
 	glBindBuffer(GL_ARRAY_BUFFER, theBufferID);
 	GLuint sphereByteOffset = cubeData.vertexBufferSize() + cubeData.indexBufferSize();
 	glVertexAttribPointer(0,3,GL_FLOAT, GL_FALSE, Neumont::Vertex::STRIDE, (void*)(sphereByteOffset + Neumont::Vertex::POSITION_OFFSET));
 	glVertexAttribPointer(1,4,GL_FLOAT, GL_FALSE, Neumont::Vertex::STRIDE, (void*)(sphereByteOffset + Neumont::Vertex::COLOR_OFFSET));
 	glVertexAttribPointer(2,3,GL_FLOAT, GL_FALSE, Neumont::Vertex::STRIDE, (void*)(sphereByteOffset + Neumont::Vertex::NORMAL_OFFSET));
+	glVertexAttribPointer(3,2,GL_FLOAT, GL_FALSE, Neumont::Vertex::STRIDE, (void*)(sphereByteOffset + Neumont::Vertex::UV_OFFSET));
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, theBufferID);
 
 	glBindVertexArray(planeVertexArrayObjectID);
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
 	glEnableVertexAttribArray(2);
+	glEnableVertexAttribArray(3);
 	glBindBuffer(GL_ARRAY_BUFFER, theBufferID);
 	GLuint planeByteOffset = sphereByteOffset + sphereData.vertexBufferSize() + sphereData.indexBufferSize();
 	glVertexAttribPointer(0,3,GL_FLOAT, GL_FALSE, Neumont::Vertex::STRIDE, (void*)(planeByteOffset + Neumont::Vertex::POSITION_OFFSET));
 	glVertexAttribPointer(1,4,GL_FLOAT, GL_FALSE, Neumont::Vertex::STRIDE, (void*)(planeByteOffset + Neumont::Vertex::COLOR_OFFSET));
 	glVertexAttribPointer(2,3,GL_FLOAT, GL_FALSE, Neumont::Vertex::STRIDE, (void*)(planeByteOffset + Neumont::Vertex::NORMAL_OFFSET));
+	glVertexAttribPointer(3,2,GL_FLOAT, GL_FALSE, Neumont::Vertex::STRIDE, (void*)(planeByteOffset +Neumont::Vertex::UV_OFFSET));
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, theBufferID);
 
 	glBindVertexArray(lineVertexArrayObjectID);
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
 	glEnableVertexAttribArray(2);
+	glEnableVertexAttribArray(3);
 	glBindBuffer(GL_ARRAY_BUFFER, theBufferID);
 	GLuint lineByteOffset = planeByteOffset + planeData.vertexBufferSize() + planeData.indexBufferSize();
 	glVertexAttribPointer(0,3,GL_FLOAT, GL_FALSE, Neumont::Vertex::STRIDE, (void*)(lineByteOffset + Neumont::Vertex::POSITION_OFFSET));
 	glVertexAttribPointer(1,4,GL_FLOAT, GL_FALSE, Neumont::Vertex::STRIDE, (void*)(lineByteOffset + Neumont::Vertex::COLOR_OFFSET));
 	glVertexAttribPointer(2,3,GL_FLOAT, GL_FALSE, Neumont::Vertex::STRIDE, (void*)(lineByteOffset + Neumont::Vertex::NORMAL_OFFSET));
+	glVertexAttribPointer(3,2,GL_FLOAT, GL_FALSE, Neumont::Vertex::STRIDE, (void*)(lineByteOffset +Neumont::Vertex::UV_OFFSET));
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, theBufferID);
 
 	glBindVertexArray(torusVertexArrayObjectID);
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
 	glEnableVertexAttribArray(2);
+	glEnableVertexAttribArray(3);
 	glBindBuffer(GL_ARRAY_BUFFER, theBufferID);
 	GLuint torusByteOffset = lineByteOffset + lineData.vertexBufferSize() + lineData.indexBufferSize();
 	glVertexAttribPointer(0,3,GL_FLOAT, GL_FALSE, Neumont::Vertex::STRIDE, (void*)(torusByteOffset + Neumont::Vertex::POSITION_OFFSET));
 	glVertexAttribPointer(1,4,GL_FLOAT, GL_FALSE, Neumont::Vertex::STRIDE, (void*)(torusByteOffset + Neumont::Vertex::COLOR_OFFSET));
 	glVertexAttribPointer(2,3,GL_FLOAT, GL_FALSE, Neumont::Vertex::STRIDE, (void*)(torusByteOffset + Neumont::Vertex::NORMAL_OFFSET));
+	glVertexAttribPointer(3,2,GL_FLOAT, GL_FALSE, Neumont::Vertex::STRIDE, (void*)(torusByteOffset +Neumont::Vertex::UV_OFFSET));
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, theBufferID);
 
 	glBindVertexArray(wirePlaneVertexArrayObjectID);
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
 	glEnableVertexAttribArray(2);
+	glEnableVertexAttribArray(3);
 	glBindBuffer(GL_ARRAY_BUFFER, theBufferID);
 	GLuint wirePlaneByteOffset = torusByteOffset + torusData.vertexBufferSize() + torusData.indexBufferSize();
 	glVertexAttribPointer(0,3,GL_FLOAT, GL_FALSE, Neumont::Vertex::STRIDE, (void*)(wirePlaneByteOffset + Neumont::Vertex::POSITION_OFFSET));
 	glVertexAttribPointer(1,4,GL_FLOAT, GL_FALSE, Neumont::Vertex::STRIDE, (void*)(wirePlaneByteOffset + Neumont::Vertex::COLOR_OFFSET));
 	glVertexAttribPointer(2,3,GL_FLOAT, GL_FALSE, Neumont::Vertex::STRIDE, (void*)(wirePlaneByteOffset + Neumont::Vertex::NORMAL_OFFSET));
+	glVertexAttribPointer(3,2,GL_FLOAT, GL_FALSE, Neumont::Vertex::STRIDE, (void*)(wirePlaneByteOffset +Neumont::Vertex::UV_OFFSET));
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, theBufferID);
 
 	glBindVertexArray(arrowVertexArrayObjectID);
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
 	glEnableVertexAttribArray(2);
+	glEnableVertexAttribArray(3);
 	glBindBuffer(GL_ARRAY_BUFFER, theBufferID);
 	GLuint arrowByteOffset = wirePlaneByteOffset + wirePlaneData.vertexBufferSize() + wirePlaneData.indexBufferSize();
 	glVertexAttribPointer(0,3,GL_FLOAT, GL_FALSE, Neumont::Vertex::STRIDE, (void*)(arrowByteOffset + Neumont::Vertex::POSITION_OFFSET));
 	glVertexAttribPointer(1,4,GL_FLOAT, GL_FALSE, Neumont::Vertex::STRIDE, (void*)(arrowByteOffset + Neumont::Vertex::COLOR_OFFSET));
 	glVertexAttribPointer(2,3,GL_FLOAT, GL_FALSE, Neumont::Vertex::STRIDE, (void*)(arrowByteOffset + Neumont::Vertex::NORMAL_OFFSET));
+	glVertexAttribPointer(3,2,GL_FLOAT, GL_FALSE, Neumont::Vertex::STRIDE, (void*)(arrowByteOffset +Neumont::Vertex::UV_OFFSET));
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, theBufferID);
 
 	glBindVertexArray(teapotVertexArrayObjectID);
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
 	glEnableVertexAttribArray(2);
+	glEnableVertexAttribArray(3);
 	glBindBuffer(GL_ARRAY_BUFFER, theBufferID);
 	GLuint teapotByteOffset = arrowByteOffset + arrowData.vertexBufferSize() + arrowData.indexBufferSize();
 	glVertexAttribPointer(0,3,GL_FLOAT, GL_FALSE, Neumont::Vertex::STRIDE, (void*)(teapotByteOffset + Neumont::Vertex::POSITION_OFFSET));
 	glVertexAttribPointer(1,4,GL_FLOAT, GL_FALSE, Neumont::Vertex::STRIDE, (void*)(teapotByteOffset + Neumont::Vertex::COLOR_OFFSET));
 	glVertexAttribPointer(2,3,GL_FLOAT, GL_FALSE, Neumont::Vertex::STRIDE, (void*)(teapotByteOffset + Neumont::Vertex::NORMAL_OFFSET));
+	glVertexAttribPointer(3,2,GL_FLOAT, GL_FALSE, Neumont::Vertex::STRIDE, (void*)(teapotByteOffset +Neumont::Vertex::UV_OFFSET));
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, theBufferID);
 
 	cubeIndexDataByteOffset = cubeData.vertexBufferSize();
@@ -709,6 +730,56 @@ void CoolGLWindow::sendDataToHardware()
 	connect(&myTimer, SIGNAL(timeout()), this, SLOT(myUpdate()));
 	myTimer.start(0);
 }
+
+GLuint wallTexture;
+GLuint teapotTexture;
+GLuint columnsTexture;
+GLuint pedestalTexture;
+GLuint rugTexture;
+GLuint pedestalTopperTexture;
+
+void CoolGLWindow::loadTextures()
+{
+	glGenTextures(1, &wallTexture);
+	glBindTexture(GL_TEXTURE_2D, wallTexture);
+	loadTextureImage("texturetestColors.bmp");
+
+	glGenTextures(1, &rugTexture);
+	glBindTexture(GL_TEXTURE_2D, rugTexture);
+	loadTextureImage("textureStars.bmp");
+
+	glGenTextures(1, &teapotTexture);
+	glBindTexture(GL_TEXTURE_2D, teapotTexture);
+	loadTextureImage("textureNebula.bmp");
+
+	glGenTextures(1, &pedestalTexture);
+	glBindTexture(GL_TEXTURE_2D, pedestalTexture);
+	loadTextureImage("textureBinaryInvert.bmp");
+
+	glGenTextures(1, &pedestalTopperTexture);
+	glBindTexture(GL_TEXTURE_2D, pedestalTopperTexture);
+	loadTextureImage("textureSingleColor.bmp");
+
+	glGenTextures(1, &columnsTexture);
+	glBindTexture(GL_TEXTURE_2D, columnsTexture);
+	loadTextureImage("textureBinary.bmp");
+}
+void CoolGLWindow::loadTextureImage(char* filename)
+{
+	int width, height;
+	QImage image = QImage(filename);
+	image = QGLWidget::convertToGLFormat(image);
+	width = image.width();
+	height = image.height();
+	uchar* imagePixels = image.bits();
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imagePixels);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+}
+
 void CoolGLWindow::myUpdate()
 {
 	if(GetAsyncKeyState(0x41)<0)//A
@@ -750,6 +821,7 @@ void CoolGLWindow::myUpdate()
 	frameCount++;
 	repaint();
 }
+#pragma region SlotMethods
 void CoolGLWindow::setObjectColorRed(float newValue)
 {
 	newColor.x = newValue/255;
@@ -814,6 +886,11 @@ void CoolGLWindow::setSpecularExponent(float newValue)
 {
 	specularExponent = newValue;
 }
+void CoolGLWindow::setApplyLighting(int newValue)
+{
+	applyLighting = newValue;
+}
+#pragma endregion
 void CoolGLWindow::mouseMoveEvent(QMouseEvent* e)
 {
 	camera.mouseUpdate(glm::vec2(e->x(), e->y()));
@@ -910,6 +987,9 @@ void CoolGLWindow::paintGL()
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 	glViewport(0,0,width(), height());
 
+	GLint applyLightingUniformLocation = glGetUniformLocation(programID, "applyLighting");
+	glUniform1i(applyLightingUniformLocation, applyLighting);
+
 	GLint lightPositionUniformLocation = glGetUniformLocation(programID, "lightPosition");
 	glUniform3fv(lightPositionUniformLocation, 1, &lightPosition[0]);
 
@@ -948,6 +1028,7 @@ void CoolGLWindow::paintGL()
 	mat4 worldToViewMatrix = camera.getWorldToViewMatrix();
 	mat4 worldToProjectionMatrix = viewToProjectionMatrix * worldToViewMatrix;
 	
+	glBindTexture(GL_TEXTURE_2D, wallTexture);
 	isLightBulb = 1.0f;
 	glUniform1f(isLightBulbLocation, isLightBulb);
 	mat4 lightBulbTransform = glm::translate(lightPosition);
@@ -973,6 +1054,8 @@ void CoolGLWindow::paintGL()
 	glUniformMatrix4fv(fullTransformMatrixLocation, 1, GL_FALSE, &fullTransformMatrix[0][0]);
 	glDrawElements(GL_TRIANGLES, planeNumIndices, GL_UNSIGNED_SHORT, (void*)planeIndexDataByteOffset);
 
+	glBindTexture(GL_TEXTURE_2D, rugTexture);
+
 	fullTransformMatrix = worldToProjectionMatrix * rugTransform;
 	glBindVertexArray(planeVertexArrayObjectID);
 	modelToWorldMatrix = rugTransform;
@@ -981,6 +1064,8 @@ void CoolGLWindow::paintGL()
 	glUniformMatrix4fv(rotationMatrixLocation, 1, GL_FALSE, &rotationMatrix[0][0]);
 	glUniformMatrix4fv(fullTransformMatrixLocation, 1, GL_FALSE, &fullTransformMatrix[0][0]);
 	glDrawElements(GL_TRIANGLES, planeNumIndices, GL_UNSIGNED_SHORT, (void*)planeIndexDataByteOffset);
+	
+	glBindTexture(GL_TEXTURE_2D, wallTexture);
 
 	fullTransformMatrix = worldToProjectionMatrix * wall1Transform;
 	glBindVertexArray(planeVertexArrayObjectID);
@@ -1044,7 +1129,7 @@ void CoolGLWindow::paintGL()
 	//glUniformMatrix4fv(rotationMatrixLocation, 1, GL_FALSE, &rotationMatrix[0][0]);
 	//glUniformMatrix4fv(fullTransformMatrixLocation, 1, GL_FALSE, &fullTransformMatrix[0][0]);
 	//glDrawElements(GL_TRIANGLES, cubeNumIndices, GL_UNSIGNED_SHORT, (void*)cubeIndexDataByteOffset);
-
+	glBindTexture(GL_TEXTURE_2D, pedestalTexture);
 	fullTransformMatrix = worldToProjectionMatrix * pedestal1Transform;
 	glBindVertexArray(cubeVertexArrayObjectID);
 	modelToWorldMatrix = pedestal1Transform;
@@ -1116,6 +1201,8 @@ void CoolGLWindow::paintGL()
 	glUniformMatrix4fv(rotationMatrixLocation, 1, GL_FALSE, &rotationMatrix[0][0]);
 	glUniformMatrix4fv(fullTransformMatrixLocation, 1, GL_FALSE, &fullTransformMatrix[0][0]);
 	glDrawElements(GL_TRIANGLES, cubeNumIndices, GL_UNSIGNED_SHORT, (void*)cubeIndexDataByteOffset);
+
+	glBindTexture(GL_TEXTURE_2D, pedestalTopperTexture);
 
 	fullTransformMatrix = worldToProjectionMatrix * pedestalTopperTorusTransform;
 	glBindVertexArray(torusVertexArrayObjectID);
@@ -1305,9 +1392,13 @@ void CoolGLWindow::paintGL()
 	glUniformMatrix4fv(rotationMatrixLocation, 1, GL_FALSE, &rotationMatrix[0][0]);
 	glUniformMatrix4fv(fullTransformMatrixLocation, 1, GL_FALSE, &fullTransformMatrix[0][0]);
 	glDrawElements(GL_TRIANGLES, sphereNumIndices, GL_UNSIGNED_SHORT, (void*)sphereIndexDataByteOffset);
+	
+	glBindTexture(GL_TEXTURE_2D, columnsTexture);
 
+	rotationMatrix = column1Rotation;
+	glUniformMatrix4fv(rotationMatrixLocation, 1, GL_FALSE, &rotationMatrix[0][0]);
 #pragma region Column_Draws
-	/*fullTransformMatrix = worldToProjectionMatrix * column1Transform;
+	fullTransformMatrix = worldToProjectionMatrix * column1Transform;
 	glBindVertexArray(cubeVertexArrayObjectID);
 	modelToWorldMatrix = column1Transform;
 	glUniformMatrix4fv(modelToWorldMatrixLocation, 1, GL_FALSE, &modelToWorldMatrix[0][0]);
@@ -1369,10 +1460,7 @@ void CoolGLWindow::paintGL()
 	modelToWorldMatrix = column8Transform;
 	glUniformMatrix4fv(modelToWorldMatrixLocation, 1, GL_FALSE, &modelToWorldMatrix[0][0]);
 	glUniformMatrix4fv(fullTransformMatrixLocation, 1, GL_FALSE, &fullTransformMatrix[0][0]);
-	glDrawElements(GL_TRIANGLES, cubeNumIndices, GL_UNSIGNED_SHORT, (void*)cubeIndexDataByteOffset);*/
-
-	rotationMatrix = column1Rotation;
-	glUniformMatrix4fv(rotationMatrixLocation, 1, GL_FALSE, &rotationMatrix[0][0]);
+	glDrawElements(GL_TRIANGLES, cubeNumIndices, GL_UNSIGNED_SHORT, (void*)cubeIndexDataByteOffset);
 
 	fullTransformMatrix = worldToProjectionMatrix * column9Transform;
 	glBindVertexArray(cubeVertexArrayObjectID);
@@ -1402,6 +1490,8 @@ void CoolGLWindow::paintGL()
 	glUniformMatrix4fv(fullTransformMatrixLocation, 1, GL_FALSE, &fullTransformMatrix[0][0]);
 	glDrawElements(GL_TRIANGLES, cubeNumIndices, GL_UNSIGNED_SHORT, (void*)cubeIndexDataByteOffset);
 #pragma endregion 
+
+	glBindTexture(GL_TEXTURE_2D, teapotTexture);
 
 	fullTransformMatrix = worldToProjectionMatrix * potTransform;
 	glBindVertexArray(teapotVertexArrayObjectID);

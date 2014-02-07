@@ -139,13 +139,22 @@ public:
 		DebugSlider* lightY = new DebugSlider(0, 8, true);
 		lightY->setValue(6);
 		DebugSlider* lightZ = new DebugSlider(0, -48, true);
-		lightZ->setValue(-20);
+		lightZ->setValue(-10);
 		QLabel* section3Label= new QLabel("Light Source Position");
 		section3Label->setAlignment(Qt::AlignCenter);
 		lightPosition->addWidget(section3Label);
 		lightPosition->addWidget(lightX);
 		lightPosition->addWidget(lightY);
 		lightPosition->addWidget(lightZ);
+
+		QHBoxLayout* checkboxRow = new QHBoxLayout();
+		QLabel* checkLabel = new QLabel("Apply lighting");
+		checkLabel->setAlignment(Qt::AlignRight);
+		checkboxRow->addWidget(checkLabel);
+		QCheckBox* lightingCheck = new QCheckBox();
+		lightingCheck->setChecked(true);
+		checkboxRow->addWidget(lightingCheck);
+		mainLayout->addLayout(checkboxRow);
 
 		//Scene display
 		display = new CoolGLWindow();
@@ -171,6 +180,8 @@ public:
 		
 		QObject::connect(diffuseIntensity, SIGNAL(valueChanged(float)), display, SLOT(setDiffusionIntensity(float)));
 		QObject::connect(specularExponent, SIGNAL(valueChanged(float)), display, SLOT(setSpecularExponent(float)));
+		QObject::connect(lightingCheck, SIGNAL(stateChanged(int)), display, SLOT(setApplyLighting(int)));
+
 
 		
 	}

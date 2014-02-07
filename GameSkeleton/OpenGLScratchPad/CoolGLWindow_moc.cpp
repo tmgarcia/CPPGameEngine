@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'CoolGLWindow.h'
 **
-** Created: Tue Feb 4 09:19:00 2014
+** Created: Thu Feb 6 01:43:05 2014
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.0)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_CoolGLWindow[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-      15,   14, // methods
+      16,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -46,6 +46,7 @@ static const uint qt_meta_data_CoolGLWindow[] = {
      324,   25,   13,   13, 0x0a,
      353,   25,   13,   13, 0x0a,
      381,   25,   13,   13, 0x0a,
+     408,   25,   13,   13, 0x0a,
 
        0        // eod
 };
@@ -66,6 +67,7 @@ static const char qt_meta_stringdata_CoolGLWindow[] = {
     "setSpecularColorGreen(float)\0"
     "setSpecularColorBlue(float)\0"
     "setSpecularExponent(float)\0"
+    "setApplyLighting(int)\0"
 };
 
 void CoolGLWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -89,6 +91,7 @@ void CoolGLWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
         case 12: _t->setSpecularColorGreen((*reinterpret_cast< float(*)>(_a[1]))); break;
         case 13: _t->setSpecularColorBlue((*reinterpret_cast< float(*)>(_a[1]))); break;
         case 14: _t->setSpecularExponent((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 15: _t->setApplyLighting((*reinterpret_cast< int(*)>(_a[1]))); break;
         default: ;
         }
     }
@@ -126,9 +129,9 @@ int CoolGLWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 15)
+        if (_id < 16)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 15;
+        _id -= 16;
     }
     return _id;
 }

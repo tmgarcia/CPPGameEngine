@@ -19,6 +19,7 @@
 #include "RenderableInfo.h"
 #include "TextureInfo.h"
 #include "ShaderInfo.h"
+#include "ShaderUniformParameter.h"
 
 using std::cout;
 using std::endl;
@@ -36,7 +37,17 @@ GLuint currentRenderIndex = 0;
 GLuint currentTextureIndex = 0;
 
 const GLuint MAX_NUM_BUFFERS = 10;
+const GLuint MAX_NUM_GEOMETRIES = 10;
+const GLuint MAX_NUM_SHADERS = 10;
+const GLuint MAX_NUM_TEXTURES = 10;
+const GLuint MAX_NUM_RENDERABLES = 10;
 const GLuint BUFFER_SIZE = 1000000;
+
+BufferInfo bufferInfos[MAX_NUM_BUFFERS];
+GeometryInfo geometryInfos[MAX_NUM_GEOMETRIES];
+ShaderInfo shaderInfos[MAX_NUM_SHADERS];
+TextureInfo textureInfos[MAX_NUM_TEXTURES];
+RenderableInfo renderableInfos[MAX_NUM_RENDERABLES];
 
 class GeneralGLWindow : public QGLWidget
 {
@@ -52,30 +63,17 @@ public:
 		PT_MAT4 = sizeof(float) *16,
 	};
 
-	BufferInfo bufferInfos[MAX_NUM_BUFFERS];
-	GeometryInfo geometryInfos[10];
-	ShaderInfo shaderInfos[10];
-	TextureInfo textureInfos[10];
-	RenderableInfo renderableInfos[10];
-
 
 	GeometryInfo* addGeometry(
 		const void* verts, GLuint vertexDataSize,
 		ushort* indices, GLuint numIndices,
 		GLenum indexingMode);//lines, triangles, point, etc
 
-	GLuint getNextAvailableBufferIndex(GLuint dataSize);
-
-
 	ShaderInfo* createShaderInfo(
 		const char* vertexShaderFilename,
 		const char* fragmentShaderFilename);
 
-	std::string readShaderCode(const char *filename);
-
 	TextureInfo* addTexture(const char* fileName);
-
-	void loadTextureBitmap(const char* filename);
 
 	RenderableInfo* addRenderable(
 		GeometryInfo* whatGeometry,
@@ -97,16 +95,11 @@ public:
 		GeneralGLWindow::ParameterType parameterType,
 		const float* value);
 
-};
+	void sendRenderableUniformsToShader(
+		RenderableInfo* renderable); 
+private:
+	void loadTextureBitmap(const char* filename);
+	std::string readShaderCode(const char *filename);
+	GLuint getNextAvailableBufferIndex(GLuint dataSize);
 
-void clientSideCode()
-{
-	GeneralGLWindow meWindow;
-	Neumont::ShapeData sphere = Neumont::ShapeGenerator::makeSphere(10);
-	meWindow.addGeometry(sphere.verts, sphere.vertexBufferSize(), sphere.indices, sphere.numIndices, GL_TRIANGLES);
-	//or make it so you can do 
-	//meWindow.addGeometry(sphere);
-	//Override method?
-	meWindow.createShaderInfo(meShaderVertexFileName, meShaderFragmentFileName);
-	
-}
+};

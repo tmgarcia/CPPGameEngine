@@ -12,6 +12,7 @@ GeometryInfo* GeneralGLWindow::addGeometry(
 	
 	GLuint indexDataSize = sizeof(ushort) *numIndices;
 	BufferInfo* indexBuffer = &bufferInfos[getNextAvailableBufferIndex(indexDataSize)];
+	GLuint indexDataOffset = BUFFER_SIZE - indexBuffer->remainingSize;
 	glBindBuffer(GL_ARRAY_BUFFER, indexBuffer->glBufferID);
 	glBufferSubData(GL_ARRAY_BUFFER, BUFFER_SIZE - indexBuffer->remainingSize, indexDataSize, indices);
 	indexBuffer->remainingSize = indexBuffer->remainingSize - indexDataSize;
@@ -21,7 +22,7 @@ GeometryInfo* GeneralGLWindow::addGeometry(
 	glBindVertexArray(ret->vertexArrayID);
 	glBindBuffer(GL_ARRAY_BUFFER, vertBuffer->glBufferID);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer->glBufferID);
-		
+	ret->indexDataOffset = indexDataOffset;
 	ret->indexingMode = indexingMode;
 	currentGeometryIndex++;
 	return ret;
@@ -127,6 +128,8 @@ TextureInfo* GeneralGLWindow::addTexture(const char* fileName)
 	glGenTextures(1, &(ret->textureID));
 	glBindTexture(GL_TEXTURE_2D, ret->textureID);
 	loadTextureBitmap(fileName);
+	currentTextureIndex++;
+	return ret;
 }
 
 void GeneralGLWindow::loadTextureBitmap(const char* filename)
@@ -158,6 +161,7 @@ RenderableInfo* GeneralGLWindow::addRenderable(
 	//in the paintGL method
 	//go over all of the renderableinfos, send them to the shaders, and draw draw draw
 	//how know which vertex array to use - go to geometry info's vertex array id
+	currentRenderIndex++;
 	return ret;
 }
 
@@ -206,3 +210,34 @@ void GeneralGLWindow::addRenderableUniformParameter(
 	}
 }
 
+void GeneralGLWindow::sendRenderableUniformsToShader(
+		RenderableInfo* renderable)
+{
+	for(int i=0; i<renderable->numUniformParameters;i++)
+	{
+		glLinkProgram(renderable->howShaders->programID);
+		glUseProgram(renderable->howShaders->programID);
+		GLint uniformLocation = glGetUniformLocation(renderable->howShaders->programID, renderable->uniformParameters[i].name);
+
+		switch(renderable->uniformParameters[i].parameterType)
+		{
+		case PT_FLOAT:
+			glUniform1f(uniformLocation, *renderable->uniformParameters[i].value);
+			break;
+		case PT_VEC2:
+			glUniform2fv(uniformLocation, 1, renderable->uniformParameters[i].value);
+			break;
+		case PT_VEC3:
+			glUniform3fv(uniformLocation, 1, renderable->uniformParameters[i].value);
+			break;
+		case PT_VEC4:
+			glUniform4fv(uniformLocation, 1,renderable->uniformParameters[i].value);
+			break;
+		case PT_MAT3:
+			glUniformMatrix3fv(uniformLocation, 1, GL_FALSE, renderable->uniformParameters[i].value);
+			break;
+		case PT_MAT4:
+			glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, renderable->uniformParameters[i].value);
+			break;
+	}
+}

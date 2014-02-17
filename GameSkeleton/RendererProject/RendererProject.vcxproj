@@ -11,10 +11,31 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BufferInfo.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="ClientGLWindow.h" />
     <ClInclude Include="GeneralGLWindow.h" />
+    <ClInclude Include="GeometryInfo.h" />
+    <ClInclude Include="ParameterType.h" />
+    <ClInclude Include="RenderableInfo.h" />
+    <ClInclude Include="ShaderInfo.h" />
+    <ClInclude Include="ShaderUniformParameter.h" />
+    <ClInclude Include="TextureInfo.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="ClientGLWindow.cpp" />
     <ClCompile Include="GeneralGLWindow.cpp" />
+    <ClCompile Include="TheMain.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="LightingAndTextureFragmentShader.glsl" />
+    <None Include="LightingAndTextureVertexShader.glsl" />
+    <None Include="PassThroughFragmentShader.glsl" />
+    <None Include="PassThroughVertexShader.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="texturetestColors.bmp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{67AADD09-EDF4-4763-AC89-BFB6E5D29050}</ProjectGuid>
@@ -54,7 +75,7 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)..\External Dependencies\Qt\lib;$(SolutionDir)..\External Dependencies\NeumontTools\lib;$(SolutionDir)..\External Dependencies\glew\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32.lib;glew32d.lib;NeumontTools.lib;QtCored4.lib;QtGuid4.lib;QtOpenGLd4.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32.lib;glew32d.lib;NeumontTools.lib;QtCored4.lib;QtGuid4.lib;QtOpenGLd4.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

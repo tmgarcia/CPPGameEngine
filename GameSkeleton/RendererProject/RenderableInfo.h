@@ -9,14 +9,17 @@ const GLuint MAX_UNIFORM_PARAMETERS = 20;
 
 class RenderableInfo
 {
+	RenderableInfo()
+	{
+		numUniformParameters = 0;
+	}
 	friend class GeneralGLWindow;
 	ShaderInfo* howShaders;
 	bool visible;
 	TextureInfo* texture;
-public:
-	mat4& whereMatrix;
-	GeometryInfo* whatGeometry;
 	GLuint numUniformParameters;
 	ShaderUniformParameter uniformParameters[MAX_UNIFORM_PARAMETERS];
-
+public:
+	mat4 whereMatrix;
+	GeometryInfo* whatGeometry;
 };

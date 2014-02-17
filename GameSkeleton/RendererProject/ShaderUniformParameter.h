@@ -1,10 +1,9 @@
 #pragma once
-#include "GeneralGLWindow.h"
-
+#include "ParameterType.h"
 class ShaderUniformParameter
 {
 	friend class GeneralGLWindow;
 	const char* name;
-	GeneralGLWindow::ParameterType parameterType;
+	ParameterType parameterType;
 	const float* value;
 };

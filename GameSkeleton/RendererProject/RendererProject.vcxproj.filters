@@ -17,14 +17,88 @@
     <ClCompile Include="ClientGLWindow.cpp" />
     <ClCompile Include="GeneralGLWindow.cpp" />
     <ClCompile Include="TheMain.cpp" />
+    <ClCompile Include="ClientGLWindow_moc.cpp" />
+    <ClCompile Include="GeneralGLWindow_moc.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="LightingAndTextureVertexShader.glsl" />
-    <None Include="LightingAndTextureFragmentShader.glsl" />
-    <None Include="PassThroughVertexShader.glsl" />
-    <None Include="PassThroughFragmentShader.glsl" />
+    <None Include="JustLightingFragmentShader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="JustLightingVertexShader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="JustTextureFragmentShader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="JustTextureVertexShader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="LightingAndTextureFragmentShader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="LightingAndTextureVertexShader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="PassThroughFragmentShader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="PassThroughVertexShader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="texturetestColors.bmp" />
+    <Image Include="texturetestColors.bmp">
+      <Filter>Textures</Filter>
+    </Image>
+    <Image Include="brightGrassTexture.bmp">
+      <Filter>Textures</Filter>
+    </Image>
+    <Image Include="darkGroundTexture.bmp">
+      <Filter>Textures</Filter>
+    </Image>
+    <Image Include="brightWallTexture.bmp">
+      <Filter>Textures</Filter>
+    </Image>
+    <Image Include="darkBarkTexture.bmp">
+      <Filter>Textures</Filter>
+    </Image>
+    <Image Include="brightMushroomTopTexture.bmp">
+      <Filter>Textures</Filter>
+    </Image>
+    <Image Include="brightMushroomUnderTexture.bmp">
+      <Filter>Textures</Filter>
+    </Image>
+    <Image Include="textureSingleColor.bmp">
+      <Filter>Textures</Filter>
+    </Image>
+    <Image Include="lava1Texture.bmp">
+      <Filter>Textures</Filter>
+    </Image>
+    <Image Include="lava2Texture.bmp">
+      <Filter>Textures</Filter>
+    </Image>
+    <Image Include="lava3Texture.bmp">
+      <Filter>Textures</Filter>
+    </Image>
+    <Image Include="lava4Texture.bmp">
+      <Filter>Textures</Filter>
+    </Image>
+    <Image Include="lava5Texture.bmp">
+      <Filter>Textures</Filter>
+    </Image>
+    <Image Include="lava6Texture.bmp">
+      <Filter>Textures</Filter>
+    </Image>
+    <Image Include="lava7Texture.bmp">
+      <Filter>Textures</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{2f7ce9ca-7075-4623-8268-94035a19242c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Textures">
+      <UniqueIdentifier>{20b1f87d-e436-451e-9637-988b702a6cbb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

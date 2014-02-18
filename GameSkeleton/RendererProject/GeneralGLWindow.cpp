@@ -37,6 +37,7 @@ RenderableInfo* renderableInfos[MAX_NUM_RENDERABLES];
 
 void GeneralGLWindow::initializeGL()
 {
+	setMouseTracking(true);
 	glewInit();
 	glEnable(GL_DEPTH_TEST);
 	glEnable( GL_TEXTURE_2D );
@@ -44,7 +45,7 @@ void GeneralGLWindow::initializeGL()
 
 void GeneralGLWindow::paintGL()
 {
-	cout<< "Painting" <<endl;
+	cout<< "-----Painting-----" <<endl;
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 	glViewport(0,0,width(), height());
 
@@ -57,11 +58,11 @@ void GeneralGLWindow::paintGL()
 }
 
 GeometryInfo* GeneralGLWindow::addGeometry(
-		const void* verts, GLuint vertexDataSize,
-		ushort* indices, GLuint numIndices,
-		GLenum indexingMode)
+	const void* verts, GLuint vertexDataSize,
+	ushort* indices, GLuint numIndices,
+	GLenum indexingMode)
 {
-	cout<<"Getting Buffer"<<endl;
+	cout<<"-----Getting Buffer-----"<<endl;
 	GLuint nextBuffIndex = getNextAvailableBufferIndex(vertexDataSize);
 	BufferInfo* vertBuffer = bufferInfos[nextBuffIndex];
 	GLuint vertexDataOffset = BUFFER_SIZE - vertBuffer->remainingSize;
@@ -76,7 +77,7 @@ GeometryInfo* GeneralGLWindow::addGeometry(
 	glBufferSubData(GL_ARRAY_BUFFER, BUFFER_SIZE - indexBuffer->remainingSize, indexDataSize, indices);
 	indexBuffer->remainingSize = indexBuffer->remainingSize - indexDataSize;
 	
-	cout<<"Creating Geometry"<<endl;
+	cout<<"-----Creating Geometry-----"<<endl;
 	geometryInfos[currentGeometryIndex] = new GeometryInfo();
 	GeometryInfo* ret = geometryInfos[currentGeometryIndex];
 	glGenVertexArrays(1, &ret->vertexArrayID);
@@ -126,7 +127,7 @@ ShaderInfo* GeneralGLWindow:: createShaderInfo(
 		const char* vertexShaderFilename,
 		const char* fragmentShaderFilename)
 {
-	cout<<"Creating Shader Info"<<endl;
+	cout<<"-----Creating Shader Info-----"<<endl;
 
 	shaderInfos[currentShaderIndex] = new ShaderInfo();
 	ShaderInfo* ret = shaderInfos[currentShaderIndex];
@@ -174,6 +175,7 @@ ShaderInfo* GeneralGLWindow:: createShaderInfo(
 	ret->programID = glCreateProgram();
 	glAttachShader(ret->programID, vertexShaderID);
 	glAttachShader(ret->programID, fragShaderID);
+	glLinkProgram(ret->programID);
 	currentShaderIndex++;
 	return ret;
 }
@@ -193,7 +195,7 @@ std::string GeneralGLWindow::readShaderCode(const char *filename)
 
 TextureInfo* GeneralGLWindow::addTexture(const char* fileName)
 {
-	cout<<"Adding Texture"<<endl;
+	cout<<"-----Adding Texture-----"<<endl;
 
 	textureInfos[currentTextureIndex] = new TextureInfo();
 	TextureInfo* ret = textureInfos[currentTextureIndex];
@@ -213,8 +215,8 @@ void GeneralGLWindow::loadTextureBitmap(const char* filename)
 	height = image.height();
 	uchar* imagePixels = image.bits();
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imagePixels);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 }
@@ -225,7 +227,7 @@ RenderableInfo* GeneralGLWindow::addRenderable(
 	ShaderInfo* howShaders,
 	TextureInfo* texture)
 {
-	cout<<"Creating Renderable"<<endl;
+	cout<<"-----Creating Renderable-----"<<endl;
 
 	renderableInfos[currentRenderIndex] = new RenderableInfo();
 	RenderableInfo* ret = renderableInfos[currentRenderIndex];
@@ -244,7 +246,7 @@ void GeneralGLWindow::addShaderStreamedParameter(
 		uint bufferOffset,
 		uint bufferStride)
 {
-	cout<<"Adding Vertex attribs"<<endl;
+	cout<<"-----Adding Vertex attribs-----"<<endl;
 	cout<<"	"<< layoutLocation<<endl;
 
 	glBindVertexArray(geometry->vertexArrayID);
@@ -258,7 +260,7 @@ void GeneralGLWindow::addRenderableUniformParameter(
 		ParameterType parameterType,
 		const float* value)
 {
-	cout<<"Adding Uniform parameter"<<endl;
+	cout<<"-----Adding Uniform parameter-----"<<endl;
 	renderable->uniformParameters[renderable->numUniformParameters].name = name;
 	renderable->uniformParameters[renderable->numUniformParameters].parameterType = parameterType;
 	renderable->uniformParameters[renderable->numUniformParameters].value = value;
@@ -267,8 +269,8 @@ void GeneralGLWindow::addRenderableUniformParameter(
 
 void GeneralGLWindow::sendRenderableToShader(RenderableInfo* renderable)
 {
-	cout<<"Sending Renderable To Shader"<<endl;
-	glLinkProgram(renderable->howShaders->programID);
+	cout<<"-----Sending Renderable To Shader-----"<<endl;
+	
 	glUseProgram(renderable->howShaders->programID);
 
 	if(renderable->texture != NULL)
@@ -278,7 +280,6 @@ void GeneralGLWindow::sendRenderableToShader(RenderableInfo* renderable)
 	{
 		GLint uniformLocation = glGetUniformLocation(renderable->howShaders->programID, renderable->uniformParameters[i].name);
 		
-		cout<<  renderable->uniformParameters[i].name << endl;
 
 		switch(renderable->uniformParameters[i].parameterType)
 		{
@@ -302,4 +303,14 @@ void GeneralGLWindow::sendRenderableToShader(RenderableInfo* renderable)
 			break;
 		}
 	}
+}
+
+void GeneralGLWindow::keyPressEvent(QKeyEvent* e)
+{
+	emit keyPressed(e);
+}
+
+void GeneralGLWindow::mouseMoveEvent(QMouseEvent* e)
+{
+	emit mouseMoved(e);
 }

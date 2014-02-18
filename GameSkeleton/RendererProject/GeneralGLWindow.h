@@ -38,6 +38,8 @@ using glm::mat4;
 
 class GeneralGLWindow: public QGLWidget
 {
+	Q_OBJECT
+
 public:
 
 	GeometryInfo* addGeometry(
@@ -82,4 +84,10 @@ private:
 
 protected:
 	void paintGL();
+
+	void keyPressEvent(QKeyEvent* e);
+	void mouseMoveEvent(QMouseEvent* e);
+signals:
+	void keyPressed(QKeyEvent* e);
+	void mouseMoved(QMouseEvent* e);
 };

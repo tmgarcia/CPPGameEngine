@@ -25,16 +25,36 @@
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ClientGLWindow.cpp" />
+    <ClCompile Include="ClientGLWindow_moc.cpp" />
     <ClCompile Include="GeneralGLWindow.cpp" />
+    <ClCompile Include="GeneralGLWindow_moc.cpp" />
     <ClCompile Include="TheMain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="JustLightingFragmentShader.glsl" />
+    <None Include="JustLightingVertexShader.glsl" />
+    <None Include="JustTextureFragmentShader.glsl" />
+    <None Include="JustTextureVertexShader.glsl" />
     <None Include="LightingAndTextureFragmentShader.glsl" />
     <None Include="LightingAndTextureVertexShader.glsl" />
     <None Include="PassThroughFragmentShader.glsl" />
     <None Include="PassThroughVertexShader.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="brightGrassTexture.bmp" />
+    <Image Include="brightMushroomTopTexture.bmp" />
+    <Image Include="brightMushroomUnderTexture.bmp" />
+    <Image Include="brightWallTexture.bmp" />
+    <Image Include="darkBarkTexture.bmp" />
+    <Image Include="darkGroundTexture.bmp" />
+    <Image Include="lava1Texture.bmp" />
+    <Image Include="lava2Texture.bmp" />
+    <Image Include="lava3Texture.bmp" />
+    <Image Include="lava4Texture.bmp" />
+    <Image Include="lava5Texture.bmp" />
+    <Image Include="lava6Texture.bmp" />
+    <Image Include="lava7Texture.bmp" />
+    <Image Include="textureSingleColor.bmp" />
     <Image Include="texturetestColors.bmp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

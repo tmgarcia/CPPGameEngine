@@ -16,10 +16,10 @@ class RenderableInfo
 	friend class GeneralGLWindow;
 	ShaderInfo* howShaders;
 	bool visible;
-	TextureInfo* texture;
 	GLuint numUniformParameters;
 	ShaderUniformParameter uniformParameters[MAX_UNIFORM_PARAMETERS];
 public:
 	mat4 whereMatrix;
 	GeometryInfo* whatGeometry;
+	TextureInfo* texture;
 };

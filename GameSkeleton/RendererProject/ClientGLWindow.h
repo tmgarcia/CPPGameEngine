@@ -30,6 +30,7 @@ protected:
 	void setup();
 	void setupGeometries();
 	void setupGeometryVertexArrayInfo(GeometryInfo* geometry);
+	void setupReadInGeometryVertexArrayInfo(GeometryInfo* geometry);
 	void setupShaders();
 	void addLightingAndTextureShaderUniforms(RenderableInfo* renderable, float* fullTransform, float* rotationMatrix);
 	void addBrightLightingAndTextureShaderUniforms(RenderableInfo* renderable, float* fullTransform, float* rotationMatrix);

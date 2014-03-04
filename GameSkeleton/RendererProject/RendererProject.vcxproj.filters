@@ -11,6 +11,7 @@
     <ClInclude Include="ShaderInfo.h" />
     <ClInclude Include="ShaderUniformParameter.h" />
     <ClInclude Include="TextureInfo.h" />
+    <ClInclude Include="ObjReader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
@@ -19,6 +20,7 @@
     <ClCompile Include="TheMain.cpp" />
     <ClCompile Include="ClientGLWindow_moc.cpp" />
     <ClCompile Include="GeneralGLWindow_moc.cpp" />
+    <ClCompile Include="ObjReader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="JustLightingFragmentShader.glsl">
@@ -45,6 +47,7 @@
     <None Include="PassThroughVertexShader.glsl">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="cube.bin" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="texturetestColors.bmp">

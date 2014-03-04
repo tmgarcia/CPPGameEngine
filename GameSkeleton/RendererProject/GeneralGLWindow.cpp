@@ -45,7 +45,6 @@ void GeneralGLWindow::initializeGL()
 
 void GeneralGLWindow::paintGL()
 {
-	cout<< "-----Painting-----" <<endl;
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 	glViewport(0,0,width(), height());
 
@@ -62,7 +61,6 @@ GeometryInfo* GeneralGLWindow::addGeometry(
 	ushort* indices, GLuint numIndices,
 	GLenum indexingMode)
 {
-	cout<<"-----Getting Buffer-----"<<endl;
 	GLuint nextBuffIndex = getNextAvailableBufferIndex(vertexDataSize);
 	BufferInfo* vertBuffer = bufferInfos[nextBuffIndex];
 	GLuint vertexDataOffset = BUFFER_SIZE - vertBuffer->remainingSize;
@@ -77,7 +75,6 @@ GeometryInfo* GeneralGLWindow::addGeometry(
 	glBufferSubData(GL_ARRAY_BUFFER, BUFFER_SIZE - indexBuffer->remainingSize, indexDataSize, indices);
 	indexBuffer->remainingSize = indexBuffer->remainingSize - indexDataSize;
 	
-	cout<<"-----Creating Geometry-----"<<endl;
 	geometryInfos[currentGeometryIndex] = new GeometryInfo();
 	GeometryInfo* ret = geometryInfos[currentGeometryIndex];
 	glGenVertexArrays(1, &ret->vertexArrayID);
@@ -127,7 +124,6 @@ ShaderInfo* GeneralGLWindow:: createShaderInfo(
 		const char* vertexShaderFilename,
 		const char* fragmentShaderFilename)
 {
-	cout<<"-----Creating Shader Info-----"<<endl;
 
 	shaderInfos[currentShaderIndex] = new ShaderInfo();
 	ShaderInfo* ret = shaderInfos[currentShaderIndex];
@@ -195,7 +191,6 @@ std::string GeneralGLWindow::readShaderCode(const char *filename)
 
 TextureInfo* GeneralGLWindow::addTexture(const char* fileName)
 {
-	cout<<"-----Adding Texture-----"<<endl;
 
 	textureInfos[currentTextureIndex] = new TextureInfo();
 	TextureInfo* ret = textureInfos[currentTextureIndex];
@@ -227,7 +222,6 @@ RenderableInfo* GeneralGLWindow::addRenderable(
 	ShaderInfo* howShaders,
 	TextureInfo* texture)
 {
-	cout<<"-----Creating Renderable-----"<<endl;
 
 	renderableInfos[currentRenderIndex] = new RenderableInfo();
 	RenderableInfo* ret = renderableInfos[currentRenderIndex];
@@ -246,8 +240,6 @@ void GeneralGLWindow::addShaderStreamedParameter(
 		uint bufferOffset,
 		uint bufferStride)
 {
-	cout<<"-----Adding Vertex attribs-----"<<endl;
-	cout<<"	"<< layoutLocation<<endl;
 
 	glBindVertexArray(geometry->vertexArrayID);
 	glEnableVertexAttribArray(layoutLocation);
@@ -260,7 +252,6 @@ void GeneralGLWindow::addRenderableUniformParameter(
 		ParameterType parameterType,
 		const float* value)
 {
-	cout<<"-----Adding Uniform parameter-----"<<endl;
 	renderable->uniformParameters[renderable->numUniformParameters].name = name;
 	renderable->uniformParameters[renderable->numUniformParameters].parameterType = parameterType;
 	renderable->uniformParameters[renderable->numUniformParameters].value = value;
@@ -269,7 +260,6 @@ void GeneralGLWindow::addRenderableUniformParameter(
 
 void GeneralGLWindow::sendRenderableToShader(RenderableInfo* renderable)
 {
-	cout<<"-----Sending Renderable To Shader-----"<<endl;
 	
 	glUseProgram(renderable->howShaders->programID);
 

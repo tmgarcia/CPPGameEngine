@@ -16,6 +16,7 @@
     <ClInclude Include="ClientGLWindow.h" />
     <ClInclude Include="GeneralGLWindow.h" />
     <ClInclude Include="GeometryInfo.h" />
+    <ClInclude Include="ObjReader.h" />
     <ClInclude Include="ParameterType.h" />
     <ClInclude Include="RenderableInfo.h" />
     <ClInclude Include="ShaderInfo.h" />
@@ -28,9 +29,11 @@
     <ClCompile Include="ClientGLWindow_moc.cpp" />
     <ClCompile Include="GeneralGLWindow.cpp" />
     <ClCompile Include="GeneralGLWindow_moc.cpp" />
+    <ClCompile Include="ObjReader.cpp" />
     <ClCompile Include="TheMain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="cube.bin" />
     <None Include="JustLightingFragmentShader.glsl" />
     <None Include="JustLightingVertexShader.glsl" />
     <None Include="JustTextureFragmentShader.glsl" />

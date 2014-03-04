@@ -1,5 +1,6 @@
 #include "ClientGLWindow.h"
 #include "Camera.h"
+#include "ObjReader.h"
 
 
 Camera camera;
@@ -55,6 +56,7 @@ GeometryInfo* torus;
 GeometryInfo* teapot;
 GeometryInfo* arrow;
 GeometryInfo* plane;
+GeometryInfo* readInCube;
 
 /*----------Shaders----------*/
 ShaderInfo* lightingAndTextureShader;
@@ -63,6 +65,10 @@ ShaderInfo* justTextureShader;
 ShaderInfo* justLightingShader;
 
 /*----------Renderables & their transforms----------*/
+RenderableInfo* readCubeRenderable;
+	mat4 readCubeTransform;
+	mat4 readCubeFullTransform;
+	mat4 readCubeRotation = mat4();
 RenderableInfo* ltSphere;
 	mat4 ltSphereTransform;
 	mat4 ltSphereFullTransform;
@@ -223,6 +229,11 @@ void ClientGLWindow::setupGeometries()
 	arrow = meWindow.addGeometry(arrowData.verts, arrowData.vertexBufferSize(), arrowData.indices, arrowData.numIndices, GL_TRIANGLES);
 	setupGeometryVertexArrayInfo(arrow);
 
+	ObjReader reader;
+
+	ObjReader::ShapeData experimentCube = reader.readInShape("cube.bin");
+	readInCube = meWindow.addGeometry(experimentCube.vertices, experimentCube.vertexDataSize, experimentCube.indices, experimentCube.numIndices, GL_TRIANGLES);
+	setupReadInGeometryVertexArrayInfo(readInCube);
 }
 
 void ClientGLWindow::setupGeometryVertexArrayInfo(GeometryInfo* geometry)
@@ -232,6 +243,15 @@ void ClientGLWindow::setupGeometryVertexArrayInfo(GeometryInfo* geometry)
 	meWindow.addShaderStreamedParameter(geometry, 2, PT_VEC3, Neumont::Vertex::NORMAL_OFFSET, Neumont::Vertex::STRIDE);
 	meWindow.addShaderStreamedParameter(geometry, 3, PT_VEC2, Neumont::Vertex::UV_OFFSET, Neumont::Vertex::STRIDE);
 }
+
+
+void ClientGLWindow::setupReadInGeometryVertexArrayInfo(GeometryInfo* geometry)
+{
+	meWindow.addShaderStreamedParameter(geometry, 0, PT_VEC3, ObjReader::POSITION_OFFSET, ObjReader::STRIDE);
+	meWindow.addShaderStreamedParameter(geometry, 2, PT_VEC3, ObjReader::NORMAL_OFFSET, ObjReader::STRIDE);
+	meWindow.addShaderStreamedParameter(geometry, 3, PT_VEC2, ObjReader::UV_OFFSET, ObjReader::STRIDE);
+}
+
 
 void ClientGLWindow::setupShaders()
 {
@@ -335,6 +355,8 @@ void ClientGLWindow::setupTransforms()
 	lavaCube3Transform *= glm::scale(vec3(15.0f, 0.25f, 5.0f));
 	lavaCube3Rotation = glm::rotate(180.0f, vec3(0,0,1));
 	
+	readCubeTransform = glm::translate(vec3(0.0f, 4.0f, -4.0f));
+
 }
 
 void ClientGLWindow::setupRenderables()
@@ -358,6 +380,7 @@ void ClientGLWindow::setupRenderables()
 	lavaCube = meWindow.addRenderable(cube, lavaCubeTransform, lightingAndTextureShader, lava1);
 	lavaCube2 = meWindow.addRenderable(cube, lavaCube2Transform, lightingAndTextureShader, lava2);
 	lavaCube3 = meWindow.addRenderable(cube, lavaCube3Transform, lightingAndTextureShader, lava3);
+	readCubeRenderable = meWindow.addRenderable(readInCube, readCubeTransform, lightingAndTextureShader, brightWall);
 }
 
 void ClientGLWindow::setupShaderUniforms()
@@ -423,6 +446,9 @@ void ClientGLWindow::setupShaderUniforms()
 
 	lavaCube3FullTransform = worldToProjectionMatrix * lavaCube3Transform;
 	addDarkLightingAndTextureShaderUniforms(lavaCube3, &lavaCube3FullTransform[0][0], &lavaCube3Rotation[0][0]);
+
+	readCubeFullTransform = worldToProjectionMatrix * readCubeTransform;
+	addLightingAndTextureShaderUniforms(readCubeRenderable, &readCubeFullTransform[0][0], &readCubeRotation[0][0]);
 }
 
 void ClientGLWindow::updateShaderUniforms()
@@ -451,6 +477,7 @@ void ClientGLWindow::updateShaderUniforms()
 	lavaCubeFullTransform = worldToProjectionMatrix * lavaCubeTransform;
 	lavaCube2FullTransform = worldToProjectionMatrix * lavaCube2Transform;
 	lavaCube3FullTransform = worldToProjectionMatrix * lavaCube3Transform;
+	readCubeFullTransform = worldToProjectionMatrix * readCubeTransform;
 
 }
 

@@ -8,7 +8,7 @@ ObjReader::ShapeData ObjReader::readInShape(char* filename)
 	ifstream binFile;
 	binFile.open(filename, ios::in | ios::binary);
 	if(binFile.fail())
-	{
+	{ 
 		cout << "Unable to open file." << endl;
 	}
 	int header [2];
@@ -22,14 +22,9 @@ ObjReader::ShapeData ObjReader::readInShape(char* filename)
 	
 	char* data = new char [vertexDataSize+indexDataSize];
 	binFile.read(data, vertexDataSize+indexDataSize);
-
+	binFile.close();
 	Vertex* vertexData = reinterpret_cast<Vertex*>(data);
 	unsigned short* indexData = reinterpret_cast<unsigned short*>(data + vertexDataSize);
-
-	for(int i = 0; i< numIndices; i++)
-	{
-		cout << indexData[i] << endl;
-	}
 
 	ObjReader::ShapeData shape;
 	shape.indices = indexData;
@@ -38,6 +33,5 @@ ObjReader::ShapeData ObjReader::readInShape(char* filename)
 	shape.vertices = vertexData;
 	shape.vertexDataSize = vertexDataSize;
 	shape.numVertices = numVertices;
-	
 	return shape;
 }

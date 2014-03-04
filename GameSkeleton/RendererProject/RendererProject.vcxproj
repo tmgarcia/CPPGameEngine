@@ -33,6 +33,7 @@
     <ClCompile Include="TheMain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="chair1.bin" />
     <None Include="cube.bin" />
     <None Include="JustLightingFragmentShader.glsl" />
     <None Include="JustLightingVertexShader.glsl" />
@@ -40,8 +41,10 @@
     <None Include="JustTextureVertexShader.glsl" />
     <None Include="LightingAndTextureFragmentShader.glsl" />
     <None Include="LightingAndTextureVertexShader.glsl" />
+    <None Include="mushroom1.bin" />
     <None Include="PassThroughFragmentShader.glsl" />
     <None Include="PassThroughVertexShader.glsl" />
+    <None Include="sphere.bin" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="brightGrassTexture.bmp" />

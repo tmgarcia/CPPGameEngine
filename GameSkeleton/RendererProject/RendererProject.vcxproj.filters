@@ -48,6 +48,9 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="cube.bin" />
+    <None Include="sphere.bin" />
+    <None Include="mushroom1.bin" />
+    <None Include="chair1.bin" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="texturetestColors.bmp">

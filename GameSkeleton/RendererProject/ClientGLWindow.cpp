@@ -57,6 +57,7 @@ GeometryInfo* teapot;
 GeometryInfo* arrow;
 GeometryInfo* plane;
 GeometryInfo* readInCube;
+GeometryInfo* mushroom;
 
 /*----------Shaders----------*/
 ShaderInfo* lightingAndTextureShader;
@@ -108,30 +109,34 @@ RenderableInfo* tableMetronomeArrow;
 	mat4 tableMetronomeArrowTransform;
 	mat4 tableMetronomeArrowFullTransform;
 	mat4 tableMetronomeArrowRotation = mat4();
-RenderableInfo* mushroom1Base;
-	mat4 mushroom1BaseTransform;
-	mat4 mushroom1BaseFullTransform;
-	mat4 mushroom1BaseRotation = mat4();
-RenderableInfo* mushroom1Under;
-	mat4 mushroom1UnderTransform;
-	mat4 mushroom1UnderFullTransform;
-	mat4 mushroom1UnderRotation = mat4();
-RenderableInfo* mushroom1Top;
-	mat4 mushroom1TopTransform;
-	mat4 mushroom1TopFullTransform;
-	mat4 mushroom1TopRotation = mat4();
-RenderableInfo* mushroom2Base;
-	mat4 mushroom2BaseTransform;
-	mat4 mushroom2BaseFullTransform;
-	mat4 mushroom2BaseRotation = mat4();
-RenderableInfo* mushroom2Under;
-	mat4 mushroom2UnderTransform;
-	mat4 mushroom2UnderFullTransform;
-	mat4 mushroom2UnderRotation = mat4();
-RenderableInfo* mushroom2Top;
-	mat4 mushroom2TopTransform;
-	mat4 mushroom2TopFullTransform;
-	mat4 mushroom2TopRotation = mat4();
+//RenderableInfo* mushroom1Base;
+//	mat4 mushroom1BaseTransform;
+//	mat4 mushroom1BaseFullTransform;
+//	mat4 mushroom1BaseRotation = mat4();
+//RenderableInfo* mushroom1Under;
+//	mat4 mushroom1UnderTransform;
+//	mat4 mushroom1UnderFullTransform;
+//	mat4 mushroom1UnderRotation = mat4();
+//RenderableInfo* mushroom1Top;
+//	mat4 mushroom1TopTransform;
+//	mat4 mushroom1TopFullTransform;
+//	mat4 mushroom1TopRotation = mat4();
+//RenderableInfo* mushroom2Base;
+//	mat4 mushroom2BaseTransform;
+//	mat4 mushroom2BaseFullTransform;
+//	mat4 mushroom2BaseRotation = mat4();
+//RenderableInfo* mushroom2Under;
+//	mat4 mushroom2UnderTransform;
+//	mat4 mushroom2UnderFullTransform;
+//	mat4 mushroom2UnderRotation = mat4();
+//RenderableInfo* mushroom2Top;
+//	mat4 mushroom2TopTransform;
+//	mat4 mushroom2TopFullTransform;
+//	mat4 mushroom2TopRotation = mat4();
+RenderableInfo* mushroom1;
+	mat4 mushroom1FullTransform;
+	mat4 mushroom1Transform;
+	mat4 mushroom1Rotation = mat4();
 RenderableInfo* tree1;
 	mat4 tree1Transform;
 	mat4 tree1FullTransform;
@@ -231,7 +236,11 @@ void ClientGLWindow::setupGeometries()
 
 	ObjReader reader;
 
-	ObjReader::ShapeData experimentCube = reader.readInShape("cube.bin");
+	ObjReader::ShapeData mushroomData = reader.readInShape("mushroom1.bin");
+	mushroom = meWindow.addGeometry(mushroomData.vertices, mushroomData.vertexDataSize, mushroomData.indices, mushroomData.numIndices, GL_TRIANGLES);
+	setupReadInGeometryVertexArrayInfo(mushroom);
+
+	ObjReader::ShapeData experimentCube = reader.readInShape("chair1.bin");
 	readInCube = meWindow.addGeometry(experimentCube.vertices, experimentCube.vertexDataSize, experimentCube.indices, experimentCube.numIndices, GL_TRIANGLES);
 	setupReadInGeometryVertexArrayInfo(readInCube);
 }
@@ -323,19 +332,22 @@ void ClientGLWindow::setupTransforms()
 	tableMetronomeArrowRotation = glm::rotate(30.0f, vec3(0, 1, 0));
 	tableMetronomeArrowRotation *= glm::rotate(80.0f, vec3(1, 0, 0));
 
-	mushroom1BaseTransform = glm::translate(vec3(-6.0f, 20.0f, -15.0f));
-	mushroom1BaseTransform *= glm::scale(vec3(1.0f, 20.0f, 1.0f));
-	mushroom1UnderTransform = glm::translate(vec3(-6.0f, 40.0f, -15.0f));
-	mushroom1UnderTransform *= glm::scale(vec3(6.0f, 0.25f, 6.0f));
-	mushroom1TopTransform = glm::translate(vec3(-6.0f, 44.25f, -15.0f));
-	mushroom1TopTransform *= glm::scale(vec3(6.0f, 4.0f, 6.0f));
+	//mushroom1BaseTransform = glm::translate(vec3(-6.0f, 20.0f, -15.0f));
+	//mushroom1BaseTransform *= glm::scale(vec3(1.0f, 20.0f, 1.0f));
+	//mushroom1UnderTransform = glm::translate(vec3(-6.0f, 40.0f, -15.0f));
+	//mushroom1UnderTransform *= glm::scale(vec3(6.0f, 0.25f, 6.0f));
+	//mushroom1TopTransform = glm::translate(vec3(-6.0f, 44.25f, -15.0f));
+	//mushroom1TopTransform *= glm::scale(vec3(6.0f, 4.0f, 6.0f));
 
-	mushroom2BaseTransform = glm::translate(vec3(-20.0f, 6.0f, -25.0f));
-	mushroom2BaseTransform *= glm::scale(vec3(0.5f, 6.0f, 0.5f));
-	mushroom2UnderTransform = glm::translate(vec3(-20.0f, 12.0f, -25.0f));
-	mushroom2UnderTransform *= glm::scale(vec3(4.0f, 0.25f, 4.0f));
-	mushroom2TopTransform = glm::translate(vec3(-20.0f, 14.25f, -25.0f));
-	mushroom2TopTransform *= glm::scale(vec3(4.0f, 2.0f, 4.0f));
+	//mushroom2BaseTransform = glm::translate(vec3(-20.0f, 6.0f, -25.0f));
+	//mushroom2BaseTransform *= glm::scale(vec3(0.5f, 6.0f, 0.5f));
+	//mushroom2UnderTransform = glm::translate(vec3(-20.0f, 12.0f, -25.0f));
+	//mushroom2UnderTransform *= glm::scale(vec3(4.0f, 0.25f, 4.0f));
+	//mushroom2TopTransform = glm::translate(vec3(-20.0f, 14.25f, -25.0f));
+	//mushroom2TopTransform *= glm::scale(vec3(4.0f, 2.0f, 4.0f));
+	
+	mushroom1Transform = glm::translate(vec3(-20.0f, 10.0f, -25.0f));
+	mushroom1Transform *= glm::scale(vec3(6.0f, 10.f, 6.0f));
 
 	tree1Transform = glm::translate(vec3(10.0f, 6.0f, -8.0f));
 	tree1Transform *= glm::scale(vec3(0.5f, 6.0f, 0.5f));
@@ -370,12 +382,13 @@ void ClientGLWindow::setupRenderables()
 	tableTeapot = meWindow.addRenderable(teapot, tableTeapotTransform, justLightingShader);
 	tableMetronome = meWindow.addRenderable(cube, tableMetronomeTransform, justLightingShader);
 	tableMetronomeArrow = meWindow.addRenderable(arrow, tableMetronomeArrowTransform, justLightingShader);
-	mushroom1Base = meWindow.addRenderable(cube, mushroom1BaseTransform, lightingAndTextureShader, brightWall);
-	mushroom1Under = meWindow.addRenderable(cube, mushroom1UnderTransform, lightingAndTextureShader, brightMushroomUnder);
-	mushroom1Top = meWindow.addRenderable(cube, mushroom1TopTransform, lightingAndTextureShader, brightMushroomTop);
-	mushroom2Base = meWindow.addRenderable(cube, mushroom2BaseTransform, lightingAndTextureShader, brightWall);
-	mushroom2Under = meWindow.addRenderable(cube, mushroom2UnderTransform, lightingAndTextureShader, brightMushroomUnder);
-	mushroom2Top = meWindow.addRenderable(cube, mushroom2TopTransform, lightingAndTextureShader, brightMushroomTop);
+	//mushroom1Base = meWindow.addRenderable(cube, mushroom1BaseTransform, lightingAndTextureShader, brightWall);
+	//mushroom1Under = meWindow.addRenderable(cube, mushroom1UnderTransform, lightingAndTextureShader, brightMushroomUnder);
+	//mushroom1Top = meWindow.addRenderable(cube, mushroom1TopTransform, lightingAndTextureShader, brightMushroomTop);
+	//mushroom2Base = meWindow.addRenderable(cube, mushroom2BaseTransform, lightingAndTextureShader, brightWall);
+	//mushroom2Under = meWindow.addRenderable(cube, mushroom2UnderTransform, lightingAndTextureShader, brightMushroomUnder);
+	//mushroom2Top = meWindow.addRenderable(cube, mushroom2TopTransform, lightingAndTextureShader, brightMushroomTop);
+	mushroom1 = meWindow.addRenderable(mushroom, mushroom1Transform, lightingAndTextureShader, brightWall);
 	tree1 = meWindow.addRenderable(cube, tree1Transform, lightingAndTextureShader, darkBark);
 	lavaCube = meWindow.addRenderable(cube, lavaCubeTransform, lightingAndTextureShader, lava1);
 	lavaCube2 = meWindow.addRenderable(cube, lavaCube2Transform, lightingAndTextureShader, lava2);
@@ -417,23 +430,26 @@ void ClientGLWindow::setupShaderUniforms()
 	tableMetronomeArrowFullTransform = worldToProjectionMatrix * tableMetronomeArrowTransform;
 	addJustLightingShaderUniforms(tableMetronomeArrow, &tableMetronomeArrowFullTransform[0][0], &tableMetronomeArrowRotation[0][0]);
 
-	mushroom1BaseFullTransform = worldToProjectionMatrix * mushroom1BaseTransform;
-	addBrightLightingAndTextureShaderUniforms(mushroom1Base, &mushroom1BaseFullTransform[0][0], &mushroom1BaseRotation[0][0]);
+	//mushroom1BaseFullTransform = worldToProjectionMatrix * mushroom1BaseTransform;
+	//addBrightLightingAndTextureShaderUniforms(mushroom1Base, &mushroom1BaseFullTransform[0][0], &mushroom1BaseRotation[0][0]);
 
-	mushroom1UnderFullTransform = worldToProjectionMatrix * mushroom1UnderTransform;
-	addBrightLightingAndTextureShaderUniforms(mushroom1Under, &mushroom1UnderFullTransform[0][0], &mushroom1UnderRotation[0][0]);
+	//mushroom1UnderFullTransform = worldToProjectionMatrix * mushroom1UnderTransform;
+	//addBrightLightingAndTextureShaderUniforms(mushroom1Under, &mushroom1UnderFullTransform[0][0], &mushroom1UnderRotation[0][0]);
 
-	mushroom1TopFullTransform = worldToProjectionMatrix * mushroom1TopTransform;
-	addBrightLightingAndTextureShaderUniforms(mushroom1Top, &mushroom1TopFullTransform[0][0], &mushroom1TopRotation[0][0]);
+	//mushroom1TopFullTransform = worldToProjectionMatrix * mushroom1TopTransform;
+	//addBrightLightingAndTextureShaderUniforms(mushroom1Top, &mushroom1TopFullTransform[0][0], &mushroom1TopRotation[0][0]);
 
-	mushroom2BaseFullTransform = worldToProjectionMatrix * mushroom2BaseTransform;
-	addBrightLightingAndTextureShaderUniforms(mushroom2Base, &mushroom2BaseFullTransform[0][0], &mushroom2BaseRotation[0][0]);
+	//mushroom2BaseFullTransform = worldToProjectionMatrix * mushroom2BaseTransform;
+	//addBrightLightingAndTextureShaderUniforms(mushroom2Base, &mushroom2BaseFullTransform[0][0], &mushroom2BaseRotation[0][0]);
 
-	mushroom2UnderFullTransform = worldToProjectionMatrix * mushroom2UnderTransform;
-	addBrightLightingAndTextureShaderUniforms(mushroom2Under, &mushroom2UnderFullTransform[0][0], &mushroom2UnderRotation[0][0]);
+	//mushroom2UnderFullTransform = worldToProjectionMatrix * mushroom2UnderTransform;
+	//addBrightLightingAndTextureShaderUniforms(mushroom2Under, &mushroom2UnderFullTransform[0][0], &mushroom2UnderRotation[0][0]);
 
-	mushroom2TopFullTransform = worldToProjectionMatrix * mushroom2TopTransform;
-	addBrightLightingAndTextureShaderUniforms(mushroom2Top, &mushroom2TopFullTransform[0][0], &mushroom2TopRotation[0][0]);
+	//mushroom2TopFullTransform = worldToProjectionMatrix * mushroom2TopTransform;
+	//addBrightLightingAndTextureShaderUniforms(mushroom2Top, &mushroom2TopFullTransform[0][0], &mushroom2TopRotation[0][0]);
+
+	mushroom1FullTransform = worldToProjectionMatrix * mushroom1Transform;
+	addBrightLightingAndTextureShaderUniforms(mushroom1, &mushroom1FullTransform[0][0], &mushroom1Rotation[0][0]);
 
 	tree1FullTransform = worldToProjectionMatrix * tree1Transform;
 	addDarkLightingAndTextureShaderUniforms(tree1, &tree1FullTransform[0][0], &tree1Rotation[0][0]);
@@ -467,12 +483,14 @@ void ClientGLWindow::updateShaderUniforms()
 	tableTeapotFullTransform = worldToProjectionMatrix * tableTeapotTransform;
 	tableMetronomeFullTransform = worldToProjectionMatrix * tableMetronomeTransform;
 	tableMetronomeArrowFullTransform = worldToProjectionMatrix * tableMetronomeArrowTransform;
-	mushroom1BaseFullTransform = worldToProjectionMatrix * mushroom1BaseTransform;
-	mushroom1UnderFullTransform = worldToProjectionMatrix * mushroom1UnderTransform;
-	mushroom1TopFullTransform = worldToProjectionMatrix * mushroom1TopTransform;
-	mushroom2BaseFullTransform = worldToProjectionMatrix * mushroom2BaseTransform;
-	mushroom2UnderFullTransform = worldToProjectionMatrix * mushroom2UnderTransform;
-	mushroom2TopFullTransform = worldToProjectionMatrix * mushroom2TopTransform;
+	//mushroom1BaseFullTransform = worldToProjectionMatrix * mushroom1BaseTransform;
+	//mushroom1UnderFullTransform = worldToProjectionMatrix * mushroom1UnderTransform;
+	//mushroom1TopFullTransform = worldToProjectionMatrix * mushroom1TopTransform;
+	//mushroom2BaseFullTransform = worldToProjectionMatrix * mushroom2BaseTransform;
+	//mushroom2UnderFullTransform = worldToProjectionMatrix * mushroom2UnderTransform;
+	//mushroom2TopFullTransform = worldToProjectionMatrix * mushroom2TopTransform;
+	mushroom1FullTransform = worldToProjectionMatrix * mushroom1Transform;
+
 	tree1FullTransform = worldToProjectionMatrix * tree1Transform;
 	lavaCubeFullTransform = worldToProjectionMatrix * lavaCubeTransform;
 	lavaCube2FullTransform = worldToProjectionMatrix * lavaCube2Transform;

@@ -215,7 +215,8 @@ void DebugShapes::addLine(vec3 startPoint, vec3 endPoint, vec3 Color, bool enabl
 	float startMagnitude = glm::sqrt((startPoint.x*startPoint.x) + (startPoint.y*startPoint.y) + (startPoint.z*startPoint.z));
 	float endMagnitude = glm::sqrt((endPoint.x*endPoint.x) + (endPoint.y*endPoint.y) + (endPoint.z*endPoint.z));
 	float newMagnitude = endMagnitude - startMagnitude;
-	mat4 fullModelToWorld =  orientation * glm::scale(vec3(newMagnitude, newMagnitude+1, newMagnitude));
+
+	mat4 fullModelToWorld =  orientation * glm::scale(vec3(newMagnitude, newMagnitude, newMagnitude));
 
 	DebugShapeInfo* shape;
 	int existingShapeIndex = existingAvailableShapeIndex(Line);

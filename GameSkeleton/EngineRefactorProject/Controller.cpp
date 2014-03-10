@@ -359,14 +359,14 @@ void Controller::setupRenderables()
 	lavaCube2 = GeneralGLWindow::getInstance().addRenderable(cube, lavaCube2Transform, lightingAndTextureShader, true, PRIORITY_1, true, lava2);
 	lavaCube3 = GeneralGLWindow::getInstance().addRenderable(cube, lavaCube3Transform, lightingAndTextureShader, true, PRIORITY_1, true, lava3);
 
-	skySphere = GeneralGLWindow::getInstance().addRenderable(newSphere, skySphereTransform, lightingAndTextureShader, true, PRIORITY_1, true, sky);
+	skySphere = GeneralGLWindow::getInstance().addRenderable(newSphere, skySphereTransform, justTextureShader, true, PRIORITY_1, true, sky);
 	//readCubeRenderable = GeneralGLWindow::getInstance().addRenderable(readInCube, readCubeTransform, lightingAndTextureShader, brightWall);
 }
 
 void Controller::setupShaderUniforms()
 {
 	eyePosition = camera.getPosition();
-	mat4 viewToProjectionMatrix = glm::perspective(60.0f, ((float)WINDOW_WIDTH) / WINDOW_HEIGHT, 0.1f, 90.0f);
+	mat4 viewToProjectionMatrix = glm::perspective(60.0f, ((float)WINDOW_WIDTH) / WINDOW_HEIGHT, 0.1f, 100.0f);
 	mat4 worldToViewMatrix = camera.getWorldToViewMatrix();
 	mat4 worldToProjectionMatrix = viewToProjectionMatrix * worldToViewMatrix;
 
@@ -409,7 +409,7 @@ void Controller::setupShaderUniforms()
 	addDarkLightingAndTextureShaderUniforms(lavaCube3, &lavaCube3FullTransform[0][0], &lavaCube3Rotation[0][0]);
 
 	skySphereFullTransform = worldToProjectionMatrix * skySphereTransform;
-	addLightingAndTextureShaderUniforms(skySphere, &skySphereFullTransform[0][0], &skySphereRotation[0][0]);
+	addJustTextureShaderUniforms(skySphere, &skySphereFullTransform[0][0]);
 	/*readCubeFullTransform = worldToProjectionMatrix * readCubeTransform;
 	addLightingAndTextureShaderUniforms(readCubeRenderable, &readCubeFullTransform[0][0], &readCubeRotation[0][0]);*/
 }
@@ -418,7 +418,7 @@ void Controller::updateShaderUniforms()
 {
 	
 	eyePosition = camera.getPosition();
-	mat4 viewToProjectionMatrix = glm::perspective(60.0f, ((float)WINDOW_WIDTH) / WINDOW_HEIGHT, 0.1f, 90.0f);
+	mat4 viewToProjectionMatrix = glm::perspective(60.0f, ((float)WINDOW_WIDTH) / WINDOW_HEIGHT, 0.1f, 100.0f);
 	mat4 worldToViewMatrix = camera.getWorldToViewMatrix();
 	mat4 worldToProjectionMatrix = viewToProjectionMatrix * worldToViewMatrix;
 

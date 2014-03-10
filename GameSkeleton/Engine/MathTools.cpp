@@ -1,6 +1,6 @@
 #include "MathTools.h"
 
-static const float _180_PI = 180/3.14159;
+static const float _180_PI = 180/3.14159265359;
 
 MathTools MathTools::theInstance;
 MathTools& MathTools::getInstance()

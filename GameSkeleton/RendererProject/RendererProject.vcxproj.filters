@@ -51,6 +51,7 @@
     <None Include="sphere.bin" />
     <None Include="mushroom1.bin" />
     <None Include="chair1.bin" />
+    <None Include="table.bin" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="texturetestColors.bmp">
@@ -96,6 +97,9 @@
       <Filter>Textures</Filter>
     </Image>
     <Image Include="lava7Texture.bmp">
+      <Filter>Textures</Filter>
+    </Image>
+    <Image Include="skyTexture.bmp">
       <Filter>Textures</Filter>
     </Image>
   </ItemGroup>

@@ -30,7 +30,9 @@ void Turret::draw(Core::Graphics& g, Vector3D shipPosition)
 	Vector3D ptm = shipPosition-mouse;
 	Vector3D bmt = ptm.normalized(); //b
 	Vector3D bmtperp = bmt.perpCCW(); //a
+
 	turnTurret = Matrix3D(bmtperp.x, bmt.x, 0.0f, bmtperp.y, bmt.y, 0.0f, 0.0f, 0.0f, 1.0f);
+
 	Matrix3D transTurret = translate(shipPosition.x, shipPosition.y) * turnTurret;
 	tip = transTurret * *turretPoints[0];
 	for(unsigned int i = 0; i<NUM_T_POINTS; i++)

@@ -45,6 +45,7 @@
     <None Include="PassThroughFragmentShader.glsl" />
     <None Include="PassThroughVertexShader.glsl" />
     <None Include="sphere.bin" />
+    <None Include="table.bin" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="brightGrassTexture.bmp" />
@@ -60,6 +61,7 @@
     <Image Include="lava5Texture.bmp" />
     <Image Include="lava6Texture.bmp" />
     <Image Include="lava7Texture.bmp" />
+    <Image Include="skyTexture.bmp" />
     <Image Include="textureSingleColor.bmp" />
     <Image Include="texturetestColors.bmp" />
   </ItemGroup>

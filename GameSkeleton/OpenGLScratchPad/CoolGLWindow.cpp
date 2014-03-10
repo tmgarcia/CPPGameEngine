@@ -621,11 +621,12 @@ void CoolGLWindow::sendDataToHardware()
 	glEnableVertexAttribArray(2);
 	glEnableVertexAttribArray(3);
 	glBindBuffer(GL_ARRAY_BUFFER, theBufferID);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, theBufferID);
+
 	glVertexAttribPointer(0,3,GL_FLOAT, GL_FALSE, Neumont::Vertex::STRIDE, (void*)Neumont::Vertex::POSITION_OFFSET);
 	glVertexAttribPointer(1,4,GL_FLOAT, GL_FALSE, Neumont::Vertex::STRIDE, (void*)Neumont::Vertex::COLOR_OFFSET);
 	glVertexAttribPointer(2,3,GL_FLOAT, GL_FALSE, Neumont::Vertex::STRIDE, (void*)Neumont::Vertex::NORMAL_OFFSET);
 	glVertexAttribPointer(3,2,GL_FLOAT, GL_FALSE, Neumont::Vertex::STRIDE, (void*)Neumont::Vertex::UV_OFFSET);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, theBufferID);
 	
 	glBindVertexArray(sphereVertexArrayObjectID);
 	glEnableVertexAttribArray(0);
@@ -777,7 +778,6 @@ void CoolGLWindow::loadTextureImage(char* filename)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
 }
 
 void CoolGLWindow::myUpdate()
@@ -1041,7 +1041,7 @@ void CoolGLWindow::paintGL()
 	glUniformMatrix4fv(rotationMatrixLocation, 1, GL_FALSE, &rotationMatrix[0][0]);
 	glUniformMatrix4fv(fullTransformMatrixLocation, 1, GL_FALSE, &fullTransformMatrix[0][0]);
 	glDrawElements(GL_TRIANGLES, sphereNumIndices, GL_UNSIGNED_SHORT, (void*)sphereIndexDataByteOffset);
-
+	
 	isLightBulb=0.0f;
 	glUniform1f(isLightBulbLocation, isLightBulb);
 	fullTransformMatrix = worldToProjectionMatrix * floorTransform;

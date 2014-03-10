@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Math">
+      <UniqueIdentifier>{adfc22b5-bc5d-4f6f-ad95-cf84bafdd2e8}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Random.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine.cpp" />
+    <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="ObjReader.cpp" />
+    <ClCompile Include="Renderer\GeneralGLWindow.cpp" />
+    <ClCompile Include="Renderer\GeneralGLWindow_moc.cpp" />
+    <ClCompile Include="DebugTools\Logger.cpp" />
+    <ClCompile Include="DebugTools\Profiler.cpp" />
+    <ClCompile Include="DebugTools\DebugShapes.cpp" />
+    <ClCompile Include="MathTools.cpp" />
+    <ClCompile Include="DebugTools\DebugShapes_moc.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Random.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine.h" />
+    <ClInclude Include="ExportHeader.h" />
+    <ClInclude Include="Particle.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="ObjReader.h" />
+    <ClInclude Include="Renderer\GeneralGLWindow.h" />
+    <ClInclude Include="Renderer\ParameterType.h" />
+    <ClInclude Include="Renderer\RenderableInfo.h" />
+    <ClInclude Include="Renderer\ShaderInfo.h" />
+    <ClInclude Include="Renderer\ShaderUniformParameter.h" />
+    <ClInclude Include="Renderer\TextureInfo.h" />
+    <ClInclude Include="Renderer\GeometryInfo.h" />
+    <ClInclude Include="Renderer\BufferInfo.h" />
+    <ClInclude Include="DebugTools\DebugMemory.h" />
+    <ClInclude Include="DebugTools\Logger.h" />
+    <ClInclude Include="DebugTools\Profiler.h" />
+    <ClInclude Include="DebugTools\List.h" />
+    <ClInclude Include="DebugTools\DebugShapes.h" />
+    <ClInclude Include="MathTools.h" />
+    <ClInclude Include="Renderer\PriorityLevel.h" />
+    <ClInclude Include="DebugTools\Asserter.h" />
+  </ItemGroup>
+</Project>

@@ -516,35 +516,22 @@ void Controller::addDarkLightingAndTextureShaderUniforms(RenderableInfo* rendera
 
 void Controller::setupDebugShapes()
 {
-	mat4 cubeTransform = glm::translate(-5.0f, 0.0f, 0.0f);
-	DebugShapes::addCube(cubeTransform, vec3(1,1,1), true, 100);
+	mat4 cubeTransform = glm::translate(-2.0f, 3.0f, -3.0f) * glm::scale(vec3(0.25f, 0.25f, 0.25f));
+	DebugShapes::addCube(cubeTransform, vec3(5,0,4), true, 5);
 
-	mat4 sphereTransform = glm::translate(-3.0f, 0.0f, 0.0f);
-	DebugShapes::addSphere(sphereTransform, vec3(1,1,1), true, 100);
+	mat4 sphereTransform = glm::translate(2.0f, 3.0f, -3.0f) * glm::scale(vec3(0.25f, 0.25f, 0.25f));
+	DebugShapes::addSphere(sphereTransform, vec3(0,0,1), true, 10);
 
-	mat4 sphereTransform1 = glm::translate(5.0f, 5.0f, 5.0f);
-	sphereTransform1 *= glm::scale(vec3(0.04f, 0.04f, 0.04f));
-	DebugShapes::addSphere(sphereTransform1, vec3(1,1,1), true, 100);
+	DebugShapes::addLine(vec3(-1.0f,3.0f,-2.5f), vec3(1.0f,3.0f,-2.5f), vec3(1,1,0), true, 15);
+
+	DebugShapes::addPoint(vec3(0,3,-3), true, 20);
+
+	DebugShapes::addVector(vec3(0, 2.5, -2.5), vec3(1, 1, 1), vec3(0.5f, 0.5f, 0.5f), true, 25);
 
 
-	DebugShapes::addLine(vec3(0,0,0), vec3(5, 5, 5), vec3(1,1,1), true, 100);
+	mat4 sphereTransform1 = glm::translate(0.0f, 3.0f, -5.0f) * glm::scale(vec3(0.25f, 0.25f, 0.25f));
+	DebugShapes::addSphere(sphereTransform1, vec3(0,1,0), false, 200);
 
-	DebugShapes::addPoint(vec3(5,5,5), true, 100);
-	DebugShapes::addPoint(vec3(0,0,0), true, 100);
-	DebugShapes::addPoint(vec3(5,4,5), true, 100);
-	DebugShapes::addPoint(vec3(5,3,5), true, 100);
-	DebugShapes::addPoint(vec3(5,2,5), true, 100);
-	DebugShapes::addPoint(vec3(5,1,5), true, 100);
-	DebugShapes::addPoint(vec3(5,2,4), true, 100);
-	DebugShapes::addPoint(vec3(5,1,4), true, 100);
-	DebugShapes::addPoint(vec3(5,3,4), true, 100);
-	DebugShapes::addPoint(vec3(5,4,4), true, 100);
-	DebugShapes::addPoint(vec3(5,5,4), true, 100);
-	DebugShapes::addPoint(vec3(6,2,5), true, 100);
-	DebugShapes::addPoint(vec3(6,1,5), true, 100);
-	DebugShapes::addPoint(vec3(6,3,5), true, 100);
-	DebugShapes::addPoint(vec3(6,4,5), true, 100);
-	DebugShapes::addPoint(vec3(6,5,5), true, 100);
 }
 
 void Controller::keyPressReaction(QKeyEvent* e)

@@ -4,7 +4,6 @@
 #include <vector>
 #include "ShapeData.h"
 #include "ShapeGenerator.h"
-#include "..\Mathtools.h"
 #include "glm\gtc\matrix_transform.hpp"
 #include "glm\gtx\transform.hpp"
 #include "..\Renderer\GeneralGLWindow.h"
@@ -16,22 +15,23 @@ using glm::mat4;
 class __declspec(dllexport) DebugShapes : public QObject
 {
 	Q_OBJECT
-private slots:
-	static void update();
+
+public:
+	static DebugShapes& getInstance();
 private:
 	QTimer timer;
 	static DebugShapes* theInstance;
-
 	DebugShapes(){}
 	DebugShapes(const DebugShapes&);
 	DebugShapes& operator = (const DebugShapes&);
-	
 
+#if DEBUGSHAPES_ON
+private slots:
+	static void tick();
+private:
+	static void update();
 	static mat4 currentWorldToProjection;
-
-
 	enum ShapeType {Sphere, Cube, Vector, Line, Point};
-
 	struct DebugShapeInfo
 	{
 		RenderableInfo* renderables[3];
@@ -43,19 +43,28 @@ private:
 		ShapeType type;
 	};
 	static vector <DebugShapeInfo*> debugInfos;
-
 	static int existingAvailableShapeIndex(ShapeType type);
 	static void setup();
-
+#endif
 public:
-	static DebugShapes& getInstance();
-	
+#if DEBUGSHAPES_ON
 	static void updateWorldToProjection(mat4 newWorldToProjection);
-
 	static void addSphere(mat4 modelToWorld, vec3 color, bool enableDepth, float lifeTime);
 	static void addCube(mat4 modelToWorld, vec3 color, bool enableDepth, float lifeTime);
 	static void addVector(vec3 tailPosition, vec3 vector, vec3 color, bool enableDepth, float lifeTime);
 	static void addLine(vec3 startPoint, vec3 endPoint, vec3 Color, bool enableDepth, float lifeTime);
 	static void addPoint(vec3 position, bool enableDepth, float lifeTime);
+#else
+	static void updateWorldToProjection(mat4 newWorldToProjection){}
+	static void addSphere(mat4 modelToWorld, vec3 color, bool enableDepth, float lifeTime){}
+	static void addCube(mat4 modelToWorld, vec3 color, bool enableDepth, float lifeTime){}
+	static void addVector(vec3 tailPosition, vec3 vector, vec3 color, bool enableDepth, float lifeTime){}
+	static void addLine(vec3 startPoint, vec3 endPoint, vec3 Color, bool enableDepth, float lifeTime){}
+	static void addPoint(vec3 position, bool enableDepth, float lifeTime){}
+	private slots:
+		static void tick(){}
+private:
+	static void setup(){}
 
+#endif
 };

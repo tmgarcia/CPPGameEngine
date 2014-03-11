@@ -53,7 +53,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_DEBUG;ASSERT_ON;LOG_ON;PROFILING_ON;WIN32;_DEBUG;_WINDOWS;_USRDLL;ENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;DEBUGSHAPES_OFF;ASSERT_ON;LOG_ON;PROFILING_ON;WIN32;_WINDOWS;_USRDLL;ENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)..\External Dependencies\NeumontTools\include;$(SolutionDir)..\External Dependencies\glew\include;$(SolutionDir)..\External Dependencies\glm;$(SolutionDir)..\External Dependencies\Qt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
@@ -92,7 +92,6 @@
     <ClCompile Include="DebugTools\DebugShapes_moc.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="Engine.cpp" />
-    <ClCompile Include="MathTools.cpp" />
     <ClCompile Include="Renderer\GeneralGLWindow.cpp" />
     <ClCompile Include="Renderer\GeneralGLWindow_moc.cpp" />
     <ClCompile Include="DebugTools\Logger.cpp" />
@@ -107,7 +106,6 @@
     <ClInclude Include="ExportHeader.h" />
     <ClInclude Include="DebugTools\Asserter.h" />
     <ClInclude Include="DebugTools\DebugMemory.h" />
-    <ClInclude Include="MathTools.h" />
     <ClInclude Include="Renderer\BufferInfo.h" />
     <ClInclude Include="Renderer\GeneralGLWindow.h" />
     <ClInclude Include="Renderer\GeometryInfo.h" />

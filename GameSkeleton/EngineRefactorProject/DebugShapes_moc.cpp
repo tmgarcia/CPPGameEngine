@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'DebugShapes.h'
 **
-** Created: Sun Mar 9 20:58:22 2014
+** Created: Mon Mar 10 20:30:51 2014
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.0)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -37,7 +37,7 @@ static const uint qt_meta_data_DebugShapes[] = {
 };
 
 static const char qt_meta_stringdata_DebugShapes[] = {
-    "DebugShapes\0\0update()\0"
+    "DebugShapes\0\0tick()\0"
 };
 
 void DebugShapes::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -46,7 +46,7 @@ void DebugShapes::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
         Q_ASSERT(staticMetaObject.cast(_o));
         DebugShapes *_t = static_cast<DebugShapes *>(_o);
         switch (_id) {
-        case 0: _t->update(); break;
+        case 0: _t->tick(); break;
         default: ;
         }
     }

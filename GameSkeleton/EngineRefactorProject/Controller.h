@@ -20,6 +20,7 @@ public:
 		QObject::connect(&GeneralGLWindow::getInstance(), SIGNAL(keyPressed(QKeyEvent*)), this, SLOT(keyPressReaction(QKeyEvent*)));
 		QObject::connect(&GeneralGLWindow::getInstance(), SIGNAL(mouseMoved(QMouseEvent*)), this, SLOT(mouseMoveReaction(QMouseEvent*)));
 		connect(&myTimer, SIGNAL(timeout()), this, SLOT(myUpdate()));
+		myTimer.setInterval(1);
 		myTimer.start(0);
 		GeneralGLWindow::getInstance().setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 		GeneralGLWindow::getInstance().move(0,0);

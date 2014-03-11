@@ -1,7 +1,7 @@
 #include "DebugShapes.h"
 
-vector <DebugShapes::DebugShapeInfo*> DebugShapes::debugInfos;
-mat4 DebugShapes::currentWorldToProjection;
+
+
 DebugShapes* DebugShapes::theInstance;
 
 DebugShapes& DebugShapes::getInstance()
@@ -14,9 +14,20 @@ DebugShapes& DebugShapes::getInstance()
 	return *theInstance;
 }
 
+#ifdef DEBUGSHAPES_ON
+vector <DebugShapes::DebugShapeInfo*> DebugShapes::debugInfos;
+mat4 DebugShapes::currentWorldToProjection;
+
+long timePassed;
 void DebugShapes::updateWorldToProjection(mat4 newWorldToProjection)
 {
 	currentWorldToProjection = newWorldToProjection;
+	update();
+}
+
+void DebugShapes::tick()
+{
+	timePassed++;
 	update();
 }
 
@@ -28,9 +39,12 @@ void DebugShapes::update()
 		for(int j = 0; j<limit; j++)
 		{
 			debugInfos[i]->fullTransforms[j] = currentWorldToProjection * debugInfos[i]->renderables[j]->whereMatrix;
-			//debugInfos[i]->renderables[j]->visible = debugInfos[i]->remainingLife > 0;
+			if(debugInfos[i]->remainingLife < 0)
+			{
+				debugInfos[i]->renderables[j]->visible = (debugInfos[i]->remainingLife > 0);
+			}
 		}
-		debugInfos[i]->remainingLife -= (getInstance().timer.interval() - debugInfos[i]->startTime);
+		debugInfos[i]->remainingLife -= (timePassed - debugInfos[i]->startTime);
 	}
 	GeneralGLWindow::getInstance().repaint();
 }
@@ -41,18 +55,21 @@ GeometryInfo* cube;
 bool cubeGeoAdded;
 GeometryInfo* line;
 bool lineGeoAdded;
-
+GeometryInfo* pointLine;
+bool pointLineGeoAdded;
 
 ShaderInfo* debugShader;
-
 void DebugShapes::setup()
 {
-	connect(&(DebugShapes::getInstance().timer), SIGNAL(timeout()), &DebugShapes::getInstance(), SLOT(update()));
-	DebugShapes::getInstance().timer.start(0);
+	timePassed = 0;
+	getInstance().timer.setInterval(1);
+	getInstance().timer.start(0);
+	connect(&getInstance().timer, SIGNAL(timeout()), &getInstance(), SLOT(tick()));
 	debugShader = GeneralGLWindow::getInstance().createShaderInfo("../Resources/Shaders/debugVertexShader.glsl", "../Resources/Shaders/debugFragmentShader.glsl");
 }
 float notCross = 0.0f;
 float isCross = 1.0f;
+float isVector = 2.0f;
 void DebugShapes::addSphere(mat4 modelToWorld, vec3 color, bool enableDepth, float lifeTime)
 {
 	if(!sphereGeoAdded)
@@ -60,7 +77,6 @@ void DebugShapes::addSphere(mat4 modelToWorld, vec3 color, bool enableDepth, flo
 		Neumont::ShapeData sphereData = Neumont::ShapeGenerator::makeSphere(10);
 		sphere = GeneralGLWindow::getInstance().addGeometry(sphereData.verts, sphereData.vertexBufferSize(), sphereData.indices, sphereData.numIndices, GL_TRIANGLES);
 		GeneralGLWindow::getInstance().addShaderStreamedParameter(sphere, 0, PT_VEC3, Neumont::Vertex::POSITION_OFFSET, Neumont::Vertex::STRIDE);
-		GeneralGLWindow::getInstance().addShaderStreamedParameter(sphere, 1, PT_VEC4, Neumont::Vertex::COLOR_OFFSET, Neumont::Vertex::STRIDE);
 		sphereGeoAdded = true;
 	}
 	
@@ -93,10 +109,11 @@ void DebugShapes::addSphere(mat4 modelToWorld, vec3 color, bool enableDepth, flo
 		shape->type = Sphere;
 		GeneralGLWindow::getInstance().addRenderableUniformParameter(shape->renderables[0], "fullTransformMatrix", PT_MAT4, &(shape->fullTransforms[0])[0][0]);
 		GeneralGLWindow::getInstance().addRenderableUniformParameter(shape->renderables[0], "isCrossHair", PT_FLOAT, &notCross);
+		GeneralGLWindow::getInstance().addRenderableUniformParameter(shape->renderables[0], "passedColor", PT_VEC4, &shape->color[0]);
 		debugInfos.push_back(shape);
 	}
 
-	shape->startTime = getInstance().timer.interval();
+	shape->startTime = timePassed;
 }
 
 void DebugShapes::addCube(mat4 modelToWorld, vec3 color, bool enableDepth, float lifeTime)
@@ -106,7 +123,6 @@ void DebugShapes::addCube(mat4 modelToWorld, vec3 color, bool enableDepth, float
 		Neumont::ShapeData cubeData = Neumont::ShapeGenerator::makeCube();
 		cube = GeneralGLWindow::getInstance().addGeometry(cubeData.verts, cubeData.vertexBufferSize(), cubeData.indices, cubeData.numIndices, GL_TRIANGLES);
 		GeneralGLWindow::getInstance().addShaderStreamedParameter(cube, 0, PT_VEC3, Neumont::Vertex::POSITION_OFFSET, Neumont::Vertex::STRIDE);
-		GeneralGLWindow::getInstance().addShaderStreamedParameter(cube, 1, PT_VEC4, Neumont::Vertex::COLOR_OFFSET, Neumont::Vertex::STRIDE);
 		cubeGeoAdded = true;
 	}
 	
@@ -139,27 +155,27 @@ void DebugShapes::addCube(mat4 modelToWorld, vec3 color, bool enableDepth, float
 		shape->type = Cube;
 		GeneralGLWindow::getInstance().addRenderableUniformParameter(shape->renderables[0], "fullTransformMatrix", PT_MAT4, &(shape->fullTransforms[0])[0][0]);
 		GeneralGLWindow::getInstance().addRenderableUniformParameter(shape->renderables[0], "isCrossHair", PT_FLOAT, &notCross);
+		GeneralGLWindow::getInstance().addRenderableUniformParameter(shape->renderables[0], "passedColor", PT_VEC4, &shape->color[0]);
 		debugInfos.push_back(shape);
 	}
 
-	shape->startTime = getInstance().timer.interval();
+	shape->startTime = timePassed;
 }
 void DebugShapes::addVector(vec3 tailPosition, vec3 vector, vec3 color, bool enableDepth, float lifeTime)
 {
 	if(!lineGeoAdded)
 	{
+		vec3 lineVerts[2] = { vec3(0,0,0), vec3(1,1,1) };
+		ushort lineIndices[2] = { 0, 1 };
 		Neumont::ShapeData lineData = Neumont::ShapeGenerator::makeLine();
-		line = GeneralGLWindow::getInstance().addGeometry(lineData.verts, lineData.vertexBufferSize(), lineData.indices, lineData.numIndices, GL_LINES);
-		GeneralGLWindow::getInstance().addShaderStreamedParameter(line, 0, PT_VEC3, Neumont::Vertex::POSITION_OFFSET, Neumont::Vertex::STRIDE);
-		GeneralGLWindow::getInstance().addShaderStreamedParameter(line, 1, PT_VEC4, Neumont::Vertex::COLOR_OFFSET, Neumont::Vertex::STRIDE);
+		line = GeneralGLWindow::getInstance().addGeometry((const void*)(&lineVerts[0]), 2*sizeof(vec3), lineIndices, 2, GL_LINES);
+		GeneralGLWindow::getInstance().addShaderStreamedParameter(line, 0, PT_VEC3, 0, sizeof(vec3));
 		lineGeoAdded = true;
 	}
 
-	mat4 firstTransform = glm::translate(vec3(0.5f, 0.0f, 0.0f));
-	firstTransform *= glm::scale(vec3(0.5f, 1, 1));
-	vec3 originalPosition = vec3(0.5f, 0, 0);
-	vec3 newPosition = tailPosition - vector;
-	mat4 transformation = MathTools::getAlignMatrix(originalPosition, newPosition);
+
+		mat4 fullModelToWorld = glm::translate(tailPosition) * glm::scale(vector);
+
 	
 	DebugShapeInfo* shape;
 	int existingShapeIndex = existingAvailableShapeIndex(Vector);
@@ -170,11 +186,11 @@ void DebugShapes::addVector(vec3 tailPosition, vec3 vector, vec3 color, bool ena
 		shape->remainingLife = lifeTime * 1000;
 		shape->color = color;
 		shape->depthTest = enableDepth;
-		shape->fullTransforms[0] = currentWorldToProjection * transformation;
+		shape->fullTransforms[0] = currentWorldToProjection * fullModelToWorld;
 
 		shape->renderables[0]->enableDepth = enableDepth;
 		shape->renderables[0]->visible = true;
-		shape->renderables[0]->whereMatrix = transformation;
+		shape->renderables[0]->whereMatrix = fullModelToWorld;
 	}
 	else
 	{
@@ -183,40 +199,33 @@ void DebugShapes::addVector(vec3 tailPosition, vec3 vector, vec3 color, bool ena
 		shape->remainingLife = lifeTime * 1000;
 		shape->color = color;
 		shape->depthTest = enableDepth;
-		shape->fullTransforms[0] = currentWorldToProjection * transformation;
+		shape->fullTransforms[0] = currentWorldToProjection * fullModelToWorld;
 
-		shape->renderables[0] = GeneralGLWindow::getInstance().addRenderable(line, transformation, debugShader, true, PRIORITY_2, enableDepth);
+		shape->renderables[0] = GeneralGLWindow::getInstance().addRenderable(line, fullModelToWorld, debugShader, true, PRIORITY_2, enableDepth);
 		shape->type = Vector;
 		GeneralGLWindow::getInstance().addRenderableUniformParameter(shape->renderables[0], "fullTransformMatrix", PT_MAT4, &(shape->fullTransforms[0])[0][0]);
-		GeneralGLWindow::getInstance().addRenderableUniformParameter(shape->renderables[0], "isCrossHair", PT_FLOAT, &notCross);
+		GeneralGLWindow::getInstance().addRenderableUniformParameter(shape->renderables[0], "isCrossHair", PT_FLOAT, &isVector);
+		GeneralGLWindow::getInstance().addRenderableUniformParameter(shape->renderables[0], "passedColor", PT_VEC4, &shape->color[0]);
 		debugInfos.push_back(shape);
 	}
-	shape->startTime = getInstance().timer.interval();
+	shape->startTime = timePassed;
 }
 void DebugShapes::addLine(vec3 startPoint, vec3 endPoint, vec3 Color, bool enableDepth, float lifeTime)
 {
 	if(!lineGeoAdded)
 	{
+		vec3 lineVerts[2] = { vec3(0,0,0), vec3(1,1,1) };
+		ushort lineIndices[2] = { 0, 1 };
 		Neumont::ShapeData lineData = Neumont::ShapeGenerator::makeLine();
-		line = GeneralGLWindow::getInstance().addGeometry(lineData.verts, lineData.vertexBufferSize(), lineData.indices, lineData.numIndices, GL_LINES);
-		GeneralGLWindow::getInstance().addShaderStreamedParameter(line, 0, PT_VEC3, Neumont::Vertex::POSITION_OFFSET, Neumont::Vertex::STRIDE);
-		GeneralGLWindow::getInstance().addShaderStreamedParameter(line, 1, PT_VEC4, Neumont::Vertex::COLOR_OFFSET, Neumont::Vertex::STRIDE);
+		line = GeneralGLWindow::getInstance().addGeometry((const void*)(&lineVerts[0]), 2*sizeof(vec3), lineIndices, 2, GL_LINES);
+		GeneralGLWindow::getInstance().addShaderStreamedParameter(line, 0, PT_VEC3, 0, sizeof(vec3));
 		lineGeoAdded = true;
 	}
 
-	
-	vec3 originalStart = vec3(0,0,0);
-	vec3 originalEnd = vec3(1,0,0);
-	vec3 originalPosition = originalEnd-originalStart;
 
 	vec3 newPosition = endPoint - startPoint;
-	mat4 orientation = MathTools::getAlignMatrix(originalPosition, newPosition);
-	
-	float startMagnitude = glm::sqrt((startPoint.x*startPoint.x) + (startPoint.y*startPoint.y) + (startPoint.z*startPoint.z));
-	float endMagnitude = glm::sqrt((endPoint.x*endPoint.x) + (endPoint.y*endPoint.y) + (endPoint.z*endPoint.z));
-	float newMagnitude = endMagnitude - startMagnitude;
 
-	mat4 fullModelToWorld =  orientation * glm::scale(vec3(newMagnitude, newMagnitude, newMagnitude));
+	mat4 fullModelToWorld = glm::translate(startPoint) * glm::scale(newPosition);
 
 	DebugShapeInfo* shape;
 	int existingShapeIndex = existingAvailableShapeIndex(Line);
@@ -246,9 +255,10 @@ void DebugShapes::addLine(vec3 startPoint, vec3 endPoint, vec3 Color, bool enabl
 		shape->type = Line;
 		GeneralGLWindow::getInstance().addRenderableUniformParameter(shape->renderables[0], "fullTransformMatrix", PT_MAT4, &(shape->fullTransforms[0])[0][0]);
 		GeneralGLWindow::getInstance().addRenderableUniformParameter(shape->renderables[0], "isCrossHair", PT_FLOAT, &notCross);
+		GeneralGLWindow::getInstance().addRenderableUniformParameter(shape->renderables[0], "passedColor", PT_VEC4, &shape->color[0]);
 		debugInfos.push_back(shape);
 	}
-	shape->startTime = getInstance().timer.interval();
+	shape->startTime = timePassed;
 }
 
 mat4 xLineRotation= glm::translate(vec3(-1, 0, 0)) * glm::scale(vec3(2, 1, 1));
@@ -256,12 +266,12 @@ mat4 yLineRotation= glm::translate(vec3(0, -1, 0)) * glm::rotate(90.0f, vec3(0,0
 mat4 zLineRotation= glm::translate(vec3(0, 0, -1)) * glm::rotate(-90.0f, vec3(0,1,0)) *glm::scale(vec3(2, 1, 1));
 void DebugShapes::addPoint(vec3 position, bool enableDepth, float lifeTime)
 {
-	if(!lineGeoAdded)
+	if(!pointLineGeoAdded)
 	{
 		Neumont::ShapeData lineData = Neumont::ShapeGenerator::makeLine();
-		line = GeneralGLWindow::getInstance().addGeometry(lineData.verts, lineData.vertexBufferSize(), lineData.indices, lineData.numIndices, GL_LINES);
-		GeneralGLWindow::getInstance().addShaderStreamedParameter(line, 0, PT_VEC3, Neumont::Vertex::POSITION_OFFSET, Neumont::Vertex::STRIDE);
-		GeneralGLWindow::getInstance().addShaderStreamedParameter(line, 1, PT_VEC4, Neumont::Vertex::COLOR_OFFSET, Neumont::Vertex::STRIDE);
+		pointLine = GeneralGLWindow::getInstance().addGeometry(lineData.verts, lineData.vertexBufferSize(), lineData.indices, lineData.numIndices, GL_LINES);
+		GeneralGLWindow::getInstance().addShaderStreamedParameter(pointLine, 0, PT_VEC3, Neumont::Vertex::POSITION_OFFSET, Neumont::Vertex::STRIDE);
+		GeneralGLWindow::getInstance().addShaderStreamedParameter(pointLine, 1, PT_VEC4, Neumont::Vertex::COLOR_OFFSET, Neumont::Vertex::STRIDE);
 		lineGeoAdded = true;
 	}
 
@@ -305,9 +315,9 @@ void DebugShapes::addPoint(vec3 position, bool enableDepth, float lifeTime)
 		shape->fullTransforms[1] = currentWorldToProjection * yLineTransform;
 		shape->fullTransforms[2] = currentWorldToProjection * zLineTransform;
 
-		shape->renderables[0] = GeneralGLWindow::getInstance().addRenderable(line, xLineTransform, debugShader, true, PRIORITY_2, enableDepth);
-		shape->renderables[1] = GeneralGLWindow::getInstance().addRenderable(line, yLineTransform, debugShader, true, PRIORITY_2, enableDepth);
-		shape->renderables[2] = GeneralGLWindow::getInstance().addRenderable(line, zLineTransform, debugShader, true, PRIORITY_2, enableDepth);
+		shape->renderables[0] = GeneralGLWindow::getInstance().addRenderable(pointLine, xLineTransform, debugShader, true, PRIORITY_2, enableDepth);
+		shape->renderables[1] = GeneralGLWindow::getInstance().addRenderable(pointLine, yLineTransform, debugShader, true, PRIORITY_2, enableDepth);
+		shape->renderables[2] = GeneralGLWindow::getInstance().addRenderable(pointLine, zLineTransform, debugShader, true, PRIORITY_2, enableDepth);
 		shape->type = Point;
 		GeneralGLWindow::getInstance().addRenderableUniformParameter(shape->renderables[0], "fullTransformMatrix", PT_MAT4, &(shape->fullTransforms[0])[0][0]);
 		GeneralGLWindow::getInstance().addRenderableUniformParameter(shape->renderables[0], "isCrossHair", PT_FLOAT, &isCross);
@@ -321,7 +331,7 @@ void DebugShapes::addPoint(vec3 position, bool enableDepth, float lifeTime)
 		debugInfos.push_back(shape);
 	}
 
-	shape->startTime = getInstance().timer.interval();
+	shape->startTime = timePassed;
 
 }
 
@@ -339,3 +349,4 @@ int DebugShapes::existingAvailableShapeIndex(ShapeType type)
 	}
 	return index;
 }
+#endif

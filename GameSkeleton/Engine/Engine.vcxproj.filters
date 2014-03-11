@@ -18,7 +18,6 @@
     <ClCompile Include="DebugTools\Logger.cpp" />
     <ClCompile Include="DebugTools\Profiler.cpp" />
     <ClCompile Include="DebugTools\DebugShapes.cpp" />
-    <ClCompile Include="MathTools.cpp" />
     <ClCompile Include="DebugTools\DebugShapes_moc.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -43,7 +42,6 @@
     <ClInclude Include="DebugTools\Profiler.h" />
     <ClInclude Include="DebugTools\List.h" />
     <ClInclude Include="DebugTools\DebugShapes.h" />
-    <ClInclude Include="MathTools.h" />
     <ClInclude Include="Renderer\PriorityLevel.h" />
     <ClInclude Include="DebugTools\Asserter.h" />
   </ItemGroup>

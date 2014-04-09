@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="FullDisplay.cpp" />
+    <ClCompile Include="LevelDisplay.cpp" />
+    <ClCompile Include="Node.cpp" />
+    <ClCompile Include="TheMain.cpp" />
+    <ClCompile Include="DebugShapes_moc.cpp" />
+    <ClCompile Include="GeneralGLWindow_moc.cpp" />
+    <ClCompile Include="FullDisplay_moc.cpp" />
+    <ClCompile Include="LevelDisplay_moc.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Node.h" />
+    <ClInclude Include="FullDisplay.h" />
+    <ClInclude Include="LevelDisplay.h" />
+  </ItemGroup>
+</Project>

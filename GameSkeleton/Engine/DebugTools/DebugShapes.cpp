@@ -217,7 +217,7 @@ void DebugShapes::addLine(vec3 startPoint, vec3 endPoint, vec3 Color, bool enabl
 		vec3 lineVerts[2] = { vec3(0,0,0), vec3(1,1,1) };
 		ushort lineIndices[2] = { 0, 1 };
 		Neumont::ShapeData lineData = Neumont::ShapeGenerator::makeLine();
-		line = GeneralGLWindow::getInstance().addGeometry((const void*)(&lineVerts[0]), 2*sizeof(vec3), lineIndices, 2, GL_LINES);
+		line = GeneralGLWindow::getInstance().addGeometry(lineVerts, 2*sizeof(vec3), lineIndices, 2, GL_LINES);
 		GeneralGLWindow::getInstance().addShaderStreamedParameter(line, 0, PT_VEC3, 0, sizeof(vec3));
 		lineGeoAdded = true;
 	}

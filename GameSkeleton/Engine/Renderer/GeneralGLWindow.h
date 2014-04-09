@@ -91,6 +91,9 @@ public:
 		RenderableInfo* renderable);
 
 	void initializeGL();
+
+	void keyPressEvent(QKeyEvent* e);
+
 private:
 	void loadTextureBitmap(const char* filename);
 	std::string readShaderCode(const char *filename);
@@ -99,7 +102,6 @@ private:
 protected:
 	void paintGL();
 
-	void keyPressEvent(QKeyEvent* e);
 	void mouseMoveEvent(QMouseEvent* e);
 signals:
 	void keyPressed(QKeyEvent* e);

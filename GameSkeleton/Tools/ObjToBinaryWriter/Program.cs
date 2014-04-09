@@ -65,8 +65,8 @@ namespace ObjToBinaryWriter
     }
     class ObjToBinaryConverter
     {
-        string inFilename = "metronome.obj";
-        string outFilename = "metronome.bin";
+        //string inFilename = "metronome.obj";
+        //string outFilename = "ObjToBinaryResult.bin";
         static List<Vertex> vertices = new List<Vertex>();
         static List<ushort> indices = new List<ushort>();
 
@@ -76,20 +76,23 @@ namespace ObjToBinaryWriter
 
         static void Main(string[] args)
         {
+            Console.WriteLine("Converting");
             ObjToBinaryConverter converter = new ObjToBinaryConverter();
-            converter.readInObj(converter.inFilename);
-            converter.WriteToBinary(converter.outFilename);
+            converter.readInObj(args[0]);
+            converter.WriteToBinary(args[1]);
         }
 
         private void readInObj(string inFileName)
         {
             StreamReader input = new StreamReader(inFileName);
+            
             input.ReadLine();
             input.ReadLine();
             //input.ReadLine();
             string line;
             while ((line = input.ReadLine()) != null)
             {
+                //Console.WriteLine(line);
                 string[] lineParts = line.Split();
                 switch (lineParts[0])
                 {

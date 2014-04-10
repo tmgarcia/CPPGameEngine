@@ -8,6 +8,9 @@
 
 #include "GeneralGLWindow.h"
 
+GLuint WINDOW_WIDTH = 1400;
+GLuint WINDOW_HEIGHT= 900;
+
 FullDisplay::FullDisplay()
 {
 	this->showMaximized();
@@ -31,12 +34,17 @@ FullDisplay::FullDisplay()
 	connect(action, SIGNAL(triggered()), this, SLOT(saveLevelAs()));
 
 	GeneralGLWindow::getInstance();
-	GeneralGLWindow::getInstance().setFixedSize(900, 900);
+	GeneralGLWindow::getInstance().setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	setCentralWidget(&GeneralGLWindow::getInstance());
 	GeneralGLWindow::getInstance().show();
 
+	levelDisplay.windowWidth = WINDOW_WIDTH;
+	levelDisplay.windowHeight = WINDOW_HEIGHT;
 	levelDisplay.setup();
-	levelDisplay.loadLevelMap("../Resources/Models/LegoLevel.obj");
+	levelDisplay.loadLevelMap("../Resources/Models/baseLevel.obj");
+
+	this->setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+	//this->move(500, 0);
 
 }
 

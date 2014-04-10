@@ -5,6 +5,9 @@
 
 #include "LevelDisplay.h"
 
+
+
+
 class FullDisplay : public QMainWindow
 {
 	Q_OBJECT

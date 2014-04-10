@@ -9,10 +9,12 @@
     <ClCompile Include="GeneralGLWindow_moc.cpp" />
     <ClCompile Include="FullDisplay_moc.cpp" />
     <ClCompile Include="LevelDisplay_moc.cpp" />
+    <ClCompile Include="NodeContainer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Node.h" />
     <ClInclude Include="FullDisplay.h" />
     <ClInclude Include="LevelDisplay.h" />
+    <ClInclude Include="NodeContainer.h" />
   </ItemGroup>
 </Project>

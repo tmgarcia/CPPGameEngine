@@ -13,8 +13,8 @@ public:
 	vec3 position;
 	int numAttachedNodes;
 
-	void addAttachedNode(Node* n);
-	void removeAttachedNode(Node* n);
+	/*void addAttachedNode(Node* n);
+	void removeAttachedNode(Node* n);*/
 	//Node* getRandomAttachedNode();
 
 	Node(vec3 location)

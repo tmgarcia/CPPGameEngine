@@ -4,8 +4,8 @@
 #include <Qt\qtimer.h>
 #include "GeneralGLWindow.h"
 
-const GLuint WINDOW_WIDTH = 900;
-const GLuint WINDOW_HEIGHT = 900;
+//const GLuint WINDOW_WIDTH = 900;
+//const GLuint WINDOW_HEIGHT = 900;
 
 class LevelDisplay : public QObject
 {
@@ -18,10 +18,13 @@ public:
 	~LevelDisplay(void);
 	void loadLevelMap(QString fileName);
 	void setup();
+	GLuint windowHeight;
+	GLuint windowWidth;
 
 private:
 	void setupLevelGeometry();
 	void updateLevelProjectionView();
+	void setupDebugShapes();
 	Camera camera;
 
 //private slots:
@@ -30,5 +33,6 @@ private:
 public slots:
 	void keyPressReaction(QKeyEvent* e);
 	void mouseMoveReaction(QMouseEvent* e);
+	void mouseClickReaction(QMouseEvent* e);
 };
 

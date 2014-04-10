@@ -45,6 +45,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)..\External Dependencies\NeumontTools\include;$(SolutionDir)..\External Dependencies\glew\include;$(SolutionDir)..\External Dependencies\glm;$(SolutionDir)..\Engine\DebugTools;$(SolutionDir)..\Engine\Renderer;$(SolutionDir)..\Engine;$(SolutionDir)..\External Dependencies\Qt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>DEBUGSHAPES_ON;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -80,12 +81,14 @@ copy "$(ProjectDir)..\Tools\ObjToBinaryWriter\bin\Debug\ObjToBinaryWriter.exe" "
     <ClCompile Include="LevelDisplay.cpp" />
     <ClCompile Include="LevelDisplay_moc.cpp" />
     <ClCompile Include="Node.cpp" />
+    <ClCompile Include="NodeContainer.cpp" />
     <ClCompile Include="TheMain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FullDisplay.h" />
     <ClInclude Include="LevelDisplay.h" />
     <ClInclude Include="Node.h" />
+    <ClInclude Include="NodeContainer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

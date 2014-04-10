@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'LevelDisplay.h'
 **
-** Created: Tue Apr 8 13:39:13 2014
+** Created: Wed Apr 9 12:31:38 2014
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.0)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_LevelDisplay[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-       2,   14, // methods
+       3,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -33,6 +33,7 @@ static const uint qt_meta_data_LevelDisplay[] = {
  // slots: signature, parameters, type, tag, flags
       16,   14,   13,   13, 0x0a,
       45,   14,   13,   13, 0x0a,
+      77,   14,   13,   13, 0x0a,
 
        0        // eod
 };
@@ -40,6 +41,7 @@ static const uint qt_meta_data_LevelDisplay[] = {
 static const char qt_meta_stringdata_LevelDisplay[] = {
     "LevelDisplay\0\0e\0keyPressReaction(QKeyEvent*)\0"
     "mouseMoveReaction(QMouseEvent*)\0"
+    "mouseClickReaction(QMouseEvent*)\0"
 };
 
 void LevelDisplay::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -50,6 +52,7 @@ void LevelDisplay::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
         switch (_id) {
         case 0: _t->keyPressReaction((*reinterpret_cast< QKeyEvent*(*)>(_a[1]))); break;
         case 1: _t->mouseMoveReaction((*reinterpret_cast< QMouseEvent*(*)>(_a[1]))); break;
+        case 2: _t->mouseClickReaction((*reinterpret_cast< QMouseEvent*(*)>(_a[1]))); break;
         default: ;
         }
     }
@@ -87,9 +90,9 @@ int LevelDisplay::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 2)
+        if (_id < 3)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 2;
+        _id -= 3;
     }
     return _id;
 }

@@ -101,9 +101,11 @@ private:
 
 protected:
 	void paintGL();
-
 	void mouseMoveEvent(QMouseEvent* e);
+	void mouseReleaseEvent(QMouseEvent* e);
+
 signals:
 	void keyPressed(QKeyEvent* e);
 	void mouseMoved(QMouseEvent* e);
+	void mouseClicked(QMouseEvent* e);
 };

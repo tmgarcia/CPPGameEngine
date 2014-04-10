@@ -1,21 +1,21 @@
 #include "Node.h"
 #include "Random.h"
 
-void Node::addAttachedNode(Node* n)
-{
-	attachedNodes.push_back(n);
-	numAttachedNodes++;
-}
-void Node::removeAttachedNode(Node* n)
-{
-	attachedNodes.remove(n);
-	numAttachedNodes--;
+//void Node::addAttachedNode(Node* n)
+//{
+//	attachedNodes.push_back(n);
+//	numAttachedNodes++;
+//}
+//void Node::removeAttachedNode(Node* n)
+//{
+//	attachedNodes.remove(n);
+//	numAttachedNodes--;
 	//int index = 0;
 	//for(int i=0; i<numAttachedNodes; i++)
 	//{
 
 	//}
-}
+//}
 
 //Node* Node::getRandomAttachedNode()
 //{

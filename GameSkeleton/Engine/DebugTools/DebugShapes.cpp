@@ -272,7 +272,7 @@ void DebugShapes::addPoint(vec3 position, bool enableDepth, float lifeTime)
 		pointLine = GeneralGLWindow::getInstance().addGeometry(lineData.verts, lineData.vertexBufferSize(), lineData.indices, lineData.numIndices, GL_LINES);
 		GeneralGLWindow::getInstance().addShaderStreamedParameter(pointLine, 0, PT_VEC3, Neumont::Vertex::POSITION_OFFSET, Neumont::Vertex::STRIDE);
 		GeneralGLWindow::getInstance().addShaderStreamedParameter(pointLine, 1, PT_VEC4, Neumont::Vertex::COLOR_OFFSET, Neumont::Vertex::STRIDE);
-		lineGeoAdded = true;
+		pointLineGeoAdded = true;
 	}
 
 	DebugShapeInfo* shape;

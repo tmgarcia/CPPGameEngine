@@ -16,7 +16,6 @@ ObjReader::ShapeData ObjReader::readInShape(char* filename)
 	int header [2];
 
 	binFile.read(reinterpret_cast<char *>(&header), 8);
-	cout << header[0] << " " << header[1] << endl;
 	int numVertices = header[0];
 	int numIndices = header[1];
 	int vertexDataSize = numVertices*(sizeof(Vertex));

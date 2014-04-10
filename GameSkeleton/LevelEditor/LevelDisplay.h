@@ -3,6 +3,7 @@
 #include <Qt\qapplication.h>
 #include <Qt\qtimer.h>
 #include "GeneralGLWindow.h"
+#include "NodeContainer.h"
 
 //const GLuint WINDOW_WIDTH = 900;
 //const GLuint WINDOW_HEIGHT = 900;
@@ -26,6 +27,7 @@ private:
 	void updateLevelProjectionView();
 	void setupDebugShapes();
 	Camera camera;
+	NodeContainer nodes;
 
 //private slots:
 //	void update();

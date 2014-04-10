@@ -228,7 +228,8 @@ void LevelDisplay::mouseClickReaction(QMouseEvent* e)
 	float perpDot = glm::dot(intersectionPoint-pointOnPlane,surfaceNormal);
 	cout << "(p-po)*n = " << perpDot << endl;
 
-	nodes.addNode(intersectionPoint);
+	if(distance>=0)
+		nodes.addNode(intersectionPoint);
 }
 
 LevelDisplay::LevelDisplay()

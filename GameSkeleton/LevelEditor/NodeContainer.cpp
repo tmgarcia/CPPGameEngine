@@ -13,7 +13,7 @@ void NodeContainer::addNode(vec3 position)
 	numNodes++;
 
 	//DebugShapes::getInstance().addSphere(modeltoworld, color, enable depth, lifetime)
-	mat4 modelToWorld = glm::translate(position) * glm::scale(vec3(0.5f,0.5f,0.5f));
+	mat4 modelToWorld = glm::translate(position) * glm::scale(vec3(0.25f,0.25f,0.25f));
 	vec3 color = vec3(1,1,1);
 	bool enableDepth = true;
 	float lifeTime = 10000;

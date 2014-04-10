@@ -41,7 +41,7 @@ FullDisplay::FullDisplay()
 	levelDisplay.windowWidth = WINDOW_WIDTH;
 	levelDisplay.windowHeight = WINDOW_HEIGHT;
 	levelDisplay.setup();
-	levelDisplay.loadLevelMap("../Resources/Models/baseLevel.obj");
+	levelDisplay.loadLevelMap("../Resources/Models/LegoMap.obj");
 
 	this->setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	//this->move(500, 0);
@@ -50,7 +50,7 @@ FullDisplay::FullDisplay()
 
 void FullDisplay::loadObj()
 {
-	QString targetObj = QFileDialog::getOpenFileName(this, "Open OBJ", ".", "Object Files (*.obj)");
+	QString targetObj = QFileDialog::getOpenFileName(this, "Open OBJ", "../Resources/Models", "Object Files (*.obj)");
 	if(targetObj == "")
 	{
 		return;

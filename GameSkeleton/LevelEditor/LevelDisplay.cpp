@@ -82,7 +82,7 @@ void LevelDisplay::setupLevelGeometry()
 	GeneralGLWindow::getInstance().addRenderableUniformParameter(levelRenderable, "rotationMatrix", PT_MAT4, &levelRotation[0][0]);
 	GeneralGLWindow::getInstance().addRenderableUniformParameter(levelRenderable, "modelToWorldMatrix", PT_MAT4, &levelRenderable->whereMatrix[0][0]);
 
-	setupDebugShapes();
+	//setupDebugShapes();
 }
 
 mat4 viewToProjectionMatrix;

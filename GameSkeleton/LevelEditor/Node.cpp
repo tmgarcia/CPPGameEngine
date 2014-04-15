@@ -37,7 +37,7 @@ void Node::addAttachedNode(Node* n)
 {
 	ConnectingNode* cn = new ConnectingNode();
 	cn->node = n;
-	cn->arrowInfo = DebugShapes::addVectorArrow(n->position, position);
+	cn->arrowInfo = DebugShapes::addVectorArrow(position, n->position);
 	attachedNodes.push_back(cn);
 	numAttachedNodes++;
 }

@@ -41,7 +41,7 @@ FullDisplay::FullDisplay()
 	levelDisplay.windowWidth = WINDOW_WIDTH;
 	levelDisplay.windowHeight = WINDOW_HEIGHT;
 	levelDisplay.setup();
-	levelDisplay.loadLevelMap("../Resources/Models/LegoMap.obj");
+	levelDisplay.loadLevelMap("../Resources/Models/baseLevel.obj");
 
 	this->setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	//this->move(500, 0);

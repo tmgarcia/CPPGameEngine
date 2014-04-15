@@ -35,18 +35,24 @@ void LevelDisplay::setup()
 	QObject::connect(&GeneralGLWindow::getInstance(), SIGNAL(keyPressed(QKeyEvent*)), this, SLOT(keyPressReaction(QKeyEvent*)));
 	QObject::connect(&GeneralGLWindow::getInstance(), SIGNAL(mouseMoved(QMouseEvent*)), this, SLOT(mouseMoveReaction(QMouseEvent*)));
 	QObject::connect(&GeneralGLWindow::getInstance(), SIGNAL(mouseClicked(QMouseEvent*)), this, SLOT(mouseClickReaction(QMouseEvent*)));
+	aNodeIsSelected = false;
+}
+
+void LevelDisplay::setupForNewLevel()
+{
+
 }
 
 void LevelDisplay::loadLevelMap(QString fileName)
 {
-	//prepForNewLevel();
+	//setupForNewLevel();
 	//int i = system("cd .");
 	//i = system("dir");
 	//cout << i << endl;
 
 	QString command("ObjToBinaryWriter.exe ");
 	const char* nativeFileName = "ObjToBinaryResult.bin";
-	command += QString(fileName) + " " + nativeFileName;
+	command += "\"" + QString(fileName) + "\" \"" + nativeFileName + "\"";
 	cout << command.toUtf8().constData() << endl;
 	int result = system(command.toUtf8().constData());
 	assert(result == 0);
@@ -82,7 +88,7 @@ void LevelDisplay::setupLevelGeometry()
 	GeneralGLWindow::getInstance().addRenderableUniformParameter(levelRenderable, "rotationMatrix", PT_MAT4, &levelRotation[0][0]);
 	GeneralGLWindow::getInstance().addRenderableUniformParameter(levelRenderable, "modelToWorldMatrix", PT_MAT4, &levelRenderable->whereMatrix[0][0]);
 
-	//setupDebugShapes();
+	setupDebugShapes();
 }
 
 mat4 viewToProjectionMatrix;
@@ -105,30 +111,30 @@ void LevelDisplay::setupDebugShapes()
 {
 	//float edgePoint = 5;
 	DebugShapes::getInstance();
-	DebugShapes::addPoint(vec3(0,0.01f,0),true,10000);
-	DebugShapes::addLine(vec3(-5,0.001f,-5),vec3(-5,0.001f,5),vec3(1,1,1),true,10000);
-	DebugShapes::addLine(vec3(-4,0.001f,-5),vec3(-4,0.001f,5),vec3(1,1,1),true,10000);
-	DebugShapes::addLine(vec3(-3,0.001f,-5),vec3(-3,0.001f,5),vec3(1,1,1),true,10000);
-	DebugShapes::addLine(vec3(-2,0.001f,-5),vec3(-2,0.001f,5),vec3(1,1,1),true,10000);
-	DebugShapes::addLine(vec3(-1,0.001f,-5),vec3(-1,0.001f,5),vec3(1,1,1),true,10000);
-	DebugShapes::addLine(vec3(0,0.001f,-5),vec3(0,0.001f,5),vec3(1,1,1),true,10000);
-	DebugShapes::addLine(vec3(5,0.001f,-5),vec3(5,0.001f,5),vec3(1,1,1),true,10000);
-	DebugShapes::addLine(vec3(4,0.001f,-5),vec3(4,0.001f,5),vec3(1,1,1),true,10000);
-	DebugShapes::addLine(vec3(3,0.001f,-5),vec3(3,0.001f,5),vec3(1,1,1),true,10000);
-	DebugShapes::addLine(vec3(2,0.001f,-5),vec3(2,0.001f,5),vec3(1,1,1),true,10000);
-	DebugShapes::addLine(vec3(1,0.001f,-5),vec3(1,0.001f,5),vec3(1,1,1),true,10000);
+	DebugShapes::addPoint(vec3(0,0.01f,0),true,100000);
+	DebugShapes::addLine(vec3(-5,0.001f,-5),vec3(-5,0.001f,5),vec3(1,1,1),true,100000);
+	DebugShapes::addLine(vec3(-4,0.001f,-5),vec3(-4,0.001f,5),vec3(1,1,1),true,100000);
+	DebugShapes::addLine(vec3(-3,0.001f,-5),vec3(-3,0.001f,5),vec3(1,1,1),true,100000);
+	DebugShapes::addLine(vec3(-2,0.001f,-5),vec3(-2,0.001f,5),vec3(1,1,1),true,100000);
+	DebugShapes::addLine(vec3(-1,0.001f,-5),vec3(-1,0.001f,5),vec3(1,1,1),true,100000);
+	DebugShapes::addLine(vec3(0,0.001f,-5),vec3(0,0.001f,5),vec3(1,1,1),true,100000);
+	DebugShapes::addLine(vec3(5,0.001f,-5),vec3(5,0.001f,5),vec3(1,1,1),true,100000);
+	DebugShapes::addLine(vec3(4,0.001f,-5),vec3(4,0.001f,5),vec3(1,1,1),true,100000);
+	DebugShapes::addLine(vec3(3,0.001f,-5),vec3(3,0.001f,5),vec3(1,1,1),true,100000);
+	DebugShapes::addLine(vec3(2,0.001f,-5),vec3(2,0.001f,5),vec3(1,1,1),true,100000);
+	DebugShapes::addLine(vec3(1,0.001f,-5),vec3(1,0.001f,5),vec3(1,1,1),true,100000);
 
-	DebugShapes::addLine(vec3(-5,0.001f,-5),vec3(5,0.001f,-5),vec3(1,1,1),true,10000);
-	DebugShapes::addLine(vec3(-5,0.001f,-4),vec3(5,0.001f,-4),vec3(1,1,1),true,10000);
-	DebugShapes::addLine(vec3(-5,0.001f,-3),vec3(5,0.001f,-3),vec3(1,1,1),true,10000);
-	DebugShapes::addLine(vec3(-5,0.001f,-2),vec3(5,0.001f,-2),vec3(1,1,1),true,10000);
-	DebugShapes::addLine(vec3(-5,0.001f,-1),vec3(5,0.001f,-1),vec3(1,1,1),true,10000);
-	DebugShapes::addLine(vec3(-5,0.001f,0),vec3(5,0.001f,0),vec3(1,1,1),true,10000);
-	DebugShapes::addLine(vec3(-5,0.001f,5),vec3(5,0.001f,5),vec3(1,1,1),true,10000);
-	DebugShapes::addLine(vec3(-5,0.001f,4),vec3(5,0.001f,4),vec3(1,1,1),true,10000);
-	DebugShapes::addLine(vec3(-5,0.001f,3),vec3(5,0.001f,3),vec3(1,1,1),true,10000);
-	DebugShapes::addLine(vec3(-5,0.001f,2),vec3(5,0.001f,2),vec3(1,1,1),true,10000);
-	DebugShapes::addLine(vec3(-5,0.001f,1),vec3(5,0.001f,1),vec3(1,1,1),true,10000);
+	DebugShapes::addLine(vec3(-5,0.001f,-5),vec3(5,0.001f,-5),vec3(1,1,1),true,100000);
+	DebugShapes::addLine(vec3(-5,0.001f,-4),vec3(5,0.001f,-4),vec3(1,1,1),true,100000);
+	DebugShapes::addLine(vec3(-5,0.001f,-3),vec3(5,0.001f,-3),vec3(1,1,1),true,100000);
+	DebugShapes::addLine(vec3(-5,0.001f,-2),vec3(5,0.001f,-2),vec3(1,1,1),true,100000);
+	DebugShapes::addLine(vec3(-5,0.001f,-1),vec3(5,0.001f,-1),vec3(1,1,1),true,100000);
+	DebugShapes::addLine(vec3(-5,0.001f,0),vec3(5,0.001f,0),vec3(1,1,1),true,100000);
+	DebugShapes::addLine(vec3(-5,0.001f,5),vec3(5,0.001f,5),vec3(1,1,1),true,100000);
+	DebugShapes::addLine(vec3(-5,0.001f,4),vec3(5,0.001f,4),vec3(1,1,1),true,100000);
+	DebugShapes::addLine(vec3(-5,0.001f,3),vec3(5,0.001f,3),vec3(1,1,1),true,100000);
+	DebugShapes::addLine(vec3(-5,0.001f,2),vec3(5,0.001f,2),vec3(1,1,1),true,100000);
+	DebugShapes::addLine(vec3(-5,0.001f,1),vec3(5,0.001f,1),vec3(1,1,1),true,100000);
 
 }
 
@@ -154,6 +160,12 @@ void LevelDisplay::keyPressReaction(QKeyEvent* e)
 	case Qt::Key::Key_F:
 		camera.moveDown();
 		break;
+	case Qt::Key::Key_Delete:
+		if(aNodeIsSelected)
+		{
+			nodes.deleteSelectedNode();
+		}
+		break;
 	}
 	updateLevelProjectionView();
 
@@ -167,33 +179,23 @@ void LevelDisplay::mouseMoveReaction(QMouseEvent* e)
 	GeneralGLWindow::getInstance().repaint();
 }
 
+
 void LevelDisplay::mouseClickReaction(QMouseEvent* e)
 {
 	int xPX = e->x();
 	int yPX = e->y();
-	cout << ">Click<" << endl;
-	cout << "Xpx " << xPX << endl;
-	cout << "Ypx " << yPX << endl;
 	
 	float xFraction = (float)xPX/windowWidth;
 	float yFraction = (float)(windowHeight-yPX)/windowHeight;
-	cout << "Xpx out of width " << xFraction << endl;
-	cout << "Ypx out of height " << yFraction << endl;
 
 	float vectorXPosition = (float)(xFraction*2)-1.0f;
 	float vectorYPosition = (float)(yFraction*2)-1.0f;
 	float vectorZPosition = -1.0f;
-	cout << "VP Vector X " << vectorXPosition << endl;
-	cout << "VP Vector Y " << vectorYPosition << endl;
-	cout << "VP Vector Z " << vectorZPosition << endl;
 
 	mat4 invertedVP = glm::inverse(viewToProjectionMatrix);
 
 	vec4 clickVectorVP = vec4(vectorXPosition, vectorYPosition, vectorZPosition, 1.0f);
 	vec4 clickVectorWP = invertedVP * clickVectorVP;
-	cout << "WP Vector X " << clickVectorWP.x << endl;
-	cout << "WP Vector Y " << clickVectorWP.y << endl;
-	cout << "WP Vector Z " << clickVectorWP.z << endl;
 
 	clickVectorWP.z = -1.0f;
 	clickVectorWP.w = 0.0f;
@@ -203,34 +205,38 @@ void LevelDisplay::mouseClickReaction(QMouseEvent* e)
 
 	vec3 direction = glm::normalize(vec3(clickVectorW));//normalized
 	vec3 origin = camera.getPosition();
+
+
 	vec3 pointOnPlane = vec3(0,0,0);
 	vec3 surfaceNormal = glm::normalize(vec3(0,1,0));
 
-	//if denominator is positive, it isn't behind me
-	//don't want denom to be 0
-
-	//d= (planepoint - origin)*sn
-	//   -----
-	//   direction * sn
-	//(p-po)*n=0
 	float numerator = glm::dot((origin - pointOnPlane), surfaceNormal);
-	cout << "numerator " << numerator << endl;
 	float denominator = glm::dot(direction, surfaceNormal);
-	cout << "denominator " << denominator << endl;
 	float distance = - numerator/denominator;
-	cout << "d " << distance << endl;
 
-	vec3 intersectionPoint = origin + (direction * distance);
+	if(e->button()==Qt::RightButton)
+	{
+		aNodeIsSelected = nodes.nodeRightClicked(direction, origin);
+	}
+	else
+	{
+		if(aNodeIsSelected)
+		{
+			nodes.nodeLeftClicked(direction, origin);
+		}
+		else
+		{
+			vec3 intersectionPoint = origin + (direction * distance);
 
-	cout << "Intersect Vector X " << intersectionPoint.x << endl;
-	cout << "Intersect Vector Y " << intersectionPoint.y << endl;
-	cout << "Intersect Vector Z " << intersectionPoint.z << endl;
-	float perpDot = glm::dot(intersectionPoint-pointOnPlane,surfaceNormal);
-	cout << "(p-po)*n = " << perpDot << endl;
+			float perpDot = glm::dot(intersectionPoint-pointOnPlane,surfaceNormal);
+			cout << "(p-po)*n = " << perpDot << endl;
 
-	if(distance>=0)
-		nodes.addNode(intersectionPoint);
+			if(distance>=0)
+				nodes.addNode(intersectionPoint);
+		}
+	}
 }
+
 
 LevelDisplay::LevelDisplay()
 {

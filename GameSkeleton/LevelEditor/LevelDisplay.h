@@ -26,6 +26,8 @@ private:
 	void setupLevelGeometry();
 	void updateLevelProjectionView();
 	void setupDebugShapes();
+	void setupForNewLevel();
+	bool aNodeIsSelected;
 	Camera camera;
 	NodeContainer nodes;
 

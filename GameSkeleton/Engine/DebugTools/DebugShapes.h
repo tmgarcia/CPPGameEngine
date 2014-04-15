@@ -31,7 +31,8 @@ private slots:
 private:
 	static void update();
 	static mat4 currentWorldToProjection;
-	enum ShapeType {Sphere, Cube, Vector, Line, Point};
+	enum ShapeType {Sphere, Cube, Vector, Line, Point, VectorArrow};
+public:
 	struct DebugShapeInfo
 	{
 		RenderableInfo* renderables[3];
@@ -42,25 +43,36 @@ private:
 		vec3 color;
 		ShapeType type;
 	};
+	struct VectorArrowInfo
+	{
+		DebugShapeInfo* stem;
+		DebugShapeInfo* head;
+	};
+private:
 	static vector <DebugShapeInfo*> debugInfos;
+	static vec3 createBasisFromOneVector(vec3 basis);
 	static int existingAvailableShapeIndex(ShapeType type);
 	static void setup();
 #endif
 public:
 #if DEBUGSHAPES_ON
 	static void updateWorldToProjection(mat4 newWorldToProjection);
-	static void addSphere(mat4 modelToWorld, vec3 color, bool enableDepth, float lifeTime);
-	static void addCube(mat4 modelToWorld, vec3 color, bool enableDepth, float lifeTime);
-	static void addVector(vec3 tailPosition, vec3 vector, vec3 color, bool enableDepth, float lifeTime);
-	static void addLine(vec3 startPoint, vec3 endPoint, vec3 Color, bool enableDepth, float lifeTime);
-	static void addPoint(vec3 position, bool enableDepth, float lifeTime);
+	static DebugShapeInfo* addSphere(mat4 modelToWorld, vec3 color, bool enableDepth, float lifeTime);
+	static DebugShapeInfo* addNodeSphere(mat4 modelToWorld, vec3 color, bool enableDepth, float lifeTime);
+	static DebugShapeInfo* addCube(mat4 modelToWorld, vec3 color, bool enableDepth, float lifeTime);
+	static DebugShapeInfo* addVector(vec3 tailPosition, vec3 vector, vec3 color, bool enableDepth, float lifeTime);
+	static VectorArrowInfo* addVectorArrow(const glm::vec3& from, const glm::vec3& to);
+	static DebugShapeInfo* addLine(vec3 startPoint, vec3 endPoint, vec3 Color, bool enableDepth, float lifeTime);
+	static DebugShapeInfo* addPoint(vec3 position, bool enableDepth, float lifeTime);
 #else
 	static void updateWorldToProjection(mat4 newWorldToProjection){}
-	static void addSphere(mat4 modelToWorld, vec3 color, bool enableDepth, float lifeTime){}
-	static void addCube(mat4 modelToWorld, vec3 color, bool enableDepth, float lifeTime){}
-	static void addVector(vec3 tailPosition, vec3 vector, vec3 color, bool enableDepth, float lifeTime){}
-	static void addLine(vec3 startPoint, vec3 endPoint, vec3 Color, bool enableDepth, float lifeTime){}
-	static void addPoint(vec3 position, bool enableDepth, float lifeTime){}
+	static DebugShapeInfo* addNodeSphere(mat4 modelToWorld, vec3 color, bool enableDepth, float lifeTime);
+	static DebugShapeInfo* addSphere(mat4 modelToWorld, vec3 color, bool enableDepth, float lifeTime){}
+	static DebugShapeInfo* addCube(mat4 modelToWorld, vec3 color, bool enableDepth, float lifeTime){}
+	static DebugShapeInfo* addVector(vec3 tailPosition, vec3 vector, vec3 color, bool enableDepth, float lifeTime){}
+	static VectorArrowInfo* addVectorArrow(const glm::vec3& from, const glm::vec3& to);
+	static DebugShapeInfo* addLine(vec3 startPoint, vec3 endPoint, vec3 Color, bool enableDepth, float lifeTime){}
+	static DebugShapeInfo* addPoint(vec3 position, bool enableDepth, float lifeTime){}
 	private slots:
 		static void tick(){}
 private:

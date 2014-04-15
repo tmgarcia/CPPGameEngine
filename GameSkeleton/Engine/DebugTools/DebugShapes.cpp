@@ -1,6 +1,6 @@
 #include "DebugShapes.h"
 
-
+#include <glm\gtc\quaternion.hpp>
 
 DebugShapes* DebugShapes::theInstance;
 
@@ -39,12 +39,15 @@ void DebugShapes::update()
 		for(int j = 0; j<limit; j++)
 		{
 			debugInfos[i]->fullTransforms[j] = currentWorldToProjection * debugInfos[i]->renderables[j]->whereMatrix;
-			if(debugInfos[i]->remainingLife < 0)
+			if(debugInfos[i]->remainingLife == 0)
 			{
-				debugInfos[i]->renderables[j]->visible = (debugInfos[i]->remainingLife > 0);
+				debugInfos[i]->renderables[j]->visible = false;
+			}
+			else if(debugInfos[i]->remainingLife >0)
+			{
+				debugInfos[i]->remainingLife -= (timePassed - debugInfos[i]->startTime);
 			}
 		}
-		debugInfos[i]->remainingLife -= (timePassed - debugInfos[i]->startTime);
 	}
 	GeneralGLWindow::getInstance().repaint();
 }
@@ -57,6 +60,9 @@ GeometryInfo* line;
 bool lineGeoAdded;
 GeometryInfo* pointLine;
 bool pointLineGeoAdded;
+GeometryInfo* cone;
+GeometryInfo* cylinder;
+bool vectorArrowGeoAdded;
 
 ShaderInfo* debugShader;
 void DebugShapes::setup()
@@ -70,7 +76,7 @@ void DebugShapes::setup()
 float notCross = 0.0f;
 float isCross = 1.0f;
 float isVector = 2.0f;
-void DebugShapes::addSphere(mat4 modelToWorld, vec3 color, bool enableDepth, float lifeTime)
+DebugShapes::DebugShapeInfo* DebugShapes::addSphere(mat4 modelToWorld, vec3 color, bool enableDepth, float lifeTime)
 {
 	if(!sphereGeoAdded)
 	{
@@ -114,9 +120,57 @@ void DebugShapes::addSphere(mat4 modelToWorld, vec3 color, bool enableDepth, flo
 	}
 
 	shape->startTime = timePassed;
+	return shape;
 }
 
-void DebugShapes::addCube(mat4 modelToWorld, vec3 color, bool enableDepth, float lifeTime)
+DebugShapes::DebugShapeInfo* DebugShapes::addNodeSphere(mat4 modelToWorld, vec3 color, bool enableDepth, float lifeTime)
+{
+	if(!sphereGeoAdded)
+	{
+		Neumont::ShapeData sphereData = Neumont::ShapeGenerator::makeSphere(10);
+		sphere = GeneralGLWindow::getInstance().addGeometry(sphereData.verts, sphereData.vertexBufferSize(), sphereData.indices, sphereData.numIndices, GL_TRIANGLES);
+		GeneralGLWindow::getInstance().addShaderStreamedParameter(sphere, 0, PT_VEC3, Neumont::Vertex::POSITION_OFFSET, Neumont::Vertex::STRIDE);
+		sphereGeoAdded = true;
+	}
+	
+	DebugShapeInfo* shape;
+
+	int existingShapeIndex = existingAvailableShapeIndex(Sphere);
+	if(existingShapeIndex!=-1)
+	{
+		shape = debugInfos[existingShapeIndex];
+
+		shape->remainingLife = lifeTime * 1000;
+		shape->color = color;
+		shape->depthTest = enableDepth;
+		shape->fullTransforms[0] = currentWorldToProjection * modelToWorld;
+
+		shape->renderables[0]->enableDepth = enableDepth;
+		shape->renderables[0]->visible = true;
+		shape->renderables[0]->whereMatrix = modelToWorld;
+	}
+	else
+	{
+		shape = new DebugShapeInfo();
+
+		shape->remainingLife = lifeTime * 1000;
+		shape->color = color;
+		shape->depthTest = enableDepth;
+		shape->fullTransforms[0] = currentWorldToProjection * modelToWorld;
+
+		shape->renderables[0] = GeneralGLWindow::getInstance().addRenderable(sphere, modelToWorld, debugShader, true, PRIORITY_2, enableDepth);
+		shape->type = Sphere;
+		GeneralGLWindow::getInstance().addRenderableUniformParameter(shape->renderables[0], "fullTransformMatrix", PT_MAT4, &(shape->fullTransforms[0])[0][0]);
+		GeneralGLWindow::getInstance().addRenderableUniformParameter(shape->renderables[0], "isCrossHair", PT_FLOAT, &notCross);
+		GeneralGLWindow::getInstance().addRenderableUniformParameter(shape->renderables[0], "passedColor", PT_VEC4, &shape->color[0]);
+		debugInfos.push_back(shape);
+	}
+
+	shape->startTime = timePassed;
+	return shape;
+}
+
+DebugShapes::DebugShapeInfo*  DebugShapes::addCube(mat4 modelToWorld, vec3 color, bool enableDepth, float lifeTime)
 {
 	if(!cubeGeoAdded)
 	{
@@ -160,8 +214,9 @@ void DebugShapes::addCube(mat4 modelToWorld, vec3 color, bool enableDepth, float
 	}
 
 	shape->startTime = timePassed;
+	return shape;
 }
-void DebugShapes::addVector(vec3 tailPosition, vec3 vector, vec3 color, bool enableDepth, float lifeTime)
+DebugShapes::DebugShapeInfo*  DebugShapes::addVector(vec3 tailPosition, vec3 vector, vec3 color, bool enableDepth, float lifeTime)
 {
 	if(!lineGeoAdded)
 	{
@@ -209,8 +264,9 @@ void DebugShapes::addVector(vec3 tailPosition, vec3 vector, vec3 color, bool ena
 		debugInfos.push_back(shape);
 	}
 	shape->startTime = timePassed;
+	return shape;
 }
-void DebugShapes::addLine(vec3 startPoint, vec3 endPoint, vec3 Color, bool enableDepth, float lifeTime)
+DebugShapes::DebugShapeInfo*  DebugShapes::addLine(vec3 startPoint, vec3 endPoint, vec3 Color, bool enableDepth, float lifeTime)
 {
 	if(!lineGeoAdded)
 	{
@@ -259,12 +315,13 @@ void DebugShapes::addLine(vec3 startPoint, vec3 endPoint, vec3 Color, bool enabl
 		debugInfos.push_back(shape);
 	}
 	shape->startTime = timePassed;
+	return shape;
 }
 
 mat4 xLineRotation= glm::translate(vec3(-1, 0, 0)) * glm::scale(vec3(2, 1, 1));
 mat4 yLineRotation= glm::translate(vec3(0, -1, 0)) * glm::rotate(90.0f, vec3(0,0,1)) * glm::scale(vec3(2, 1, 1));
 mat4 zLineRotation= glm::translate(vec3(0, 0, -1)) * glm::rotate(-90.0f, vec3(0,1,0)) *glm::scale(vec3(2, 1, 1));
-void DebugShapes::addPoint(vec3 position, bool enableDepth, float lifeTime)
+DebugShapes::DebugShapeInfo*  DebugShapes::addPoint(vec3 position, bool enableDepth, float lifeTime)
 {
 	if(!pointLineGeoAdded)
 	{
@@ -332,8 +389,23 @@ void DebugShapes::addPoint(vec3 position, bool enableDepth, float lifeTime)
 	}
 
 	shape->startTime = timePassed;
+	return shape;
 
 }
+
+DebugShapes::VectorArrowInfo* DebugShapes::addVectorArrow(const glm::vec3& from, const glm::vec3& to)
+{
+	vec3 color = vec3(0.5f,1.0f,0.5f);
+	VectorArrowInfo* arrow = new VectorArrowInfo();
+	arrow->stem = addLine(vec3(from.x,0.01f,from.z),vec3(to.x,0.01f,to.z),color,true,-1);
+	//A*t + (1-t)*B = lerp
+	vec3 arrowPosition = to*0.90f + from*(1-0.90f);
+	mat4 arrowHead = glm::translate(arrowPosition) * glm::scale(0.125f, 0.125f, 0.125f);
+	arrow->head = addCube(arrowHead,color,true,-1);
+
+	return arrow;
+}
+
 
 int DebugShapes::existingAvailableShapeIndex(ShapeType type)
 {
@@ -341,7 +413,7 @@ int DebugShapes::existingAvailableShapeIndex(ShapeType type)
 	bool foundAvailableShape = false;
 	for(int i = 0; i< debugInfos.size() && !foundAvailableShape; i++)
 	{
-		if(debugInfos[i]->type==type && debugInfos[i]->remainingLife<0)
+		if(debugInfos[i]->type==type && debugInfos[i]->remainingLife==0)
 		{
 			foundAvailableShape = true;
 			index = i;

@@ -1,30 +1,93 @@
 #include "Node.h"
 #include "Random.h"
 
-//void Node::addAttachedNode(Node* n)
-//{
-//	attachedNodes.push_back(n);
-//	numAttachedNodes++;
-//}
-//void Node::removeAttachedNode(Node* n)
-//{
-//	attachedNodes.remove(n);
-//	numAttachedNodes--;
-	//int index = 0;
-	//for(int i=0; i<numAttachedNodes; i++)
-	//{
+bool Node::connectedToNode(Node* n)
+{
+	return(findConnection(n)!=-1);
+}
 
-	//}
-//}
+int Node::findConnection(Node* n)
+{
+	bool foundNode = false;
+	int index = -1;
+	for(int i = 0; i<numAttachedNodes && !foundNode; i++)
+	{
+		if(attachedNodes[i]->node==n)
+		{
+			foundNode = true;
+			index = i;
+		}
+	}
+	return index;
+}
 
-//Node* Node::getRandomAttachedNode()
-//{
-//	//int randomIndex = (int)Random::getInstance().randomFloatRange(0, numAttachedNodes);
-//	//std::list<Node*>::iterator it;
-//	//if (attachedNodes.size() > randomIndex)
-//	//{
-//	//	std::list<Node*>::iterator it = std::next(attachedNodes.begin(), randomIndex);
-//	//}
-//	//
-//	//return ;
-//}
+void Node::toggleAttachedNode(Node* n)
+{
+	if(findConnection(n)!=-1)
+	{
+		removeAttachedNode(n);
+	}
+	else
+	{
+		addAttachedNode(n);
+	}
+}
+
+void Node::addAttachedNode(Node* n)
+{
+	ConnectingNode* cn = new ConnectingNode();
+	cn->node = n;
+	cn->arrowInfo = DebugShapes::addVectorArrow(n->position, position);
+	attachedNodes.push_back(cn);
+	numAttachedNodes++;
+}
+
+void Node::removeAttachedNode(Node* n)
+{
+	int i = findConnection(n);
+	attachedNodes[i]->arrowInfo->head->renderables[0]->visible = false;
+	attachedNodes[i]->arrowInfo->stem->renderables[0]->visible = false;
+	attachedNodes[i]->arrowInfo->head->remainingLife = 0;
+	attachedNodes[i]->arrowInfo->stem->remainingLife = 0;
+	attachedNodes.removeAt(i);
+	numAttachedNodes--;
+}
+
+Node* Node::getRandomAttachedNode()
+{
+	int randomIndex = (int)Random::getInstance().randomFloatRange(0, numAttachedNodes-1);
+	Node* randomNode = attachedNodes.at(randomIndex)->node;
+	
+	return randomNode;
+}
+
+void Node::hideAttachedNodes()
+{
+	for(int i = 0; i<numAttachedNodes; i++)
+	{
+		attachedNodes[i]->arrowInfo->head->renderables[0]->visible = false;
+		attachedNodes[i]->arrowInfo->stem->renderables[0]->visible = false;
+	}
+}
+
+void Node::highlightAttachedNodes(vec3 color)
+{
+	for(int i = 0; i<numAttachedNodes; i++)
+	{
+		attachedNodes[i]->node->nodeInfo->color = color;
+		attachedNodes[i]->arrowInfo->head->renderables[0]->visible = true;
+		attachedNodes[i]->arrowInfo->stem->renderables[0]->visible = true;
+	}
+}
+
+void Node::clearAttachedNodes()
+{
+	for(int i = 0; i<numAttachedNodes; i++)
+	{
+		attachedNodes[i]->arrowInfo->head->renderables[0]->visible = false;
+		attachedNodes[i]->arrowInfo->stem->renderables[0]->visible = false;
+		attachedNodes[i]->arrowInfo->head->remainingLife = 0;
+		attachedNodes[i]->arrowInfo->stem->remainingLife = 0;
+	}
+	attachedNodes.clear();
+}

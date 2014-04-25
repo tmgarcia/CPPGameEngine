@@ -12,8 +12,8 @@ vec3 destinationnodeColor = vec3(0,1,0);
 
 #define R_CS(a) reinterpret_cast<char*>(&a), sizeof(a)
 #define R_C(t,a) reinterpret_cast<t>(a)//cast a to t
-#define NODE_FILE_ADDRESS(nodeIndex) NODE_DATA_BASE + nodeIndex * SERIALIZED_NODE_SIZE
-uint SERIALIZED_NODE_SIZE = sizeof(vec3) + sizeof(int) + sizeof(uint);
+#define NODE_FILE_ADDRESS(nodeIndex) nodeIndex * SERIALIZED_NODE_SIZE
+uint SERIALIZED_NODE_SIZE = sizeof(vec3) + sizeof(uint) + sizeof(uint);
 uint SERIALIZED_CONNECTION_SIZE = sizeof(float) + sizeof(uint);
 
 void NodeContainer::loadInNodes(uint numNodes, char* nodeData)
@@ -21,22 +21,49 @@ void NodeContainer::loadInNodes(uint numNodes, char* nodeData)
 	//nodes = vec3, int num connections, uint where connections start
 	//connections = float, uint
 	//selectedNode->toggleAttachedNode(clickedNode);
+	cout << "-- loading nodes --"<< endl;
 	for(uint i = 0; i < numNodes; i++)
 	{
 		uint positionData = i * SERIALIZED_NODE_SIZE;
+		cout << "positionData " << positionData << endl;
 		vec3 position = *(R_C(vec3*, nodeData + positionData));
+		cout << "node " << i << endl;
 		cout << position.x << "," << position.y << "," << position.z << endl;
 		addNode(position);
+	}
+
+	cout << "-- loading connections --"<< endl;
+	for(uint i = 0; i < numNodes; i++)
+	{
+		cout << "node " << i << endl;
+		uint positionData = i * SERIALIZED_NODE_SIZE;
 
 		uint attachedNodeData = positionData + sizeof(vec3);
-		int numAttachedNodes = (R_C(int, nodeData + attachedNodeData));
+		cout << "attachedNodeData " << attachedNodeData << endl;
 
-		uint connectionFileOffsetData = attachedNodeData + sizeof(int);
+		uint numAttachedNodes = *(R_C(uint*, nodeData + attachedNodeData));
+		cout << numAttachedNodes << " connections" << endl;
 
-		uint connectionFileOffset = (R_C(uint, nodeData + connectionFileOffsetData));
-		for(int j = 0; j<numAttachedNodes; j++)
+		uint nodeConnectionsDataOffsetPosition = attachedNodeData + sizeof(uint);
+		cout << "connectionDataOffset position " << nodeConnectionsDataOffsetPosition << endl;
+
+		uint nodeConnectionsDataOffset = *(R_C(uint*, nodeData + nodeConnectionsDataOffsetPosition));
+		cout << "node's connections offset " << nodeConnectionsDataOffset << endl;
+
+		uint currentConnectionOffset = nodeConnectionsDataOffset;
+		cout << "current Connection Offset " << currentConnectionOffset << endl;
+
+		for(int j = 0; j< numAttachedNodes; j++)
 		{
+			cout << "connection " << j << endl;
+			float cost = *(R_C(float*, nodeData + currentConnectionOffset));
+			cout << "cost " << cost << endl;
+			uint targetAddress = *(R_C(uint*, nodeData + currentConnectionOffset + sizeof(float)));
+			uint targetIndex = targetAddress;
+			cout << "target index " << targetIndex << endl;
+			nodes[i]->addAttachedNode(nodes[targetIndex], cost);
 
+			currentConnectionOffset += SERIALIZED_CONNECTION_SIZE;
 		}
 
 	}
@@ -49,15 +76,24 @@ void NodeContainer::clearAllNodes()
 
 ofstream* NodeContainer::serializeNodes(ofstream *stream, uint NODE_DATA_BASE)
 {
+	cout << "-- saving nodes --"<< endl;
+	vec3 n0Position(1,0,1);
+	vec3 n1Position(-1,0,-1);
+	addNode(n0Position);
+	addNode(n1Position);
+	nodes[0]->addAttachedNode(nodes[1], 5.0f);
+
 	uint NODE_DATA_BYTE_SIZE = numNodes * SERIALIZED_NODE_SIZE;
-	uint CONNECTION_DATA_BASE = NODE_DATA_BASE + NODE_DATA_BYTE_SIZE;
+	uint CONNECTION_DATA_BASE = NODE_DATA_BYTE_SIZE;
 	uint currentBits;
 	uint connectionFileOffset = CONNECTION_DATA_BASE;
 	for(int i = 0; i < numNodes; i++)
 	{
+		cout << "node" << i << endl;
 		stream->write(R_CS(nodes[i]->position));
-		currentBits = nodes[i]->numAttachedNodes;	
+		currentBits = nodes[i]->numAttachedNodes;
 		stream->write(R_CS(currentBits));
+		cout << nodes[i]->numAttachedNodes << " connections" << endl;
 		stream->write(R_CS(connectionFileOffset));//where connections start
 		connectionFileOffset += nodes[i]->numAttachedNodes * SERIALIZED_CONNECTION_SIZE;//Where next node's connections will start
 	}
@@ -67,9 +103,12 @@ ofstream* NodeContainer::serializeNodes(ofstream *stream, uint NODE_DATA_BASE)
 	{
 		for(int j = 0; j < nodes[i]->numAttachedNodes; i++)
 		{
+			cout << "-- saving connections --"<< endl;
 			cost = nodes[i]->attachedNodes[j]->cost;
-			fileAdress = NODE_FILE_ADDRESS(nodes.indexOf(nodes[i]->attachedNodes[j]->node));
+			cout << "cost "<< cost << endl;
 			stream->write(R_CS(cost));
+
+			fileAdress = (nodes.indexOf(nodes[i]->attachedNodes[j]->node));
 			stream->write(R_CS(fileAdress));
 		}
 	}

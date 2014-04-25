@@ -48,21 +48,25 @@ void LevelDisplay::setupForNewLevel()
 
 #define R_CS(a) reinterpret_cast<char*>(&a), sizeof(a)
 #define R_C(t,a) reinterpret_cast<t>(a)//cast a to t
-uint HEADER_BYTE_SIZE = sizeof(uint);//how many bites in header
+uint HEADER_BYTE_SIZE = 2*sizeof(uint);//how many bites in header
+uint SERIALIZED_NODE_SIZE1 = sizeof(vec3) + sizeof(uint) + sizeof(uint);
+
 void LevelDisplay::loadLevel(QString filename)
 {
+	nodes.clearAllNodes();
 	cout << "Loading" << endl;
 	ifstream in(filename.toUtf8().constData(), std::ios::binary | std::ios::in);
 	
 	char* header = new char[HEADER_BYTE_SIZE];//Reading in the header
 	in.read(header, HEADER_BYTE_SIZE);
-	uint numNodes = * R_C(uint*, header);
+	uint geometryDataSize = * R_C(uint*, header);
+	uint numNodes = * R_C(uint*, header + sizeof(uint));
 
-	char* geometryData = new char[sizeof(ObjReader::ShapeData)];//Reading in geometry data
-	in.read(geometryData, sizeof(ObjReader::ShapeData));
+	char* geometryData = new char[geometryDataSize];//Reading in geometry data
+	in.read(geometryData, geometryDataSize);
 
-	char* nodeData = new char[numNodes * sizeof(Node)];//Reading in the node & connection data
-	in.read(nodeData, numNodes * sizeof(Node));
+	char* nodeData = new char[numNodes * SERIALIZED_NODE_SIZE1];//Reading in the node & connection data
+	in.read(nodeData, numNodes * SERIALIZED_NODE_SIZE1);
 	in.close();
 
 	cout << "numNodes " << numNodes << endl;
@@ -75,17 +79,18 @@ void LevelDisplay::loadLevel(QString filename)
 void LevelDisplay::saveLevel(QString filename)
 {
 	cout << "Saving" << endl;
-	vec3 n0Position(1,0,1);
-	vec3 n1Position(-1,0,-1);
-	nodes.addNode(n0Position);
-	nodes.addNode(n1Position);
 
-	uint NUM_NODES = nodes.numNodes;
-	uint NODE_DATA_BASE = HEADER_BYTE_SIZE + sizeof(ObjReader::ShapeData);//where node data starts
+	//uint NUM_NODES = nodes.numNodes;
+	uint geometryDataSize = sizeof(levelData);
+
+	uint NUM_NODES = 2;
+	uint NODE_DATA_BASE = HEADER_BYTE_SIZE + sizeof(levelData);//where node data starts
 
 	ofstream out(filename.toUtf8().constData(), std::ios::binary | std::ios::out);
 	
-	uint currentBits = NUM_NODES;
+	uint currentBits = geometryDataSize;
+	out.write(R_CS(currentBits));
+	currentBits = NUM_NODES;
 	out.write(R_CS(currentBits));
 	
 	//ObjReader::ShapeData

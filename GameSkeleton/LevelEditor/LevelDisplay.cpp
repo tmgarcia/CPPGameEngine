@@ -3,10 +3,12 @@
 #include "DebugShapes.h"
 
 #include <iostream>
+#include <fstream>
 
 using std::cout;
 using std::endl;
-
+using std::ofstream;
+using std::ifstream;
 
 vec3 lightPosition = vec3(0.0f, 50.0f, -30.0f);
 float diffusionIntensity = 1;
@@ -24,6 +26,8 @@ GeometryInfo* levelGeometry;
 RenderableInfo* levelRenderable;
 ShaderInfo* lightingShader;
 
+ObjReader::ShapeData levelData;
+
 //mat4 levelTransform = glm::translate(vec3(0,0,-10.0f));
 mat4 levelTransform = mat4();
 mat4 levelRotation = mat4();
@@ -40,8 +44,58 @@ void LevelDisplay::setup()
 
 void LevelDisplay::setupForNewLevel()
 {
+}
+
+#define R_CS(a) reinterpret_cast<char*>(&a), sizeof(a)
+#define R_C(t,a) reinterpret_cast<t>(a)//cast a to t
+uint HEADER_BYTE_SIZE = sizeof(uint);//how many bites in header
+void LevelDisplay::loadLevel(QString filename)
+{
+	cout << "Loading" << endl;
+	ifstream in(filename.toUtf8().constData(), std::ios::binary | std::ios::in);
+	
+	char* header = new char[HEADER_BYTE_SIZE];//Reading in the header
+	in.read(header, HEADER_BYTE_SIZE);
+	uint numNodes = * R_C(uint*, header);
+
+	char* geometryData = new char[sizeof(ObjReader::ShapeData)];//Reading in geometry data
+	in.read(geometryData, sizeof(ObjReader::ShapeData));
+
+	char* nodeData = new char[numNodes * sizeof(Node)];//Reading in the node & connection data
+	in.read(nodeData, numNodes * sizeof(Node));
+	in.close();
+
+	cout << "numNodes " << numNodes << endl;
+
+	nodes.loadInNodes(numNodes, nodeData);
 
 }
+
+
+void LevelDisplay::saveLevel(QString filename)
+{
+	cout << "Saving" << endl;
+	vec3 n0Position(1,0,1);
+	vec3 n1Position(-1,0,-1);
+	nodes.addNode(n0Position);
+	nodes.addNode(n1Position);
+
+	uint NUM_NODES = nodes.numNodes;
+	uint NODE_DATA_BASE = HEADER_BYTE_SIZE + sizeof(ObjReader::ShapeData);//where node data starts
+
+	ofstream out(filename.toUtf8().constData(), std::ios::binary | std::ios::out);
+	
+	uint currentBits = NUM_NODES;
+	out.write(R_CS(currentBits));
+	
+	//ObjReader::ShapeData
+	out.write(R_CS(levelData));//Geo data
+
+	nodes.serializeNodes(&out, NODE_DATA_BASE);//possibly need to store return?
+
+	out.close();
+}
+
 
 void LevelDisplay::loadLevelMap(QString fileName)
 {
@@ -57,14 +111,14 @@ void LevelDisplay::loadLevelMap(QString fileName)
 	int result = system(command.toUtf8().constData());
 	assert(result == 0);
 
+	ObjReader reader;
+	levelData = reader.readInShape("ObjToBinaryResult.bin");
+
 	setupLevelGeometry();
 }
 
 void LevelDisplay::setupLevelGeometry()
 {
-	ObjReader reader;
-	
-	ObjReader::ShapeData levelData = reader.readInShape("ObjToBinaryResult.bin");
 	levelGeometry = GeneralGLWindow::getInstance().addGeometry(levelData.vertices, levelData.vertexDataSize, levelData.indices, levelData.numIndices, GL_TRIANGLES);
 	
 	lightingShader = GeneralGLWindow::getInstance().createShaderInfo("../Resources/Shaders/justLightingVertexShader.glsl", "../Resources/Shaders/justLightingFragmentShader.glsl");

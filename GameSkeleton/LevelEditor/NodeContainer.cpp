@@ -4,10 +4,77 @@
 #include "DebugShapes.h"
 #include "Random.h"
 
+
 float nodeRadius = 0.25f;
 vec3 nodeColor = vec3(0.6f,0,1);
 vec3 sourceNodeColor = vec3(1,0,0);
 vec3 destinationnodeColor = vec3(0,1,0);
+
+#define R_CS(a) reinterpret_cast<char*>(&a), sizeof(a)
+#define R_C(t,a) reinterpret_cast<t>(a)//cast a to t
+#define NODE_FILE_ADDRESS(nodeIndex) NODE_DATA_BASE + nodeIndex * SERIALIZED_NODE_SIZE
+uint SERIALIZED_NODE_SIZE = sizeof(vec3) + sizeof(int) + sizeof(uint);
+uint SERIALIZED_CONNECTION_SIZE = sizeof(float) + sizeof(uint);
+
+void NodeContainer::loadInNodes(uint numNodes, char* nodeData)
+{
+	//nodes = vec3, int num connections, uint where connections start
+	//connections = float, uint
+	//selectedNode->toggleAttachedNode(clickedNode);
+	for(uint i = 0; i < numNodes; i++)
+	{
+		uint positionData = i * SERIALIZED_NODE_SIZE;
+		vec3 position = *(R_C(vec3*, nodeData + positionData));
+		cout << position.x << "," << position.y << "," << position.z << endl;
+		addNode(position);
+
+		uint attachedNodeData = positionData + sizeof(vec3);
+		int numAttachedNodes = (R_C(int, nodeData + attachedNodeData));
+
+		uint connectionFileOffsetData = attachedNodeData + sizeof(int);
+
+		uint connectionFileOffset = (R_C(uint, nodeData + connectionFileOffsetData));
+		for(int j = 0; j<numAttachedNodes; j++)
+		{
+
+		}
+
+	}
+}
+
+void NodeContainer::clearAllNodes()
+{
+	nodes.clear();
+}
+
+ofstream* NodeContainer::serializeNodes(ofstream *stream, uint NODE_DATA_BASE)
+{
+	uint NODE_DATA_BYTE_SIZE = numNodes * SERIALIZED_NODE_SIZE;
+	uint CONNECTION_DATA_BASE = NODE_DATA_BASE + NODE_DATA_BYTE_SIZE;
+	uint currentBits;
+	uint connectionFileOffset = CONNECTION_DATA_BASE;
+	for(int i = 0; i < numNodes; i++)
+	{
+		stream->write(R_CS(nodes[i]->position));
+		currentBits = nodes[i]->numAttachedNodes;	
+		stream->write(R_CS(currentBits));
+		stream->write(R_CS(connectionFileOffset));//where connections start
+		connectionFileOffset += nodes[i]->numAttachedNodes * SERIALIZED_CONNECTION_SIZE;//Where next node's connections will start
+	}
+	uint fileAdress;
+	float cost;
+	for(int i = 0; i < numNodes; i++)
+	{
+		for(int j = 0; j < nodes[i]->numAttachedNodes; i++)
+		{
+			cost = nodes[i]->attachedNodes[j]->cost;
+			fileAdress = NODE_FILE_ADDRESS(nodes.indexOf(nodes[i]->attachedNodes[j]->node));
+			stream->write(R_CS(cost));
+			stream->write(R_CS(fileAdress));
+		}
+	}
+	return stream;
+}
 
 bool NodeContainer::nodeRightClicked(vec3 clickDirection, vec3 clickOrigin)
 {
@@ -103,16 +170,6 @@ void NodeContainer::removeNode(Node* node)
 	nodes.removeAt(nodes.indexOf(node));
 	numNodes--;
 	resetNodeColors();
-}
-
-void NodeContainer::drawNodes()
-{
-
-}
-
-void NodeContainer::drawNode(Node* node)
-{
-
 }
 
 NodeContainer::NodeContainer()

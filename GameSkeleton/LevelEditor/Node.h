@@ -15,6 +15,7 @@ public:
 	int numAttachedNodes;
 
 	void toggleAttachedNode(Node* n);
+	void addAttachedNode(Node* n, float cost);
 	void highlightAttachedNodes(vec3 color);
 	void hideAttachedNodes();
 	void clearAttachedNodes();
@@ -27,16 +28,15 @@ public:
 		numAttachedNodes = 0;
 	}
 	~Node();
-
-private:
-	void addAttachedNode(Node* n);
-	void removeAttachedNode(Node* n);
-	int findConnection(Node* n);
 	struct ConnectingNode
 	{
+		float cost;
 		DebugShapes::VectorArrowInfo* arrowInfo;
 		Node* node;
 	};
 	QList<ConnectingNode*> attachedNodes;
+private:
+	void removeAttachedNode(Node* n);
+	int findConnection(Node* n);
 };
 

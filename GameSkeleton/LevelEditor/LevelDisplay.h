@@ -18,6 +18,8 @@ public:
 	LevelDisplay();
 	~LevelDisplay(void);
 	void loadLevelMap(QString fileName);
+	void saveLevel(QString fileName);
+	void loadLevel(QString fileName);
 	void setup();
 	GLuint windowHeight;
 	GLuint windowWidth;

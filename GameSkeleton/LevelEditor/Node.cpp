@@ -29,21 +29,23 @@ void Node::toggleAttachedNode(Node* n)
 	}
 	else
 	{
-		addAttachedNode(n);
+		addAttachedNode(n, glm::length(position-n->position));
 	}
 }
 
-void Node::addAttachedNode(Node* n)
+void Node::addAttachedNode(Node* n, float cost)
 {
 	ConnectingNode* cn = new ConnectingNode();
 	cn->node = n;
 	cn->arrowInfo = DebugShapes::addVectorArrow(position, n->position);
+	cn->cost = cost;
 	attachedNodes.push_back(cn);
 	numAttachedNodes++;
 }
 
 void Node::removeAttachedNode(Node* n)
 {
+	n->nodeInfo->color = vec3(0.6f,0,1);
 	int i = findConnection(n);
 	attachedNodes[i]->arrowInfo->head->renderables[0]->visible = false;
 	attachedNodes[i]->arrowInfo->stem->renderables[0]->visible = false;

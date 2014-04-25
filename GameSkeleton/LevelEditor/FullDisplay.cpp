@@ -65,7 +65,8 @@ void FullDisplay::loadObj()
 
 void FullDisplay::loadLevel()
 {
-	QString targetObj = QFileDialog::getOpenFileName(this, "Open Level", ".", "Level Files (*.tlvl)");
+	QString targetLevel = QFileDialog::getOpenFileName(this, "Open Level", ".", "Level Files (*.tlvl)");
+	levelDisplay.loadLevel(targetLevel);
 
 }
 
@@ -73,7 +74,7 @@ void FullDisplay::saveLevel()
 {
 	if(currentSaved)
 	{
-		
+		levelDisplay.saveLevel("testLevel.tlvl");
 	}
 	else
 	{
@@ -83,6 +84,7 @@ void FullDisplay::saveLevel()
 void FullDisplay::saveLevelAs()
 {
 	QString saveName = QFileDialog::getSaveFileName(this, "Save Level", ".", "Level Files (*.tlvl)");
+	levelDisplay.saveLevel(saveName);
 	currentSaved = true;
 }
 

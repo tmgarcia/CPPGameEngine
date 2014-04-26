@@ -40,6 +40,7 @@ void LevelDisplay::setup()
 	QObject::connect(&GeneralGLWindow::getInstance(), SIGNAL(mouseMoved(QMouseEvent*)), this, SLOT(mouseMoveReaction(QMouseEvent*)));
 	QObject::connect(&GeneralGLWindow::getInstance(), SIGNAL(mouseClicked(QMouseEvent*)), this, SLOT(mouseClickReaction(QMouseEvent*)));
 	aNodeIsSelected = false;
+	levelLoaded = false;
 }
 
 void LevelDisplay::setupForNewLevel()
@@ -54,7 +55,8 @@ uint SERIALIZED_CONNECTION_SIZE1 = sizeof(float) + sizeof(uint);
 
 void LevelDisplay::loadLevel(QString filename)
 {
-	levelRenderable->visible = false;
+	if(levelLoaded)
+		levelRenderable->visible = false;
 	nodes.clearAllNodes();
 	cout << "Loading" << endl;
 	ifstream in(filename.toUtf8().constData(), std::ios::binary | std::ios::in);
@@ -69,15 +71,18 @@ void LevelDisplay::loadLevel(QString filename)
 	uint geometryDataSize = * R_C(uint*, header);
 	uint numNodes = * R_C(uint*, header + sizeof(uint));
 
-	char* geometryData = new char[geometryDataSize];//Reading in geometry data
-	in.read(geometryData, geometryDataSize);
-
-	ofstream out("ObjToBinaryResult.bin", std::ios::binary | std::ios::out);
-	out.write(geometryData, geometryDataSize);
-	out.close();
-	ObjReader reader;
-	levelData = reader.readInShape("ObjToBinaryResult.bin");
-	setupLevelGeometry();
+	if(geometryDataSize>0)
+	{
+		char* geometryData = new char[geometryDataSize];//Reading in geometry data
+		in.read(geometryData, geometryDataSize);
+		ofstream out("ObjToBinaryResult.bin", std::ios::binary | std::ios::out);
+		out.write(geometryData, geometryDataSize);
+		out.close();
+		ObjReader reader;
+		levelData = reader.readInShape("ObjToBinaryResult.bin");
+		setupLevelGeometry();
+		levelLoaded = true;
+	}
 
 	uint nodeDataSize = numTotalBytes - (HEADER_BYTE_SIZE+geometryDataSize);
 	char* nodeData = new char[nodeDataSize];//Reading in the node & connection data
@@ -99,13 +104,18 @@ void LevelDisplay::saveLevel(QString filename)
 	uint geometryDataSize = sizeof(levelData);
 
 	//Reading in level file
-	ifstream levelIn("ObjToBinaryResult.bin", std::ios::binary | std::ios::in);
-	levelIn.seekg(0, std::ios::end);
-	uint numLevelBytes = levelIn.tellg();
-	levelIn.seekg(0, std::ios::beg);
-	char* levelBuf = new char[numLevelBytes];
-	levelIn.read(levelBuf, numLevelBytes);
-	levelIn.close();
+	uint numLevelBytes = 0;
+	char* levelBuf = nullptr;
+	if(levelLoaded)
+	{
+		ifstream levelIn("ObjToBinaryResult.bin", std::ios::binary | std::ios::in);
+		levelIn.seekg(0, std::ios::end);
+		uint numLevelBytes = levelIn.tellg();
+		levelIn.seekg(0, std::ios::beg);
+		levelBuf = new char[numLevelBytes];
+		levelIn.read(levelBuf, numLevelBytes);
+		levelIn.close();
+	}
 
 	uint NODE_DATA_BASE = HEADER_BYTE_SIZE + numLevelBytes;//Where node data starts
 
@@ -115,8 +125,11 @@ void LevelDisplay::saveLevel(QString filename)
 	out.write(R_CS(numLevelBytes));//size of the geometry data
 	out.write(R_CS(NUM_NODES));//Number of nodes
 	
-	//Writing out level data
-	out.write(levelBuf, numLevelBytes);
+	if(levelLoaded)
+	{
+		//Writing out level data
+		out.write(levelBuf, numLevelBytes);
+	}
 
 	//Writing out node and connection data
 	nodes.serializeNodes(&out, NODE_DATA_BASE);
@@ -131,7 +144,8 @@ void LevelDisplay::loadLevelMap(QString fileName)
 	//int i = system("cd .");
 	//i = system("dir");
 	//cout << i << endl;
-	levelRenderable->visible = false;
+	if(levelLoaded)
+		levelRenderable->visible = false;
 	QString command("ObjToBinaryWriter.exe ");
 	const char* nativeFileName = "ObjToBinaryResult.bin";
 	command += "\"" + QString(fileName) + "\" \"" + nativeFileName + "\"";
@@ -143,6 +157,7 @@ void LevelDisplay::loadLevelMap(QString fileName)
 	levelData = reader.readInShape("ObjToBinaryResult.bin");
 
 	setupLevelGeometry();
+	levelLoaded = true;
 }
 
 void LevelDisplay::setupLevelGeometry()

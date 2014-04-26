@@ -30,6 +30,7 @@ private:
 	void setupDebugShapes();
 	void setupForNewLevel();
 	bool aNodeIsSelected;
+	bool levelLoaded;
 	Camera camera;
 	NodeContainer nodes;
 

@@ -72,6 +72,7 @@ void NodeContainer::loadInNodes(uint numNodes, char* nodeData)
 void NodeContainer::clearAllNodes()
 {
 	nodes.clear();
+	numNodes = 0;
 }
 
 ofstream* NodeContainer::serializeNodes(ofstream *stream, uint NODE_DATA_BASE)

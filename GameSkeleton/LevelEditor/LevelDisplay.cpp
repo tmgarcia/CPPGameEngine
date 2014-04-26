@@ -101,7 +101,6 @@ void LevelDisplay::saveLevel(QString filename)
 	cout << "Saving" << endl;
 
 	uint NUM_NODES = nodes.numNodes;
-	uint geometryDataSize = sizeof(levelData);
 
 	//Reading in level file
 	uint numLevelBytes = 0;
@@ -110,7 +109,7 @@ void LevelDisplay::saveLevel(QString filename)
 	{
 		ifstream levelIn("ObjToBinaryResult.bin", std::ios::binary | std::ios::in);
 		levelIn.seekg(0, std::ios::end);
-		uint numLevelBytes = levelIn.tellg();
+		numLevelBytes = levelIn.tellg();
 		levelIn.seekg(0, std::ios::beg);
 		levelBuf = new char[numLevelBytes];
 		levelIn.read(levelBuf, numLevelBytes);

@@ -50,23 +50,38 @@ void LevelDisplay::setupForNewLevel()
 #define R_C(t,a) reinterpret_cast<t>(a)//cast a to t
 uint HEADER_BYTE_SIZE = 2*sizeof(uint);//how many bites in header
 uint SERIALIZED_NODE_SIZE1 = sizeof(vec3) + sizeof(uint) + sizeof(uint);
+uint SERIALIZED_CONNECTION_SIZE1 = sizeof(float) + sizeof(uint);
 
 void LevelDisplay::loadLevel(QString filename)
 {
+	levelRenderable->visible = false;
 	nodes.clearAllNodes();
 	cout << "Loading" << endl;
 	ifstream in(filename.toUtf8().constData(), std::ios::binary | std::ios::in);
 	
+	in.seekg(0, std::ios::end);
+	uint numTotalBytes = in.tellg();
+	in.seekg(0, std::ios::beg);
+
 	char* header = new char[HEADER_BYTE_SIZE];//Reading in the header
 	in.read(header, HEADER_BYTE_SIZE);
+
 	uint geometryDataSize = * R_C(uint*, header);
 	uint numNodes = * R_C(uint*, header + sizeof(uint));
 
 	char* geometryData = new char[geometryDataSize];//Reading in geometry data
 	in.read(geometryData, geometryDataSize);
 
-	char* nodeData = new char[numNodes * SERIALIZED_NODE_SIZE1];//Reading in the node & connection data
-	in.read(nodeData, numNodes * SERIALIZED_NODE_SIZE1);
+	ofstream out("ObjToBinaryResult.bin", std::ios::binary | std::ios::out);
+	out.write(geometryData, geometryDataSize);
+	out.close();
+	ObjReader reader;
+	levelData = reader.readInShape("ObjToBinaryResult.bin");
+	setupLevelGeometry();
+
+	uint nodeDataSize = numTotalBytes - (HEADER_BYTE_SIZE+geometryDataSize);
+	char* nodeData = new char[nodeDataSize];//Reading in the node & connection data
+	in.read(nodeData, nodeDataSize);
 	in.close();
 
 	cout << "numNodes " << numNodes << endl;
@@ -80,23 +95,31 @@ void LevelDisplay::saveLevel(QString filename)
 {
 	cout << "Saving" << endl;
 
-	//uint NUM_NODES = nodes.numNodes;
+	uint NUM_NODES = nodes.numNodes;
 	uint geometryDataSize = sizeof(levelData);
 
-	uint NUM_NODES = 2;
-	uint NODE_DATA_BASE = HEADER_BYTE_SIZE + sizeof(levelData);//where node data starts
+	//Reading in level file
+	ifstream levelIn("ObjToBinaryResult.bin", std::ios::binary | std::ios::in);
+	levelIn.seekg(0, std::ios::end);
+	uint numLevelBytes = levelIn.tellg();
+	levelIn.seekg(0, std::ios::beg);
+	char* levelBuf = new char[numLevelBytes];
+	levelIn.read(levelBuf, numLevelBytes);
+	levelIn.close();
+
+	uint NODE_DATA_BASE = HEADER_BYTE_SIZE + numLevelBytes;//Where node data starts
 
 	ofstream out(filename.toUtf8().constData(), std::ios::binary | std::ios::out);
 	
-	uint currentBits = geometryDataSize;
-	out.write(R_CS(currentBits));
-	currentBits = NUM_NODES;
-	out.write(R_CS(currentBits));
+	//Writing out header 
+	out.write(R_CS(numLevelBytes));//size of the geometry data
+	out.write(R_CS(NUM_NODES));//Number of nodes
 	
-	//ObjReader::ShapeData
-	out.write(R_CS(levelData));//Geo data
+	//Writing out level data
+	out.write(levelBuf, numLevelBytes);
 
-	nodes.serializeNodes(&out, NODE_DATA_BASE);//possibly need to store return?
+	//Writing out node and connection data
+	nodes.serializeNodes(&out, NODE_DATA_BASE);
 
 	out.close();
 }
@@ -108,7 +131,7 @@ void LevelDisplay::loadLevelMap(QString fileName)
 	//int i = system("cd .");
 	//i = system("dir");
 	//cout << i << endl;
-
+	levelRenderable->visible = false;
 	QString command("ObjToBinaryWriter.exe ");
 	const char* nativeFileName = "ObjToBinaryResult.bin";
 	command += "\"" + QString(fileName) + "\" \"" + nativeFileName + "\"";

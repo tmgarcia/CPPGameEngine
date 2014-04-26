@@ -56,7 +56,7 @@ void NodeContainer::loadInNodes(uint numNodes, char* nodeData)
 		for(int j = 0; j< numAttachedNodes; j++)
 		{
 			cout << "connection " << j << endl;
-			float cost = *(R_C(float*, nodeData + currentConnectionOffset));
+			float cost = *R_C(float*, nodeData + currentConnectionOffset);
 			cout << "cost " << cost << endl;
 			uint targetAddress = *(R_C(uint*, nodeData + currentConnectionOffset + sizeof(float)));
 			uint targetIndex = targetAddress;
@@ -65,8 +65,8 @@ void NodeContainer::loadInNodes(uint numNodes, char* nodeData)
 
 			currentConnectionOffset += SERIALIZED_CONNECTION_SIZE;
 		}
-
 	}
+	resetNodeColors();
 }
 
 void NodeContainer::clearAllNodes()
@@ -77,12 +77,7 @@ void NodeContainer::clearAllNodes()
 ofstream* NodeContainer::serializeNodes(ofstream *stream, uint NODE_DATA_BASE)
 {
 	cout << "-- saving nodes --"<< endl;
-	vec3 n0Position(1,0,1);
-	vec3 n1Position(-1,0,-1);
-	addNode(n0Position);
-	addNode(n1Position);
-	nodes[0]->addAttachedNode(nodes[1], 5.0f);
-
+	cout << "num nodes" << numNodes<< endl;
 	uint NODE_DATA_BYTE_SIZE = numNodes * SERIALIZED_NODE_SIZE;
 	uint CONNECTION_DATA_BASE = NODE_DATA_BYTE_SIZE;
 	uint currentBits;
@@ -101,8 +96,10 @@ ofstream* NodeContainer::serializeNodes(ofstream *stream, uint NODE_DATA_BASE)
 	float cost;
 	for(int i = 0; i < numNodes; i++)
 	{
-		for(int j = 0; j < nodes[i]->numAttachedNodes; i++)
+		cout << "i="<< i << endl;
+		for(int j = 0; j < nodes[i]->numAttachedNodes; j++)
 		{
+			cout << "j="<< j << endl;
 			cout << "-- saving connections --"<< endl;
 			cost = nodes[i]->attachedNodes[j]->cost;
 			cout << "cost "<< cost << endl;
@@ -110,6 +107,7 @@ ofstream* NodeContainer::serializeNodes(ofstream *stream, uint NODE_DATA_BASE)
 
 			fileAdress = (nodes.indexOf(nodes[i]->attachedNodes[j]->node));
 			stream->write(R_CS(fileAdress));
+			cout << "target index "<< fileAdress << endl;
 		}
 	}
 	return stream;

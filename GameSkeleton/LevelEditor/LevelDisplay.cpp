@@ -92,7 +92,6 @@ void LevelDisplay::loadLevel(QString filename)
 	cout << "numNodes " << numNodes << endl;
 
 	nodes.loadInNodes(numNodes, nodeData);
-
 }
 
 

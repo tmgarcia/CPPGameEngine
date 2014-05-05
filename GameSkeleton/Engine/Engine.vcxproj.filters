@@ -26,6 +26,10 @@
       <Filter>Math</Filter>
     </ClCompile>
     <ClCompile Include="MathTools\TransformationMatrixMaker.cpp" />
+    <ClCompile Include="DebugToolBar.cpp" />
+    <ClCompile Include="AStarDebugToolbar.cpp" />
+    <ClCompile Include="DebugTools\DebugSlider.cpp" />
+    <ClCompile Include="DebugTools\DebugSlider_moc.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h" />
@@ -59,5 +63,8 @@
       <Filter>Math</Filter>
     </ClInclude>
     <ClInclude Include="MathTools\TransformationMatrixMaker.h" />
+    <ClInclude Include="DebugToolBar.h" />
+    <ClInclude Include="AStarDebugToolbar.h" />
+    <ClInclude Include="DebugTools\DebugSlider.h" />
   </ItemGroup>
 </Project>

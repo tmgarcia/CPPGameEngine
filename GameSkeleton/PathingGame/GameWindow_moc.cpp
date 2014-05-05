@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'GameWindow.h'
 **
-** Created: Sun Apr 27 23:45:40 2014
+** Created: Mon May 5 10:30:34 2014
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.0)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_GameWindow[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-       3,   14, // methods
+       8,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -33,7 +33,12 @@ static const uint qt_meta_data_GameWindow[] = {
  // slots: signature, parameters, type, tag, flags
       14,   12,   11,   11, 0x0a,
       43,   12,   11,   11, 0x0a,
-      75,   11,   11,   11, 0x08,
+      75,   11,   11,   11, 0x0a,
+      93,   11,   11,   11, 0x0a,
+     117,   11,   11,   11, 0x0a,
+     134,   11,   11,   11, 0x0a,
+     161,  159,   11,   11, 0x0a,
+     186,   11,   11,   11, 0x08,
 
        0        // eod
 };
@@ -41,7 +46,9 @@ static const uint qt_meta_data_GameWindow[] = {
 static const char qt_meta_stringdata_GameWindow[] = {
     "GameWindow\0\0e\0keyPressReaction(QKeyEvent*)\0"
     "mouseMoveReaction(QMouseEvent*)\0"
-    "update()\0"
+    "togglePathNodes()\0togglePathConnections()\0"
+    "toggleAllNodes()\0toggleCameraPlayerView()\0"
+    "s\0setCharacterSpeed(float)\0update()\0"
 };
 
 void GameWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -52,7 +59,12 @@ void GameWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         switch (_id) {
         case 0: _t->keyPressReaction((*reinterpret_cast< QKeyEvent*(*)>(_a[1]))); break;
         case 1: _t->mouseMoveReaction((*reinterpret_cast< QMouseEvent*(*)>(_a[1]))); break;
-        case 2: _t->update(); break;
+        case 2: _t->togglePathNodes(); break;
+        case 3: _t->togglePathConnections(); break;
+        case 4: _t->toggleAllNodes(); break;
+        case 5: _t->toggleCameraPlayerView(); break;
+        case 6: _t->setCharacterSpeed((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 7: _t->update(); break;
         default: ;
         }
     }
@@ -90,9 +102,9 @@ int GameWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 3)
+        if (_id < 8)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 3;
+        _id -= 8;
     }
     return _id;
 }

@@ -1,5 +1,5 @@
 #include "Node.h"
-#include "Random.h"
+#include "MathTools\Random.h"
 
 bool Node::connectedToNode(Node* n)
 {

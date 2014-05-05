@@ -22,11 +22,11 @@ GLuint currentShaderIndex = 0;
 GLuint currentRenderIndex = 0;
 GLuint currentTextureIndex = 0;
 
-const GLuint MAX_NUM_BUFFERS = 50;
+const GLuint MAX_NUM_BUFFERS = 80;
 const GLuint MAX_NUM_GEOMETRIES = 30;
 const GLuint MAX_NUM_SHADERS = 10;
 const GLuint MAX_NUM_TEXTURES = 30;
-const GLuint MAX_NUM_RENDERABLES = 70;
+const GLuint MAX_NUM_RENDERABLES = 600;
 const GLuint BUFFER_SIZE = 1000000;
 
 BufferInfo* bufferInfos[MAX_NUM_BUFFERS];

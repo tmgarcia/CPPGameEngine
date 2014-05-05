@@ -21,14 +21,15 @@ public:
 	void deleteSelectedNode();
 	void loadInNodes(uint numNodes, char* nodeData);
 	void clearAllNodes();
-
+	void resetNodeColors();
+	void highlightAllNodes(vec3 color);
+	void hideAllNodes();
 	ofstream* serializeNodes(ofstream *stream, uint NODE_DATA_BASE);
 
 	EditorNodeContainer();
 	~EditorNodeContainer();
 private:
 	QList<EditorNode*> nodes;
-	void resetNodeColors();
 	void addConnection(EditorNode* node);
 	bool nodeHasBeenClicked(vec3 clickDirection, vec3 clickOrigin);
 };

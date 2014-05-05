@@ -9,6 +9,22 @@ Camera::Camera() :
 	position(0.0f, 3.0f, 5.0f)
 {}
 
+void Camera::resetPosition()
+{
+	viewDirection = glm::vec3(0.0f, 0.0f, -1.0f);
+	position = glm::vec3(0.0f, 3.0f, 5.0f);
+}
+
+void Camera::setPosition(glm::vec3 newPos)
+{
+	position = newPos;
+}
+
+void Camera::setViewDirection(glm::vec3 newView)
+{
+	viewDirection = newView;
+}
+
 glm::mat4 Camera::getWorldToViewMatrix() const
 {
 	return glm::lookAt(position, position + viewDirection, UP);

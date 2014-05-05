@@ -13,6 +13,9 @@ public:
 	vec3 position;
 	DebugShapes::DebugShapeInfo* nodeInfo;
 	int numAttachedNodes;
+	void highlight(vec3 color);
+	void highlightConnection(EditorNode* n, vec3 color);
+	void setVisible(bool isVisible);
 
 	void toggleAttachedNode(EditorNode* n);
 	void addAttachedNode(EditorNode* n, float cost);

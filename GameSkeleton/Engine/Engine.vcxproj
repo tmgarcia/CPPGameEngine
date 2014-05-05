@@ -88,9 +88,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AStarData\GameNodeContainer.cpp" />
+    <ClCompile Include="AStarDebugToolbar.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="DebugToolBar.cpp" />
     <ClCompile Include="DebugTools\DebugShapes.cpp" />
     <ClCompile Include="DebugTools\DebugShapes_moc.cpp" />
+    <ClCompile Include="DebugTools\DebugSlider.cpp" />
+    <ClCompile Include="DebugTools\DebugSlider_moc.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="AStarData\EditorNode.cpp" />
     <ClCompile Include="AStarData\EditorNodeContainer.cpp" />
@@ -109,10 +113,13 @@
   <ItemGroup>
     <ClInclude Include="AStarData\GameNodeContainer.h" />
     <ClInclude Include="AStarData\PathingNode.h" />
+    <ClInclude Include="AStarDebugToolbar.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="DebugToolBar.h" />
     <ClInclude Include="DebugTools\DebugShapes.h" />
     <ClInclude Include="AStarData\EditorNode.h" />
     <ClInclude Include="AStarData\EditorNodeContainer.h" />
+    <ClInclude Include="DebugTools\DebugSlider.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="ExportHeader.h" />
     <ClInclude Include="DebugTools\Asserter.h" />

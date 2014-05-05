@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'FullDisplay.h'
 **
-** Created: Sun Apr 27 23:46:37 2014
+** Created: Mon May 5 10:30:45 2014
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.0)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_FullDisplay[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-       3,   14, // methods
+       6,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -32,15 +32,19 @@ static const uint qt_meta_data_FullDisplay[] = {
 
  // slots: signature, parameters, type, tag, flags
       13,   12,   12,   12, 0x08,
-      23,   12,   12,   12, 0x08,
-      35,   12,   12,   12, 0x08,
+      25,   12,   12,   12, 0x08,
+      42,   12,   12,   12, 0x08,
+      63,   12,   12,   12, 0x08,
+      90,   12,   12,   12, 0x08,
+     110,   12,   12,   12, 0x08,
 
        0        // eod
 };
 
 static const char qt_meta_stringdata_FullDisplay[] = {
-    "FullDisplay\0\0loadObj()\0loadLevel()\0"
-    "startCharacter()\0"
+    "FullDisplay\0\0loadLevel()\0startCharacter()\0"
+    "highlightPathNodes()\0highlightPathConnections()\0"
+    "highlightAllNodes()\0cameraToPlayerView()\0"
 };
 
 void FullDisplay::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -49,9 +53,12 @@ void FullDisplay::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
         Q_ASSERT(staticMetaObject.cast(_o));
         FullDisplay *_t = static_cast<FullDisplay *>(_o);
         switch (_id) {
-        case 0: _t->loadObj(); break;
-        case 1: _t->loadLevel(); break;
-        case 2: _t->startCharacter(); break;
+        case 0: _t->loadLevel(); break;
+        case 1: _t->startCharacter(); break;
+        case 2: _t->highlightPathNodes(); break;
+        case 3: _t->highlightPathConnections(); break;
+        case 4: _t->highlightAllNodes(); break;
+        case 5: _t->cameraToPlayerView(); break;
         default: ;
         }
     }
@@ -90,9 +97,9 @@ int FullDisplay::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 3)
+        if (_id < 6)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 3;
+        _id -= 6;
     }
     return _id;
 }

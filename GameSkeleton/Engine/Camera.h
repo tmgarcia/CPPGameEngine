@@ -21,5 +21,9 @@ public:
 	void strafeRight();
 	void moveUp();
 	void moveDown();
+	void resetPosition();
+	void setPosition(glm::vec3 p);
+	void setViewDirection(glm::vec3 p);
+
 };
 

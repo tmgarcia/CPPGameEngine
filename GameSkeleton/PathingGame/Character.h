@@ -13,6 +13,8 @@ public:
 	mat4 rotation;
 	mat4 fullTransform;
 	Path path;
+	vec3 position;
+	void updatePosition();
 	Character()
 	{
 

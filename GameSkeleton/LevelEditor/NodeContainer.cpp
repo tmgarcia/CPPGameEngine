@@ -2,7 +2,7 @@
 #include <glm\gtx\projection.hpp>
 
 #include "DebugShapes.h"
-#include "Random.h"
+#include "MathTools\Random.h"
 
 
 float nodeRadius = 0.25f;

@@ -25,10 +25,15 @@ mat4 TransformationMatrixMaker::getRotationFromVector(vec3 a)
 	vec3 v = glm::cross(w, u);//x
 	//vwu faces with belly
 	//wvu faces with side upside-down
-	//vuw on side facing with butt
-	//uvw upside-down facing with butt
+	//vuw on side facing with tail
+	//uvw upside-down facing with tail
 	//wuv head down facing with side
 	//uwv head down facing with stomach
-	mat4 result = mat4(vec4(u, 0), vec4(-v,0), vec4(-w,0), vec4(0,0,0,1));
+	mat4 result = mat4(vec4(u, 0), vec4(-v,0), vec4(w,0), vec4(0,0,0,1));//-w for camera
+	//u-v-w - original
+	//u-vw
+	//uvw
+	//-uvw
+	//uwv
 	return result;
 }

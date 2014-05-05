@@ -15,7 +15,7 @@ using std::ifstream;
 vec3 lightPosition = vec3(0.0f, 50.0f, -30.0f);
 float diffusionIntensity = 1;
 vec4 specularColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
-float specularExponent = 100;
+float specularExponent = 1000000;
 vec3 eyePosition;
 vec3 overridingObjectColor = vec3(0.3,0.3,0.3);
 vec3 ambientLight = vec3(0.9f, 0.9f, 0.9f);
@@ -34,38 +34,134 @@ mat4 viewToProjectionMatrix;
 mat4 worldToViewMatrix;
 mat4 worldToProjectionMatrix;
 
+vec3 nonPathNodesColor= vec3(1,0,0);
+vec3 pathNodesColor= vec3(0,0.5f,1);
+vec3 pathConnectionsColor = vec3(0,0.5f,1);
+
 void GameWindow::setup()
 {
 	QObject::connect(&GeneralGLWindow::getInstance(), SIGNAL(keyPressed(QKeyEvent*)), this, SLOT(keyPressReaction(QKeyEvent*)));
 	QObject::connect(&GeneralGLWindow::getInstance(), SIGNAL(mouseMoved(QMouseEvent*)), this, SLOT(mouseMoveReaction(QMouseEvent*)));
 	QObject::connect(&timer, SIGNAL(timeout()), this, SLOT(update()));
 	//aNodeIsSelected = false;
+	cameraFrozen = false;
 	levelLoaded = false;
 	testCharacterLoaded = false;
+	pathConnectionsHighlighted = false;
+	pathHighlighted = false;
+	allNodesHighlighted = false;
+	cameraFollowingPlayer = false;
 	frames = 0;
 	timer.setInterval(1);
 	timer.start(0);
 }
 
+void GameWindow::togglePathNodes()
+{
+	if(testCharacterLoaded)
+	{
+		if(pathHighlighted)
+		{
+			character.path.hidePathNodes();
+			pathHighlighted = false;
+			if(allNodesHighlighted)
+			{
+				nodes.highlightAllNodes(nonPathNodesColor);
+			}
+		}
+		else
+		{
+			character.path.highlightPathNodes(pathNodesColor);
+			pathHighlighted = true;
+		}
+	}
+}
+void GameWindow::togglePathConnections()
+{
+	if(testCharacterLoaded)
+	{
+		if(pathConnectionsHighlighted)
+		{
+			character.path.hidePathConnections();
+			pathConnectionsHighlighted = false;
+		}
+		else
+		{
+			character.path.highlightPathConnections(pathConnectionsColor);
+			pathConnectionsHighlighted = true;
+		}
+	}
+}
+void GameWindow::toggleAllNodes()
+{
+	if(allNodesHighlighted)
+	{
+		nodes.hideAllNodes();
+		allNodesHighlighted = false;
+		if(pathHighlighted)
+		{
+			character.path.highlightPathNodes(pathNodesColor);
+		}
+	}
+	else
+	{
+		nodes.highlightAllNodes(nonPathNodesColor);
+		if(pathHighlighted)
+		{
+			character.path.highlightPathNodes(pathNodesColor);
+		}
+		allNodesHighlighted = true;
+	}
+}
+void GameWindow::toggleCameraPlayerView()
+{
+	if(testCharacterLoaded)
+	{
+		if(cameraFollowingPlayer)
+		{
+			camera.resetPosition();
+			character.renderable->visible = true;
+			cameraFollowingPlayer = false;
+			cameraFrozen = false;
+		}
+		else
+		{
+			camera.setPosition(character.position);
+			camera.setViewDirection(vec3(vec4(0.0f, 0.0f, -1.0f, 0.1f)*character.rotation));
+			character.renderable->visible = false;
+			cameraFollowingPlayer = true;
+			cameraFrozen = true;
+		}
+	}
+}
 
+void GameWindow::setCharacterSpeed(float s)
+{
+	character.path.speed = s;
+}
+
+#pragma region Character_Setup
 void GameWindow::loadTestCharacter()
 {
-	QString fileName = "../Resources/Models/turtle.obj";
-	QString command("ObjToBinaryWriter.exe ");
-	const char* nativeFileName = "Character.bin";
-	command += "\"" + QString(fileName) + "\" \"" + nativeFileName + "\"";
-	cout << command.toUtf8().constData() << endl;
-	int result = system(command.toUtf8().constData());
-	assert(result == 0);
+	if(!testCharacterLoaded)
+	{
+		QString fileName = "../Resources/Models/turtle.obj";
+		QString command("ObjToBinaryWriter.exe ");
+		const char* nativeFileName = "Character.bin";
+		command += "\"" + QString(fileName) + "\" \"" + nativeFileName + "\"";
+		cout << command.toUtf8().constData() << endl;
+		int result = system(command.toUtf8().constData());
+		assert(result == 0);
 
-	ObjReader reader;
-	character.shapeData = reader.readInShape("Character.bin");
-	EditorNode* characterStart = nodes.getRandomNode();
-	character.modelToWorldTransform = glm::translate(characterStart->position);
-	character.rotation = mat4();
-	setupCharacterGeometry();
-	setupCharacterPath(characterStart);
-	testCharacterLoaded = true;
+		ObjReader reader;
+		character.shapeData = reader.readInShape("Character.bin");
+		EditorNode* characterStart = nodes.getRandomNode();
+		character.modelToWorldTransform = glm::translate(characterStart->position);
+		character.rotation = mat4();
+		setupCharacterGeometry();
+		setupCharacterPath(characterStart);
+		testCharacterLoaded = true;
+	}
 }
 
 void GameWindow::setupCharacterPath(EditorNode* start)
@@ -86,8 +182,19 @@ void GameWindow::setupCharacterPath(EditorNode* start)
 	}
 	currentCharacterGoal = end;
 	cout << "Nodes in path: " << p.totalNodes << endl;
-	p.speed = 1;
+	if(testCharacterLoaded)
+	{
+		p.speed = character.path.speed;
+	}
 	character.path = p;
+	if(pathHighlighted)
+	{
+		character.path.highlightPathNodes(pathNodesColor);
+	}
+	if(pathConnectionsHighlighted)
+	{
+		character.path.highlightPathConnections(pathConnectionsColor);
+	}
 }
 
 void GameWindow::setupCharacterGeometry()
@@ -115,7 +222,9 @@ void GameWindow::setupCharacterGeometry()
 	GeneralGLWindow::getInstance().addRenderableUniformParameter(character.renderable, "rotationMatrix", PT_MAT4, &character.rotation[0][0]);
 	GeneralGLWindow::getInstance().addRenderableUniformParameter(character.renderable, "modelToWorldMatrix", PT_MAT4, &character.renderable->whereMatrix[0][0]);
 }
+#pragma endregion
 
+#pragma region Level_Setup
 #define R_CS(a) reinterpret_cast<char*>(&a), sizeof(a)
 #define R_C(t,a) reinterpret_cast<t>(a)//cast a to t
 uint HEADER_BYTE_SIZE = 2*sizeof(uint);//how many bites in header
@@ -164,9 +273,12 @@ void GameWindow::loadLevel(QString filename)
 	nodes.loadInNodes(numNodes, nodeData);
 	delete(nodeData);
 	delete(header);
+	camera.resetPosition();
+	nodes.hideAllNodes();
 }
+#pragma endregion
 
-
+#pragma region Level_Map_Loading
 void GameWindow::loadLevelMap(QString fileName)
 {
 	if(levelLoaded)
@@ -184,7 +296,6 @@ void GameWindow::loadLevelMap(QString fileName)
 	setupLevelGeometry();
 	levelLoaded = true;
 }
-
 void GameWindow::setupLevelGeometry()
 {
 	levelGeometry = GeneralGLWindow::getInstance().addGeometry(levelData.vertices, levelData.vertexDataSize, levelData.indices, levelData.numIndices, GL_TRIANGLES);
@@ -212,7 +323,7 @@ void GameWindow::setupLevelGeometry()
 
 	setupDebugShapes();
 }
-
+#pragma endregion
 
 void GameWindow::updateLevelProjectionView()
 {
@@ -241,22 +352,31 @@ void GameWindow::keyPressReaction(QKeyEvent* e)
 	switch(e->key())
 	{
 	case Qt::Key::Key_W:
-		camera.moveForward();
+		if(!cameraFrozen)
+			camera.moveForward();
 		break;
 	case Qt::Key::Key_S:
-		camera.moveBackward();
+		if(!cameraFrozen)
+			camera.moveBackward();
 		break;
 	case Qt::Key::Key_A:
-		camera.strafeLeft();
+		if(!cameraFrozen)
+			camera.strafeLeft();
 		break;
 	case Qt::Key::Key_D:
-		camera.strafeRight();
+		if(!cameraFrozen)
+			camera.strafeRight();
 		break;
 	case Qt::Key::Key_R:
-		camera.moveUp();
+		if(!cameraFrozen)
+			camera.moveUp();
 		break;
 	case Qt::Key::Key_F:
-		camera.moveDown();
+		if(!cameraFrozen)
+			camera.moveDown();
+		break;
+	case Qt::Key::Key_0:
+		cameraFrozen = !cameraFrozen;
 		break;
 	}
 	updateLevelProjectionView();
@@ -266,28 +386,48 @@ void GameWindow::keyPressReaction(QKeyEvent* e)
 
 void GameWindow::mouseMoveReaction(QMouseEvent* e)
 {
-	camera.mouseUpdate(glm::vec2(e->x(), e->y()));
-	updateLevelProjectionView();
-	GeneralGLWindow::getInstance().repaint();
+	if(!cameraFrozen)
+	{
+		camera.mouseUpdate(glm::vec2(e->x(), e->y()));
+		updateLevelProjectionView();
+		GeneralGLWindow::getInstance().repaint();
+	}
 }
 
 void GameWindow::update()
 {
 	frames++;
-	GeneralGLWindow::getInstance().repaint();
+	//GeneralGLWindow::getInstance().mouse
 	if(testCharacterLoaded)
 	{
 		if(!character.path.reachedEndNode)
 		{
-			character.modelToWorldTransform = character.path.getNextPathTransform();
-			character.renderable->whereMatrix = character.modelToWorldTransform;
-			character.rotation = character.path.currentRotation;
+			character.updatePosition();
+			if(cameraFollowingPlayer)
+			{
+				camera.setPosition(vec3(character.position.x, 0.1f, character.position.z));
+				camera.setViewDirection(vec3(vec4(0.0f, 0.0f, -1.0f, 1.0f)*character.rotation));
+			}
 		}
 		else
 		{
+			if(pathHighlighted)
+			{
+				character.path.hidePathNodes();
+				if(allNodesHighlighted)
+				{
+					nodes.highlightAllNodes(nonPathNodesColor);
+				}
+			}
+			if(pathConnectionsHighlighted)
+			{
+				character.path.hidePathConnections();
+			}
+
 			setupCharacterPath(currentCharacterGoal);
 		}
 	}
+	GeneralGLWindow::getInstance().repaint();
 	updateLevelProjectionView();
 }
 

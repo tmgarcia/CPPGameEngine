@@ -31,6 +31,7 @@ private:
 	void setupForNewLevel();
 	bool aNodeIsSelected;
 	bool levelLoaded;
+	bool cameraFrozen;
 	Camera camera;
 	NodeContainer nodes;
 

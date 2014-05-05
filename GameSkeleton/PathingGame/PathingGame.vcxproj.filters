@@ -15,6 +15,7 @@
     <ClCompile Include="DebugShapes_moc.cpp" />
     <ClCompile Include="GeneralGLWindow_moc.cpp" />
     <ClCompile Include="Character.cpp" />
+    <ClCompile Include="DebugSlider_moc.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="PathingGame.rc" />

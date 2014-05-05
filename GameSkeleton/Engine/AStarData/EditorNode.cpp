@@ -82,6 +82,27 @@ void EditorNode::highlightAttachedNodes(vec3 color)
 	}
 }
 
+void EditorNode::highlight(vec3 color)
+{
+	nodeInfo->color = color;
+}
+void EditorNode::highlightConnection(EditorNode* n,vec3 color)
+{
+	int connectionIndex = findConnection(n);
+	if(connectionIndex!=-1)
+	{
+		attachedNodes[connectionIndex]->arrowInfo->head->renderables[0]->visible = true;
+		attachedNodes[connectionIndex]->arrowInfo->stem->renderables[0]->visible = true;
+		attachedNodes[connectionIndex]->arrowInfo->head->color = color;
+		attachedNodes[connectionIndex]->arrowInfo->stem->color = color;
+	}
+}
+
+void EditorNode::setVisible(bool isVisible)
+{
+	nodeInfo->renderables[0]->visible = isVisible;
+}
+
 void EditorNode::clearAttachedNodes()
 {
 	for(int i = 0; i<numAttachedNodes; i++)

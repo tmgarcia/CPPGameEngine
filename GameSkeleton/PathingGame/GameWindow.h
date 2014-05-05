@@ -29,8 +29,13 @@ private:
 	void setupCharacterGeometry();
 	void updateLevelProjectionView();
 	void setupDebugShapes();
+	bool cameraFrozen;
 	bool levelLoaded;
 	bool testCharacterLoaded;
+	bool pathHighlighted;
+	bool pathConnectionsHighlighted;
+	bool allNodesHighlighted;
+	bool cameraFollowingPlayer;
 	EditorNode* currentCharacterGoal;
 	Camera camera;
 	EditorNodeContainer nodes;
@@ -40,6 +45,11 @@ private:
 public slots:
 	void keyPressReaction(QKeyEvent* e);
 	void mouseMoveReaction(QMouseEvent* e);
+	void togglePathNodes();
+	void togglePathConnections();
+	void toggleAllNodes();
+	void toggleCameraPlayerView();
+	void setCharacterSpeed(float s);
 
 private slots:
 	void update();

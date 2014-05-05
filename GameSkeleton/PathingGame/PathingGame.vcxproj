@@ -58,6 +58,7 @@
       <Command>copy "$(ProjectDir)..\Engine\$(Configuration)\Engine.dll" "$(OutDir)"
 copy "$(ProjectDir)..\Engine\Renderer\GeneralGLWindow_moc.cpp" "$(ProjectDir)"
 copy "$(ProjectDir)..\Engine\DebugTools\DebugShapes_moc.cpp" "$(ProjectDir)"
+copy "$(ProjectDir)..\Engine\DebugTools\DebugSlider_moc.cpp" "$(ProjectDir)"
 copy "$(ProjectDir)..\Tools\ObjToBinaryWriter\bin\Debug\ObjToBinaryWriter.exe" "$(ProjectDir)"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -84,6 +85,7 @@ copy "$(ProjectDir)..\Tools\ObjToBinaryWriter\bin\Debug\ObjToBinaryWriter.exe" "
   <ItemGroup>
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="DebugShapes_moc.cpp" />
+    <ClCompile Include="DebugSlider_moc.cpp" />
     <ClCompile Include="FullDisplay.cpp" />
     <ClCompile Include="FullDisplay_moc.cpp" />
     <ClCompile Include="GameWindow.cpp" />

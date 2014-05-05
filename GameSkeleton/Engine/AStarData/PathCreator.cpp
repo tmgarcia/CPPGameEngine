@@ -49,6 +49,7 @@ Path PathCreator::calculatePath(EditorNode* start, EditorNode* end)
 	{
 		cout << "IMPOSSIBLE PATH" << endl;
 	}
+	processedNodes.clear();
 	return p;
 }
 void PathCreator::processNode(EditorNode* node, float costSoFar, PathingNode* parent)

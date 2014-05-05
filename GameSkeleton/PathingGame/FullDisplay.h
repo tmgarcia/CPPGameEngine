@@ -25,9 +25,12 @@ private:
 	void keyPressEvent(QKeyEvent *event);
 
 private slots:
-	void loadObj();
 	void loadLevel();
 	void startCharacter();
+	void highlightPathNodes();
+	void highlightPathConnections();
+	void highlightAllNodes();
+	void cameraToPlayerView();
 	//void saveLevel();
 	//void saveLevelAs();
 

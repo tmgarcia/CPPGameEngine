@@ -199,6 +199,22 @@ void EditorNodeContainer::resetNodeColors()
 	}
 }
 
+void EditorNodeContainer::highlightAllNodes(vec3 color)
+{
+	for(int i = 0; i<numNodes; i++)
+	{
+		nodes[i]->setVisible(true);
+		nodes[i]->highlight(color);
+	}
+}
+void EditorNodeContainer::hideAllNodes()
+{
+	for(int i = 0; i<numNodes; i++)
+	{
+		nodes[i]->setVisible(false);
+	}
+}
+
 void EditorNodeContainer::removeNode(EditorNode* node)
 {
 	for(int i = 0; i<numNodes; i++)

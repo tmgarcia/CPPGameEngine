@@ -41,6 +41,7 @@ void LevelDisplay::setup()
 	QObject::connect(&GeneralGLWindow::getInstance(), SIGNAL(mouseClicked(QMouseEvent*)), this, SLOT(mouseClickReaction(QMouseEvent*)));
 	aNodeIsSelected = false;
 	levelLoaded = false;
+	cameraFrozen=false;
 }
 
 void LevelDisplay::setupForNewLevel()
@@ -81,7 +82,6 @@ void LevelDisplay::loadLevel(QString filename)
 		ObjReader reader;
 		levelData = reader.readInShape("ObjToBinaryResult.bin");
 		setupLevelGeometry();
-		levelLoaded = true;
 	}
 
 	uint nodeDataSize = numTotalBytes - (HEADER_BYTE_SIZE+geometryDataSize);
@@ -92,6 +92,8 @@ void LevelDisplay::loadLevel(QString filename)
 	cout << "numNodes " << numNodes << endl;
 
 	nodes.loadInNodes(numNodes, nodeData);
+	levelLoaded = true;
+	cout << "Done loading" << endl;
 }
 
 
@@ -238,28 +240,37 @@ void LevelDisplay::keyPressReaction(QKeyEvent* e)
 	switch(e->key())
 	{
 	case Qt::Key::Key_W:
-		camera.moveForward();
+		if(!cameraFrozen)
+			camera.moveForward();
 		break;
 	case Qt::Key::Key_S:
-		camera.moveBackward();
+		if(!cameraFrozen)
+			camera.moveBackward();
 		break;
 	case Qt::Key::Key_A:
-		camera.strafeLeft();
+		if(!cameraFrozen)
+			camera.strafeLeft();
 		break;
 	case Qt::Key::Key_D:
-		camera.strafeRight();
+		if(!cameraFrozen)
+			camera.strafeRight();
 		break;
 	case Qt::Key::Key_R:
-		camera.moveUp();
+		if(!cameraFrozen)
+			camera.moveUp();
 		break;
 	case Qt::Key::Key_F:
-		camera.moveDown();
+		if(!cameraFrozen)
+			camera.moveDown();
 		break;
 	case Qt::Key::Key_Delete:
 		if(aNodeIsSelected)
 		{
 			nodes.deleteSelectedNode();
 		}
+		break;
+	case Qt::Key::Key_0:
+		cameraFrozen = !cameraFrozen;
 		break;
 	}
 	updateLevelProjectionView();
@@ -269,9 +280,12 @@ void LevelDisplay::keyPressReaction(QKeyEvent* e)
 
 void LevelDisplay::mouseMoveReaction(QMouseEvent* e)
 {
-	camera.mouseUpdate(glm::vec2(e->x(), e->y()));
-	updateLevelProjectionView();
-	GeneralGLWindow::getInstance().repaint();
+	if(!cameraFrozen)
+	{
+		camera.mouseUpdate(glm::vec2(e->x(), e->y()));
+		updateLevelProjectionView();
+		GeneralGLWindow::getInstance().repaint();
+	}
 }
 
 

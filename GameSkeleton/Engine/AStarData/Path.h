@@ -5,7 +5,11 @@ using glm::mat4;
 class __declspec(dllexport)Path
 {
 public:
-	mat4 getNextPathTransform();
+	vec3 getNextPathPosition();
+	void highlightPathNodes(vec3 color);
+	void highlightPathConnections(vec3 color);
+	void hidePathNodes();
+	void hidePathConnections();
 	float speed;//What percent per update ex: 10 = 10% progress between nodes each update 100% is immediately at next node
 	int totalNodes;
 	bool isValidPath;
@@ -16,20 +20,24 @@ public:
 	{
 		path = p;
 		totalNodes = numNodes;
-		speed = 1;//Default 10% per update, or 0.1
+		speed = 0.5;//half a "unit" per stretch
 		isValidPath = numNodes>0;
 		currentPathIndex = 0;
 		currentStretch = 0;
 		pathingObjectDefaultViewDirection = vec3(0,0,-1);
 		reachedEndNode = false;
-		lastTransform = mat4();
+		lastPosition= vec3();
 		currentRotation = mat4();
+		pathHighlighted = false;
+		pathHighlightColor = vec3();
 	}
 	~Path(){}
 private:
 	EditorNode** path;
 	int currentPathIndex;
 	float currentStretch;
-	mat4 lastTransform;
+	vec3 lastPosition;
+	bool pathHighlighted;
+	vec3 pathHighlightColor;
 };
 

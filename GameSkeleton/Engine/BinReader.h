@@ -3,7 +3,7 @@
 #include "glm\gtc\matrix_transform.hpp"
 #include "glm\gtx\transform.hpp"
 
-class __declspec(dllexport) ObjReader
+class __declspec(dllexport) BinReader
 {
 public:
 	static const unsigned int POSITION_OFFSET = 0;

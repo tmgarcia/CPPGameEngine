@@ -1,9 +1,9 @@
-#include "ObjReader.h"
+#include "BinReader.h"
 #include <iostream>
 #include <fstream>
 using namespace std;
 
-ObjReader::ShapeData ObjReader::readInShape(char* filename)
+BinReader::ShapeData BinReader::readInShape(char* filename)
 {
 	ifstream binFile;
 	binFile.open(filename, ios::in | ios::binary);
@@ -27,7 +27,7 @@ ObjReader::ShapeData ObjReader::readInShape(char* filename)
 	Vertex* vertexData = reinterpret_cast<Vertex*>(data);
 	unsigned short* indexData = reinterpret_cast<unsigned short*>(data + vertexDataSize);
 
-	ObjReader::ShapeData shape;
+	BinReader::ShapeData shape;
 	shape.indices = indexData;
 	shape.indexDataSize = indexDataSize;
 	shape.numIndices = numIndices;

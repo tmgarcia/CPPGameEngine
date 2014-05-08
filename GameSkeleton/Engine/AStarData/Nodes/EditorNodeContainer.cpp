@@ -2,13 +2,9 @@
 
 #include <glm\gtx\projection.hpp>
 
-#include "..\DebugTools\DebugShapes.h"
-#include "..\MathTools\Random.h"
+#include "..\..\DebugTools\DebugShapes.h"
+#include "..\..\MathTools\Random.h"
 
-float nodeRadius = 0.25f;
-vec3 nodeColor = vec3(0.6f,0,1);
-vec3 sourceNodeColor = vec3(1,0,0);
-vec3 destinationnodeColor = vec3(0,1,0);
 
 EditorNode* EditorNodeContainer::getRandomNode()
 {
@@ -16,11 +12,6 @@ EditorNode* EditorNodeContainer::getRandomNode()
 	return nodes[randomIndex];
 }
 
-#define R_CS(a) reinterpret_cast<char*>(&a), sizeof(a)
-#define R_C(t,a) reinterpret_cast<t>(a)//cast a to t
-#define NODE_FILE_ADDRESS(nodeIndex) nodeIndex * SERIALIZED_NODE_SIZE
-uint SERIALIZED_NODE_SIZE = sizeof(vec3) + sizeof(uint) + sizeof(uint);
-uint SERIALIZED_CONNECTION_SIZE = sizeof(float) + sizeof(uint);
 
 void EditorNodeContainer::loadInNodes(uint numNodes, char* nodeData)
 {
@@ -31,43 +22,31 @@ void EditorNodeContainer::loadInNodes(uint numNodes, char* nodeData)
 	for(uint i = 0; i < numNodes; i++)
 	{
 		uint positionData = i * SERIALIZED_NODE_SIZE;
-		cout << "positionData " << positionData << endl;
 		vec3 position = *(R_C(vec3*, nodeData + positionData));
-		cout << "node " << i << endl;
 		cout << position.x << "," << position.y << "," << position.z << endl;
 		addNode(position);
 	}
 
-	cout << "-- loading connections --"<< endl;
 	for(uint i = 0; i < numNodes; i++)
 	{
-		cout << "node " << i << endl;
 		uint positionData = i * SERIALIZED_NODE_SIZE;
 
 		uint attachedNodeData = positionData + sizeof(vec3);
-		cout << "attachedNodeData " << attachedNodeData << endl;
 
-		uint numAttachedNodes = *(R_C(uint*, nodeData + attachedNodeData));
-		cout << numAttachedNodes << " connections" << endl;
+		uint numConnections = *(R_C(uint*, nodeData + attachedNodeData));
 
 		uint nodeConnectionsDataOffsetPosition = attachedNodeData + sizeof(uint);
-		cout << "connectionDataOffset position " << nodeConnectionsDataOffsetPosition << endl;
 
 		uint nodeConnectionsDataOffset = *(R_C(uint*, nodeData + nodeConnectionsDataOffsetPosition));
-		cout << "node's connections offset " << nodeConnectionsDataOffset << endl;
 
 		uint currentConnectionOffset = nodeConnectionsDataOffset;
-		cout << "current Connection Offset " << currentConnectionOffset << endl;
 
-		for(int j = 0; j< numAttachedNodes; j++)
+		for(int j = 0; j< numConnections; j++)
 		{
-			cout << "connection " << j << endl;
 			float cost = *R_C(float*, nodeData + currentConnectionOffset);
-			cout << "cost " << cost << endl;
 			uint targetAddress = *(R_C(uint*, nodeData + currentConnectionOffset + sizeof(float)));
 			uint targetIndex = targetAddress;
-			cout << "target index " << targetIndex << endl;
-			nodes[i]->addAttachedNode(nodes[targetIndex], cost);
+			nodes[i]->addConnection(nodes[targetIndex], cost);
 
 			currentConnectionOffset += SERIALIZED_CONNECTION_SIZE;
 		}
@@ -93,26 +72,26 @@ ofstream* EditorNodeContainer::serializeNodes(ofstream *stream, uint NODE_DATA_B
 	{
 		cout << "node" << i << endl;
 		stream->write(R_CS(nodes[i]->position));
-		currentBits = nodes[i]->numAttachedNodes;
+		currentBits = nodes[i]->numConnections;
 		stream->write(R_CS(currentBits));
-		cout << nodes[i]->numAttachedNodes << " connections" << endl;
+		cout << nodes[i]->numConnections << " connections" << endl;
 		stream->write(R_CS(connectionFileOffset));//where connections start
-		connectionFileOffset += nodes[i]->numAttachedNodes * SERIALIZED_CONNECTION_SIZE;//Where next node's connections will start
+		connectionFileOffset += nodes[i]->numConnections * SERIALIZED_CONNECTION_SIZE;//Where next node's connections will start
 	}
 	uint fileAdress;
 	float cost;
 	for(int i = 0; i < numNodes; i++)
 	{
 		cout << "i="<< i << endl;
-		for(int j = 0; j < nodes[i]->numAttachedNodes; j++)
+		for(int j = 0; j < nodes[i]->numConnections; j++)
 		{
 			cout << "j="<< j << endl;
 			cout << "-- saving connections --"<< endl;
-			cost = nodes[i]->attachedNodes[j]->cost;
+			cost = nodes[i]->connections[j]->cost;
 			cout << "cost "<< cost << endl;
 			stream->write(R_CS(cost));
 
-			fileAdress = (nodes.indexOf(nodes[i]->attachedNodes[j]->node));
+			fileAdress = (nodes.indexOf(nodes[i]->connections[j]->node));
 			stream->write(R_CS(fileAdress));
 			cout << "target index "<< fileAdress << endl;
 		}
@@ -129,8 +108,8 @@ bool EditorNodeContainer::nodeRightClicked(vec3 clickDirection, vec3 clickOrigin
 		nodeClicked = true;
 		selectedNode = clickedNode;
 		selectedNode->nodeInfo->color = sourceNodeColor;
-		if(selectedNode->numAttachedNodes>0)
-			selectedNode->highlightAttachedNodes(destinationnodeColor);
+		if(selectedNode->numConnections>0)
+			selectedNode->highlightAllConnections(destinationnodeColor);
 	}
 	return nodeClicked;
 }
@@ -142,7 +121,7 @@ void EditorNodeContainer::nodeLeftClicked(vec3 clickDirection, vec3 clickOrigin)
 		if(clickedNode->position != selectedNode->position)
 		{
 			clickedNode->nodeInfo->color = destinationnodeColor;
-			selectedNode->toggleAttachedNode(clickedNode);
+			selectedNode->toggleConnection(clickedNode);
 		}
 	}
 }
@@ -195,7 +174,7 @@ void EditorNodeContainer::resetNodeColors()
 	for(int i = 0; i<numNodes; i++)
 	{
 		nodes[i]->nodeInfo->color = nodeColor;
-		nodes[i]->hideAttachedNodes();
+		nodes[i]->hideConnections();
 	}
 }
 
@@ -221,10 +200,10 @@ void EditorNodeContainer::removeNode(EditorNode* node)
 	{
 		if(nodes[i]->connectedToNode(node))
 		{
-			nodes[i]->toggleAttachedNode(node);
+			nodes[i]->toggleConnection(node);
 		}
 	}
-	node->clearAttachedNodes();
+	node->clearConnections();
 	node->nodeInfo->remainingLife = 0;
 	node->nodeInfo->renderables[0]->visible = false;
 	nodes.removeAt(nodes.indexOf(node));

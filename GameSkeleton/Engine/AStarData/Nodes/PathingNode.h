@@ -1,5 +1,5 @@
 #pragma once
-#include "EditorNode.h"
+#include "DebugNode.h"
 
 class __declspec(dllexport) PathingNode
 {
@@ -8,9 +8,9 @@ public:
 	float costSoFar;
 	float totalEstimatedCost;
 	bool open;
-	EditorNode* node;
+	DebugNode* node;
 	PathingNode* parentNode;
-	PathingNode(EditorNode* n, float h)
+	PathingNode(DebugNode* n, float h)
 	{
 		node = n;
 		heuristic = h;

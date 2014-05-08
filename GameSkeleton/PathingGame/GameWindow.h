@@ -2,10 +2,12 @@
 
 #include <Qt\qapplication.h>
 #include <Qt\qtimer.h>
-#include "AStarData\EditorNodeContainer.h"
-#include "AStarData\EditorNode.h"
-#include "Character.h"
+#include "AStarData\Nodes\DebugNodeContainer.h"
+#include "AStarData\Nodes\DebugNode.h"
+#include "Entities\NonPlayerCharacter.h"
+#include "GameObjects\GameLevel.h"
 #include <Qt\qtimer.h>
+#include "GameObjects\Flag.h"
 
 class GameWindow : public QObject
 {
@@ -16,7 +18,6 @@ class GameWindow : public QObject
 public:
 	GameWindow();
 	~GameWindow();
-	void loadLevelMap(QString filename);
 	void setup();
 	void GameWindow::loadLevel(QString filename);
 	GLuint windowHeight;
@@ -24,11 +25,13 @@ public:
 	void loadTestCharacter();
 
 private:
-	void setupCharacterPath(EditorNode* start);
+	void setupCharacterPath(DebugNode* start);
 	void setupLevelGeometry();
 	void setupCharacterGeometry();
 	void updateLevelProjectionView();
 	void setupDebugShapes();
+	void resetNodeHighlighting();
+	DebugNode* getNewFlagLocation();
 	bool cameraFrozen;
 	bool levelLoaded;
 	bool testCharacterLoaded;
@@ -36,10 +39,10 @@ private:
 	bool pathConnectionsHighlighted;
 	bool allNodesHighlighted;
 	bool cameraFollowingPlayer;
-	EditorNode* currentCharacterGoal;
+	DebugNode* currentCharacterGoal;
 	Camera camera;
-	EditorNodeContainer nodes;
-	Character character;
+	Flag flag;
+	NonPlayerCharacter character;
 	int frames;
 
 public slots:

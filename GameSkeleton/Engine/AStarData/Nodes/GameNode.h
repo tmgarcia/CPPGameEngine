@@ -1,7 +1,7 @@
 #pragma once
 
 #include <glm\glm.hpp>
-#include "..\DebugTools\DebugShapes.h"
+#include "..\..\DebugTools\DebugShapes.h"
 
 using glm::vec3;
 

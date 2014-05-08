@@ -1,11 +1,11 @@
 #pragma once
-#include "PathingNode.h"
+#include "Nodes\PathingNode.h"
 #include "Path.h"
-#include "EditorNode.h"
+#include "Nodes\DebugNode.h"
 class __declspec(dllexport)PathCreator
 {
 public:
-	Path calculatePath(EditorNode* start, EditorNode* end);
+	Path calculatePath(DebugNode* start, DebugNode* end);
 
 	PathCreator()
 	{
@@ -13,13 +13,13 @@ public:
 	}
 	~PathCreator(){}
 private:
-	void processNode(EditorNode* node, float costSoFar, PathingNode* parent);
+	void processNode(DebugNode* node, float costSoFar, PathingNode* parent);
 	QList<PathingNode*> processedNodes;
 	bool endNodeHasLowestTEC();
 	bool openNodesRemaining();
 	PathingNode* getOpenNodeWithLowestTEC();
-	EditorNode* startNode;
-	EditorNode* endNode;
-	int nodePreviouslyProcessed(EditorNode* node);
+	DebugNode* startNode;
+	DebugNode* endNode;
+	int nodePreviouslyProcessed(DebugNode* node);
 };
 

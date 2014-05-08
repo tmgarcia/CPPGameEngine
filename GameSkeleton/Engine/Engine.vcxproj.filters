@@ -9,19 +9,14 @@
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="ObjReader.cpp" />
     <ClCompile Include="Renderer\GeneralGLWindow.cpp" />
     <ClCompile Include="Renderer\GeneralGLWindow_moc.cpp" />
     <ClCompile Include="DebugTools\Logger.cpp" />
     <ClCompile Include="DebugTools\Profiler.cpp" />
     <ClCompile Include="DebugTools\DebugShapes.cpp" />
     <ClCompile Include="DebugTools\DebugShapes_moc.cpp" />
-    <ClCompile Include="AStarData\EditorNode.cpp" />
-    <ClCompile Include="AStarData\GameNode.cpp" />
-    <ClCompile Include="AStarData\EditorNodeContainer.cpp" />
     <ClCompile Include="AStarData\PathCreator.cpp" />
     <ClCompile Include="AStarData\Path.cpp" />
-    <ClCompile Include="AStarData\GameNodeContainer.cpp" />
     <ClCompile Include="MathTools\Random.cpp">
       <Filter>Math</Filter>
     </ClCompile>
@@ -30,13 +25,27 @@
     <ClCompile Include="AStarDebugToolbar.cpp" />
     <ClCompile Include="DebugTools\DebugSlider.cpp" />
     <ClCompile Include="DebugTools\DebugSlider_moc.cpp" />
+    <ClCompile Include="AStarData\Nodes\DebugNode.cpp" />
+    <ClCompile Include="AStarData\Nodes\DebugNodeContainer.cpp" />
+    <ClCompile Include="AStarData\Nodes\EditorNode.cpp" />
+    <ClCompile Include="AStarData\Nodes\EditorNodeContainer.cpp" />
+    <ClCompile Include="AStarData\Nodes\GameNode.cpp" />
+    <ClCompile Include="AStarData\Nodes\GameNodeContainer.cpp" />
+    <ClCompile Include="AStarData\Nodes\Node.cpp" />
+    <ClCompile Include="AStarData\Nodes\NodeContainer.cpp" />
+    <ClCompile Include="Entities\NonPlayerCharacter.cpp" />
+    <ClCompile Include="GameObjects\GameLevel.cpp" />
+    <ClCompile Include="BinReader.cpp" />
+    <ClCompile Include="GameObjects\Flag.cpp" />
+    <ClCompile Include="Entities\State.cpp" />
+    <ClCompile Include="Entities\ReturningToBaseState.cpp" />
+    <ClCompile Include="Entities\FetchingFlagState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h" />
     <ClInclude Include="ExportHeader.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="ObjReader.h" />
     <ClInclude Include="Renderer\GeneralGLWindow.h" />
     <ClInclude Include="Renderer\ParameterType.h" />
     <ClInclude Include="Renderer\RenderableInfo.h" />
@@ -52,13 +61,8 @@
     <ClInclude Include="DebugTools\DebugShapes.h" />
     <ClInclude Include="Renderer\PriorityLevel.h" />
     <ClInclude Include="DebugTools\Asserter.h" />
-    <ClInclude Include="AStarData\EditorNode.h" />
-    <ClInclude Include="AStarData\GameNode.h" />
-    <ClInclude Include="AStarData\EditorNodeContainer.h" />
-    <ClInclude Include="AStarData\PathingNode.h" />
     <ClInclude Include="AStarData\PathCreator.h" />
     <ClInclude Include="AStarData\Path.h" />
-    <ClInclude Include="AStarData\GameNodeContainer.h" />
     <ClInclude Include="MathTools\Random.h">
       <Filter>Math</Filter>
     </ClInclude>
@@ -66,5 +70,21 @@
     <ClInclude Include="DebugToolBar.h" />
     <ClInclude Include="AStarDebugToolbar.h" />
     <ClInclude Include="DebugTools\DebugSlider.h" />
+    <ClInclude Include="AStarData\Nodes\DebugNode.h" />
+    <ClInclude Include="AStarData\Nodes\DebugNodeContainer.h" />
+    <ClInclude Include="AStarData\Nodes\EditorNode.h" />
+    <ClInclude Include="AStarData\Nodes\EditorNodeContainer.h" />
+    <ClInclude Include="AStarData\Nodes\GameNode.h" />
+    <ClInclude Include="AStarData\Nodes\GameNodeContainer.h" />
+    <ClInclude Include="AStarData\Nodes\Node.h" />
+    <ClInclude Include="AStarData\Nodes\PathingNode.h" />
+    <ClInclude Include="AStarData\Nodes\NodeContainer.h" />
+    <ClInclude Include="Entities\NonPlayerCharacter.h" />
+    <ClInclude Include="GameObjects\GameLevel.h" />
+    <ClInclude Include="BinReader.h" />
+    <ClInclude Include="GameObjects\Flag.h" />
+    <ClInclude Include="Entities\State.h" />
+    <ClInclude Include="Entities\FetchingFlagState.h" />
+    <ClInclude Include="Entities\ReturningToBaseState.h" />
   </ItemGroup>
 </Project>

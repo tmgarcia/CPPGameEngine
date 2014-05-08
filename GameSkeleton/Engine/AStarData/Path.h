@@ -1,6 +1,6 @@
 #pragma once
 
-#include "EditorNode.h"
+#include "Nodes\DebugNode.h"
 using glm::mat4;
 class __declspec(dllexport)Path
 {
@@ -16,10 +16,16 @@ public:
 	bool reachedEndNode;
 	vec3 pathingObjectDefaultViewDirection;//The object being pathed's normalized view direction by default (ex 0,0,-1 facing straight in negative z direction)
 	mat4 currentRotation;
-	Path(EditorNode** p=nullptr, int numNodes=0)
+	bool pathConnectionsHighlighted;
+	vec3 pathConnectionHighlightColor;
+	vec3 pathHighlightColor;
+	bool pathHighlighted;
+	DebugNode* getCurrentNode();
+	Path(DebugNode** p=nullptr, int numNodes=0)
 	{
 		path = p;
 		totalNodes = numNodes;
+		cout << "numNodes " << totalNodes << endl;
 		speed = 0.5;//half a "unit" per stretch
 		isValidPath = numNodes>0;
 		currentPathIndex = 0;
@@ -29,15 +35,14 @@ public:
 		lastPosition= vec3();
 		currentRotation = mat4();
 		pathHighlighted = false;
+		pathConnectionsHighlighted = false;
 		pathHighlightColor = vec3();
 	}
 	~Path(){}
 private:
-	EditorNode** path;
+	DebugNode** path;
 	int currentPathIndex;
 	float currentStretch;
 	vec3 lastPosition;
-	bool pathHighlighted;
-	vec3 pathHighlightColor;
 };
 

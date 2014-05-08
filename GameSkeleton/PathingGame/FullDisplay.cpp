@@ -51,6 +51,7 @@ FullDisplay::FullDisplay()
 	speedSlider->setValue(0.5f);
 	speedSlider->setFixedWidth(300);
 	QLabel* speedLabel = new QLabel("Speed:");
+
 	debugToolBar->addWidget(speedLabel);
 	debugToolBar->addWidget(speedSlider);
 	//QObject::connect(ambientR, SIGNAL(valueChanged(float)), display, SLOT(setAmbientColorRed(float)));

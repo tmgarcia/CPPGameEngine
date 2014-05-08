@@ -4,7 +4,8 @@
 #include <math.h>
 
 using glm::vec2;
-
+int turnSteps = 8;
+int currentTurnStep = 0;
 vec3 Path::getNextPathPosition()
 {
 	//if haven't reached end
@@ -25,15 +26,31 @@ vec3 Path::getNextPathPosition()
 		}
 		newPosition = A*currentStretch + (1-currentStretch)*B;
 		//newPosition = glm::translate(newPosition);
-
-		//theta = acos(A dot B)
-		mat4 rotation = TransformationMatrixMaker::getInstance().getRotationFromVector(direction);
+		
+		mat4 rotation;
+		if(currentTurnStep<=turnSteps && currentPathIndex!=0)
+		{
+			//cout<<"step " << currentTurnStep<<endl;
+			float lerpAmount = (float)currentTurnStep/(float)turnSteps;
+			//cout<<"turn lerp " << lerpAmount<<endl;
+			vec3 B1 = path[currentPathIndex-1]->position;//current node
+			vec3 A1 = path[currentPathIndex]->position;
+			vec3 previousDirection = vec3(B1.x, 0, B1.z)-vec3(A1.x, 0, A1.z);
+			vec3 midTurnPosition = direction*lerpAmount + (1-lerpAmount)*previousDirection;
+			rotation = TransformationMatrixMaker::getInstance().getRotationFromVector(midTurnPosition);
+			currentTurnStep++;
+		}
+		else
+		{
+			rotation = TransformationMatrixMaker::getInstance().getRotationFromVector(direction);
+		}
 		currentRotation = rotation;
 
 		if(currentStretch==1)
 		{
 			currentPathIndex++;
 			currentStretch = 0;
+			currentTurnStep = 0;
 			if(currentPathIndex==totalNodes-1)
 			{
 				cout << "End of path" << endl;
@@ -74,6 +91,8 @@ void Path::highlightPathConnections(vec3 color)
 	{
 		path[i]->highlightConnection(path[i+1], color);
 	}
+	pathConnectionsHighlighted = true;
+	pathConnectionHighlightColor = color;
 }
 void Path::hidePathNodes()
 {
@@ -87,6 +106,11 @@ void Path::hidePathConnections()
 {
 	for(int i = 0; i<totalNodes-1; i++)
 	{
-		path[i]->hideAttachedNodes();
+		path[i]->hideConnections();
 	}
+	pathConnectionsHighlighted = false;
+}
+DebugNode* Path::getCurrentNode()
+{
+	return path[currentPathIndex];
 }

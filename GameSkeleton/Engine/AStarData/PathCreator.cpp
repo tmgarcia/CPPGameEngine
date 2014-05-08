@@ -1,8 +1,9 @@
 #include "PathCreator.h"
 
 
-Path PathCreator::calculatePath(EditorNode* start, EditorNode* end)
+Path PathCreator::calculatePath(DebugNode* start, DebugNode* end)
 {
+	cout << "started calculating Path" << endl;
 	startNode = start;
 	endNode = end;
 
@@ -10,17 +11,17 @@ Path PathCreator::calculatePath(EditorNode* start, EditorNode* end)
 	for(processNode(start, 0, NULL), currentParentNode=processedNodes[0]; !endNodeHasLowestTEC() && openNodesRemaining(); currentParentNode = getOpenNodeWithLowestTEC())
 	{
 		currentParentNode->open=false;
-		for(int i = 0; i<currentParentNode->node->numAttachedNodes; i++)
+		for(int i = 0; i<currentParentNode->node->numConnections; i++)
 		{
-			float connectionCostSquared = glm::pow(currentParentNode->node->attachedNodes[i]->cost, 2.0f);
+			float connectionCostSquared = glm::pow(currentParentNode->node->connections[i]->cost, 2.0f);
 			float costSoFar = connectionCostSquared + currentParentNode->costSoFar;
-			processNode(currentParentNode->node->attachedNodes[i]->node, costSoFar, currentParentNode);
+			processNode(currentParentNode->node->connections[i]->node, costSoFar, currentParentNode);
 		}
 	}
 	Path p = Path(nullptr, 0);
 	if(openNodesRemaining())//If the end node could actually be reached
 	{
-		QList <EditorNode*> reversePath;
+		QList <DebugNode*> reversePath;
 		bool reachedStartNode = false;
 		uint numNodesInPath = 0;
 		PathingNode* currentNode = currentParentNode;//current parent node will be end node
@@ -37,7 +38,7 @@ Path PathCreator::calculatePath(EditorNode* start, EditorNode* end)
 				currentNode = currentNode->parentNode;
 			}
 		}
-		EditorNode** path = new EditorNode*[numNodesInPath];
+		DebugNode** path = new DebugNode*[numNodesInPath];
 		for(int i = 0; i<numNodesInPath; i++)
 		{
 			path[i] = reversePath[i];
@@ -50,9 +51,10 @@ Path PathCreator::calculatePath(EditorNode* start, EditorNode* end)
 		cout << "IMPOSSIBLE PATH" << endl;
 	}
 	processedNodes.clear();
+	cout << "finished calculating path" << endl;
 	return p;
 }
-void PathCreator::processNode(EditorNode* node, float costSoFar, PathingNode* parent)
+void PathCreator::processNode(DebugNode* node, float costSoFar, PathingNode* parent)
 {
 	vec3 nodeToEnd = endNode->position - node->position;
 	float h = (nodeToEnd.x*nodeToEnd.x)+(nodeToEnd.y*nodeToEnd.y)+(nodeToEnd.z*nodeToEnd.z);//from node to end, squared
@@ -112,7 +114,7 @@ PathingNode* PathCreator::getOpenNodeWithLowestTEC()
 	}
 	return processedNodes[index];
 }
-int PathCreator::nodePreviouslyProcessed(EditorNode* node)
+int PathCreator::nodePreviouslyProcessed(DebugNode* node)
 {
 	int index = -1;
 	for(int i = 0; i < processedNodes.size(); i++)

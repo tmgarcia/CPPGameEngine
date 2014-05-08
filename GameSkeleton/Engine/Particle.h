@@ -1,15 +1,14 @@
 #pragma once
-#include "Vector3D.h"
-#include "Core.h"
-using Core::RGB;
+#include "glm\glm.hpp"
 
+using glm::vec3;
 
 class Particle
 {
 public:
-	RGB color;
-	Vector3D position;
-	Vector3D velocity;
+	vec3 color;
+	vec3 position;
+	vec3 velocity;
 	float size;
 	float lifetime;
 	float orientation;

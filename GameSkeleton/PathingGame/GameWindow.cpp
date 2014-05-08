@@ -1,5 +1,5 @@
 #include "GameWindow.h"
-#include "ObjReader.h"
+#include "BinReader.h"
 #include "DebugShapes.h"
 #include "AStarData\PathCreator.h"
 #include "AStarData\Path.h"
@@ -12,24 +12,6 @@ using std::endl;
 using std::ofstream;
 using std::ifstream;
 
-vec3 lightPosition = vec3(0.0f, 50.0f, -30.0f);
-float diffusionIntensity = 1;
-vec4 specularColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
-float specularExponent = 1000000;
-vec3 eyePosition;
-vec3 overridingObjectColor = vec3(0.3,0.3,0.3);
-vec3 ambientLight = vec3(0.9f, 0.9f, 0.9f);
-
-GeometryInfo* levelGeometry;
-RenderableInfo* levelRenderable;
-ShaderInfo* lightingShader;
-
-ObjReader::ShapeData levelData;
-
-mat4 levelTransform = mat4();
-mat4 levelRotation = mat4();
-mat4 levelFullTransform = mat4();
-
 mat4 viewToProjectionMatrix;
 mat4 worldToViewMatrix;
 mat4 worldToProjectionMatrix;
@@ -38,12 +20,14 @@ vec3 nonPathNodesColor= vec3(1,0,0);
 vec3 pathNodesColor= vec3(0,0.5f,1);
 vec3 pathConnectionsColor = vec3(0,0.5f,1);
 
+DebugNode* baseNode;
+
 void GameWindow::setup()
 {
 	QObject::connect(&GeneralGLWindow::getInstance(), SIGNAL(keyPressed(QKeyEvent*)), this, SLOT(keyPressReaction(QKeyEvent*)));
 	QObject::connect(&GeneralGLWindow::getInstance(), SIGNAL(mouseMoved(QMouseEvent*)), this, SLOT(mouseMoveReaction(QMouseEvent*)));
 	QObject::connect(&timer, SIGNAL(timeout()), this, SLOT(update()));
-	//aNodeIsSelected = false;
+	DebugNodeContainer::getInstance();
 	cameraFrozen = false;
 	levelLoaded = false;
 	testCharacterLoaded = false;
@@ -62,16 +46,16 @@ void GameWindow::togglePathNodes()
 	{
 		if(pathHighlighted)
 		{
-			character.path.hidePathNodes();
+			character.hidePathNodes();
 			pathHighlighted = false;
 			if(allNodesHighlighted)
 			{
-				nodes.highlightAllNodes(nonPathNodesColor);
+				DebugNodeContainer::getInstance().highlightAllNodes(nonPathNodesColor);
 			}
 		}
 		else
 		{
-			character.path.highlightPathNodes(pathNodesColor);
+			character.highlightPathNodes(pathNodesColor);
 			pathHighlighted = true;
 		}
 	}
@@ -82,12 +66,12 @@ void GameWindow::togglePathConnections()
 	{
 		if(pathConnectionsHighlighted)
 		{
-			character.path.hidePathConnections();
+			character.hidePathConnections();
 			pathConnectionsHighlighted = false;
 		}
 		else
 		{
-			character.path.highlightPathConnections(pathConnectionsColor);
+			character.highlightPathConnections(pathConnectionsColor);
 			pathConnectionsHighlighted = true;
 		}
 	}
@@ -96,19 +80,19 @@ void GameWindow::toggleAllNodes()
 {
 	if(allNodesHighlighted)
 	{
-		nodes.hideAllNodes();
+		DebugNodeContainer::getInstance().hideAllNodes();
 		allNodesHighlighted = false;
 		if(pathHighlighted)
 		{
-			character.path.highlightPathNodes(pathNodesColor);
+			character.highlightPathNodes(pathNodesColor);
 		}
 	}
 	else
 	{
-		nodes.highlightAllNodes(nonPathNodesColor);
+		DebugNodeContainer::getInstance().highlightAllNodes(nonPathNodesColor);
 		if(pathHighlighted)
 		{
-			character.path.highlightPathNodes(pathNodesColor);
+			character.highlightPathNodes(pathNodesColor);
 		}
 		allNodesHighlighted = true;
 	}
@@ -120,15 +104,15 @@ void GameWindow::toggleCameraPlayerView()
 		if(cameraFollowingPlayer)
 		{
 			camera.resetPosition();
-			character.renderable->visible = true;
+			character.setVisible(true);
 			cameraFollowingPlayer = false;
 			cameraFrozen = false;
 		}
 		else
 		{
-			camera.setPosition(character.position);
-			camera.setViewDirection(vec3(vec4(0.0f, 0.0f, -1.0f, 0.1f)*character.rotation));
-			character.renderable->visible = false;
+			camera.setPosition(character.getPosition());
+			camera.setViewDirection(vec3(vec4(0.0f, 0.0f, -1.0f, 0.1f)*character.getRotation()));
+			character.setVisible(false);
 			cameraFollowingPlayer = true;
 			cameraFrozen = true;
 		}
@@ -137,197 +121,58 @@ void GameWindow::toggleCameraPlayerView()
 
 void GameWindow::setCharacterSpeed(float s)
 {
-	character.path.speed = s;
+	character.setSpeed(s);
 }
 
-#pragma region Character_Setup
 void GameWindow::loadTestCharacter()
 {
 	if(!testCharacterLoaded)
 	{
-		QString fileName = "../Resources/Models/turtle.obj";
-		QString command("ObjToBinaryWriter.exe ");
-		const char* nativeFileName = "Character.bin";
-		command += "\"" + QString(fileName) + "\" \"" + nativeFileName + "\"";
-		cout << command.toUtf8().constData() << endl;
-		int result = system(command.toUtf8().constData());
-		assert(result == 0);
-
-		ObjReader reader;
-		character.shapeData = reader.readInShape("Character.bin");
-		EditorNode* characterStart = nodes.getRandomNode();
-		character.modelToWorldTransform = glm::translate(characterStart->position);
-		character.rotation = mat4();
-		setupCharacterGeometry();
-		setupCharacterPath(characterStart);
+		QString fileName = "../Resources/Models/fish.obj";
+		character = NonPlayerCharacter(fileName, GameLevel::getInstance().baseNode, worldToProjectionMatrix);
 		testCharacterLoaded = true;
+
+		DebugNode* flagNode = getNewFlagLocation();
+		//flag = Flag("../Resources/Models/chair1.bin", flagNode, worldToProjectionMatrix);
+
+		character.startPathing(flagNode);
 	}
 }
 
-void GameWindow::setupCharacterPath(EditorNode* start)
+DebugNode* GameWindow::getNewFlagLocation()
 {
-	cout << "Getting new Path" << endl;
-	EditorNode* end = nullptr;
-	PathCreator pathCreator;
-	Path p;
-	bool foundValidPath = false;
-	while(!foundValidPath)
+	bool foundLocationForFlag = false;
+	DebugNode* flagNode = nullptr;
+	while(!foundLocationForFlag)
 	{
-		end = nodes.getRandomNode();
-		if(!(end == start))
+		flagNode = DebugNodeContainer::getInstance().getRandomNode();
+		if(flagNode != character.getBaseNode() && flagNode != character.getCurrentNode())
 		{
-			p = pathCreator.calculatePath(start, end);
-			foundValidPath = (p.isValidPath);
+			cout << "base " << GameLevel::getInstance().baseNode->position.x << "," << GameLevel::getInstance().baseNode->position.y << "," << GameLevel::getInstance().baseNode->position.z<<endl;
+			cout << "flag " << flagNode->position.x << "," << flagNode->position.y << "," << flagNode->position.z<<endl;
+			foundLocationForFlag = true;
 		}
 	}
-	currentCharacterGoal = end;
-	cout << "Nodes in path: " << p.totalNodes << endl;
-	if(testCharacterLoaded)
-	{
-		p.speed = character.path.speed;
-	}
-	character.path = p;
-	if(pathHighlighted)
-	{
-		character.path.highlightPathNodes(pathNodesColor);
-	}
-	if(pathConnectionsHighlighted)
-	{
-		character.path.highlightPathConnections(pathConnectionsColor);
-	}
+	return flagNode;
 }
-
-void GameWindow::setupCharacterGeometry()
-{
-	character.geometry = GeneralGLWindow::getInstance().addGeometry(character.shapeData.vertices, character.shapeData.vertexDataSize, character.shapeData.indices, character.shapeData.numIndices, GL_TRIANGLES);
-	
-	character.shader = GeneralGLWindow::getInstance().createShaderInfo("../Resources/Shaders/justLightingVertexShader.glsl", "../Resources/Shaders/justLightingFragmentShader.glsl");
-
-	GeneralGLWindow::getInstance().addShaderStreamedParameter(character.geometry, 0, PT_VEC3, ObjReader::POSITION_OFFSET, ObjReader::STRIDE);
-	GeneralGLWindow::getInstance().addShaderStreamedParameter(character.geometry, 2, PT_VEC3, ObjReader::NORMAL_OFFSET, ObjReader::STRIDE);
-
-	character.renderable = GeneralGLWindow::getInstance().addRenderable(character.geometry, character.modelToWorldTransform, character.shader, true, PRIORITY_1, true);
-
-	character.fullTransform = worldToProjectionMatrix * character.modelToWorldTransform;
-	
-	GeneralGLWindow::getInstance().addRenderableUniformParameter(character.renderable, "lightPosition", PT_VEC3, &lightPosition[0]);
-	GeneralGLWindow::getInstance().addRenderableUniformParameter(character.renderable, "diffusionIntensity", PT_FLOAT, &diffusionIntensity);
-	GeneralGLWindow::getInstance().addRenderableUniformParameter(character.renderable, "specularColor", PT_VEC4, &specularColor[0]);
-	GeneralGLWindow::getInstance().addRenderableUniformParameter(character.renderable, "specularExponent", PT_FLOAT, &specularExponent);
-	GeneralGLWindow::getInstance().addRenderableUniformParameter(character.renderable, "eyePosition", PT_VEC3, &eyePosition[0]);
-	GeneralGLWindow::getInstance().addRenderableUniformParameter(character.renderable, "overridingObjectColor", PT_VEC3, &overridingObjectColor[0]);
-	GeneralGLWindow::getInstance().addRenderableUniformParameter(character.renderable, "ambientLight", PT_VEC3, &ambientLight[0]);
-																 
-	GeneralGLWindow::getInstance().addRenderableUniformParameter(character.renderable, "fullTransformMatrix", PT_MAT4, &character.fullTransform[0][0]);
-	GeneralGLWindow::getInstance().addRenderableUniformParameter(character.renderable, "rotationMatrix", PT_MAT4, &character.rotation[0][0]);
-	GeneralGLWindow::getInstance().addRenderableUniformParameter(character.renderable, "modelToWorldMatrix", PT_MAT4, &character.renderable->whereMatrix[0][0]);
-}
-#pragma endregion
-
-#pragma region Level_Setup
-#define R_CS(a) reinterpret_cast<char*>(&a), sizeof(a)
-#define R_C(t,a) reinterpret_cast<t>(a)//cast a to t
-uint HEADER_BYTE_SIZE = 2*sizeof(uint);//how many bites in header
-uint SERIALIZED_NODE_SIZE1 = sizeof(vec3) + sizeof(uint) + sizeof(uint);
-uint SERIALIZED_CONNECTION_SIZE1 = sizeof(float) + sizeof(uint);
 
 void GameWindow::loadLevel(QString filename)
 {
 	if(levelLoaded)
-		levelRenderable->visible = false;
-	nodes.clearAllNodes();
-	cout << "Loading" << endl;
-	ifstream in(filename.toUtf8().constData(), std::ios::binary | std::ios::in);
-	
-	in.seekg(0, std::ios::end);
-	uint numTotalBytes = in.tellg();
-	in.seekg(0, std::ios::beg);
-
-	char* header = new char[HEADER_BYTE_SIZE];//Reading in the header
-	in.read(header, HEADER_BYTE_SIZE);
-
-	uint geometryDataSize = * R_C(uint*, header);
-	uint numNodes = * R_C(uint*, header + sizeof(uint));
-
-	if(geometryDataSize>0)
 	{
-		char* geometryData = new char[geometryDataSize];//Reading in geometry data
-		in.read(geometryData, geometryDataSize);
-		ofstream out("ObjToBinaryResult.bin", std::ios::binary | std::ios::out);
-		out.write(geometryData, geometryDataSize);
-		out.close();
-		ObjReader reader;
-		levelData = reader.readInShape("ObjToBinaryResult.bin");
-		setupLevelGeometry();
-		levelLoaded = true;
-		delete(geometryData);
+		GameLevel::getInstance().setVisible(false);
 	}
 
-	uint nodeDataSize = numTotalBytes - (HEADER_BYTE_SIZE+geometryDataSize);
-	char* nodeData = new char[nodeDataSize];//Reading in the node & connection data
-	in.read(nodeData, nodeDataSize);
-	in.close();
-
-	cout << "numNodes " << numNodes << endl;
-
-	nodes.loadInNodes(numNodes, nodeData);
-	delete(nodeData);
-	delete(header);
-	camera.resetPosition();
-	nodes.hideAllNodes();
-}
-#pragma endregion
-
-#pragma region Level_Map_Loading
-void GameWindow::loadLevelMap(QString fileName)
-{
-	if(levelLoaded)
-		levelRenderable->visible = false;
-	QString command("ObjToBinaryWriter.exe ");
-	const char* nativeFileName = "ObjToBinaryResult.bin";
-	command += "\"" + QString(fileName) + "\" \"" + nativeFileName + "\"";
-	cout << command.toUtf8().constData() << endl;
-	int result = system(command.toUtf8().constData());
-	assert(result == 0);
-
-	ObjReader reader;
-	levelData = reader.readInShape("ObjToBinaryResult.bin");
-
-	setupLevelGeometry();
+	GameLevel::getInstance();
+	GameLevel::getInstance().update(camera.getPosition(), worldToProjectionMatrix);
+	GameLevel::getInstance().loadLevel(filename);
 	levelLoaded = true;
+	camera.resetPosition();
+	DebugNodeContainer::getInstance().hideAllNodes();
 }
-void GameWindow::setupLevelGeometry()
-{
-	levelGeometry = GeneralGLWindow::getInstance().addGeometry(levelData.vertices, levelData.vertexDataSize, levelData.indices, levelData.numIndices, GL_TRIANGLES);
-	
-	lightingShader = GeneralGLWindow::getInstance().createShaderInfo("../Resources/Shaders/justLightingVertexShader.glsl", "../Resources/Shaders/justLightingFragmentShader.glsl");
-
-	GeneralGLWindow::getInstance().addShaderStreamedParameter(levelGeometry, 0, PT_VEC3, ObjReader::POSITION_OFFSET, ObjReader::STRIDE);
-	GeneralGLWindow::getInstance().addShaderStreamedParameter(levelGeometry, 2, PT_VEC3, ObjReader::NORMAL_OFFSET, ObjReader::STRIDE);
-
-	levelRenderable = GeneralGLWindow::getInstance().addRenderable(levelGeometry, levelTransform, lightingShader, true, PRIORITY_1, true);
-
-	updateLevelProjectionView();
-
-	GeneralGLWindow::getInstance().addRenderableUniformParameter(levelRenderable, "lightPosition", PT_VEC3, &lightPosition[0]);
-	GeneralGLWindow::getInstance().addRenderableUniformParameter(levelRenderable, "diffusionIntensity", PT_FLOAT, &diffusionIntensity);
-	GeneralGLWindow::getInstance().addRenderableUniformParameter(levelRenderable, "specularColor", PT_VEC4, &specularColor[0]);
-	GeneralGLWindow::getInstance().addRenderableUniformParameter(levelRenderable, "specularExponent", PT_FLOAT, &specularExponent);
-	GeneralGLWindow::getInstance().addRenderableUniformParameter(levelRenderable, "eyePosition", PT_VEC3, &eyePosition[0]);
-	GeneralGLWindow::getInstance().addRenderableUniformParameter(levelRenderable, "overridingObjectColor", PT_VEC3, &overridingObjectColor[0]);
-	GeneralGLWindow::getInstance().addRenderableUniformParameter(levelRenderable, "ambientLight", PT_VEC3, &ambientLight[0]);
-
-	GeneralGLWindow::getInstance().addRenderableUniformParameter(levelRenderable, "fullTransformMatrix", PT_MAT4, &levelFullTransform[0][0]);
-	GeneralGLWindow::getInstance().addRenderableUniformParameter(levelRenderable, "rotationMatrix", PT_MAT4, &levelRotation[0][0]);
-	GeneralGLWindow::getInstance().addRenderableUniformParameter(levelRenderable, "modelToWorldMatrix", PT_MAT4, &levelRenderable->whereMatrix[0][0]);
-
-	setupDebugShapes();
-}
-#pragma endregion
 
 void GameWindow::updateLevelProjectionView()
 {
-	eyePosition = camera.getPosition();
 	viewToProjectionMatrix = glm::perspective(60.0f, ((float)windowWidth) / windowHeight, 0.1f, 100.0f);
 	worldToViewMatrix = camera.getWorldToViewMatrix();
 	worldToProjectionMatrix = viewToProjectionMatrix * worldToViewMatrix;
@@ -335,10 +180,15 @@ void GameWindow::updateLevelProjectionView()
 	DebugShapes::getInstance();
 	DebugShapes::updateWorldToProjection(worldToProjectionMatrix);
 
-	levelFullTransform = worldToProjectionMatrix * levelTransform;
+	if(levelLoaded)
+	{
+		GameLevel::getInstance().update(camera.getPosition(), worldToProjectionMatrix);
+	}
+
 	if(testCharacterLoaded)
 	{
-		character.fullTransform = worldToProjectionMatrix * character.modelToWorldTransform;
+		character.updateFullTransform(worldToProjectionMatrix);
+		//flag.update(worldToProjectionMatrix);
 	}
 }
 
@@ -400,39 +250,43 @@ void GameWindow::update()
 	//GeneralGLWindow::getInstance().mouse
 	if(testCharacterLoaded)
 	{
-		if(!character.path.reachedEndNode)
+		if(frames%100==0)
+			character.updatePathPosition();
+		if(cameraFollowingPlayer)
 		{
-			character.updatePosition();
-			if(cameraFollowingPlayer)
-			{
-				camera.setPosition(vec3(character.position.x, 0.1f, character.position.z));
-				camera.setViewDirection(vec3(vec4(0.0f, 0.0f, -1.0f, 1.0f)*character.rotation));
-			}
+			camera.setPosition(vec3(character.getPosition().x, 0.1f, character.getPosition().z));
+			camera.setViewDirection(vec3(vec4(0.0f, 0.0f, -1.0f, 1.0f)*character.getRotation()));
 		}
-		else
-		{
-			if(pathHighlighted)
-			{
-				character.path.hidePathNodes();
-				if(allNodesHighlighted)
-				{
-					nodes.highlightAllNodes(nonPathNodesColor);
-				}
-			}
-			if(pathConnectionsHighlighted)
-			{
-				character.path.hidePathConnections();
-			}
 
-			setupCharacterPath(currentCharacterGoal);
+		if(character.hasFlag && !character.isCurrentlyPathing())
+		{
+			cout << "character has flag" << endl;
+			character.startPathing(character.getBaseNode());
+			resetNodeHighlighting();
+		}
+		else if(!character.hasFlag && (!character.isCurrentlyPathing() || frames%1000 == 0))
+		{
+			cout << "character returned flag" << endl;
+			DebugNode* flagNode = getNewFlagLocation();
+			flag.setAtNode(flagNode);
+			character.setNewPathGoal(flagNode);
+			resetNodeHighlighting();
 		}
 	}
-	GeneralGLWindow::getInstance().repaint();
 	updateLevelProjectionView();
+	GeneralGLWindow::getInstance().repaint();
 }
-
-GameWindow::GameWindow(void)
+void GameWindow::resetNodeHighlighting()
 {
+	if(pathHighlighted && allNodesHighlighted)
+	{
+		DebugNodeContainer::getInstance().highlightAllNodes(nonPathNodesColor);
+		character.highlightPathNodes(pathNodesColor);
+	}
+}
+GameWindow::GameWindow()
+{
+
 }
 
 

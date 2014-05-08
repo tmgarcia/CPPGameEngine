@@ -2,12 +2,13 @@
 
 #include <Qt\qlist.h>
 
+#include "NodeContainer.h"
 #include "EditorNode.h"
 #include <iostream>
 #include <fstream>
 using std::ofstream;
 
-class __declspec(dllexport)EditorNodeContainer
+class __declspec(dllexport)EditorNodeContainer : public NodeContainer
 {
 public:
 	int numNodes;

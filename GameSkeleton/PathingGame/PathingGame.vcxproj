@@ -77,13 +77,11 @@ copy "$(ProjectDir)..\Tools\ObjToBinaryWriter\bin\Debug\ObjToBinaryWriter.exe" "
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Character.h" />
     <ClInclude Include="FullDisplay.h" />
     <ClInclude Include="GameWindow.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Character.cpp" />
     <ClCompile Include="DebugShapes_moc.cpp" />
     <ClCompile Include="DebugSlider_moc.cpp" />
     <ClCompile Include="FullDisplay.cpp" />

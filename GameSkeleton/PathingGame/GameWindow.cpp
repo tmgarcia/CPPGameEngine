@@ -40,7 +40,7 @@ void GameWindow::setup()
 	timer.start(0);
 
 	updateLevelProjectionView();
-	loadLevel("../Resources/GameLevels/DebugLevel.tlvl");
+	loadLevel("../Resources/GameLevels/ShalidorsMazeUV.tlvl");
 	loadTestCharacter();
 	setupDebugShapes();
 }
@@ -133,13 +133,13 @@ void GameWindow::loadTestCharacter()
 {
 	if(!testCharacterLoaded)
 	{
-		QString fileName = "../Resources/Models/turtle.obj";
+		QString fileName = "../Resources/Models/fish.obj";
 		character = new NonPlayerCharacter(fileName, DebugNodeContainer::getInstance().getNode(0), worldToProjectionMatrix);
 		testCharacterLoaded = true;
 
 		//DebugNode* flagNode = getNewFlagLocation();
 		DebugNode* flagNode = DebugNodeContainer::getInstance().getNode(1);
-		flag = new Flag("../Resources/Models/chair1.bin", flagNode, worldToProjectionMatrix);
+		flag = new Flag("../Resources/Models/hook.bin", flagNode, worldToProjectionMatrix);
 
 		character->startPathing(flagNode);
 		updateLevelProjectionView();
@@ -263,9 +263,11 @@ void GameWindow::update()
 	//GeneralGLWindow::getInstance().mouse
 	if(testCharacterLoaded)
 	{
-		if(frames%10==0)
+		character->updatePathPosition();
+		if(character->hasFlag)
 		{
-			character->updatePathPosition();
+			flag->setPosition(character->getPosition());
+			GameLevel::getInstance().setLightPosition(vec3(flag->getPosition().x, 0.5f, flag->getPosition().z));
 		}
 		if(cameraFollowingPlayer)
 		{
@@ -279,12 +281,13 @@ void GameWindow::update()
 			character->startPathing(character->getBaseNode());
 			resetNodeHighlighting();
 		}
-		else if(!character->hasFlag && (!character->isCurrentlyPathing() || frames%1000 == 0))
+		else if(!character->hasFlag && (!character->isCurrentlyPathing() || frames%300 == 0))
 		{
 			cout << "character returned flag" << endl;
 			DebugNode* flagNode = getNewFlagLocation();
 			flag->setAtNode(flagNode);
-			character->setNewPathGoal(flagNode);
+			GameLevel::getInstance().setLightPosition(vec3(flag->getPosition().x, 0.5f, flag->getPosition().z));
+			character->startPathing(flagNode);
 			resetNodeHighlighting();
 		}
 	}
@@ -293,9 +296,12 @@ void GameWindow::update()
 }
 void GameWindow::resetNodeHighlighting()
 {
-	if(pathHighlighted && allNodesHighlighted)
+	if(pathHighlighted)
 	{
-		DebugNodeContainer::getInstance().highlightAllNodes(nonPathNodesColor);
+		if(allNodesHighlighted)
+		{
+			DebugNodeContainer::getInstance().highlightAllNodes(nonPathNodesColor);
+		}
 		character->highlightPathNodes(pathNodesColor);
 	}
 }

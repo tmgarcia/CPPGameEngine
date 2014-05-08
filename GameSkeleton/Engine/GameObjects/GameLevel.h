@@ -15,10 +15,10 @@ private:
 		lightPosition = vec3(0.0f, 5.0f, 0.0f);
 		diffusionIntensity = 1;
 		specularColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
-		specularExponent = 1000000;
+		specularExponent = 100;
 		eyePosition;
 		overridingObjectColor = vec3(0.5,0.5,0.5);
-		ambientLight = vec3(0.4f, 0.6f, 1.0f);
+		ambientLight = vec3(0.4f, 0.4f, 0.4f);
 
 		modelToWorldTransform = mat4();
 		rotation = mat4();

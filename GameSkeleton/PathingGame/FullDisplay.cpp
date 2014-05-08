@@ -54,6 +54,7 @@ FullDisplay::FullDisplay()
 
 	debugToolBar->addWidget(speedLabel);
 	debugToolBar->addWidget(speedSlider);
+	speedSlider->setValue(0.5f);
 	//QObject::connect(ambientR, SIGNAL(valueChanged(float)), display, SLOT(setAmbientColorRed(float)));
 	connect(speedSlider, SIGNAL(valueChanged(float)), &gameWindow, SLOT(setCharacterSpeed(float)));
 

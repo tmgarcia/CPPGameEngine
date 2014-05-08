@@ -5,10 +5,15 @@ void Flag::setAtNode(DebugNode* node)
 {
 	currentNode = node;
 	position = currentNode->position;
+	modelToWorldTransform = glm::translate(position)*glm::rotate(90.0f,vec3(0,1,0))*glm::scale(vec3(0.5f, 0.5f, 0.5f));
+	fullTransform = worldToProjection* modelToWorldTransform;
 }
 void Flag::setPosition(vec3 p)
 {
 	position = p;
+	position.y = 0.5;
+	modelToWorldTransform = glm::translate(position)*glm::rotate(90.0f,vec3(0,1,0))*glm::scale(vec3(0.5f, 0.5f, 0.5f));
+	fullTransform = worldToProjection* modelToWorldTransform;
 }
 DebugNode* Flag::getCurrentNode()
 {
@@ -30,7 +35,7 @@ void Flag::loadModel(char* modelFile)
 {
 	BinReader reader;
 	shapeData = reader.readInShape(modelFile);
-	modelToWorldTransform = glm::translate(position);
+	modelToWorldTransform = glm::translate(position)*glm::rotate(90.0f,vec3(0,1,0))*glm::scale(vec3(0.5f, 0.5f, 0.5f));
 	rotation = mat4();
 	renderModel();
 }

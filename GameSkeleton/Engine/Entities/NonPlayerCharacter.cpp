@@ -8,18 +8,30 @@
 
 NonPlayerCharacter::NonPlayerCharacter(QString modelFile, DebugNode* base, mat4 worldToProjectionMatrix)
 {
-	cout << "character Construction" << endl;
+	cout << "---character Construction started---" << endl;
 
 	baseNode = base;
 	currentNode = baseNode;
 	position = baseNode->position;
+	cout << "Position= " << position.x << "," << position.y << "," << position.z << endl;
 	isPathing = false;
 	hasFlag = false;
 	speed = 0.5f;
 	modelToWorldTransform = glm::translate(position);
+	cout << "Model To World= " << endl;
+	cout << "    " << modelToWorldTransform[0][0] << "," <<  modelToWorldTransform[0][1] << "," <<  modelToWorldTransform[0][2] << "," <<  modelToWorldTransform[0][3] << endl;
+	cout << "    " << modelToWorldTransform[1][0] << "," <<  modelToWorldTransform[1][1] << "," <<  modelToWorldTransform[0][2] << "," <<  modelToWorldTransform[1][3] << endl;
+	cout << "    " << modelToWorldTransform[2][0] << "," <<  modelToWorldTransform[2][1] << "," <<  modelToWorldTransform[0][2] << "," <<  modelToWorldTransform[2][3] << endl;
+	cout << "    " << modelToWorldTransform[3][0] << "," <<  modelToWorldTransform[3][1] << "," <<  modelToWorldTransform[0][2] << "," <<  modelToWorldTransform[3][3] << endl;
 	worldToProjection = worldToProjectionMatrix;
-	state = new FetchingFlagState();
+
+	gettingFlagState = new FetchingFlagState();
+	returningHomeState = new ReturningToBaseState();
+
+	state = gettingFlagState;
 	loadModel(modelFile);
+
+	cout << "---character Construction done---" << endl;
 }
 
 void NonPlayerCharacter::updatePathPosition()
@@ -78,9 +90,13 @@ void NonPlayerCharacter::setSpeed(float s)
 {
 	speed = s;
 }
-void NonPlayerCharacter::setState(State* s)
+void NonPlayerCharacter::setStateToReturnHome()
 {
-	state = s;
+	state = returningHomeState;
+}
+void NonPlayerCharacter::setStateToFetchingFlag()
+{
+	state = gettingFlagState;
 }
 void NonPlayerCharacter::startPathing(DebugNode* endNode)
 {
@@ -148,28 +164,53 @@ void NonPlayerCharacter::loadModel(QString fileName)
 void NonPlayerCharacter::renderModel()
 {
 	cout << "setting up character for renderer" << endl;
+
 	geometry = GeneralGLWindow::getInstance().addGeometry(shapeData.vertices, shapeData.vertexDataSize, shapeData.indices, shapeData.numIndices, GL_TRIANGLES);
+	cout << "Geometry data: vertexDataSize="<< shapeData.vertexDataSize << ", numIndices=" << shapeData.numIndices << endl;
 	
 	shader = GeneralGLWindow::getInstance().createShaderInfo("../Resources/Shaders/justLightingVertexShader.glsl", "../Resources/Shaders/justLightingFragmentShader.glsl");
 
 	GeneralGLWindow::getInstance().addShaderStreamedParameter(geometry, 0, PT_VEC3, BinReader::POSITION_OFFSET, BinReader::STRIDE);
 	GeneralGLWindow::getInstance().addShaderStreamedParameter(geometry, 2, PT_VEC3, BinReader::NORMAL_OFFSET, BinReader::STRIDE);
 
-	renderable = GeneralGLWindow::getInstance().addRenderable(geometry, modelToWorldTransform, shader, true, PRIORITY_1, true);
+	renderable = GeneralGLWindow::getInstance().addRenderable(geometry, modelToWorldTransform, shader, true, PRIORITY_2, true);
 
 	fullTransform = worldToProjection* modelToWorldTransform;
 	
+	cout << "World To Projection= " << endl;
+	cout << "    " << worldToProjection[0][0] << "," <<  worldToProjection[0][1] << "," <<  worldToProjection[0][2] << "," <<  worldToProjection[0][3] << endl;
+	cout << "    " <<worldToProjection[1][0] << "," <<  worldToProjection[1][1] << "," <<  worldToProjection[0][2] << "," <<  worldToProjection[1][3] << endl;
+	cout << "    " <<worldToProjection[2][0] << "," <<  worldToProjection[2][1] << "," <<  worldToProjection[0][2] << "," <<  worldToProjection[2][3] << endl;
+	cout << "    " <<worldToProjection[3][0] << "," <<  worldToProjection[3][1] << "," <<  worldToProjection[0][2] << "," <<  worldToProjection[3][3] << endl;
+
+	cout << "Full Transform= " << endl;
+	cout << "    " << fullTransform[0][0] << "," <<  fullTransform[0][1] << "," <<  fullTransform[0][2] << "," <<  fullTransform[0][3] << endl;
+	cout << "    " << fullTransform[1][0] << "," <<  fullTransform[1][1] << "," <<  fullTransform[0][2] << "," <<  fullTransform[1][3] << endl;
+	cout << "    " << fullTransform[2][0] << "," <<  fullTransform[2][1] << "," <<  fullTransform[0][2] << "," <<  fullTransform[2][3] << endl;
+	cout << "    " << fullTransform[3][0] << "," <<  fullTransform[3][1] << "," <<  fullTransform[0][2] << "," <<  fullTransform[3][3] << endl;
+
 	GeneralGLWindow::getInstance().addRenderableUniformParameter(renderable, "lightPosition", PT_VEC3, &GameLevel::getInstance().lightPosition[0]);
+	cout << "Light postition: " << GameLevel::getInstance().lightPosition.x << "," << GameLevel::getInstance().lightPosition.y << "," << GameLevel::getInstance().lightPosition.z << endl;
 	GeneralGLWindow::getInstance().addRenderableUniformParameter(renderable, "diffusionIntensity", PT_FLOAT, &GameLevel::getInstance().diffusionIntensity);
 	GeneralGLWindow::getInstance().addRenderableUniformParameter(renderable, "specularColor", PT_VEC4, &GameLevel::getInstance().specularColor[0]);
+	cout << "Specular Color: " << GameLevel::getInstance().specularColor.x << "," << GameLevel::getInstance().specularColor.y << "," << GameLevel::getInstance().specularColor.z << endl;
 	GeneralGLWindow::getInstance().addRenderableUniformParameter(renderable, "specularExponent", PT_FLOAT, &GameLevel::getInstance().specularExponent);
 	GeneralGLWindow::getInstance().addRenderableUniformParameter(renderable, "eyePosition", PT_VEC3, &GameLevel::getInstance().eyePosition[0]);
+	cout << "Eye position: " << GameLevel::getInstance().eyePosition.x << "," << GameLevel::getInstance().eyePosition.y << "," << GameLevel::getInstance().eyePosition.z << endl;
 	GeneralGLWindow::getInstance().addRenderableUniformParameter(renderable, "overridingObjectColor", PT_VEC3, &GameLevel::getInstance().overridingObjectColor[0]);
 	GeneralGLWindow::getInstance().addRenderableUniformParameter(renderable, "ambientLight", PT_VEC3, &GameLevel::getInstance().ambientLight[0]);
 																 
 	GeneralGLWindow::getInstance().addRenderableUniformParameter(renderable, "fullTransformMatrix", PT_MAT4, &fullTransform[0][0]);
 	GeneralGLWindow::getInstance().addRenderableUniformParameter(renderable, "rotationMatrix", PT_MAT4, &rotation[0][0]);
 	GeneralGLWindow::getInstance().addRenderableUniformParameter(renderable, "modelToWorldMatrix", PT_MAT4, &renderable->whereMatrix[0][0]);
+	cout << "renderable-> where Matrix = " << endl;
+	cout << "    " << renderable->whereMatrix[0][0] << "," <<  renderable->whereMatrix[0][1] << "," <<  renderable->whereMatrix[0][2] << "," <<  renderable->whereMatrix[0][3] << endl;
+	cout << "    " << renderable->whereMatrix[1][0] << "," <<  renderable->whereMatrix[1][1] << "," <<  renderable->whereMatrix[0][2] << "," <<  renderable->whereMatrix[1][3] << endl;
+	cout << "    " << renderable->whereMatrix[2][0] << "," <<  renderable->whereMatrix[2][1] << "," <<  renderable->whereMatrix[0][2] << "," <<  renderable->whereMatrix[2][3] << endl;
+	cout << "    " << renderable->whereMatrix[3][0] << "," <<  renderable->whereMatrix[3][1] << "," <<  renderable->whereMatrix[0][2] << "," <<  renderable->whereMatrix[3][3] << endl;
+
+	cout << "PROGRAM ID "<< shader->programID << endl;
+
 }
 void NonPlayerCharacter::setupPath()
 {	

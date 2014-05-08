@@ -19,7 +19,8 @@ public:
 
 	void setSpeed(float s);
 	void setVisible(bool visible);
-	void setState(State* s);
+	void setStateToReturnHome();
+	void setStateToFetchingFlag();
 	void startPathing(DebugNode* endNode);
 	void stopPathing();
 	void setNewPathGoal(DebugNode* endNode);
@@ -51,6 +52,8 @@ private:
 	DebugNode* currentNode;
 	DebugNode* currentGoalNode;
 	State* state;
+	State* gettingFlagState;
+	State* returningHomeState;
 
 	GeometryInfo* geometry;
 	RenderableInfo* renderable;

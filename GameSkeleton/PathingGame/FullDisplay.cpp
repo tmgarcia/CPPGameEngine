@@ -67,6 +67,7 @@ FullDisplay::FullDisplay()
 	gameWindow.setup();
 
 	this->setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+	this->move(300, 0);
 }
 
 void FullDisplay::highlightPathNodes()

@@ -1,5 +1,5 @@
 #include "LevelDisplay.h"
-#include "ObjReader.h"
+#include "BinReader.h"
 #include "DebugShapes.h"
 
 #include <iostream>
@@ -26,7 +26,7 @@ GeometryInfo* levelGeometry;
 RenderableInfo* levelRenderable;
 ShaderInfo* lightingShader;
 
-ObjReader::ShapeData levelData;
+BinReader::ShapeData levelData;
 
 //mat4 levelTransform = glm::translate(vec3(0,0,-10.0f));
 mat4 levelTransform = mat4();
@@ -79,7 +79,7 @@ void LevelDisplay::loadLevel(QString filename)
 		ofstream out("ObjToBinaryResult.bin", std::ios::binary | std::ios::out);
 		out.write(geometryData, geometryDataSize);
 		out.close();
-		ObjReader reader;
+		BinReader reader;
 		levelData = reader.readInShape("ObjToBinaryResult.bin");
 		setupLevelGeometry();
 	}
@@ -153,7 +153,7 @@ void LevelDisplay::loadLevelMap(QString fileName)
 	int result = system(command.toUtf8().constData());
 	assert(result == 0);
 
-	ObjReader reader;
+	BinReader reader;
 	levelData = reader.readInShape("ObjToBinaryResult.bin");
 
 	setupLevelGeometry();
@@ -166,8 +166,8 @@ void LevelDisplay::setupLevelGeometry()
 	
 	lightingShader = GeneralGLWindow::getInstance().createShaderInfo("../Resources/Shaders/justLightingVertexShader.glsl", "../Resources/Shaders/justLightingFragmentShader.glsl");
 
-	GeneralGLWindow::getInstance().addShaderStreamedParameter(levelGeometry, 0, PT_VEC3, ObjReader::POSITION_OFFSET, ObjReader::STRIDE);
-	GeneralGLWindow::getInstance().addShaderStreamedParameter(levelGeometry, 2, PT_VEC3, ObjReader::NORMAL_OFFSET, ObjReader::STRIDE);
+	GeneralGLWindow::getInstance().addShaderStreamedParameter(levelGeometry, 0, PT_VEC3, BinReader::POSITION_OFFSET, BinReader::STRIDE);
+	GeneralGLWindow::getInstance().addShaderStreamedParameter(levelGeometry, 2, PT_VEC3, BinReader::NORMAL_OFFSET, BinReader::STRIDE);
 
 	levelRenderable = GeneralGLWindow::getInstance().addRenderable(levelGeometry, levelTransform, lightingShader, true, PRIORITY_1, true);
 

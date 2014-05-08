@@ -41,8 +41,8 @@ private:
 	bool cameraFollowingPlayer;
 	DebugNode* currentCharacterGoal;
 	Camera camera;
-	Flag flag;
-	NonPlayerCharacter character;
+	Flag* flag;
+	NonPlayerCharacter* character;
 	int frames;
 
 public slots:

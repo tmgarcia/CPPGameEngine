@@ -8,6 +8,6 @@ void FetchingFlagState::update(NonPlayerCharacter* player)
 		cout << "Flag fetching update" << endl;
 		player->hasFlag = true;
 		player->stopPathing();
-		player->setState(new ReturningToBaseState());
+		player->setStateToReturnHome();
 	}
 }

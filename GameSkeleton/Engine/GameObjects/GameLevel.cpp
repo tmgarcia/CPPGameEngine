@@ -21,7 +21,10 @@ void GameLevel::loadLevel(QString fileName)
 	DebugNodeContainer::getInstance().clearAllNodes();
 	cout << "Loading Level" << endl;
 	ifstream in(fileName.toUtf8().constData(), std::ios::binary | std::ios::in);
-	
+	if(in.fail())
+	{
+		cout << "DIDN'T LOAD LEVEL FILE" << endl;
+	}
 	in.seekg(0, std::ios::end);
 	uint numTotalBytes = in.tellg();
 	in.seekg(0, std::ios::beg);

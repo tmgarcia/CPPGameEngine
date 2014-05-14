@@ -21,6 +21,7 @@ void VelocityAcceleration::initialize()
 	velocityGraphic = addVectorGraphic();
 	velocityGraphic->displayStyle = DS_ARROW;
 	velocityGraphic->r = 255;
+	
 }
 
 void VelocityAcceleration::newFrame()

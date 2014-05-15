@@ -8,7 +8,14 @@ public:
 	vec3 position;
 	vec3 velocity;
 	vec3 momentum;
-	float acceleration;
+
+	vec3 forceAccum;
+	void clearAccumulator();
+	void integrate(float dt);
+
+	void addForce(const vec3 &force);
+
+	vec3 acceleration;
 	float damping;
 	float mass;
 

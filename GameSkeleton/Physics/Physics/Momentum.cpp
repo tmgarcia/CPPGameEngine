@@ -34,7 +34,7 @@ void Momentum::initialize()
 
 	QObject::connect(massSlider, SIGNAL(valueChanged(float)), this, SLOT(particleMassChanged(float)));
 	QObject::connect(conserveBox, SIGNAL(stateChanged(int)), this, SLOT(toggleMomentumConservation(int)));
-	//momentumDisplay->setText(QString::number(particle.getMomentumLength()));
+	
 	particleGraphic = addVectorGraphic();
 	particleGraphic->position = particle.position;
 	particleGraphic->displayStyle = DS_POINT;

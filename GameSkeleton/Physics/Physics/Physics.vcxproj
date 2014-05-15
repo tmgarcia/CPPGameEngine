@@ -71,18 +71,28 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AccumulatingForces.h" />
     <ClInclude Include="DebugSlider.h" />
     <ClInclude Include="Momentum.h" />
     <ClInclude Include="Particle.h" />
+    <ClInclude Include="ParticleForceGenerator.h" />
+    <ClInclude Include="ParticleForceRegistry.h" />
+    <ClInclude Include="ParticleGravityGenerator.h" />
+    <ClInclude Include="ParticleKeyboardForceGenerator.h" />
     <ClInclude Include="VelocityAcceleration.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AccumulatingForces.cpp" />
     <ClCompile Include="DebugSlider.cpp" />
     <ClCompile Include="DebugSlider_moc.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Momentum.cpp" />
     <ClCompile Include="Momentum_moc.cpp" />
     <ClCompile Include="Particle.cpp" />
+    <ClCompile Include="ParticleForceGenerator.cpp" />
+    <ClCompile Include="ParticleForceRegistry.cpp" />
+    <ClCompile Include="ParticleGravityGenerator.cpp" />
+    <ClCompile Include="ParticleKeyboardForceGenerator.cpp" />
     <ClCompile Include="VelocityAcceleration.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -11,8 +11,6 @@ class AccumulatingForces : public GuiBase
 public:
 	void initialize();
 	void newFrame();
-	void vectorGraphicMouseDrag(uint vectorGraphicINdex, const glm::vec3& dragDelta);
-	glm::vec3 getUserDirection();
 	AccumulatingForces(){}
 	~AccumulatingForces(){}
 };

@@ -21,7 +21,15 @@
     <ClInclude Include="ParticleKeyboardForceGenerator.h">
       <Filter>ParticleForceTools</Filter>
     </ClInclude>
-    <ClInclude Include="AccumulatingForces.h" />
+    <ClInclude Include="ParticleDragGenerator.h">
+      <Filter>ParticleForceTools</Filter>
+    </ClInclude>
+    <ClInclude Include="AccumulatingForces.h">
+      <Filter>3-ForceAccumulation</Filter>
+    </ClInclude>
+    <ClInclude Include="DragForces.h">
+      <Filter>4-DragForce</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -49,7 +57,18 @@
     <ClCompile Include="ParticleKeyboardForceGenerator.cpp">
       <Filter>ParticleForceTools</Filter>
     </ClCompile>
-    <ClCompile Include="AccumulatingForces.cpp" />
+    <ClCompile Include="ParticleDragGenerator.cpp">
+      <Filter>ParticleForceTools</Filter>
+    </ClCompile>
+    <ClCompile Include="AccumulatingForces.cpp">
+      <Filter>3-ForceAccumulation</Filter>
+    </ClCompile>
+    <ClCompile Include="DragForces.cpp">
+      <Filter>4-DragForce</Filter>
+    </ClCompile>
+    <ClCompile Include="DragForces_moc.cpp">
+      <Filter>4-DragForce</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="1-VelocityAcceleration">
@@ -63,6 +82,9 @@
     </Filter>
     <Filter Include="ParticleForceTools">
       <UniqueIdentifier>{36033cf1-25a3-46af-a7b2-c058a3dd007f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4-DragForce">
+      <UniqueIdentifier>{ae0917c1-0563-4e17-bbd6-e7d8cb0168f8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -62,8 +62,3 @@ void AccumulatingForces::newFrame()
 	sync(keyboardParticleGraphic, keyboardParticle.position);
 	sync(accumulatedParticleGraphic, accumulatedParticle.position);
 }
-
-void AccumulatingForces::vectorGraphicMouseDrag(uint vectorGraphicIndex, const glm::vec3& dragDelta)
-{
-	//particle.position += dragDelta;
-}

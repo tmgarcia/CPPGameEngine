@@ -38,21 +38,15 @@ void Momentum::initialize()
 	particleGraphic = addVectorGraphic();
 	particleGraphic->position = particle.position;
 	particleGraphic->displayStyle = DS_POINT;
-	particleGraphic->r = 100;
-	particleGraphic->g = 0;
-	particleGraphic->b = 100;
+	particleGraphic->color = vec3(0.5f,0,0.5f);
 
 	velocityGraphic = addVectorGraphic();
 	velocityGraphic->displayStyle = DS_ARROW;
-	velocityGraphic->b = 255;
-	velocityGraphic->r = 0;
-	velocityGraphic->g = 0;
+	velocityGraphic->color = vec3(1,0,0);
 
 	momentumGraphic = addVectorGraphic();
 	momentumGraphic->displayStyle = DS_ARROW;
-	momentumGraphic->r = 255;
-	momentumGraphic->g = 0;
-	momentumGraphic->b = 0;
+	momentumGraphic->color = vec3(1,0,0);
 }
 
 void Momentum::newFrame()

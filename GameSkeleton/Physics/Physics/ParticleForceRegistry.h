@@ -35,6 +35,6 @@ public:
 	void clear();
 
 	//Calls force generators to update forces of corresponding particles
-	void updateForces(float duration);
+	void updateForces(float dt);
 };
 

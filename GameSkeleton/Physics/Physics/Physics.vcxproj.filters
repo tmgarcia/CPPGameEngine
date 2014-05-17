@@ -9,19 +9,7 @@
     <ClInclude Include="VelocityAcceleration.h">
       <Filter>1-VelocityAcceleration</Filter>
     </ClInclude>
-    <ClInclude Include="ParticleForceGenerator.h">
-      <Filter>ParticleForceTools</Filter>
-    </ClInclude>
     <ClInclude Include="ParticleForceRegistry.h">
-      <Filter>ParticleForceTools</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticleGravityGenerator.h">
-      <Filter>ParticleForceTools</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticleKeyboardForceGenerator.h">
-      <Filter>ParticleForceTools</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticleDragGenerator.h">
       <Filter>ParticleForceTools</Filter>
     </ClInclude>
     <ClInclude Include="AccumulatingForces.h">
@@ -30,6 +18,21 @@
     <ClInclude Include="DragForces.h">
       <Filter>4-DragForce</Filter>
     </ClInclude>
+    <ClInclude Include="SpringForces.h" />
+    <ClInclude Include="ParticleDragGenerator.h">
+      <Filter>ParticleForceTools\ForceGenerators</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleForceGenerator.h">
+      <Filter>ParticleForceTools\ForceGenerators</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleGravityGenerator.h">
+      <Filter>ParticleForceTools\ForceGenerators</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleKeyboardForceGenerator.h">
+      <Filter>ParticleForceTools\ForceGenerators</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="ParticleSpringGenerator.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -45,19 +48,7 @@
     <ClCompile Include="VelocityAcceleration.cpp">
       <Filter>1-VelocityAcceleration</Filter>
     </ClCompile>
-    <ClCompile Include="ParticleForceGenerator.cpp">
-      <Filter>ParticleForceTools</Filter>
-    </ClCompile>
     <ClCompile Include="ParticleForceRegistry.cpp">
-      <Filter>ParticleForceTools</Filter>
-    </ClCompile>
-    <ClCompile Include="ParticleGravityGenerator.cpp">
-      <Filter>ParticleForceTools</Filter>
-    </ClCompile>
-    <ClCompile Include="ParticleKeyboardForceGenerator.cpp">
-      <Filter>ParticleForceTools</Filter>
-    </ClCompile>
-    <ClCompile Include="ParticleDragGenerator.cpp">
       <Filter>ParticleForceTools</Filter>
     </ClCompile>
     <ClCompile Include="AccumulatingForces.cpp">
@@ -69,6 +60,21 @@
     <ClCompile Include="DragForces_moc.cpp">
       <Filter>4-DragForce</Filter>
     </ClCompile>
+    <ClCompile Include="SpringForces.cpp" />
+    <ClCompile Include="ParticleDragGenerator.cpp">
+      <Filter>ParticleForceTools\ForceGenerators</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleForceGenerator.cpp">
+      <Filter>ParticleForceTools\ForceGenerators</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleGravityGenerator.cpp">
+      <Filter>ParticleForceTools\ForceGenerators</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleKeyboardForceGenerator.cpp">
+      <Filter>ParticleForceTools\ForceGenerators</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleSpringGenerator.cpp" />
+    <ClCompile Include="SpringForces_moc.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="1-VelocityAcceleration">
@@ -86,5 +92,14 @@
     <Filter Include="4-DragForce">
       <UniqueIdentifier>{ae0917c1-0563-4e17-bbd6-e7d8cb0168f8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="5-Springs">
+      <UniqueIdentifier>{81861838-edeb-4b65-b05f-2beed9e9a576}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ParticleForceTools\ForceGenerators">
+      <UniqueIdentifier>{4d277e64-fbd0-4f1c-94b7-c8337c83121c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Physics.rc" />
   </ItemGroup>
 </Project>

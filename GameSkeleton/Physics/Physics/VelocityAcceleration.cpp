@@ -5,6 +5,8 @@
 VectorGraphic* particleGraphic;
 VectorGraphic* velocityGraphic;
 
+using glm::vec3;
+
 glm::vec3 velocity;
 glm::vec3 position;
 
@@ -20,7 +22,7 @@ void VelocityAcceleration::initialize()
 
 	velocityGraphic = addVectorGraphic();
 	velocityGraphic->displayStyle = DS_ARROW;
-	velocityGraphic->r = 255;
+	velocityGraphic->color = vec3(1,0,0);
 	
 }
 

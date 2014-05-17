@@ -30,11 +30,11 @@ void ParticleForceRegistry::clear()
 }
 
 	//Calls force generators to update forces of corresponding particles
-void ParticleForceRegistry::updateForces(float duration)
+void ParticleForceRegistry::updateForces(float dt)
 {
 	Registry::iterator i = registrations.begin();
 	for(; i != registrations.end(); i++)
 	{
-		i->fg->updateForce(i->particle, duration);
+		i->fg->updateForce(i->particle, dt);
 	}
 }

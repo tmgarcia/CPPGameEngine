@@ -81,6 +81,9 @@
     <ClInclude Include="ParticleForceRegistry.h" />
     <ClInclude Include="ParticleGravityGenerator.h" />
     <ClInclude Include="ParticleKeyboardForceGenerator.h" />
+    <ClInclude Include="ParticleSpringGenerator.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="SpringForces.h" />
     <ClInclude Include="VelocityAcceleration.h" />
   </ItemGroup>
   <ItemGroup>
@@ -98,7 +101,13 @@
     <ClCompile Include="ParticleForceRegistry.cpp" />
     <ClCompile Include="ParticleGravityGenerator.cpp" />
     <ClCompile Include="ParticleKeyboardForceGenerator.cpp" />
+    <ClCompile Include="ParticleSpringGenerator.cpp" />
+    <ClCompile Include="SpringForces.cpp" />
+    <ClCompile Include="SpringForces_moc.cpp" />
     <ClCompile Include="VelocityAcceleration.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Physics.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -25,23 +25,17 @@ void AccumulatingForces::initialize()
 	gravityParticleGraphic = addVectorGraphic();
 	gravityParticleGraphic->position = gravityParticle.position;
 	gravityParticleGraphic->displayStyle = DS_POINT;
-	gravityParticleGraphic->r = 255;
-	gravityParticleGraphic->g = 0;
-	gravityParticleGraphic->b = 0;
+	gravityParticleGraphic->color = vec3(1,0,0);
 
 	keyboardParticleGraphic = addVectorGraphic();
 	keyboardParticleGraphic->position = keyboardParticle.position;
 	keyboardParticleGraphic->displayStyle = DS_POINT;
-	keyboardParticleGraphic->r = 0;
-	keyboardParticleGraphic->g = 0;
-	keyboardParticleGraphic->b = 255;
+	keyboardParticleGraphic->color = vec3(0,0,1);
 
 	accumulatedParticleGraphic = addVectorGraphic();
 	accumulatedParticleGraphic->position = accumulatedParticle.position;
 	accumulatedParticleGraphic->displayStyle = DS_POINT;
-	accumulatedParticleGraphic->r = 200;
-	accumulatedParticleGraphic->g = 0;
-	accumulatedParticleGraphic->b = 255;
+	accumulatedParticleGraphic->color = vec3(0.8f,0,1);
 
 	forceRegistry.add(&gravityParticle, &gravityGenerator);
 	forceRegistry.add(&keyboardParticle, &keyboardGenerator);

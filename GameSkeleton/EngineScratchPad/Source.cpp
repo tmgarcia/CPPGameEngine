@@ -8,27 +8,91 @@ using glm::vec4;
 using std::cout;
 using std::endl;
 
-void printMatrix(mat4 m)
+void printMatrix(char* title, mat4 m)
 {
+	cout << title << endl;
 	for(int i = 0; i < 4; i++)
 	{
 		for(int j = 0; j<4; j++)
 		{
-			cout << i << j << m[i][j]<<endl;
+			cout << i << j << "[" << m[i][j] <<"],"<< endl;
 		}
 	}
 }
 
+void printVector(char* title, vec3 v)
+{
+	cout << title << "("<< v.x << "," << v.y << "," << v.z << ")" << endl;
+}
+
+void printFloat(char* title, float f)
+{
+	cout << title << f << endl;
+}
+
 int main()
 {
-	mat4 test1 = mat4();
-	printMatrix(test1);
-	vec4 v1 = vec4(11.0f, 12.0f, 13.0f, 14.0f);
-	vec4 v2 = vec4(21.0f, 22.0f, 23.0f, 24.0f);
-	vec4 v3 = vec4(31.0f, 32.0f, 33.0f, 34.0f);
-	vec4 v4 = vec4(41.0f, 42.0f, 43.0f, 44.0f);
-	mat4 test2 = mat4(v1,v2,v3,v4);
-	cout<< "test2" << endl;
-	printMatrix(test2);
+	cout << "---- BUILDING FORCE ----" << endl;
+	vec3 p = vec3(0,0,0);
+	printVector("particle position: ",p);
+	vec3 o = vec3(2,0,0);
+	printVector("other position: ",o);
+	float restlength = 4;
+	printFloat("restLength: ",restlength);
+	float springConstant = 100;
+	printFloat("springConstant: ",springConstant);
+
+	cout << "--------" << endl;
+
+	vec3 force = p;
+	printVector("force = particle->position: ",force);
+	force = p-o;
+	printVector("force = force-other->position: ",force);
+	float mag = glm::length(force);
+	printFloat("magnitude = glm::length(force): ",mag);
+	mag = (mag - restlength);
+	printFloat("magnitude = magnitude - restlength: ",mag);
+
+	/*mag = fabsf(mag);
+	printFloat("magnitude = fabsf(magnitude): ",mag);*/
+
+	mag = mag * springConstant;
+	printFloat("magnitude = magnitude*springConstant: ",mag);
+
+	force = glm::normalize(force);
+	printVector("force = glm::normalize(force): ",force);
+
+	force = force * -mag;
+	printVector("force * -magnitude: ",force);
+
+	cout << endl;
+	cout << "---- BUILDING PARTICLE VELOCITY ----" << endl;
+	
+	printVector("particle position: ",p);
+	vec3 v = vec3(0,0,0);
+	printVector("particle velocity: ",v);
+	vec3 a = vec3(0,0,0);
+	printVector("particle acceleration: ",a);
+	float m = 1.0f;
+	printFloat("particle mass: ",m);
+	float damp = 0.5f;
+	float dt = 0.0065f;
+	printFloat("dt(): ",dt);
+	cout << "--------" << endl;
+
+	p+= v * dt;
+	printVector("position+=velocity*dt: ",p);
+	float inverseMass = 1/m;
+	printFloat("inverseMass = 1/mass: ",inverseMass);
+	a = force * inverseMass;
+	printVector("acceleration = accumulatedForce * inverseMass: ",a);
+	v+= a * dt;
+	printVector("velocity = acceleration * dt: ",v);
+	v*= glm::pow(damp, dt);
+	printVector("velocity *= glm::pow(damping,dt): ",v);
+	p+= v * dt;
+	printVector("next postion = position+=velocity*dt: ",p);
+
 	std::cin;
+	std::getchar();
 }

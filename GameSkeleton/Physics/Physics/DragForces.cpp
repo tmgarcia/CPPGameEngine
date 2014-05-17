@@ -43,9 +43,7 @@ void DragForces::initialize()
 	particleVGraphic = addVectorGraphic();
 	particleVGraphic->position = particle.position;
 	particleVGraphic->displayStyle = DS_POINT;
-	particleVGraphic->r = 200;
-	particleVGraphic->g = 0;
-	particleVGraphic->b = 255;
+	particleVGraphic->color = vec3(0.8f,0,1);
 
 	registry.add(&particle, &dragGenerator);
 

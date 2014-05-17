@@ -21,9 +21,9 @@ public:
 
 	float getMomentumLength();
 	void newFrame(float dt, vec3 direction);
-	Particle(vec3 velocity=vec3(0,0,0), float acceleration=1.0f, float damping=0.95f, float mass=1.0f): velocity(velocity), acceleration(acceleration), damping(damping), mass(mass)
+	Particle(vec3 velocity=vec3(0,0,0), float acceleration=0.0f, float damping=0.1f, float mass=1.0f): velocity(velocity), acceleration(acceleration), damping(damping), mass(mass)
 	{
-
+		
 	}
 	~Particle(){}
 };

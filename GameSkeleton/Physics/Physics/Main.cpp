@@ -4,6 +4,7 @@
 #include "AccumulatingForces.h"
 #include "DragForces.h"
 #include "SpringForces.h"
+#include "MultipleSprings.h"
 
 int main(int argc, char* argv[])
 {
@@ -12,7 +13,8 @@ int main(int argc, char* argv[])
 	//Momentum demo = Momentum();
 	//AccumulatingForces demo = AccumulatingForces();
 	//DragForces demo = DragForces();
-	SpringForces demo = SpringForces();
+	//SpringForces demo = SpringForces();
+	MultipleSprings demo = MultipleSprings();
 
 	demo.initialize();
 	demo.show();

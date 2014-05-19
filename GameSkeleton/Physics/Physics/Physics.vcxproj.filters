@@ -32,7 +32,12 @@
       <Filter>ParticleForceTools\ForceGenerators</Filter>
     </ClInclude>
     <ClInclude Include="resource.h" />
-    <ClInclude Include="ParticleSpringGenerator.h" />
+    <ClInclude Include="ParticleSpringGenerator.h">
+      <Filter>ParticleForceTools\ForceGenerators</Filter>
+    </ClInclude>
+    <ClInclude Include="MultipleSprings.h">
+      <Filter>6-MultipleSprings</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -73,8 +78,16 @@
     <ClCompile Include="ParticleKeyboardForceGenerator.cpp">
       <Filter>ParticleForceTools\ForceGenerators</Filter>
     </ClCompile>
-    <ClCompile Include="ParticleSpringGenerator.cpp" />
     <ClCompile Include="SpringForces_moc.cpp" />
+    <ClCompile Include="ParticleSpringGenerator.cpp">
+      <Filter>ParticleForceTools\ForceGenerators</Filter>
+    </ClCompile>
+    <ClCompile Include="MultipleSprings_moc.cpp">
+      <Filter>6-MultipleSprings</Filter>
+    </ClCompile>
+    <ClCompile Include="MultipleSprings.cpp">
+      <Filter>6-MultipleSprings</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="1-VelocityAcceleration">
@@ -97,6 +110,9 @@
     </Filter>
     <Filter Include="ParticleForceTools\ForceGenerators">
       <UniqueIdentifier>{4d277e64-fbd0-4f1c-94b7-c8337c83121c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="6-MultipleSprings">
+      <UniqueIdentifier>{66fce925-4eec-4412-a21b-9ccf696c36e6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

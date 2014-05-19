@@ -4,9 +4,9 @@
 
 class ParticleGravityGenerator : public ParticleForceGenerator
 {
-	vec3 gravity;
 
 public:
+	vec3 gravity;
 	ParticleGravityGenerator(const vec3 &gravity = vec3(0,-1,0)) : gravity(gravity)
 	{}
 

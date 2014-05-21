@@ -1,5 +1,10 @@
 #include "Particle.h"
 
+#include <iostream>
+
+using std::cout;
+using std::endl;
+
 void Particle::integrate(float dt)
 {
 	position += velocity * dt;
@@ -31,4 +36,12 @@ void Particle::newFrame(float dt, vec3 direction)
 	velocity += acceleration * dt * damping* direction;
 	position += velocity * dt;
 	momentum = mass * velocity;
+}
+float Particle::getInverseMass()
+{
+	return 1/mass;
+}
+float Particle::getKineticEnergy()
+{
+	return (0.5) * mass * glm::pow(glm::length(velocity),2.0f);
 }

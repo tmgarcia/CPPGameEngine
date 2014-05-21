@@ -74,17 +74,24 @@
     <ClInclude Include="AccumulatingForces.h" />
     <ClInclude Include="DebugSlider.h" />
     <ClInclude Include="DragForces.h" />
+    <ClInclude Include="FastDelegate.h" />
     <ClInclude Include="Momentum.h" />
     <ClInclude Include="MultipleSprings.h" />
+    <ClInclude Include="OneDCollision.h" />
     <ClInclude Include="Particle.h" />
+    <ClInclude Include="ParticleContact.h" />
+    <ClInclude Include="ParticleContactGenerator.h" />
+    <ClInclude Include="ParticleContactResolver.h" />
     <ClInclude Include="ParticleDragGenerator.h" />
     <ClInclude Include="ParticleForceGenerator.h" />
     <ClInclude Include="ParticleForceRegistry.h" />
     <ClInclude Include="ParticleGravityGenerator.h" />
     <ClInclude Include="ParticleKeyboardForceGenerator.h" />
     <ClInclude Include="ParticleSpringGenerator.h" />
+    <ClInclude Include="ParticleWorld.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SpringForces.h" />
+    <ClInclude Include="TwoDParticleContactGenerator.h" />
     <ClInclude Include="VelocityAcceleration.h" />
   </ItemGroup>
   <ItemGroup>
@@ -98,15 +105,22 @@
     <ClCompile Include="Momentum_moc.cpp" />
     <ClCompile Include="MultipleSprings.cpp" />
     <ClCompile Include="MultipleSprings_moc.cpp" />
+    <ClCompile Include="OneDCollision.cpp" />
+    <ClCompile Include="OneDCollision_moc.cpp" />
     <ClCompile Include="Particle.cpp" />
+    <ClCompile Include="ParticleContact.cpp" />
+    <ClCompile Include="ParticleContactGenerator.cpp" />
+    <ClCompile Include="ParticleContactResolver.cpp" />
     <ClCompile Include="ParticleDragGenerator.cpp" />
     <ClCompile Include="ParticleForceGenerator.cpp" />
     <ClCompile Include="ParticleForceRegistry.cpp" />
     <ClCompile Include="ParticleGravityGenerator.cpp" />
     <ClCompile Include="ParticleKeyboardForceGenerator.cpp" />
     <ClCompile Include="ParticleSpringGenerator.cpp" />
+    <ClCompile Include="ParticleWorld.cpp" />
     <ClCompile Include="SpringForces.cpp" />
     <ClCompile Include="SpringForces_moc.cpp" />
+    <ClCompile Include="TwoDParticleContactGenerator.cpp" />
     <ClCompile Include="VelocityAcceleration.cpp" />
   </ItemGroup>
   <ItemGroup>

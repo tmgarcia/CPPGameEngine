@@ -18,7 +18,6 @@
     <ClInclude Include="DragForces.h">
       <Filter>4-DragForce</Filter>
     </ClInclude>
-    <ClInclude Include="SpringForces.h" />
     <ClInclude Include="ParticleDragGenerator.h">
       <Filter>ParticleForceTools\ForceGenerators</Filter>
     </ClInclude>
@@ -37,6 +36,26 @@
     </ClInclude>
     <ClInclude Include="MultipleSprings.h">
       <Filter>6-MultipleSprings</Filter>
+    </ClInclude>
+    <ClInclude Include="FastDelegate.h" />
+    <ClInclude Include="ParticleContact.h">
+      <Filter>ParticleCollisionTools</Filter>
+    </ClInclude>
+    <ClInclude Include="SpringForces.h">
+      <Filter>5-Springs</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleContactResolver.h">
+      <Filter>ParticleCollisionTools</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleWorld.h" />
+    <ClInclude Include="OneDCollision.h">
+      <Filter>7-OneDimensionalCollision</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleContactGenerator.h">
+      <Filter>ParticleCollisionTools</Filter>
+    </ClInclude>
+    <ClInclude Include="TwoDParticleContactGenerator.h">
+      <Filter>ParticleCollisionTools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -65,7 +84,6 @@
     <ClCompile Include="DragForces_moc.cpp">
       <Filter>4-DragForce</Filter>
     </ClCompile>
-    <ClCompile Include="SpringForces.cpp" />
     <ClCompile Include="ParticleDragGenerator.cpp">
       <Filter>ParticleForceTools\ForceGenerators</Filter>
     </ClCompile>
@@ -78,7 +96,6 @@
     <ClCompile Include="ParticleKeyboardForceGenerator.cpp">
       <Filter>ParticleForceTools\ForceGenerators</Filter>
     </ClCompile>
-    <ClCompile Include="SpringForces_moc.cpp" />
     <ClCompile Include="ParticleSpringGenerator.cpp">
       <Filter>ParticleForceTools\ForceGenerators</Filter>
     </ClCompile>
@@ -87,6 +104,31 @@
     </ClCompile>
     <ClCompile Include="MultipleSprings.cpp">
       <Filter>6-MultipleSprings</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleContact.cpp">
+      <Filter>ParticleCollisionTools</Filter>
+    </ClCompile>
+    <ClCompile Include="SpringForces.cpp">
+      <Filter>5-Springs</Filter>
+    </ClCompile>
+    <ClCompile Include="SpringForces_moc.cpp">
+      <Filter>5-Springs</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleContactResolver.cpp">
+      <Filter>ParticleCollisionTools</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleWorld.cpp" />
+    <ClCompile Include="OneDCollision.cpp">
+      <Filter>7-OneDimensionalCollision</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleContactGenerator.cpp">
+      <Filter>ParticleCollisionTools</Filter>
+    </ClCompile>
+    <ClCompile Include="TwoDParticleContactGenerator.cpp">
+      <Filter>ParticleCollisionTools</Filter>
+    </ClCompile>
+    <ClCompile Include="OneDCollision_moc.cpp">
+      <Filter>7-OneDimensionalCollision</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -113,6 +155,12 @@
     </Filter>
     <Filter Include="6-MultipleSprings">
       <UniqueIdentifier>{66fce925-4eec-4412-a21b-9ccf696c36e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="7-OneDimensionalCollision">
+      <UniqueIdentifier>{4aaaad5e-8bdd-486c-92ff-6fc523b77923}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ParticleCollisionTools">
+      <UniqueIdentifier>{27766924-579e-4bb1-a0a9-7acc7ea55d80}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

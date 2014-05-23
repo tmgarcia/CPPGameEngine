@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'OneDCollision.h'
 **
-** Created: Wed May 21 02:02:23 2014
+** Created: Thu May 22 17:37:58 2014
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.0)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_OneDCollision[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-       6,   14, // methods
+       9,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -35,8 +35,11 @@ static const uint qt_meta_data_OneDCollision[] = {
       37,   14,   14,   14, 0x08,
       60,   14,   14,   14, 0x08,
       86,   14,   14,   14, 0x08,
-     116,   14,   14,   14, 0x08,
-     147,   14,   14,   14, 0x08,
+     117,   14,   14,   14, 0x08,
+     148,   14,   14,   14, 0x08,
+     180,   14,   14,   14, 0x08,
+     212,   14,   14,   14, 0x08,
+     229,   14,   14,   14, 0x08,
 
        0        // eod
 };
@@ -44,9 +47,11 @@ static const uint qt_meta_data_OneDCollision[] = {
 static const char qt_meta_stringdata_OneDCollision[] = {
     "OneDCollision\0\0redMassChanged(float)\0"
     "blueMassChanged(float)\0restitutionChanged(float)\0"
-    "redInitVelocityChanged(float)\0"
-    "blueInitVelocityChanged(float)\0"
-    "resetParticles()\0"
+    "redInitVelocityXChanged(float)\0"
+    "redInitVelocityYChanged(float)\0"
+    "blueInitVelocityXChanged(float)\0"
+    "blueInitVelocityYChanged(float)\0"
+    "resetParticles()\0createCollision()\0"
 };
 
 void OneDCollision::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -58,9 +63,12 @@ void OneDCollision::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _i
         case 0: _t->redMassChanged((*reinterpret_cast< float(*)>(_a[1]))); break;
         case 1: _t->blueMassChanged((*reinterpret_cast< float(*)>(_a[1]))); break;
         case 2: _t->restitutionChanged((*reinterpret_cast< float(*)>(_a[1]))); break;
-        case 3: _t->redInitVelocityChanged((*reinterpret_cast< float(*)>(_a[1]))); break;
-        case 4: _t->blueInitVelocityChanged((*reinterpret_cast< float(*)>(_a[1]))); break;
-        case 5: _t->resetParticles(); break;
+        case 3: _t->redInitVelocityXChanged((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 4: _t->redInitVelocityYChanged((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 5: _t->blueInitVelocityXChanged((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 6: _t->blueInitVelocityYChanged((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 7: _t->resetParticles(); break;
+        case 8: _t->createCollision(); break;
         default: ;
         }
     }
@@ -98,9 +106,9 @@ int OneDCollision::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 6)
+        if (_id < 9)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 6;
+        _id -= 9;
     }
     return _id;
 }

@@ -36,5 +36,5 @@ void ParticleContactResolver::resolveContacts(ParticleContact *contactArray, uns
 
 void ParticleContactResolver::setIterations(unsigned iterations)
 {
-	iterations = iterations;
+	ParticleContactResolver::iterations = iterations;
 }

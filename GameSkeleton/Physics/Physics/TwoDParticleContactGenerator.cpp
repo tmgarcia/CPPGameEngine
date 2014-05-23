@@ -26,10 +26,10 @@ unsigned TwoDParticleContactGenerator::addContact(ParticleContact *contact, unsi
 		cout << "particle[1] position " << particle[1]->position.x << ","<< particle[1]->position.y << "," << particle[1]->position.z << endl;
 
 
-		vec3 normal = particle[1]->position - particle[0]->position;
+		vec3 normal = particle[0]->position - particle[1]->position;
 		cout << "Contact Normal " << normal.x << ","<< normal.y << "," << normal.z << endl;
 		normal = glm::normalize(normal);
-		cout << "Contact Normal " << normal.x << ","<< normal.y << "," << normal.z << endl;
+		cout << "Contact Normal Normalized " << normal.x << ","<< normal.y << "," << normal.z << endl;
 		contact->contactNormal = normal;
 
 		cout << "penetration " << minimumSeparation - separation << endl;

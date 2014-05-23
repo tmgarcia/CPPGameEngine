@@ -17,8 +17,12 @@ private:
 
 	VectorGraphic* particleRedGraphic;
 	VectorGraphic* particleRedMomentumGraphic;
+	VectorGraphic* particleRedSeparatingMomentumGraphic;
 	VectorGraphic* particleBlueGraphic;
 	VectorGraphic* particleBlueMomentumGraphic;
+	VectorGraphic* particleBlueSeparatingMomentumGraphic;
+
+	VectorGraphic* totalMomentumGraphic;
 
 	void setupMenu();
 	void setupParticleGraphics();
@@ -35,8 +39,11 @@ private slots:
 	void redMassChanged(float);
 	void blueMassChanged(float);
 	void restitutionChanged(float);
-	void redInitVelocityChanged(float);
-	void blueInitVelocityChanged(float);
+	void redInitVelocityXChanged(float);
+	void redInitVelocityYChanged(float);
+	void blueInitVelocityXChanged(float);
+	void blueInitVelocityYChanged(float);
 	void resetParticles();
+	void createCollision();
 };
 

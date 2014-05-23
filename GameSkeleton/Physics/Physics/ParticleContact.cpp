@@ -44,7 +44,7 @@ void ParticleContact::resolveVelocity(float dt)
 	}
 
 	float accCausedSepVelocity = glm::dot(accCausedVelocity, contactNormal) * dt;
-	cout << "Acc Caused Velocity: " << accCausedSepVelocity << endl;
+	cout << "Acceleration Caused Velocity: " << accCausedSepVelocity << endl;
 
 
 	if(accCausedSepVelocity <0)
@@ -64,6 +64,11 @@ void ParticleContact::resolveVelocity(float dt)
 	{
 		totalInverseMass += particle[1]->getInverseMass();
 	}
+	cout << "p0 Mass: " << particle[0]->mass << endl;
+	cout << "p1 Mass: " << particle[1]->mass << endl;
+	cout << "p0 Inverse Mass: " << particle[0]->getInverseMass() << endl;
+	cout << "p1 Inverse Mass: " << particle[1]->getInverseMass() << endl;
+	cout << "Total Inverse Mass: " << totalInverseMass << endl;
 
 	if(totalInverseMass <=0)
 	{
@@ -71,11 +76,12 @@ void ParticleContact::resolveVelocity(float dt)
 	}
 
 	float impulse = deltaVelocity / totalInverseMass;
+	cout << "Impulse: " << impulse << endl;
 
 	vec3 impulsePerIMass = contactNormal * impulse;
+	cout << "Impulse per mass: " << impulsePerIMass.x << ","<< impulsePerIMass.y << "," << impulsePerIMass.z << endl;
 
 	vec3 p0newVel = (particle[0]->velocity + impulsePerIMass * particle[0]->getInverseMass());
-	cout << "Delta Velocity: " << deltaVelocity << endl;
 	cout << "New p0 velocity: " << p0newVel.x << ","<< p0newVel.y << "," << p0newVel.z << endl;
 	particle[0]->velocity = p0newVel;
 

@@ -47,6 +47,7 @@ void SpringForces::initialize()
 	QObject::connect(springConstantSlider, SIGNAL(valueChanged(float)), this, SLOT(springConstantChanged(float)));
 
 	springParticle.position = vec3(-(initialRestLength/2),0,0);
+	springParticle.damping = 0.5f;
 	anchorParticle.position = vec3((initialRestLength/2),0,0);
 
 	springRestGraphic = addVectorGraphic();

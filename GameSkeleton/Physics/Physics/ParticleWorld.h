@@ -11,6 +11,7 @@ using std::vector;
 class ParticleWorld
 {
 public:
+	vec3 preContactVelocity;
 	typedef std::vector<Particle*> Particles;
 	Particles particles;
 

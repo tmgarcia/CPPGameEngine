@@ -57,6 +57,10 @@
     <ClInclude Include="TwoDParticleContactGenerator.h">
       <Filter>ParticleCollisionTools</Filter>
     </ClInclude>
+    <ClInclude Include="RestingContact.h">
+      <Filter>9-RestingContact</Filter>
+    </ClInclude>
+    <ClInclude Include="FloorContactGenerator.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -130,6 +134,13 @@
     <ClCompile Include="OneDCollision_moc.cpp">
       <Filter>7-OneDimensionalCollision</Filter>
     </ClCompile>
+    <ClCompile Include="RestingContact.cpp">
+      <Filter>9-RestingContact</Filter>
+    </ClCompile>
+    <ClCompile Include="FloorContactGenerator.cpp" />
+    <ClCompile Include="restingContact_moc.cpp">
+      <Filter>9-RestingContact</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="1-VelocityAcceleration">
@@ -161,6 +172,9 @@
     </Filter>
     <Filter Include="ParticleCollisionTools">
       <UniqueIdentifier>{27766924-579e-4bb1-a0a9-7acc7ea55d80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="9-RestingContact">
+      <UniqueIdentifier>{29303da8-bd3d-4665-8284-b77a721dc87d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -26,6 +26,7 @@ void ParticleWorld::integrate(float dt)
 	for(Particles::iterator p = particles.begin(); p != particles.end(); p++)
 	{
 		(*p)->integrate(dt);
+		preContactVelocity = (*p)->velocity;
 	}
 }
 

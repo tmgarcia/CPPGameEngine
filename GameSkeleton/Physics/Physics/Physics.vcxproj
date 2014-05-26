@@ -75,6 +75,7 @@
     <ClInclude Include="DebugSlider.h" />
     <ClInclude Include="DragForces.h" />
     <ClInclude Include="FastDelegate.h" />
+    <ClInclude Include="FloorContactGenerator.h" />
     <ClInclude Include="Momentum.h" />
     <ClInclude Include="MultipleSprings.h" />
     <ClInclude Include="OneDCollision.h" />
@@ -90,6 +91,7 @@
     <ClInclude Include="ParticleSpringGenerator.h" />
     <ClInclude Include="ParticleWorld.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="RestingContact.h" />
     <ClInclude Include="SpringForces.h" />
     <ClInclude Include="TwoDParticleContactGenerator.h" />
     <ClInclude Include="VelocityAcceleration.h" />
@@ -100,6 +102,7 @@
     <ClCompile Include="DebugSlider_moc.cpp" />
     <ClCompile Include="DragForces.cpp" />
     <ClCompile Include="DragForces_moc.cpp" />
+    <ClCompile Include="FloorContactGenerator.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Momentum.cpp" />
     <ClCompile Include="Momentum_moc.cpp" />
@@ -118,6 +121,8 @@
     <ClCompile Include="ParticleKeyboardForceGenerator.cpp" />
     <ClCompile Include="ParticleSpringGenerator.cpp" />
     <ClCompile Include="ParticleWorld.cpp" />
+    <ClCompile Include="RestingContact.cpp" />
+    <ClCompile Include="restingContact_moc.cpp" />
     <ClCompile Include="SpringForces.cpp" />
     <ClCompile Include="SpringForces_moc.cpp" />
     <ClCompile Include="TwoDParticleContactGenerator.cpp" />

@@ -38,18 +38,23 @@ void ParticleContact::resolveVelocity(float dt)
 	cout << "New Separating Velocity: " << newSepVelocity << endl;
 
 	vec3 accCausedVelocity = particle[0]->acceleration;
+	cout << "Particle Acceleration: " << particle[0]->acceleration.x << ","<< particle[0]->acceleration.y << "," << particle[0]->acceleration.z << endl;
 	if(particle[1])
 	{
+		cout << "Particle one?" << endl;
 		accCausedVelocity -= particle[1]->acceleration;
 	}
 
-	float accCausedSepVelocity = glm::dot(accCausedVelocity, contactNormal) * dt;
+	float accCausedSepVelocity = glm::dot(accCausedVelocity, contactNormal);
+	cout << "Acceleration caused velocity: (" << accCausedVelocity.x << ","<< accCausedVelocity.y << "," << accCausedVelocity.z << ") dot (";
+	cout << contactNormal.x << ","<< contactNormal.y << "," << contactNormal.z << ") * " << dt << endl;
 	cout << "Acceleration Caused Velocity: " << accCausedSepVelocity << endl;
 
 
 	if(accCausedSepVelocity <0)
 	{
-		newSepVelocity += restitution * accCausedSepVelocity;
+		newSepVelocity +=  accCausedSepVelocity;
+		cout << "New Separating Velocity with Acceleration caused: " << newSepVelocity << endl;
 		if(newSepVelocity < 0)
 		{
 			newSepVelocity = 0;
@@ -59,15 +64,15 @@ void ParticleContact::resolveVelocity(float dt)
 	float deltaVelocity = newSepVelocity - separatingVelocity;
 	cout << "Delta Velocity: " << deltaVelocity << endl;
 	float totalInverseMass = particle[0]->getInverseMass();
+	cout << "p0 Mass: " << particle[0]->mass << endl;
+	cout << "p0 Inverse Mass: " << particle[0]->getInverseMass() << endl;
 
 	if(particle[1])
 	{
 		totalInverseMass += particle[1]->getInverseMass();
-	}
-	cout << "p0 Mass: " << particle[0]->mass << endl;
 	cout << "p1 Mass: " << particle[1]->mass << endl;
-	cout << "p0 Inverse Mass: " << particle[0]->getInverseMass() << endl;
 	cout << "p1 Inverse Mass: " << particle[1]->getInverseMass() << endl;
+	}
 	cout << "Total Inverse Mass: " << totalInverseMass << endl;
 
 	if(totalInverseMass <=0)
@@ -117,16 +122,17 @@ void ParticleContact::resolveInterpenetration(float dt)
 	cout << "movePerIMass: " << movePerIMass.x << ","<< movePerIMass.y << "," << movePerIMass.z << endl;
 
 	particleMovement[0] = movePerIMass * -particle[0]->getInverseMass();
+	cout << "current particle position [0]: " << particle[0]->position.x << ","<< particle[0]->position.y << "," << particle[0]->position.z << endl;
 	if(particle[1])
 	{
 		particleMovement[1] = movePerIMass * particle[1]->getInverseMass();
+		cout << "current particle position [1]: " << particle[1]->position.x << ","<< particle[1]->position.y << "," << particle[1]->position.z << endl;
 	}
 	else
 	{
 		particleMovement[1] = vec3(0,0,0);
+		particleMovement[0] = -particleMovement[0];
 	}
-	cout << "current particle position [0]: " << particle[0]->position.x << ","<< particle[0]->position.y << "," << particle[0]->position.z << endl;
-	cout << "current particle position [1]: " << particle[1]->position.x << ","<< particle[1]->position.y << "," << particle[1]->position.z << endl;
 
 	cout << "particle movement [0]: " << particleMovement[0].x << ","<< particleMovement[0].y << "," << particleMovement[0].z << endl;
 	cout << "particle movement [1]: " << particleMovement[1].x << ","<< particleMovement[1].y << "," << particleMovement[1].z << endl;
@@ -139,11 +145,6 @@ void ParticleContact::resolveInterpenetration(float dt)
 		particle[1]->position = particle[1]->position + particleMovement[1];
 		cout << "new particle position [1]: " << particle[1]->position.x << ","<< particle[1]->position.y << "," << particle[1]->position.z << endl;
 	}
-
-	vec3 relativePos = particle[0]->position - particle[1]->position;
-	float newSeparation =  glm::length(relativePos);
-
-	cout << "new separation: " << newSeparation << endl;
 
 
 	cout << endl;

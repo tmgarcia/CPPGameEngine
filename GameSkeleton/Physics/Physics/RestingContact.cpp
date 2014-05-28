@@ -63,7 +63,7 @@ void RestingContact::setupParticles()
 	bounceParticle = new Particle();
 	bounceParticle->position = vec3(0, 3, 0);
 	bounceParticle->velocity = vec3(1,0,0);
-	bounceParticle->damping = 0.9f;
+	//bounceParticle->damping = 0.9f;
 
 	contactGenerator.minimumSeparation = (bounceParticle->mass/2.0f);
 	contactGenerator.restitution = startRestitution;
@@ -96,10 +96,10 @@ void RestingContact::newFrame()
 	forceRegistry.updateForces(dt());
 
 	particleWorld.runPhysics(dt());
-	incomingBounce = glm::length(particleWorld.preContactVelocity);
+	incomingBounce = particleWorld.preContactVelocity.y;
 	incomingBounceLabel->setText(incomingBounceText + QString::number(incomingBounce));
 
-	outgoingBounce = glm::length(bounceParticle->velocity);
+	outgoingBounce = bounceParticle->velocity.y;
 	outgoingBounceLabel->setText(outgoingBounceText + QString::number(outgoingBounce));
 	syncAllParticles();
 	syncAllLabels();

@@ -45,7 +45,7 @@ void ParticleContact::resolveVelocity(float dt)
 		accCausedVelocity -= particle[1]->acceleration;
 	}
 
-	float accCausedSepVelocity = glm::dot(accCausedVelocity, contactNormal);
+	float accCausedSepVelocity = glm::dot(accCausedVelocity, contactNormal) * dt;
 	cout << "Acceleration caused velocity: (" << accCausedVelocity.x << ","<< accCausedVelocity.y << "," << accCausedVelocity.z << ") dot (";
 	cout << contactNormal.x << ","<< contactNormal.y << "," << contactNormal.z << ") * " << dt << endl;
 	cout << "Acceleration Caused Velocity: " << accCausedSepVelocity << endl;

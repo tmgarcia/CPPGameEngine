@@ -61,6 +61,9 @@
       <Filter>9-RestingContact</Filter>
     </ClInclude>
     <ClInclude Include="FloorContactGenerator.h" />
+    <ClInclude Include="MultipleContacts.h">
+      <Filter>10-MultipleContacts</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -141,6 +144,9 @@
     <ClCompile Include="restingContact_moc.cpp">
       <Filter>9-RestingContact</Filter>
     </ClCompile>
+    <ClCompile Include="MultipleContacts.cpp">
+      <Filter>10-MultipleContacts</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="1-VelocityAcceleration">
@@ -175,6 +181,9 @@
     </Filter>
     <Filter Include="9-RestingContact">
       <UniqueIdentifier>{29303da8-bd3d-4665-8284-b77a721dc87d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="10-MultipleContacts">
+      <UniqueIdentifier>{6c1da484-8c0b-4afb-a185-a33c76807c77}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

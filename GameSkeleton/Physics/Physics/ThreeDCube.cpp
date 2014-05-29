@@ -15,9 +15,9 @@ void ThreeDCube::initialize()
 {
 	GuiBase::initialize(true, false);
 	srand((unsigned)time(NULL));
-	originalRestitution = 0.5f;
-	originalSpringConstant = 10;
-	originalDamping = 0.5f;
+	originalRestitution = 1.0f;
+	originalSpringConstant = 3;
+	originalDamping = 0.2f;
 	originalRestLength = 5.0f;
 
 	setupParticles();
@@ -53,15 +53,15 @@ void ThreeDCube::setupMenu()
 	dampingLayout->addWidget(dampingLabel);
 	dampingLayout->addWidget(dampingSlider);
 
-	QHBoxLayout* restLengthLayout = new QHBoxLayout();
+	/*QHBoxLayout* restLengthLayout = new QHBoxLayout();
 	QLabel* restLengthLabel = new QLabel("Base Rest length");
 	DebugSlider* restLengthSlider = new DebugSlider(0.5f, 10.0f, false, 100.0f);
 	restLengthSlider->setValue(originalRestLength);
 	restLengthLayout->addWidget(restLengthLabel);
-	restLengthLayout->addWidget(restLengthSlider);
+	restLengthLayout->addWidget(restLengthSlider);*/
 
 	slidersLayout->addLayout(springConstantLayout);
-	slidersLayout->addLayout(restLengthLayout);
+	//slidersLayout->addLayout(restLengthLayout);
 	slidersLayout->addLayout(restitutionLayout);
 	slidersLayout->addLayout(dampingLayout);
 
@@ -72,7 +72,7 @@ void ThreeDCube::setupMenu()
 	QObject::connect(restitutionSlider, SIGNAL(valueChanged(float)), this, SLOT(restitutionChanged(float)));
 	QObject::connect(springConstantSlider, SIGNAL(valueChanged(float)), this, SLOT(springConstantChanged(float)));
 	QObject::connect(dampingSlider, SIGNAL(valueChanged(float)), this, SLOT(dampingChanged(float)));
-	QObject::connect(restLengthSlider, SIGNAL(valueChanged(float)), this, SLOT(restLengthChanged(float)));
+	//QObject::connect(restLengthSlider, SIGNAL(valueChanged(float)), this, SLOT(restLengthChanged(float)));
 }
 void ThreeDCube::setupParticleGraphics()
 {

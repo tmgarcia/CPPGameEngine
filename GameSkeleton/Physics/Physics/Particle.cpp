@@ -43,5 +43,5 @@ float Particle::getInverseMass()
 }
 float Particle::getKineticEnergy()
 {
-	return (0.5) * mass * glm::pow(glm::length(velocity),2.0f);
+	return (0.5f) * mass * glm::pow(glm::length(velocity),2.0f);
 }

@@ -67,6 +67,9 @@
     <ClInclude Include="FloorContactGenerator.h">
       <Filter>ParticleCollisionTools</Filter>
     </ClInclude>
+    <ClInclude Include="ThreeDCube.h">
+      <Filter>11-3DCube</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -156,6 +159,12 @@
     <ClCompile Include="MultipleContacts_moc.cpp">
       <Filter>10-MultipleContacts</Filter>
     </ClCompile>
+    <ClCompile Include="ThreeDCube.cpp">
+      <Filter>11-3DCube</Filter>
+    </ClCompile>
+    <ClCompile Include="ThreeDCube_moc.cpp">
+      <Filter>11-3DCube</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="1-VelocityAcceleration">
@@ -193,6 +202,9 @@
     </Filter>
     <Filter Include="10-MultipleContacts">
       <UniqueIdentifier>{6c1da484-8c0b-4afb-a185-a33c76807c77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="11-3DCube">
+      <UniqueIdentifier>{cf971fea-cfcf-4c5b-b66d-b9f0f520aaec}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

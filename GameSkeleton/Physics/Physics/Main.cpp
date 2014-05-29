@@ -8,6 +8,7 @@
 #include "OneDCollision.h"
 #include "RestingContact.h"
 #include "MultipleContacts.h"
+#include "ThreeDCube.h"
 
 int main(int argc, char* argv[])
 {
@@ -20,7 +21,8 @@ int main(int argc, char* argv[])
 	//MultipleSprings demo = MultipleSprings();
 	//OneDCollision demo = OneDCollision();
 	//RestingContact demo = RestingContact();
-	MultipleContacts demo = MultipleContacts();
+	//MultipleContacts demo = MultipleContacts();
+	ThreeDCube demo = ThreeDCube();
 
 	demo.initialize();
 	demo.show();

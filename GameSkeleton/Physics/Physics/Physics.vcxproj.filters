@@ -60,9 +60,12 @@
     <ClInclude Include="RestingContact.h">
       <Filter>9-RestingContact</Filter>
     </ClInclude>
-    <ClInclude Include="FloorContactGenerator.h" />
     <ClInclude Include="MultipleContacts.h">
       <Filter>10-MultipleContacts</Filter>
+    </ClInclude>
+    <ClInclude Include="RandomColorGenerator.h" />
+    <ClInclude Include="FloorContactGenerator.h">
+      <Filter>ParticleCollisionTools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -140,11 +143,17 @@
     <ClCompile Include="RestingContact.cpp">
       <Filter>9-RestingContact</Filter>
     </ClCompile>
-    <ClCompile Include="FloorContactGenerator.cpp" />
     <ClCompile Include="restingContact_moc.cpp">
       <Filter>9-RestingContact</Filter>
     </ClCompile>
     <ClCompile Include="MultipleContacts.cpp">
+      <Filter>10-MultipleContacts</Filter>
+    </ClCompile>
+    <ClCompile Include="RandomColorGenerator.cpp" />
+    <ClCompile Include="FloorContactGenerator.cpp">
+      <Filter>ParticleCollisionTools</Filter>
+    </ClCompile>
+    <ClCompile Include="MultipleContacts_moc.cpp">
       <Filter>10-MultipleContacts</Filter>
     </ClCompile>
   </ItemGroup>

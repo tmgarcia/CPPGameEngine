@@ -10,12 +10,17 @@ float FloorContactGenerator::currentSeparation() const
 	return separation;
 }
 
+void FloorContactGenerator::setRestitution(float newRestitution)
+{
+	restitution = newRestitution;
+}
+
 unsigned FloorContactGenerator::addContact(ParticleContact *contact, unsigned limit) const
 {
 	unsigned result = 0;
 	float separation = currentSeparation();
 
-	if(separation <= minimumSeparation)
+	if(separation < minimumSeparation)
 	{
 		contact->particle[0] = particle;
 		contact->particle[1] = NULL;
@@ -26,8 +31,8 @@ unsigned FloorContactGenerator::addContact(ParticleContact *contact, unsigned li
 
 		float penetration = minimumSeparation - separation;
 		contact->penetration = minimumSeparation - separation;
-		cout<< endl;
-		cout<< "min sep " << minimumSeparation << " sep " << separation << " penetration " << penetration << endl;
+		//cout<< endl;
+		//cout<< "min sep " << minimumSeparation << " sep " << separation << " penetration " << penetration << endl;
 		contact->restitution = restitution;
 		result = 1;
 	}

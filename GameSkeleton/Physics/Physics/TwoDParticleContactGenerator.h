@@ -14,6 +14,7 @@ protected:
 
 public:
 	virtual unsigned addContact(ParticleContact *contact, unsigned limit) const;
+	virtual void setRestitution(float newRestitution);
 
 };
 

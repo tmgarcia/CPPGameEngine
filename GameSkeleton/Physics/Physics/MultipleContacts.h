@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ParticleWorld.h"
+#include "TwoDParticleContactGenerator.h"
 #include "FloorContactGenerator.h"
 #include "PhysicsGui\GuiBase.h"
 #include "ParticleGravityGenerator.h"
@@ -17,17 +18,19 @@ private:
 	Particle* bounceParticle4;
 	Particle* freeParticle;
 
-	VectorGraphic* bounceParticle1Generator;
-	VectorGraphic* bounceParticle2Generator;
-	VectorGraphic* bounceParticle3Generator;
-	VectorGraphic* bounceParticle4Generator;
-	VectorGraphic* freeParticleGenerator;
+	VectorGraphic* bounceParticle1Graphic;
+	VectorGraphic* bounceParticle2Graphic;
+	VectorGraphic* bounceParticle3Graphic;
+	VectorGraphic* bounceParticle4Graphic;
+	VectorGraphic* freeParticleGraphic;
 
 	ParticleWorld particleWorld;
 
 	ParticleGravityGenerator gravityGenerator;
 	ParticleForceRegistry forceRegistry;
-	VectorGraphic* bounceParticleGraphic;
+
+	float originalRestitution;
+
 
 	void setupMenu();
 	void setupParticleGraphics();
@@ -43,6 +46,5 @@ public:
 private slots:
 	void restitutionChanged(float);
 	void resetToFall();
-	void resetToRest();
 };
 

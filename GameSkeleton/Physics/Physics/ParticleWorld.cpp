@@ -37,14 +37,15 @@ void ParticleWorld::runPhysics(float dt)
 	unsigned usedContacts = generateContacts();
 	if(usedContacts)
 	{
-		cout << "used contacts " << usedContacts << endl;
+		//cout << "used contacts " << usedContacts << endl;
 		if(calculateIterations)
 		{
-			resolver.setIterations(usedContacts * 2);
+			resolver.setIterations(usedContacts * 1);
 			resolver.resolveContacts(contacts, usedContacts, dt);
 		}
 		else
 		{
+			resolver.setIterations(usedContacts * 1);
 			resolver.resolveContacts(contacts, usedContacts, dt);
 		}
 	}

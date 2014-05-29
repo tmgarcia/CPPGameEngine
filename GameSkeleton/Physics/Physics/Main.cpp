@@ -7,6 +7,7 @@
 #include "MultipleSprings.h"
 #include "OneDCollision.h"
 #include "RestingContact.h"
+#include "MultipleContacts.h"
 
 int main(int argc, char* argv[])
 {
@@ -18,7 +19,8 @@ int main(int argc, char* argv[])
 	//SpringForces demo = SpringForces();
 	//MultipleSprings demo = MultipleSprings();
 	//OneDCollision demo = OneDCollision();
-	RestingContact demo = RestingContact();
+	//RestingContact demo = RestingContact();
+	MultipleContacts demo = MultipleContacts();
 
 	demo.initialize();
 	demo.show();

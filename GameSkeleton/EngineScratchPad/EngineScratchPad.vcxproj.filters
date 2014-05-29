@@ -4,5 +4,11 @@
     <ClCompile Include="DebugShapes_moc.cpp" />
     <ClCompile Include="GeneralGLWindow_moc.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="ScratchWindow.cpp" />
+    <ClCompile Include="MapLerper.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ScratchWindow.h" />
+    <ClInclude Include="MapLerper.h" />
   </ItemGroup>
 </Project>

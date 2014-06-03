@@ -74,6 +74,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AccumulatingForces.h" />
+    <ClInclude Include="AngularVelocity.h" />
     <ClInclude Include="DebugSlider.h" />
     <ClInclude Include="DragForces.h" />
     <ClInclude Include="FastDelegate.h" />
@@ -103,6 +104,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AccumulatingForces.cpp" />
+    <ClCompile Include="AngularVelocity.cpp" />
+    <ClCompile Include="AngularVelocity_moc.cpp" />
     <ClCompile Include="DebugSlider.cpp" />
     <ClCompile Include="DebugSlider_moc.cpp" />
     <ClCompile Include="DragForces.cpp" />

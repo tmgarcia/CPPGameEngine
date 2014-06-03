@@ -70,6 +70,9 @@
     <ClInclude Include="ThreeDCube.h">
       <Filter>11-3DCube</Filter>
     </ClInclude>
+    <ClInclude Include="AngularVelocity.h">
+      <Filter>12-AngularVelocity</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -165,6 +168,12 @@
     <ClCompile Include="ThreeDCube_moc.cpp">
       <Filter>11-3DCube</Filter>
     </ClCompile>
+    <ClCompile Include="AngularVelocity.cpp">
+      <Filter>12-AngularVelocity</Filter>
+    </ClCompile>
+    <ClCompile Include="AngularVelocity_moc.cpp">
+      <Filter>12-AngularVelocity</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="1-VelocityAcceleration">
@@ -205,6 +214,9 @@
     </Filter>
     <Filter Include="11-3DCube">
       <UniqueIdentifier>{cf971fea-cfcf-4c5b-b66d-b9f0f520aaec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="12-AngularVelocity">
+      <UniqueIdentifier>{2bd931a5-b9be-456b-ad0a-36ea8d6244e1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

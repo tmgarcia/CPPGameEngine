@@ -9,20 +9,22 @@
 #include "RestingContact.h"
 #include "MultipleContacts.h"
 #include "ThreeDCube.h"
+#include "AngularVelocity.h"
 
 int main(int argc, char* argv[])
 {
 	QApplication app(argc, argv);
-	//VelocityAcceleration demo = VelocityAcceleration();
-	//Momentum demo = Momentum();
-	//AccumulatingForces demo = AccumulatingForces();
-	//DragForces demo = DragForces();
-	//SpringForces demo = SpringForces();
-	//MultipleSprings demo = MultipleSprings();
-	//OneDCollision demo = OneDCollision();
-	//RestingContact demo = RestingContact();
-	//MultipleContacts demo = MultipleContacts();
-	ThreeDCube demo = ThreeDCube();
+	//VelocityAcceleration demo;
+	//Momentum demo;
+	//AccumulatingForces demo;
+	//DragForces demo;
+	//SpringForces demo;
+	//MultipleSprings demo;
+	//OneDCollision demo;
+	//RestingContact demo;
+	//MultipleContacts demo;
+	//ThreeDCube demo;
+	AngularVelocity demo;
 
 	demo.initialize();
 	demo.show();

@@ -56,7 +56,7 @@ void ParticleContact::resolveVelocity(float dt)
 	if(accCausedSepVelocity <0)
 	{
 		//cout << "New Separating Velocity: " << newSepVelocity << endl;
-		newSepVelocity +=  accCausedSepVelocity;
+		newSepVelocity += restitution* accCausedSepVelocity;
 		//cout << "New Separating Velocity with Acceleration caused: " << newSepVelocity << endl;
 		if(newSepVelocity < 0)
 		{
@@ -156,7 +156,6 @@ void ParticleContact::resolveInterpenetration(float dt)
 		particle[1]->position = particle[1]->position + particleMovement[1];
 		//cout << "new particle position [1]: " << particle[1]->position.x << ","<< particle[1]->position.y << "," << particle[1]->position.z << endl;
 	}
-
 
 	//cout << endl;
 }

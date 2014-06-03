@@ -75,6 +75,7 @@
   <ItemGroup>
     <ClInclude Include="AccumulatingForces.h" />
     <ClInclude Include="AngularVelocity.h" />
+    <ClInclude Include="ChaslesTheorem.h" />
     <ClInclude Include="DebugSlider.h" />
     <ClInclude Include="DragForces.h" />
     <ClInclude Include="FastDelegate.h" />
@@ -106,6 +107,7 @@
     <ClCompile Include="AccumulatingForces.cpp" />
     <ClCompile Include="AngularVelocity.cpp" />
     <ClCompile Include="AngularVelocity_moc.cpp" />
+    <ClCompile Include="ChaslesTheorem.cpp" />
     <ClCompile Include="DebugSlider.cpp" />
     <ClCompile Include="DebugSlider_moc.cpp" />
     <ClCompile Include="DragForces.cpp" />

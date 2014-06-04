@@ -3,14 +3,17 @@
 #include "Particle.h"
 #include "PhysicsGui\GuiBase.h"
 #include "RandomColorGenerator.h"
+#include <Qt\qlist.h>
 
 class ChaslesTheorem : public GuiBase
 {
 	Q_OBJECT
 
 private:
-	
+	int numOfParticles;
+
 	vec3 bodyOrigin;
+	vec3 bodyOriginVelocity;
 	VectorGraphic* bodyVelocityGraphic;
 
 	float radius;
@@ -19,6 +22,7 @@ private:
 
 	struct BodyParticle
 	{
+		float originalRadiusFromOrigin;
 		Particle* particle;
 		VectorGraphic* particleGraphic;
 		VectorGraphic* particlePositionGraphic;
@@ -26,18 +30,24 @@ private:
 		VectorGraphic* worldVelocityGraphic;
 	};
 
-	BodyParticle** bodyParticles;
+	QList<BodyParticle*> bodyParticles;
 
-	bool isThrown;
+	bool sameRadius;
 
 	void setupMenu();
 	void setupParticles();
 	void setup();
+	void syncAllGraphics();
 
 public:
 	void vectorGraphicMouseDrag(uint vectorGraphicIndex, const glm::vec3& dragDelta);
 	void initialize();
 	void newFrame();
+	ChaslesTheorem(int numParticles = 10)
+	{
+		numOfParticles = numParticles;
+	}
+
 	
 private slots:
 	void throwParticle();

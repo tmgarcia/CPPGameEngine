@@ -108,6 +108,7 @@
     <ClCompile Include="AngularVelocity.cpp" />
     <ClCompile Include="AngularVelocity_moc.cpp" />
     <ClCompile Include="ChaslesTheorem.cpp" />
+    <ClCompile Include="ChaslesTheorem_moc.cpp" />
     <ClCompile Include="DebugSlider.cpp" />
     <ClCompile Include="DebugSlider_moc.cpp" />
     <ClCompile Include="DragForces.cpp" />

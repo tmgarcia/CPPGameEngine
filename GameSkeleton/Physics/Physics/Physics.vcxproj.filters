@@ -73,7 +73,9 @@
     <ClInclude Include="AngularVelocity.h">
       <Filter>12-AngularVelocity</Filter>
     </ClInclude>
-    <ClInclude Include="ChaslesTheorem.h" />
+    <ClInclude Include="ChaslesTheorem.h">
+      <Filter>13-ChaslesTheorem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -175,7 +177,12 @@
     <ClCompile Include="AngularVelocity_moc.cpp">
       <Filter>12-AngularVelocity</Filter>
     </ClCompile>
-    <ClCompile Include="ChaslesTheorem.cpp" />
+    <ClCompile Include="ChaslesTheorem.cpp">
+      <Filter>13-ChaslesTheorem</Filter>
+    </ClCompile>
+    <ClCompile Include="ChaslesTheorem_moc.cpp">
+      <Filter>13-ChaslesTheorem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="1-VelocityAcceleration">

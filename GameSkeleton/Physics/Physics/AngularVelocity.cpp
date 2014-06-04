@@ -37,7 +37,7 @@ void AngularVelocity::setupMenu()
 
 	QHBoxLayout* radiusLayout = new QHBoxLayout();
 	QLabel* radiusLabel = new QLabel("Radius");
-	DebugSlider* radiusSlider = new DebugSlider(0.0f, 5.0f);
+	DebugSlider* radiusSlider = new DebugSlider(0.1f, 5.0f);
 	radiusSlider->setValue(radius);
 	radiusLayout->addWidget(radiusLabel);
 	radiusLayout->addWidget(radiusSlider);

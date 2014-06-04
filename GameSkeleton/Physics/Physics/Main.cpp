@@ -10,6 +10,7 @@
 #include "MultipleContacts.h"
 #include "ThreeDCube.h"
 #include "AngularVelocity.h"
+#include "ChaslesTheorem.h"
 
 int main(int argc, char* argv[])
 {
@@ -24,7 +25,8 @@ int main(int argc, char* argv[])
 	//RestingContact demo;
 	//MultipleContacts demo;
 	//ThreeDCube demo;
-	AngularVelocity demo;
+	//AngularVelocity demo;
+	ChaslesTheorem demo = ChaslesTheorem(15);//Pass in number of particles that will make up the body (defaults to 10)
 
 	demo.initialize();
 	demo.show();

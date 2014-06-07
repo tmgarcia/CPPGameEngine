@@ -4,19 +4,19 @@
     <ClInclude Include="Particle.h" />
     <ClInclude Include="DebugSlider.h" />
     <ClInclude Include="Momentum.h">
-      <Filter>2-Momentum</Filter>
+      <Filter>02-Momentum</Filter>
     </ClInclude>
     <ClInclude Include="VelocityAcceleration.h">
-      <Filter>1-VelocityAcceleration</Filter>
+      <Filter>01-VelocityAcceleration</Filter>
     </ClInclude>
     <ClInclude Include="ParticleForceRegistry.h">
       <Filter>ParticleForceTools</Filter>
     </ClInclude>
     <ClInclude Include="AccumulatingForces.h">
-      <Filter>3-ForceAccumulation</Filter>
+      <Filter>03-ForceAccumulation</Filter>
     </ClInclude>
     <ClInclude Include="DragForces.h">
-      <Filter>4-DragForce</Filter>
+      <Filter>04-DragForce</Filter>
     </ClInclude>
     <ClInclude Include="ParticleDragGenerator.h">
       <Filter>ParticleForceTools\ForceGenerators</Filter>
@@ -35,21 +35,21 @@
       <Filter>ParticleForceTools\ForceGenerators</Filter>
     </ClInclude>
     <ClInclude Include="MultipleSprings.h">
-      <Filter>6-MultipleSprings</Filter>
+      <Filter>06-MultipleSprings</Filter>
     </ClInclude>
     <ClInclude Include="FastDelegate.h" />
     <ClInclude Include="ParticleContact.h">
       <Filter>ParticleCollisionTools</Filter>
     </ClInclude>
     <ClInclude Include="SpringForces.h">
-      <Filter>5-Springs</Filter>
+      <Filter>05-Springs</Filter>
     </ClInclude>
     <ClInclude Include="ParticleContactResolver.h">
       <Filter>ParticleCollisionTools</Filter>
     </ClInclude>
     <ClInclude Include="ParticleWorld.h" />
     <ClInclude Include="OneDCollision.h">
-      <Filter>7-OneDimensionalCollision</Filter>
+      <Filter>0708-OneDimensionalCollision</Filter>
     </ClInclude>
     <ClInclude Include="ParticleContactGenerator.h">
       <Filter>ParticleCollisionTools</Filter>
@@ -58,7 +58,7 @@
       <Filter>ParticleCollisionTools</Filter>
     </ClInclude>
     <ClInclude Include="RestingContact.h">
-      <Filter>9-RestingContact</Filter>
+      <Filter>09-RestingContact</Filter>
     </ClInclude>
     <ClInclude Include="MultipleContacts.h">
       <Filter>10-MultipleContacts</Filter>
@@ -76,6 +76,9 @@
     <ClInclude Include="ChaslesTheorem.h">
       <Filter>13-ChaslesTheorem</Filter>
     </ClInclude>
+    <ClInclude Include="Torque.h">
+      <Filter>14-Torque</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -83,25 +86,25 @@
     <ClCompile Include="DebugSlider.cpp" />
     <ClCompile Include="DebugSlider_moc.cpp" />
     <ClCompile Include="Momentum.cpp">
-      <Filter>2-Momentum</Filter>
+      <Filter>02-Momentum</Filter>
     </ClCompile>
     <ClCompile Include="Momentum_moc.cpp">
-      <Filter>2-Momentum</Filter>
+      <Filter>02-Momentum</Filter>
     </ClCompile>
     <ClCompile Include="VelocityAcceleration.cpp">
-      <Filter>1-VelocityAcceleration</Filter>
+      <Filter>01-VelocityAcceleration</Filter>
     </ClCompile>
     <ClCompile Include="ParticleForceRegistry.cpp">
       <Filter>ParticleForceTools</Filter>
     </ClCompile>
     <ClCompile Include="AccumulatingForces.cpp">
-      <Filter>3-ForceAccumulation</Filter>
+      <Filter>03-ForceAccumulation</Filter>
     </ClCompile>
     <ClCompile Include="DragForces.cpp">
-      <Filter>4-DragForce</Filter>
+      <Filter>04-DragForce</Filter>
     </ClCompile>
     <ClCompile Include="DragForces_moc.cpp">
-      <Filter>4-DragForce</Filter>
+      <Filter>04-DragForce</Filter>
     </ClCompile>
     <ClCompile Include="ParticleDragGenerator.cpp">
       <Filter>ParticleForceTools\ForceGenerators</Filter>
@@ -119,26 +122,26 @@
       <Filter>ParticleForceTools\ForceGenerators</Filter>
     </ClCompile>
     <ClCompile Include="MultipleSprings_moc.cpp">
-      <Filter>6-MultipleSprings</Filter>
+      <Filter>06-MultipleSprings</Filter>
     </ClCompile>
     <ClCompile Include="MultipleSprings.cpp">
-      <Filter>6-MultipleSprings</Filter>
+      <Filter>06-MultipleSprings</Filter>
     </ClCompile>
     <ClCompile Include="ParticleContact.cpp">
       <Filter>ParticleCollisionTools</Filter>
     </ClCompile>
     <ClCompile Include="SpringForces.cpp">
-      <Filter>5-Springs</Filter>
+      <Filter>05-Springs</Filter>
     </ClCompile>
     <ClCompile Include="SpringForces_moc.cpp">
-      <Filter>5-Springs</Filter>
+      <Filter>05-Springs</Filter>
     </ClCompile>
     <ClCompile Include="ParticleContactResolver.cpp">
       <Filter>ParticleCollisionTools</Filter>
     </ClCompile>
     <ClCompile Include="ParticleWorld.cpp" />
     <ClCompile Include="OneDCollision.cpp">
-      <Filter>7-OneDimensionalCollision</Filter>
+      <Filter>0708-OneDimensionalCollision</Filter>
     </ClCompile>
     <ClCompile Include="ParticleContactGenerator.cpp">
       <Filter>ParticleCollisionTools</Filter>
@@ -147,13 +150,13 @@
       <Filter>ParticleCollisionTools</Filter>
     </ClCompile>
     <ClCompile Include="OneDCollision_moc.cpp">
-      <Filter>7-OneDimensionalCollision</Filter>
+      <Filter>0708-OneDimensionalCollision</Filter>
     </ClCompile>
     <ClCompile Include="RestingContact.cpp">
-      <Filter>9-RestingContact</Filter>
+      <Filter>09-RestingContact</Filter>
     </ClCompile>
     <ClCompile Include="restingContact_moc.cpp">
-      <Filter>9-RestingContact</Filter>
+      <Filter>09-RestingContact</Filter>
     </ClCompile>
     <ClCompile Include="MultipleContacts.cpp">
       <Filter>10-MultipleContacts</Filter>
@@ -183,40 +186,22 @@
     <ClCompile Include="ChaslesTheorem_moc.cpp">
       <Filter>13-ChaslesTheorem</Filter>
     </ClCompile>
+    <ClCompile Include="Torque.cpp">
+      <Filter>14-Torque</Filter>
+    </ClCompile>
+    <ClCompile Include="Torque_moc.cpp">
+      <Filter>14-Torque</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="1-VelocityAcceleration">
-      <UniqueIdentifier>{d5d14095-dd90-4d0b-948b-1cbc7407cbe0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="2-Momentum">
-      <UniqueIdentifier>{3d734788-5ecd-4f25-a884-648d33c96b8b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="3-ForceAccumulation">
-      <UniqueIdentifier>{46bc1985-248a-45e6-920b-54c302eac7f5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ParticleForceTools">
       <UniqueIdentifier>{36033cf1-25a3-46af-a7b2-c058a3dd007f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="4-DragForce">
-      <UniqueIdentifier>{ae0917c1-0563-4e17-bbd6-e7d8cb0168f8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="5-Springs">
-      <UniqueIdentifier>{81861838-edeb-4b65-b05f-2beed9e9a576}</UniqueIdentifier>
     </Filter>
     <Filter Include="ParticleForceTools\ForceGenerators">
       <UniqueIdentifier>{4d277e64-fbd0-4f1c-94b7-c8337c83121c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="6-MultipleSprings">
-      <UniqueIdentifier>{66fce925-4eec-4412-a21b-9ccf696c36e6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="7-OneDimensionalCollision">
-      <UniqueIdentifier>{4aaaad5e-8bdd-486c-92ff-6fc523b77923}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ParticleCollisionTools">
       <UniqueIdentifier>{27766924-579e-4bb1-a0a9-7acc7ea55d80}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="9-RestingContact">
-      <UniqueIdentifier>{29303da8-bd3d-4665-8284-b77a721dc87d}</UniqueIdentifier>
     </Filter>
     <Filter Include="10-MultipleContacts">
       <UniqueIdentifier>{6c1da484-8c0b-4afb-a185-a33c76807c77}</UniqueIdentifier>
@@ -229,6 +214,33 @@
     </Filter>
     <Filter Include="13-ChaslesTheorem">
       <UniqueIdentifier>{e00c22cb-9a33-45ae-809c-30f3ee7f7fc8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="14-Torque">
+      <UniqueIdentifier>{71b745dd-cfbc-4a75-b213-b26ae1a30e32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01-VelocityAcceleration">
+      <UniqueIdentifier>{d5d14095-dd90-4d0b-948b-1cbc7407cbe0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02-Momentum">
+      <UniqueIdentifier>{3d734788-5ecd-4f25-a884-648d33c96b8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03-ForceAccumulation">
+      <UniqueIdentifier>{46bc1985-248a-45e6-920b-54c302eac7f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04-DragForce">
+      <UniqueIdentifier>{ae0917c1-0563-4e17-bbd6-e7d8cb0168f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05-Springs">
+      <UniqueIdentifier>{81861838-edeb-4b65-b05f-2beed9e9a576}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06-MultipleSprings">
+      <UniqueIdentifier>{66fce925-4eec-4412-a21b-9ccf696c36e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="09-RestingContact">
+      <UniqueIdentifier>{29303da8-bd3d-4665-8284-b77a721dc87d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="0708-OneDimensionalCollision">
+      <UniqueIdentifier>{4aaaad5e-8bdd-486c-92ff-6fc523b77923}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

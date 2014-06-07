@@ -100,6 +100,7 @@
     <ClInclude Include="RestingContact.h" />
     <ClInclude Include="SpringForces.h" />
     <ClInclude Include="ThreeDCube.h" />
+    <ClInclude Include="Torque.h" />
     <ClInclude Include="TwoDParticleContactGenerator.h" />
     <ClInclude Include="VelocityAcceleration.h" />
   </ItemGroup>
@@ -141,6 +142,8 @@
     <ClCompile Include="SpringForces_moc.cpp" />
     <ClCompile Include="ThreeDCube.cpp" />
     <ClCompile Include="ThreeDCube_moc.cpp" />
+    <ClCompile Include="Torque.cpp" />
+    <ClCompile Include="Torque_moc.cpp" />
     <ClCompile Include="TwoDParticleContactGenerator.cpp" />
     <ClCompile Include="VelocityAcceleration.cpp" />
   </ItemGroup>

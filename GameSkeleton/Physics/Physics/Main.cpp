@@ -11,22 +11,24 @@
 #include "ThreeDCube.h"
 #include "AngularVelocity.h"
 #include "ChaslesTheorem.h"
+#include "Torque.h"
 
 int main(int argc, char* argv[])
 {
 	QApplication app(argc, argv);
-	//VelocityAcceleration demo;
-	//Momentum demo;
-	//AccumulatingForces demo;
-	//DragForces demo;
-	//SpringForces demo;
-	//MultipleSprings demo;
-	//OneDCollision demo;
-	//RestingContact demo;
-	//MultipleContacts demo;
-	//ThreeDCube demo;
-	//AngularVelocity demo;
-	ChaslesTheorem demo = ChaslesTheorem(15);//Pass in number of particles that will make up the body (defaults to 10)
+	//VelocityAcceleration demo;/*1*/
+	//Momentum demo;/*2*/
+	//AccumulatingForces demo;/*3*/
+	//DragForces demo;/*4*/
+	//SpringForces demo;/*5*/
+	//MultipleSprings demo;/*6*/
+	//OneDCollision demo;/*7,8*/
+	//RestingContact demo;/*9*/
+	//MultipleContacts demo;/*10*/
+	//ThreeDCube demo;/*11*/
+	////AngularVelocity demo;/*12*/
+	//ChaslesTheorem demo = ChaslesTheorem(15);/*13*/
+	Torque demo = Torque(15); /*14*/
 
 	demo.initialize();
 	demo.show();

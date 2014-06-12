@@ -55,5 +55,3 @@ private:
 	mat4 fullTransform;
 	mat4 worldToProjection;
 };
-};
-

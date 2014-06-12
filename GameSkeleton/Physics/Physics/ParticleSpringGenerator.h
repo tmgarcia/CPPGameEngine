@@ -12,6 +12,7 @@ public:
 
 	float springConstant;
 	float restLength;
+	vec3 lastForce;
 
 	ParticleSpringGenerator(Particle *other = new Particle(), float springConstant = 1, float restLength = 1): other(other), springConstant(springConstant), restLength(restLength)
 	{}

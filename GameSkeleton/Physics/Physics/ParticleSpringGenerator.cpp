@@ -29,11 +29,14 @@ void ParticleSpringGenerator::updateForce(Particle *particle, float duration)
 
 	float distanceBetweenLengthAndRestLength = distanceBetweenparticles-restLength;
 
+	if(distanceBetweenLengthAndRestLength>0)
+	{
 	float k = springConstant;
 
 	float f = -k * distanceBetweenLengthAndRestLength;
 
 	vec3 forceVector = glm::normalize(vectorBetweenParticles) * f;
-
+	lastForce = forceVector;
 	particle->addForce(forceVector);
+	}
 }

@@ -79,6 +79,9 @@
     <ClInclude Include="Torque.h">
       <Filter>14-Torque</Filter>
     </ClInclude>
+    <ClInclude Include="TorqueSquare.h">
+      <Filter>15-TorqueSquare</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -192,6 +195,12 @@
     <ClCompile Include="Torque_moc.cpp">
       <Filter>14-Torque</Filter>
     </ClCompile>
+    <ClCompile Include="TorqueSquare.cpp">
+      <Filter>15-TorqueSquare</Filter>
+    </ClCompile>
+    <ClCompile Include="TorqueSquare_moc.cpp">
+      <Filter>15-TorqueSquare</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="ParticleForceTools">
@@ -241,6 +250,9 @@
     </Filter>
     <Filter Include="0708-OneDimensionalCollision">
       <UniqueIdentifier>{4aaaad5e-8bdd-486c-92ff-6fc523b77923}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="15-TorqueSquare">
+      <UniqueIdentifier>{b164b2f2-0468-40b4-991d-9f813f28bb3a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

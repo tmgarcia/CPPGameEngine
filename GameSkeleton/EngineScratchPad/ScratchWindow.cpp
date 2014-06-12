@@ -14,7 +14,7 @@ void ScratchWindow::loadLevel()
 {
 	QString fileName = "../Resources/GameLevels/dataMaze.tlvl";
 	GameLevel::getInstance();
-	GameLevel::getInstance().update(camera.getPosition, worldToProjectionMatrix);
+	//GameLevel::getInstance().update(camera.getPosition, worldToProjectionMatrix);
 	GameLevel::getInstance().loadLevel(fileName);
 	camera.resetPosition();
 	DebugNodeContainer::getInstance().hideAllNodes();

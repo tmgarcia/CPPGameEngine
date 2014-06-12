@@ -68,7 +68,7 @@ void MapLerper::setSpeed(float s)
 }
 void MapLerper::startPathing()
 {
-	currentGoalNode = endNode;
+	//currentGoalNode = endNode;
 	setupPath();
 	isPathing = true;
 }

@@ -13,6 +13,7 @@
 #include "ChaslesTheorem.h"
 #include "Torque.h"
 #include "TorqueSquare.h"
+#include "SomethingCool.h"
 
 int main(int argc, char* argv[])
 {
@@ -30,7 +31,8 @@ int main(int argc, char* argv[])
 	////AngularVelocity demo;/*12*/
 	//ChaslesTheorem demo = ChaslesTheorem(15);/*13*/
 	//Torque demo = Torque(15); /*14*/
-	TorqueSquare demo;
+	//TorqueSquare demo;
+	SomethingCool demo;
 
 	demo.initialize();
 	demo.show();

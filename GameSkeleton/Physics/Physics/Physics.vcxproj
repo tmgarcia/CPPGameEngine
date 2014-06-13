@@ -98,12 +98,14 @@
     <ClInclude Include="RandomColorGenerator.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="RestingContact.h" />
+    <ClInclude Include="SomethingCool.h" />
     <ClInclude Include="SpringForces.h" />
     <ClInclude Include="ThreeDCube.h" />
     <ClInclude Include="Torque.h" />
     <ClInclude Include="TorqueSquare.h" />
     <ClInclude Include="TwoDParticleContactGenerator.h" />
     <ClInclude Include="VelocityAcceleration.h" />
+    <ClInclude Include="StickyPointBungeeGenerator.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AccumulatingForces.cpp" />
@@ -139,6 +141,8 @@
     <ClCompile Include="RandomColorGenerator.cpp" />
     <ClCompile Include="RestingContact.cpp" />
     <ClCompile Include="restingContact_moc.cpp" />
+    <ClCompile Include="SomethingCool.cpp" />
+    <ClCompile Include="SomethingCool_moc.cpp" />
     <ClCompile Include="SpringForces.cpp" />
     <ClCompile Include="SpringForces_moc.cpp" />
     <ClCompile Include="ThreeDCube.cpp" />
@@ -149,6 +153,7 @@
     <ClCompile Include="Torque_moc.cpp" />
     <ClCompile Include="TwoDParticleContactGenerator.cpp" />
     <ClCompile Include="VelocityAcceleration.cpp" />
+    <ClCompile Include="StickyPointBungeeGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Physics.rc" />

@@ -82,6 +82,8 @@
     <ClInclude Include="TorqueSquare.h">
       <Filter>15-TorqueSquare</Filter>
     </ClInclude>
+    <ClInclude Include="SomethingCool.h" />
+    <ClInclude Include="StickyPointBungeeGenerator.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -201,6 +203,9 @@
     <ClCompile Include="TorqueSquare_moc.cpp">
       <Filter>15-TorqueSquare</Filter>
     </ClCompile>
+    <ClCompile Include="SomethingCool.cpp" />
+    <ClCompile Include="StickyPointBungeeGenerator.cpp" />
+    <ClCompile Include="SomethingCool_moc.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="ParticleForceTools">
@@ -253,6 +258,9 @@
     </Filter>
     <Filter Include="15-TorqueSquare">
       <UniqueIdentifier>{b164b2f2-0468-40b4-991d-9f813f28bb3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="16-SomethingCool">
+      <UniqueIdentifier>{99c37609-ba36-48fe-81d3-1ffc98764d2b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

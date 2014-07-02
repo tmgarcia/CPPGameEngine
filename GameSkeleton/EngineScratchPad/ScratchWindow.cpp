@@ -3,6 +3,7 @@
 #include "DebugMenu\DebugMenu.h"
 #include <iostream>;
 
+
 using std::cout;
 using std::endl;
 
@@ -21,41 +22,13 @@ mat4 textBTranslate;
 mat4 textBRotation;
 mat4 textBFullTransform;
 
-mat4 eye1ModelToWorld;
-vec3 eye1Position;
-mat4 eye1FullTransform;
-mat4 eye2ModelToWorld;
-vec3 eye2Position;
-mat4 eye2FullTransform;
-mat4 eye3ModelToWorld;
-vec3 eye3Position;
-mat4 eye3FullTransform;
-
-ShaderInfo* alphaTextureShader;
-
 TextureInfo* discTexture;
 TextureInfo* textATexture;
 TextureInfo* textBTexture;
-TextureInfo* eyeTexture;
-
-AlphaMapInfo* discAlpha;
-AlphaMapInfo* textAAlpha;
-AlphaMapInfo* textBAlpha;
-AlphaMapInfo* eyeAlpha1;
-AlphaMapInfo* eyeAlpha2;
-AlphaMapInfo* eyeAlpha3;
-AlphaMapInfo* eyeAlpha4;
-AlphaMapInfo* eyeAlpha5;
-AlphaMapInfo* eyeAlpha6;
-
-GeometryInfo* plane;
 
 RenderableInfo* disc;
 RenderableInfo* textA;
 RenderableInfo* textB;
-RenderableInfo* eye1;
-RenderableInfo* eye2;
-RenderableInfo* eye3;
 
 void ScratchWindow::setup()
 {
@@ -77,16 +50,6 @@ void ScratchWindow::setup()
 	textBTranslate = glm::translate(vec3(0.5f,0.001f,0.5f));
 	textBModelToWorld = textBTranslate * textBRotation;
 
-	eye1Position = vec3(0,0,-0.25);
-	eye1ModelToWorld = billboard(eye1Position)*glm::rotate(90.0f, vec3(1,0,0)) * glm::scale(vec3(0.005f,1,0.005f));
-	eye2Position = vec3(0.25f,0,0.0f);
-	eye2ModelToWorld = billboard(eye2Position)*glm::rotate(90.0f, vec3(1,0,0)) * glm::scale(vec3(0.005f,1,0.005f));
-	eye3Position = vec3(-0.25f,0,0.0f);
-	eye3ModelToWorld = billboard(eye3Position)*glm::rotate(90.0f, vec3(1,0,0)) * glm::scale(vec3(0.005f,1,0.005f));
-
-	DebugShapes::getInstance();
-	//DebugShapes::addCube(eye1ModelToWorld, vec3(1,1,1),true, 100000);
-
 	discTexture = GeneralGLWindow::getInstance().addTexture("../Resources/Textures/madnessDiscTexture.bmp");
 	textATexture = GeneralGLWindow::getInstance().addTexture("../Resources/Textures/madnessTextATexture.bmp");
 	textBTexture = GeneralGLWindow::getInstance().addTexture("../Resources/Textures/madnessTextBTexture.bmp");
@@ -106,23 +69,40 @@ void ScratchWindow::setup()
 	disc = GeneralGLWindow::getInstance().addRenderable(plane, discModelToWorld, alphaTextureShader, true, PRIORITY_1, true, discTexture, discAlpha);
 	textA = GeneralGLWindow::getInstance().addRenderable(plane, textAModelToWorld, alphaTextureShader, true, PRIORITY_1, true, textATexture, textAAlpha);
 	textB = GeneralGLWindow::getInstance().addRenderable(plane, textBModelToWorld, alphaTextureShader, true, PRIORITY_1, true, textBTexture, textBAlpha);
-	eye1 = GeneralGLWindow::getInstance().addRenderable(plane, eye1ModelToWorld, alphaTextureShader, true, PRIORITY_1, true, eyeTexture, eyeAlpha1);
-	eye2 = GeneralGLWindow::getInstance().addRenderable(plane, eye1ModelToWorld, alphaTextureShader, true, PRIORITY_1, true, eyeTexture, eyeAlpha1);
-	eye3 = GeneralGLWindow::getInstance().addRenderable(plane, eye1ModelToWorld, alphaTextureShader, true, PRIORITY_1, true, eyeTexture, eyeAlpha1);
 
 	discFullTransform = worldToProjectionMatrix * discModelToWorld;
 	textAFullTransform = worldToProjectionMatrix * textAModelToWorld;
 	textBFullTransform = worldToProjectionMatrix * textBModelToWorld;
-	eye1FullTransform = worldToProjectionMatrix * eye1ModelToWorld;
-	eye2FullTransform = worldToProjectionMatrix * eye2ModelToWorld;
-	eye3FullTransform = worldToProjectionMatrix * eye3ModelToWorld;
 
 	GeneralGLWindow::getInstance().addRenderableUniformParameter(disc, "fullTransformMatrix", PT_MAT4, &discFullTransform[0][0]);
 	GeneralGLWindow::getInstance().addRenderableUniformParameter(textA, "fullTransformMatrix", PT_MAT4, &textAFullTransform[0][0]);
 	GeneralGLWindow::getInstance().addRenderableUniformParameter(textB, "fullTransformMatrix", PT_MAT4, &textBFullTransform[0][0]);
-	GeneralGLWindow::getInstance().addRenderableUniformParameter(eye1, "fullTransformMatrix", PT_MAT4, &eye1FullTransform[0][0]);
-	GeneralGLWindow::getInstance().addRenderableUniformParameter(eye2, "fullTransformMatrix", PT_MAT4, &eye2FullTransform[0][0]);
-	GeneralGLWindow::getInstance().addRenderableUniformParameter(eye3, "fullTransformMatrix", PT_MAT4, &eye3FullTransform[0][0]);
+	setupEyes();
+}
+
+void ScratchWindow::setupEyes()
+{
+	numEyes = 200;
+
+	float minDistance = 1.0f;
+	float maxDistance = 10.0f;
+	float minScale = 0.125f;
+	float maxScale = 1.0f;
+	float minBlinkFrame = 20.0f;
+	float maxBlinkFrame = 80.0f;
+	Random::getInstance();
+	for(int i = 0; i<numEyes; i++)
+	{
+		float distanceFromCenter = Random::getInstance().randomFloatRange(minDistance, maxDistance);
+		float angle = Random::getInstance().randomFloatRange(0, 359);
+		mat4 transform = glm::rotate(angle, vec3(0,1,0));
+		vec3 position = vec3(vec4(0,-0.05f,distanceFromCenter,1) * transform);
+		float scale = Random::getInstance().randomFloatRange(minScale, maxScale);
+		int blinkFrame = (int)Random::getInstance().randomFloatRange(minBlinkFrame, maxBlinkFrame);
+		Eye* e = new Eye(position, scale, blinkFrame);
+		e->setupRenderable(plane, alphaTextureShader, eyeTexture, eyeAlpha1);
+		eyes.append(e);
+	}
 }
 
 float rotateA = 0;
@@ -132,138 +112,28 @@ float rotateIncrementA = 0.3f;
 float rotateIncrementB = 0.2f;
 
 int frame = 0;
+
+bool massBlink = false;
 void ScratchWindow::update()
 {
-	checkBlinks();
 	textARotation = glm::rotate(rotateA, vec3(0,1,0));
 	textBRotation = glm::rotate(rotateB, vec3(0,1,0));
 	rotateA += rotateIncrementA;
 	rotateB -= rotateIncrementB;
+	if(frame!= 0 && frame%50 == 0 && !massBlink)
+	{
+		for(int i = 0; i<numEyes; i++)
+		{
+			eyes[i]->startBlink();
+		}
+		massBlink = true;
+	}
+	for(int i = 0; i<numEyes; i++)
+	{
+		eyes[i]->checkBlinkFrame(frame);
+	}
 	updateShaderInfo();
 	frame++;
-}
-
-int eye1Stage = 0;
-bool eye1Blinking = false;
-bool eye1Closing = false;
-int eye2Stage = 0;
-bool eye2Blinking = false;
-bool eye2Closing = false;
-int eye3Stage = 0;
-bool eye3Blinking = false;
-bool eye3Closing = false;
-void ScratchWindow::checkBlinks()
-{
-	if(frame%40 == 0 && !eye1Blinking)
-	{
-		eye1Blinking = true;
-		eye1Closing = true;
-	}
-	if(frame%50 == 0 && !eye2Blinking)
-	{
-		eye2Blinking = true;
-		eye2Closing = true;
-	}
-	if(frame%60 == 0 && !eye3Blinking)
-	{
-		eye3Blinking = true;
-		eye3Closing = true;
-	}
-
-	if(eye1Blinking)
-	{
-		if(eye1Stage < 0)
-		{
-			eye1Blinking = false;
-			eye1Closing = false;
-			eye1Stage = 0;
-		}
-		else
-		{
-			blinkEye(eye1, eye1Stage);
-			if(eye1Stage == 6)
-			{
-				eye1Closing = false;
-			}
-			if(eye1Closing)
-			{
-				eye1Stage++;
-			}
-			else
-			{
-				eye1Stage--;
-			}
-		}
-	}
-	if(eye2Blinking)
-	{
-		if(eye2Stage < 0)
-		{
-			eye2Blinking = false;
-			eye2Closing = false;
-			eye2Stage = 0;
-		}
-		else
-		{
-			blinkEye(eye2, eye2Stage);
-			if(eye2Stage == 6)
-			{
-				eye2Closing = false;
-			}
-			if(eye2Closing)
-			{
-				eye2Stage++;
-			}
-			else
-			{
-				eye2Stage--;
-			}
-		}
-	}
-	if(eye3Blinking)
-	{
-		if(eye3Stage < 0)
-		{
-			eye3Blinking = false;
-			eye3Closing = false;
-			eye3Stage = 0;
-		}
-		else
-		{
-			blinkEye(eye3, eye3Stage);
-			if(eye3Stage == 6)
-			{
-				eye3Closing = false;
-			}
-			if(eye3Closing)
-			{
-				eye3Stage++;
-			}
-			else
-			{
-				eye3Stage--;
-			}
-		}
-	}
-}
-
-void ScratchWindow::blinkEye(RenderableInfo* eye, int stage)
-{
-	switch(stage)
-	{
-	case 0: eye->alphaMap = eyeAlpha1;
-		break;
-	case 1: eye->alphaMap = eyeAlpha2;
-		break;
-	case 2: eye->alphaMap = eyeAlpha3;
-		break;
-	case 3: eye->alphaMap = eyeAlpha4;
-		break;
-	case 4: eye->alphaMap = eyeAlpha5;
-		break;
-	case 5: eye->alphaMap = eyeAlpha6;
-		break;
-	}
 }
 
 void ScratchWindow::updateShaderInfo()
@@ -282,27 +152,33 @@ void ScratchWindow::updateShaderInfo()
 	textBModelToWorld =  textBRotation* textBTranslate;
 	textBFullTransform = worldToProjectionMatrix * textBModelToWorld;
 
-	eye1ModelToWorld = billboard(eye1Position)*glm::rotate(90.0f, vec3(1,0,0)) * glm::scale(vec3(0.15f,1,0.15f));
-	eye1FullTransform = worldToProjectionMatrix * eye1ModelToWorld;
-	eye2ModelToWorld = billboard(eye2Position)*glm::rotate(90.0f, vec3(1,0,0)) * glm::scale(vec3(0.15f,1,0.15f));
-	eye2FullTransform = worldToProjectionMatrix * eye2ModelToWorld;
-	eye3ModelToWorld = billboard(eye3Position)*glm::rotate(90.0f, vec3(1,0,0)) * glm::scale(vec3(0.15f,1,0.15f));
-	eye3FullTransform = worldToProjectionMatrix * eye3ModelToWorld;
+	TransformationMatrixMaker::getInstance();
+	for(int i = 0; i<numEyes; i++)
+	{
+		eyes[i]->updateTransforms(eyePosition, vec3(0,1,0),worldToProjectionMatrix);
+		if(eyes[i]->isBlinking)
+		{
+			AlphaMapInfo* nextAlpha = new AlphaMapInfo();
+			switch(eyes[i]->blinkStage)
+			{
+			case 0: nextAlpha = eyeAlpha1;
+				break;
+			case 1: nextAlpha = eyeAlpha2;
+				break;
+			case 2: nextAlpha = eyeAlpha3;
+				break;
+			case 3: nextAlpha = eyeAlpha4;
+				break;
+			case 4: nextAlpha = eyeAlpha5;
+				break;
+			case 5: nextAlpha = eyeAlpha6;
+				break;
+			}
+			eyes[i]->updateBlinkStage(nextAlpha);
+		}
+	}
 
 	GeneralGLWindow::getInstance().repaint();
-}
-
-mat4 ScratchWindow::billboard(vec3 position) 
-{
-	vec3 look = glm::normalize(camera.getPosition() - position);
-	vec3 right = glm::cross(vec3(0,1,0), look);
-	vec3 up2 = glm::cross(look, right);
-	mat4 transform;
-	transform[0] = vec4(right, 0);
-	transform[1] = vec4(up2, 0);
-	transform[2] = vec4(look, 0);
-	transform[3] = vec4(position, 1);
-	return transform;
 }
 
 void ScratchWindow::keyPressEvent(QKeyEvent *event)
@@ -330,6 +206,12 @@ void ScratchWindow::keyPressReaction(QKeyEvent* e)
 		break;
 	case Qt::Key::Key_F:
 		camera.moveDown();
+		break;
+	case Qt::Key::Key_Space:
+		for(int i = 0; i<numEyes; i++)
+		{
+			eyes[i]->startBlink();
+		}
 		break;
 	}
 	//updateShaderUniforms();

@@ -5,6 +5,8 @@
 #include <Qt\qmainwindow.h>
 #include "GeneralGLWindow.h"
 #include "DebugMenu\DebugMenu.h"
+#include "MathTools\TransformationMatrixMaker.h";
+#include "MathTools\Random.h";
 
 #include <iostream>
 
@@ -55,16 +57,111 @@ public:
 
 	}
 protected:
+	TextureInfo* eyeTexture;
+	GeometryInfo* plane;
+	ShaderInfo* alphaTextureShader;
+
+	AlphaMapInfo* discAlpha;
+	AlphaMapInfo* textAAlpha;
+	AlphaMapInfo* textBAlpha;
+	AlphaMapInfo* eyeAlpha1;
+	AlphaMapInfo* eyeAlpha2;
+	AlphaMapInfo* eyeAlpha3;
+	AlphaMapInfo* eyeAlpha4;
+	AlphaMapInfo* eyeAlpha5;
+	AlphaMapInfo* eyeAlpha6;
+
 	float val;
 	void setup();
 	Camera camera;
 	void loadLevel();
 	void keyPressEvent(QKeyEvent *event);
 	void updateShaderInfo();
-	mat4 billboard(vec3 position);
-	void blinkEye(RenderableInfo* eye, int stage);
-	void checkBlinks();
+	void setupEyes();
 
+	struct Eye
+	{
+		int blinkStage;
+		int blinkFrame;
+		float scale;
+		bool isBlinking;
+		bool isClosing;
+		vec3 position;
+		mat4 modelToWorld;
+		mat4 fullTransform;
+		RenderableInfo* renderable;
+		Eye(vec3 pos, float _scale, int _blinkFrame)
+		{
+			position = pos;
+			scale = _scale;
+			blinkFrame = _blinkFrame;
+			isBlinking = false;
+			isClosing = false;
+		}
+		void setupRenderable(GeometryInfo* plane, ShaderInfo* alphaTextureShader, TextureInfo* eyeTexture, AlphaMapInfo* eyeAlpha1)
+		{
+			renderable = GeneralGLWindow::getInstance().addRenderable(plane, modelToWorld, alphaTextureShader, true, PRIORITY_1, true, eyeTexture, eyeAlpha1);
+			GeneralGLWindow::getInstance().addRenderableUniformParameter(renderable, "fullTransformMatrix", PT_MAT4, &fullTransform[0][0]);
+		}
+		void checkBlinkFrame(int frame)
+		{
+			if(frame%blinkFrame==0 && !isBlinking)
+			{
+				startBlink();
+			}
+		}
+		void updateTransforms(vec3 cameraPosition, vec3 cameraUp, mat4 worldToProjection)
+		{
+			mat4 billboardTransform = TransformationMatrixMaker::getInstance().getBillboardTransformation(position, cameraPosition, cameraUp, true);
+			modelToWorld = billboardTransform * glm::rotate(90.0f, vec3(1,0,0)) * glm::scale(vec3(scale, 1, scale));
+			fullTransform = worldToProjection * modelToWorld;
+		}
+		void startBlink()
+		{
+			isBlinking = true;
+			isClosing = true;
+			blinkStage = 0;
+		}
+		void stopBlinking()
+		{
+			isBlinking = false;
+			isClosing = false;
+			blinkStage = 0;
+		}
+		void updateBlinkStage(AlphaMapInfo* nextAlpha)
+		{
+			if(blinkStage < 0)
+			{
+				stopBlinking();
+				blinkStage = 0;
+			}
+			else
+			{
+				if(blinkStage!=6)
+				{
+					blink(nextAlpha);
+				}
+				else
+				{
+					isClosing = false;
+				}
+				if(isClosing)
+				{
+					blinkStage++;
+				}
+				else
+				{
+					blinkStage--;
+				}
+			}
+		}
+		void blink(AlphaMapInfo* nextAlpha)
+		{
+			renderable->alphaMap = nextAlpha;
+		}
+	};
+	QList<Eye*> eyes;
+	int numEyes;
 private slots:
 	void update();
 

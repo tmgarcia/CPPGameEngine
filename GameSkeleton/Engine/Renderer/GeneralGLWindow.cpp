@@ -21,11 +21,13 @@ GLuint currentGeometryIndex = 0;
 GLuint currentShaderIndex = 0;
 GLuint currentRenderIndex = 0;
 GLuint currentTextureIndex = 0;
+GLuint currentAlphaMapIndex = 0;
 
 const GLuint MAX_NUM_BUFFERS = 80;
 const GLuint MAX_NUM_GEOMETRIES = 30;
 const GLuint MAX_NUM_SHADERS = 10;
 const GLuint MAX_NUM_TEXTURES = 30;
+const GLuint MAX_NUM_ALPHAMAPS= 20;
 const GLuint MAX_NUM_RENDERABLES = 600;
 const GLuint BUFFER_SIZE = 1000000;
 
@@ -33,6 +35,7 @@ BufferInfo* bufferInfos[MAX_NUM_BUFFERS];
 GeometryInfo* geometryInfos[MAX_NUM_GEOMETRIES];
 ShaderInfo* shaderInfos[MAX_NUM_SHADERS];
 TextureInfo* textureInfos[MAX_NUM_TEXTURES];
+AlphaMapInfo* alphaMapInfos[MAX_NUM_ALPHAMAPS];
 RenderableInfo* renderableInfos[MAX_NUM_RENDERABLES];
 
 void GeneralGLWindow::initializeGL()
@@ -41,6 +44,7 @@ void GeneralGLWindow::initializeGL()
 	glewInit();
 	glEnable( GL_TEXTURE_2D );
 }
+
 
 void GeneralGLWindow::paintGL()
 {
@@ -107,6 +111,7 @@ GeometryInfo* GeneralGLWindow::addGeometry(
 	ret->indexingMode = indexingMode;
 	ret->numIndices = numIndices;
 	currentGeometryIndex++;
+
 	return ret;
 }
 
@@ -157,7 +162,7 @@ ShaderInfo* GeneralGLWindow:: createShaderInfo(
 	adapter[0] = temp.c_str();
 	glShaderSource(fragShaderID, 1, adapter, 0);
 
-		temp = readShaderCode(vertexShaderFilename);
+	temp = readShaderCode(vertexShaderFilename);
 	adapter[0] = temp.c_str();
 	glShaderSource(vertexShaderID, 1, adapter, 0);
 
@@ -168,6 +173,7 @@ ShaderInfo* GeneralGLWindow:: createShaderInfo(
 	glGetShaderiv(vertexShaderID, GL_COMPILE_STATUS, &compileStatus);
 	if(compileStatus != GL_TRUE)
 	{
+		cout << "Vertex Shader Error" << endl;
 		GLint logLength;
 		glGetShaderiv(vertexShaderID, GL_INFO_LOG_LENGTH, &logLength);
 		char* buffer = new char[logLength];
@@ -180,6 +186,7 @@ ShaderInfo* GeneralGLWindow:: createShaderInfo(
 	glGetShaderiv(fragShaderID, GL_COMPILE_STATUS, &compileStatus);
 	if(compileStatus != GL_TRUE)
 	{
+		cout << "Fragment Shader Error" << endl;
 		GLint logLength;
 		glGetShaderiv(fragShaderID, GL_INFO_LOG_LENGTH, &logLength);
 		char* buffer = new char[logLength];
@@ -208,6 +215,18 @@ std::string GeneralGLWindow::readShaderCode(const char *filename)
 	return std::string(
 		std::istreambuf_iterator<char>(input),
 		std::istreambuf_iterator<char>());
+}
+
+AlphaMapInfo* GeneralGLWindow::addAlphaMap(const char* fileName)
+{
+
+	alphaMapInfos[currentAlphaMapIndex] = new AlphaMapInfo();
+	AlphaMapInfo* ret = alphaMapInfos[currentAlphaMapIndex];
+	glGenTextures(1, &(ret->textureID));
+	glBindTexture(GL_TEXTURE_2D, ret->textureID);
+	loadTextureBitmap(fileName);
+	currentAlphaMapIndex++;
+	return ret;
 }
 
 TextureInfo* GeneralGLWindow::addTexture(const char* fileName)
@@ -244,7 +263,8 @@ RenderableInfo* GeneralGLWindow::addRenderable(
 	bool visible,
 	PriorityLevel priority,
 	bool depthEnabled,
-	TextureInfo* texture)
+	TextureInfo* texture,
+	AlphaMapInfo* alphaMap)
 {
 
 	renderableInfos[currentRenderIndex] = new RenderableInfo();
@@ -256,8 +276,8 @@ RenderableInfo* GeneralGLWindow::addRenderable(
 	ret->priority = priority;
 	ret->enableDepth = depthEnabled;
 	ret->texture = texture;
+	ret->alphaMap = alphaMap;
 	
-
 	currentRenderIndex++;
 	return ret;
 }
@@ -269,7 +289,6 @@ void GeneralGLWindow::addShaderStreamedParameter(
 		uint bufferOffset,
 		uint bufferStride)
 {
-
 	glBindVertexArray(geometry->vertexArrayID);
 	glEnableVertexAttribArray(layoutLocation);
 	glVertexAttribPointer(layoutLocation, parameterType/sizeof(float), GL_FLOAT, GL_FALSE, bufferStride, (void*)(geometry->vertexDataOffset+bufferOffset));
@@ -289,17 +308,28 @@ void GeneralGLWindow::addRenderableUniformParameter(
 
 void GeneralGLWindow::sendRenderableToShader(RenderableInfo* renderable)
 {
-	
-	glUseProgram(renderable->howShaders->programID);
+	GLuint programID = renderable->howShaders->programID;
+	glUseProgram(programID);
 
 	if(renderable->texture != NULL)
+	{
+		GLint baseTextureLoc = glGetUniformLocation(programID, "baseTexture");
+		glUniform1i(baseTextureLoc, 0);
+		glActiveTexture(GL_TEXTURE0 + 0);
 		glBindTexture(GL_TEXTURE_2D, renderable->texture->textureID);
+	}
+	if(renderable->alphaMap != NULL)
+	{
+		GLint alphaMapLoc = glGetUniformLocation(programID, "alphaMap");
+		glUniform1i(alphaMapLoc, 1);
+		glActiveTexture(GL_TEXTURE0 + 1);
+		glBindTexture(GL_TEXTURE_2D, renderable->alphaMap->textureID);
+	}
 
 	for(uint i=0; i<renderable->numUniformParameters;i++)
 	{
-		GLint uniformLocation = glGetUniformLocation(renderable->howShaders->programID, renderable->uniformParameters[i].name);
+		GLint uniformLocation = glGetUniformLocation(programID, renderable->uniformParameters[i].name);
 		
-
 		switch(renderable->uniformParameters[i].parameterType)
 		{
 		case PT_FLOAT:

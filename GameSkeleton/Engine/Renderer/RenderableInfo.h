@@ -2,6 +2,7 @@
 #include "GeometryInfo.h"
 #include "ShaderInfo.h"
 #include "TextureInfo.h"
+#include "AlphaMapInfo.h"
 #include "ShaderUniformParameter.h"
 #include "PriorityLevel.h"
 using glm::mat4;
@@ -23,6 +24,7 @@ public:
 	mat4 whereMatrix;
 	GeometryInfo* whatGeometry;
 	TextureInfo* texture;
+	AlphaMapInfo* alphaMap;
 	bool visible;
 	PriorityLevel priority;
 };

@@ -93,7 +93,10 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="AStarData\Nodes\DebugNode.cpp" />
     <ClCompile Include="AStarData\Nodes\DebugNodeContainer.cpp" />
+    <ClCompile Include="DebugTools\DebugMenu\DebugMenu.cpp" />
     <ClCompile Include="DebugToolBar.cpp" />
+    <ClCompile Include="DebugTools\DebugMenu\DebugMenu_moc.cpp" />
+    <ClCompile Include="DebugTools\DebugMenu\FloatSlider_moc.cpp" />
     <ClCompile Include="DebugTools\DebugShapes.cpp" />
     <ClCompile Include="DebugTools\DebugShapes_moc.cpp" />
     <ClCompile Include="DebugTools\DebugSlider.cpp" />
@@ -128,7 +131,11 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="AStarData\Nodes\DebugNode.h" />
     <ClInclude Include="AStarData\Nodes\DebugNodeContainer.h" />
+    <ClInclude Include="DebugTools\DebugMenu\CheckBox.h" />
+    <ClInclude Include="DebugTools\DebugMenu\DebugMenu.h" />
     <ClInclude Include="DebugToolBar.h" />
+    <ClInclude Include="DebugTools\DebugMenu\FloatSlider.h" />
+    <ClInclude Include="DebugTools\DebugMenu\IntSlider.h" />
     <ClInclude Include="DebugTools\DebugShapes.h" />
     <ClInclude Include="AStarData\Nodes\EditorNode.h" />
     <ClInclude Include="AStarData\Nodes\EditorNodeContainer.h" />
@@ -145,6 +152,7 @@
     <ClInclude Include="Entities\FetchingFlagState.h" />
     <ClInclude Include="GameObjects\Flag.h" />
     <ClInclude Include="GameObjects\GameLevel.h" />
+    <ClInclude Include="Renderer\AlphaMapInfo.h" />
     <ClInclude Include="Renderer\BufferInfo.h" />
     <ClInclude Include="Renderer\GeneralGLWindow.h" />
     <ClInclude Include="Renderer\GeometryInfo.h" />

@@ -6,9 +6,16 @@
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="ScratchWindow.cpp" />
     <ClCompile Include="MapLerper.cpp" />
+    <ClCompile Include="DebugMenu_moc.cpp" />
+    <ClCompile Include="FloatSlider_moc.cpp" />
+    <ClCompile Include="ScratchWindow_moc.cpp" />
+    <ClCompile Include="DebugSlider_moc.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ScratchWindow.h" />
     <ClInclude Include="MapLerper.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ObjToBinaryWriter.exe" />
   </ItemGroup>
 </Project>

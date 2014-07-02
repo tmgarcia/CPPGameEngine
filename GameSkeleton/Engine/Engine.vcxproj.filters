@@ -40,6 +40,9 @@
     <ClCompile Include="Entities\State.cpp" />
     <ClCompile Include="Entities\ReturningToBaseState.cpp" />
     <ClCompile Include="Entities\FetchingFlagState.cpp" />
+    <ClCompile Include="DebugTools\DebugMenu\DebugMenu.cpp" />
+    <ClCompile Include="DebugTools\DebugMenu\DebugMenu_moc.cpp" />
+    <ClCompile Include="DebugTools\DebugMenu\FloatSlider_moc.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h" />
@@ -86,5 +89,10 @@
     <ClInclude Include="Entities\State.h" />
     <ClInclude Include="Entities\FetchingFlagState.h" />
     <ClInclude Include="Entities\ReturningToBaseState.h" />
+    <ClInclude Include="DebugTools\DebugMenu\DebugMenu.h" />
+    <ClInclude Include="DebugTools\DebugMenu\FloatSlider.h" />
+    <ClInclude Include="DebugTools\DebugMenu\IntSlider.h" />
+    <ClInclude Include="DebugTools\DebugMenu\CheckBox.h" />
+    <ClInclude Include="Renderer\AlphaMapInfo.h" />
   </ItemGroup>
 </Project>

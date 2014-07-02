@@ -22,6 +22,7 @@
 #include "GeometryInfo.h"
 #include "RenderableInfo.h"
 #include "TextureInfo.h"
+#include "AlphaMapInfo.h"
 #include "ShaderInfo.h"
 #include "ShaderUniformParameter.h"
 #include "ParameterType.h"
@@ -51,6 +52,8 @@ private:
 	static GeneralGLWindow* theInstance;
 
 public:
+	void debugMethod();
+
 	static GeneralGLWindow& getInstance();
 
 	GeometryInfo* addGeometry(
@@ -63,6 +66,7 @@ public:
 		const char* fragmentShaderFilename);
 
 	TextureInfo* addTexture(const char* fileName);
+	AlphaMapInfo* addAlphaMap(const char* fileName);
 
 	RenderableInfo* addRenderable(
 		GeometryInfo* whatGeometry,
@@ -71,7 +75,8 @@ public:
 		bool visible,
 		PriorityLevel priority,
 		bool depthEnabled = true,
-		TextureInfo* texture = NULL);
+		TextureInfo* texture = NULL,
+		AlphaMapInfo* alphaMap = NULL);
 
 	void addShaderStreamedParameter(
 		GeometryInfo* geometry,

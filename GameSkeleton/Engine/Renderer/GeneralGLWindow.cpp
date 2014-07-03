@@ -15,6 +15,7 @@
 #include <QtOpenGL\qglwidget>
 #include <qt\qtimer.h>
 #include <iostream>
+//#include "../
 
 GLuint currentNumBuffers = 0;
 GLuint currentGeometryIndex = 0;
@@ -45,6 +46,10 @@ void GeneralGLWindow::initializeGL()
 	glEnable( GL_TEXTURE_2D );
 }
 
+void GeneralGLWindow::debugMethod()
+{
+
+}
 
 void GeneralGLWindow::paintGL()
 {

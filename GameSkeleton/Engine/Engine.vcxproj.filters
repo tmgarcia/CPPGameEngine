@@ -43,6 +43,11 @@
     <ClCompile Include="DebugTools\DebugMenu\DebugMenu.cpp" />
     <ClCompile Include="DebugTools\DebugMenu\DebugMenu_moc.cpp" />
     <ClCompile Include="DebugTools\DebugMenu\FloatSlider_moc.cpp" />
+    <ClCompile Include="GraphicObjects\BlinkingEye.cpp" />
+    <ClCompile Include="GraphicObjects\BlinkingEyeGroup.cpp" />
+    <ClCompile Include="DebugTools\DebugMenu\IntSlider_moc.cpp" />
+    <ClCompile Include="DebugTools\DebugMenu\CheckBox_moc.cpp" />
+    <ClCompile Include="DebugTools\ConsolePrinter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h" />
@@ -94,5 +99,8 @@
     <ClInclude Include="DebugTools\DebugMenu\IntSlider.h" />
     <ClInclude Include="DebugTools\DebugMenu\CheckBox.h" />
     <ClInclude Include="Renderer\AlphaMapInfo.h" />
+    <ClInclude Include="GraphicObjects\BlinkingEye.h" />
+    <ClInclude Include="GraphicObjects\BlinkingEyeGroup.h" />
+    <ClInclude Include="DebugTools\ConsolePrinter.h" />
   </ItemGroup>
 </Project>

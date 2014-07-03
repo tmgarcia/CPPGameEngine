@@ -7,7 +7,7 @@
 
 class CheckBox: public QWidget
 {
-	//Q_OBJECT
+	Q_OBJECT
 
 	bool* trackingVariable;
 	QCheckBox* box;
@@ -23,20 +23,20 @@ public:
 		box = new QCheckBox();
 		box->setChecked(*variable);
 
-		//QObject::connect(box, SIGNAL(stateChanged(int)), this, SLOT(updateValue(int)));
+		QObject::connect(box, SIGNAL(stateChanged(int)), this, SLOT(updateValue(int)));
 
 		if(!labelText.isNull() && !labelText.isEmpty())
 		{
-			QLabel* label = new QLabel(labelText);
-			layout->addWidget(label);
+			box->setText(labelText);
 		}
+		
 		layout->addWidget(box);
 		this->setLayout(layout);
 	}
 
-//private slots:
-//	void updateValue(int value)
-//	{
-//		*trackingVariable = value;
-//	}
+private slots:
+	void updateValue(int value)
+	{
+		*trackingVariable = value;
+	}
 };

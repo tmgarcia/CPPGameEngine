@@ -8,7 +8,7 @@
 
 class IntSlider: public QWidget
 {
-	//Q_OBJECT
+	Q_OBJECT
 
 	int* trackingVariable;
 	DebugSlider* slider;
@@ -24,7 +24,7 @@ public:
 		slider = new DebugSlider(min, max, false, (max-min));
 		slider->setValue(*variable);
 
-		//QObject::connect(slider, SIGNAL(valueChanged(float)), this, SLOT(updateValue(float)));
+		QObject::connect(slider, SIGNAL(valueChanged(float)), this, SLOT(updateValue(float)));
 
 		if(!labelText.isNull() && !labelText.isEmpty())
 		{
@@ -35,9 +35,9 @@ public:
 		this->setLayout(layout);
 	}
 
-//private slots:
-//	void updateValue(float value)
-//	{
-//		*trackingVariable = (int)value;
-//	}
+private slots:
+	void updateValue(float value)
+	{
+		*trackingVariable = (int)value;
+	}
 };

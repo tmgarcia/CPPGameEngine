@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'DebugMenu.h'
 **
-** Created: Mon Jun 30 15:23:52 2014
+** Created: Thu Jul 3 02:42:27 2014
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.0)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -50,7 +50,7 @@ const QMetaObjectExtraData DebugMenu::staticMetaObjectExtraData = {
 };
 
 const QMetaObject DebugMenu::staticMetaObject = {
-    { &QWidget::staticMetaObject, qt_meta_stringdata_DebugMenu,
+    { &QTabWidget::staticMetaObject, qt_meta_stringdata_DebugMenu,
       qt_meta_data_DebugMenu, &staticMetaObjectExtraData }
 };
 
@@ -68,12 +68,12 @@ void *DebugMenu::qt_metacast(const char *_clname)
     if (!_clname) return 0;
     if (!strcmp(_clname, qt_meta_stringdata_DebugMenu))
         return static_cast<void*>(const_cast< DebugMenu*>(this));
-    return QWidget::qt_metacast(_clname);
+    return QTabWidget::qt_metacast(_clname);
 }
 
 int DebugMenu::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
-    _id = QWidget::qt_metacall(_c, _id, _a);
+    _id = QTabWidget::qt_metacall(_c, _id, _a);
     if (_id < 0)
         return _id;
     return _id;

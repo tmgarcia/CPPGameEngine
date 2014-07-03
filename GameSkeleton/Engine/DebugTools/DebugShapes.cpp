@@ -266,6 +266,31 @@ DebugShapes::DebugShapeInfo*  DebugShapes::addVector(vec3 tailPosition, vec3 vec
 	shape->startTime = timePassed;
 	return shape;
 }
+void  DebugShapes::addGrid(vec3 position, int numXLines, int numZLines, bool enableDepth, float lifeTime)
+{
+	mat4 transform = glm::translate(position);
+	int xPointAz = numZLines/2;
+	int xPointBz = -(numZLines/2);
+	int x = -numXLines/2;
+	for(int i = 0; i < numXLines; i++)
+	{
+		vec3 start = vec3(x, 0, xPointAz);
+		vec3 end = vec3(x, 0, xPointBz);
+		addLine(start, end, vec3(1,1,1),enableDepth, lifeTime);
+		x++;
+	}
+	int zPointAx = numXLines/2;
+	int zPointBx = -(numXLines/2);
+	int z = -numZLines/2;
+	for(int i = 0; i < numZLines; i++)
+	{
+		vec3 start = vec3(zPointAx, 0, z);
+		vec3 end = vec3(zPointBx, 0, z);
+		addLine(start, end, vec3(1,1,1),enableDepth, lifeTime);
+		z++;
+	}
+
+}
 DebugShapes::DebugShapeInfo*  DebugShapes::addLine(vec3 startPoint, vec3 endPoint, vec3 Color, bool enableDepth, float lifeTime)
 {
 	if(!lineGeoAdded)
@@ -405,7 +430,6 @@ DebugShapes::VectorArrowInfo* DebugShapes::addVectorArrow(const glm::vec3& from,
 
 	return arrow;
 }
-
 
 int DebugShapes::existingAvailableShapeIndex(ShapeType type)
 {

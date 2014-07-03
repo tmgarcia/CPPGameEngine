@@ -61,6 +61,8 @@ copy "$(ProjectDir)..\Engine\DebugTools\DebugShapes_moc.cpp" "$(ProjectDir)"
 copy "$(ProjectDir)..\Engine\DebugTools\DebugSlider_moc.cpp" "$(ProjectDir)"
 copy "$(ProjectDir)..\Engine\DebugTools\DebugMenu\DebugMenu_moc.cpp" "$(ProjectDir)"
 copy "$(ProjectDir)..\Engine\DebugTools\DebugMenu\FloatSlider_moc.cpp" "$(ProjectDir)"
+copy "$(ProjectDir)..\Engine\DebugTools\DebugMenu\IntSlider_moc.cpp" "$(ProjectDir)"
+copy "$(ProjectDir)..\Engine\DebugTools\DebugMenu\CheckBox_moc.cpp" "$(ProjectDir)"
 copy "$(ProjectDir)..\Tools\ObjToBinaryWriter\bin\Debug\ObjToBinaryWriter.exe" "$(ProjectDir)"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -79,11 +81,13 @@ copy "$(ProjectDir)..\Tools\ObjToBinaryWriter\bin\Debug\ObjToBinaryWriter.exe" "
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CheckBox_moc.cpp" />
     <ClCompile Include="DebugMenu_moc.cpp" />
     <ClCompile Include="DebugShapes_moc.cpp" />
     <ClCompile Include="DebugSlider_moc.cpp" />
     <ClCompile Include="FloatSlider_moc.cpp" />
     <ClCompile Include="GeneralGLWindow_moc.cpp" />
+    <ClCompile Include="IntSlider_moc.cpp" />
     <ClCompile Include="MapLerper.cpp" />
     <ClCompile Include="ScratchWindow.cpp" />
     <ClCompile Include="ScratchWindow_moc.cpp" />

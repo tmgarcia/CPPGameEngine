@@ -10,6 +10,8 @@
     <ClCompile Include="FloatSlider_moc.cpp" />
     <ClCompile Include="ScratchWindow_moc.cpp" />
     <ClCompile Include="DebugSlider_moc.cpp" />
+    <ClCompile Include="IntSlider_moc.cpp" />
+    <ClCompile Include="CheckBox_moc.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ScratchWindow.h" />

@@ -90,6 +90,11 @@
     <ClCompile Include="AStarData\Nodes\GameNodeContainer.cpp" />
     <ClCompile Include="AStarData\Nodes\Node.cpp" />
     <ClCompile Include="AStarDebugToolbar.cpp" />
+    <ClCompile Include="DebugTools\ConsolePrinter.cpp" />
+    <ClCompile Include="DebugTools\DebugMenu\CheckBox_moc.cpp" />
+    <ClCompile Include="DebugTools\DebugMenu\IntSlider_moc.cpp" />
+    <ClCompile Include="GraphicObjects\BlinkingEyeGroup.cpp" />
+    <ClCompile Include="GraphicObjects\BlinkingEye.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="AStarData\Nodes\DebugNode.cpp" />
     <ClCompile Include="AStarData\Nodes\DebugNodeContainer.cpp" />
@@ -128,6 +133,9 @@
     <ClInclude Include="AStarData\Nodes\Node.h" />
     <ClInclude Include="AStarData\Nodes\PathingNode.h" />
     <ClInclude Include="AStarDebugToolbar.h" />
+    <ClInclude Include="DebugTools\ConsolePrinter.h" />
+    <ClInclude Include="GraphicObjects\BlinkingEyeGroup.h" />
+    <ClInclude Include="GraphicObjects\BlinkingEye.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="AStarData\Nodes\DebugNode.h" />
     <ClInclude Include="AStarData\Nodes\DebugNodeContainer.h" />

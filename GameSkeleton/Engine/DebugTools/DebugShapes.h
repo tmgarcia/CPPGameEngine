@@ -64,6 +64,7 @@ public:
 	static VectorArrowInfo* addVectorArrow(const glm::vec3& from, const glm::vec3& to);
 	static DebugShapeInfo* addLine(vec3 startPoint, vec3 endPoint, vec3 Color, bool enableDepth, float lifeTime);
 	static DebugShapeInfo* addPoint(vec3 position, bool enableDepth, float lifeTime);
+	static void addGrid(vec3 position, int numXLines, int numZLines, bool enableDepth, float lifeTime);
 #else
 	static void updateWorldToProjection(mat4 newWorldToProjection){}
 	static DebugShapeInfo* addNodeSphere(mat4 modelToWorld, vec3 color, bool enableDepth, float lifeTime);
@@ -73,6 +74,7 @@ public:
 	static VectorArrowInfo* addVectorArrow(const glm::vec3& from, const glm::vec3& to);
 	static DebugShapeInfo* addLine(vec3 startPoint, vec3 endPoint, vec3 Color, bool enableDepth, float lifeTime){}
 	static DebugShapeInfo* addPoint(vec3 position, bool enableDepth, float lifeTime){}
+	static void addGrid(vec3 position, int numXLines, int numZLines, bool enableDepth, float lifeTime){}
 	private slots:
 		static void tick(){}
 private:

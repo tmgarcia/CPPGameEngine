@@ -32,7 +32,7 @@ void DebugMenu::addFloatSlider(QString tabName, float* variable, float min, floa
 		tabs.append(tab);
 		numTabs++;
 		this->addTab(tab, tabName);
-		tab->show();
+		//tab->show();
 	}
 	FloatSlider* f = new FloatSlider(variable, min, max, labelText);
 	//f->setFixedWidth(800);
@@ -53,7 +53,7 @@ void DebugMenu::addIntSlider(QString tabName, int* variable, int min, int max, Q
 		tabs.append(tab);
 		numTabs++;
 		this->addTab(tab, tabName);
-		tab->show();
+		//tab->show();
 	}
 	IntSlider* f = new IntSlider(variable, min, max, labelText);
 	tab->slidersLayout->addWidget(f);
@@ -73,7 +73,7 @@ void DebugMenu::addCheckBox(QString tabName, bool* variable, QString labelText="
 		tabs.append(tab);
 		numTabs++;
 		this->addTab(tab, tabName);
-		tab->show();
+		//tab->show();
 	}
 	QHBoxLayout* checkBoxGroup;
 	if(tab->numCheckBoxes == 0 || tab->numCheckBoxes%4==0)

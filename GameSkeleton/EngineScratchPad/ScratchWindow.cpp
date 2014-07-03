@@ -53,8 +53,8 @@ void ScratchWindow::setup()
 
 	cube1 = GeneralGLWindow::getInstance().addRenderable(cube, cube1ModelToWorld, passThroughShader, true, PRIORITY_1, true);
 	sphere1 = GeneralGLWindow::getInstance().addRenderable(sphere, sphere1ModelToWorld, passThroughShader, true, PRIORITY_1, true);
-	dMenu->addCheckBox("Tab1",&(cube1->visible),"Cube Visible");
-	dMenu->addCheckBox("Tab1",&(sphere1->visible),"Sphere Visible");
+	dMenu->addCheckBox("CubeTab",&(cube1->visible),"Cube Visible");
+	dMenu->addCheckBox("SphereTab",&(sphere1->visible),"Sphere Visible");
 
 	cube1FullTransform = worldToProjectionMatrix * cube1ModelToWorld;
 	sphere1FullTransform = worldToProjectionMatrix * sphere1ModelToWorld;

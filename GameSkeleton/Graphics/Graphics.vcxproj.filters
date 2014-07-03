@@ -9,6 +9,8 @@
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="MainWindow_moc.cpp" />
+    <ClCompile Include="CheckBox_moc.cpp" />
+    <ClCompile Include="IntSlider_moc.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainWindow.h" />

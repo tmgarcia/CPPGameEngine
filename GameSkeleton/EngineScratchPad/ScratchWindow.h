@@ -51,15 +51,15 @@ public:
 
 		QObject::connect(&GeneralGLWindow::getInstance(), SIGNAL(keyPressed(QKeyEvent*)), this, SLOT(keyPressReaction(QKeyEvent*)));
 		QObject::connect(&GeneralGLWindow::getInstance(), SIGNAL(mouseMoved(QMouseEvent*)), this, SLOT(mouseMoveReaction(QMouseEvent*)));
-		cubePosX = 0;
+		cubePosX = 2;
 		cubePosZ = 0;
-		dMenu->addFloatSlider("Tab1",&cubePosX, -5, 5, "float cube x");
-		dMenu->addIntSlider("Tab1",&cubePosZ, -5, 5, "int cube z");
+		dMenu->addFloatSlider("CubeTab",&cubePosX, -5, 5, "float cube x");
+		dMenu->addIntSlider("CubeTab",&cubePosZ, -5, 5, "int cube z");
 
-		spherePosX = 0;
+		spherePosX = -2;
 		spherePosZ = 0;
-		dMenu->addFloatSlider("Tab1",&spherePosX, -5, 5, "float sphere x");
-		dMenu->addIntSlider("Tab1",&spherePosZ, -5, 5, "int sphere z");
+		dMenu->addFloatSlider("SphereTab",&spherePosX, -5, 5, "float sphere x");
+		dMenu->addIntSlider("SphereTab",&spherePosZ, -5, 5, "int sphere z");
 
 		setup();
 

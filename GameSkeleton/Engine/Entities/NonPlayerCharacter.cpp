@@ -131,11 +131,9 @@ void NonPlayerCharacter::hidePathConnections()
 
 void NonPlayerCharacter::loadModel(QString fileName)
 {
-	cout << "Loading Character Model" << endl;
 	QString command("ObjToBinaryWriter.exe ");
 	const char* nativeFileName = "Character.bin";
 	command += "\"" + QString(fileName) + "\" \"" + nativeFileName + "\"";
-	cout << command.toUtf8().constData() << endl;
 	int result = system(command.toUtf8().constData());
 	assert(result == 0);
 

@@ -45,7 +45,6 @@ class __declspec(dllexport) GeneralGLWindow: public QGLWidget
 private:
 	GeneralGLWindow()
 	{
-		cout << "Constructing Gl" <<endl;
 	}
 	GeneralGLWindow(GeneralGLWindow const&);
 	GeneralGLWindow& operator = (GeneralGLWindow const&);

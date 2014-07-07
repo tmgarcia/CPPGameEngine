@@ -30,9 +30,7 @@ vec3 Path::getNextPathPosition()
 		mat4 rotation;
 		if(currentTurnStep<=turnSteps && currentPathIndex!=0)
 		{
-			//cout<<"step " << currentTurnStep<<endl;
 			float lerpAmount = (float)currentTurnStep/(float)turnSteps;
-			//cout<<"turn lerp " << lerpAmount<<endl;
 			vec3 B1 = path[currentPathIndex-1]->position;//current node
 			vec3 A1 = path[currentPathIndex]->position;
 			vec3 previousDirection = vec3(B1.x, 0, B1.z)-vec3(A1.x, 0, A1.z);
@@ -53,7 +51,6 @@ vec3 Path::getNextPathPosition()
 			currentTurnStep = 0;
 			if(currentPathIndex==totalNodes-1)
 			{
-				cout << "End of path" << endl;
 				reachedEndNode = true;
 				lastPosition = newPosition;
 			}

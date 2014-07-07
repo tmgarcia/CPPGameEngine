@@ -1,6 +1,6 @@
 #include "Controller.h"
 #include "Camera.h"
-#include "ObjReader.h"
+#include "BinReader.h"
 
 
 Camera camera;
@@ -214,29 +214,29 @@ void Controller::setupGeometries()
 	arrow = GeneralGLWindow::getInstance().addGeometry(arrowData.verts, arrowData.vertexBufferSize(), arrowData.indices, arrowData.numIndices, GL_TRIANGLES);
 	setupGeometryVertexArrayInfo(arrow);
 
-	ObjReader reader;
+	BinReader reader;
 
-	ObjReader::ShapeData mushroomData = reader.readInShape("../Resources/Models/mushroom1.bin");
+	BinReader::ShapeData mushroomData = reader.readInShape("../Resources/Models/mushroom1.bin");
 	mushroom = GeneralGLWindow::getInstance().addGeometry(mushroomData.vertices, mushroomData.vertexDataSize, mushroomData.indices, mushroomData.numIndices, GL_TRIANGLES);
 	setupReadInGeometryVertexArrayInfo(mushroom);
 
-	ObjReader::ShapeData chairData = reader.readInShape("../Resources/Models/chair1.bin");
+	BinReader::ShapeData chairData = reader.readInShape("../Resources/Models/chair1.bin");
 	chair = GeneralGLWindow::getInstance().addGeometry(chairData.vertices, chairData.vertexDataSize, chairData.indices, chairData.numIndices, GL_TRIANGLES);
 	setupReadInGeometryVertexArrayInfo(chair);
 
-	ObjReader::ShapeData tableData = reader.readInShape("../Resources/Models/table.bin");
+	BinReader::ShapeData tableData = reader.readInShape("../Resources/Models/table.bin");
 	table = GeneralGLWindow::getInstance().addGeometry(tableData.vertices, tableData.vertexDataSize, tableData.indices, tableData.numIndices, GL_TRIANGLES);
 	setupReadInGeometryVertexArrayInfo(table);
 
-	ObjReader::ShapeData metronomeData = reader.readInShape("../Resources/Models/metronome.bin");
+	BinReader::ShapeData metronomeData = reader.readInShape("../Resources/Models/metronome.bin");
 	metronome = GeneralGLWindow::getInstance().addGeometry(metronomeData.vertices, metronomeData.vertexDataSize, metronomeData.indices, metronomeData.numIndices, GL_TRIANGLES);
 	setupReadInGeometryVertexArrayInfo(metronome);
 
-	ObjReader::ShapeData newSphereData = reader.readInShape("../Resources/Models/sphere.bin");
+	BinReader::ShapeData newSphereData = reader.readInShape("../Resources/Models/sphere.bin");
 	newSphere = GeneralGLWindow::getInstance().addGeometry(newSphereData.vertices, newSphereData.vertexDataSize, newSphereData.indices, newSphereData.numIndices, GL_TRIANGLES);
 	setupReadInGeometryVertexArrayInfo(newSphere);
 
-	/*ObjReader::ShapeData experimentCube = reader.readInShape("$(ProjectDir)..\Resources\Models\chair1.bin");
+	/*BinReader::ShapeData experimentCube = reader.readInShape("$(ProjectDir)..\Resources\Models\chair1.bin");
 	readInCube = GeneralGLWindow::getInstance().addGeometry(experimentCube.vertices, experimentCube.vertexDataSize, experimentCube.indices, experimentCube.numIndices, GL_TRIANGLES);
 	setupReadInGeometryVertexArrayInfo(readInCube);*/
 }

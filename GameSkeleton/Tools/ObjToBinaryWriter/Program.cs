@@ -76,10 +76,14 @@ namespace ObjToBinaryWriter
 
         static void Main(string[] args)
         {
+            //Console.WriteLine("Converting");
+            //ObjToBinaryConverter converter = new ObjToBinaryConverter();
+            //converter.readInObj(args[0]);
+            //converter.WriteToBinary(args[1]);
             Console.WriteLine("Converting");
             ObjToBinaryConverter converter = new ObjToBinaryConverter();
-            converter.readInObj(args[0]);
-            converter.WriteToBinary(args[1]);
+            converter.readInObj("../../../../Resources/Models/alchemyRoomOuter.obj");
+            converter.WriteToBinary("alchemyRoomOuter.bin");
         }
 
         private void readInObj(string inFileName)

@@ -2,13 +2,13 @@
 
 #include "IntSlider.h"
 #include "CheckBox.h"
+#include "Vec3Slider.h"
 
 int DebugMenu::tabExists(QString name)
 {
 	int index = -1;
 	for(int i = 0; i<numTabs && index==-1; i++)
 	{
-		cout<< i << ": "<<tabs[i]->name.toLocal8Bit().constData() << endl;
 		if(tabs[i]->name == name)
 		{
 			index = i;
@@ -35,6 +35,28 @@ void DebugMenu::addFloatSlider(QString tabName, float* variable, float min, floa
 		//tab->show();
 	}
 	FloatSlider* f = new FloatSlider(variable, min, max, labelText);
+	//f->setFixedWidth(800);
+	tab->slidersLayout->addWidget(f);
+}
+
+void DebugMenu::addVec3Slider(QString tabName, vec3* vector, float minX, float maxX, float minY, float maxY, float minZ, float maxZ, QString labelText)
+{
+	ConsolePrinter::getInstance().print(tabName, "Add float slider: ");
+	DebugTab* tab;
+	int tabIndex = tabExists(tabName);
+	if(tabIndex!= -1)
+	{
+		tab = tabs[tabIndex];
+	}
+	else
+	{
+		tab = new DebugTab(tabName);
+		tabs.append(tab);
+		numTabs++;
+		this->addTab(tab, tabName);
+		//tab->show();
+	}
+	Vec3Slider* f = new Vec3Slider(vector, minX, maxX, minY, maxY, minZ, maxZ, labelText);
 	//f->setFixedWidth(800);
 	tab->slidersLayout->addWidget(f);
 }

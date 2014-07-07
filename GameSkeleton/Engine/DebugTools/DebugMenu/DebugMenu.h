@@ -34,6 +34,7 @@ public:
 		this->show();
 	}
 	void addFloatSlider(QString tabName, float* variable, float min, float max, QString labelText);
+	void addVec3Slider(QString tabName, vec3* vector, float minX, float maxX, float minY, float maxY, float minZ, float maxZ, QString labelText);
 	void addIntSlider(QString tabName, int* variable, int min, int max, QString labelText);
 	void addCheckBox(QString tabName, bool* variable, QString labelText);
 	void addDisplay(QString tabName, float* variable, QString labelText);
@@ -52,7 +53,6 @@ private:
 		float value;
 		DebugTab(QString n)
 		{
-			cout << "Constructing DebugTab "<< endl;
 			name = n;
 			numCheckBoxes = 0;
 			numDisplays = 0;

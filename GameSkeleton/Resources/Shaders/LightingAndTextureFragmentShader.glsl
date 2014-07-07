@@ -31,5 +31,7 @@ void main()
 	vec4 specularLighting = specularColor * specularAngle;
 
 	theFinalColor= (ambientColor + vec4(brightness, brightness, brightness, 1))* objectColor + specularLighting;
-	theFinalColor= texture(tex, UV) * theFinalColor;
+	vec4 texel = texture(tex, UV);
+	theFinalColor= texel * theFinalColor;
+	theFinalColor.a = texel.a;
 }

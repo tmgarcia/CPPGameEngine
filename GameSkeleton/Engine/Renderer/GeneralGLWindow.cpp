@@ -15,6 +15,7 @@
 #include <QtOpenGL\qglwidget>
 #include <qt\qtimer.h>
 #include <iostream>
+#include "../DebugTools/ConsolePrinter.h"
 //#include "../
 
 GLuint currentNumBuffers = 0;
@@ -43,7 +44,10 @@ void GeneralGLWindow::initializeGL()
 {
 	setMouseTracking(true);
 	glewInit();
+	glDisable(GL_CULL_FACE);
 	glEnable( GL_TEXTURE_2D );
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void GeneralGLWindow::debugMethod()
@@ -178,7 +182,7 @@ ShaderInfo* GeneralGLWindow:: createShaderInfo(
 	glGetShaderiv(vertexShaderID, GL_COMPILE_STATUS, &compileStatus);
 	if(compileStatus != GL_TRUE)
 	{
-		cout << "Vertex Shader Error" << endl;
+		ConsolePrinter::getInstance().print("Vertex Shader Error");
 		GLint logLength;
 		glGetShaderiv(vertexShaderID, GL_INFO_LOG_LENGTH, &logLength);
 		char* buffer = new char[logLength];
@@ -191,7 +195,7 @@ ShaderInfo* GeneralGLWindow:: createShaderInfo(
 	glGetShaderiv(fragShaderID, GL_COMPILE_STATUS, &compileStatus);
 	if(compileStatus != GL_TRUE)
 	{
-		cout << "Fragment Shader Error" << endl;
+		ConsolePrinter::getInstance().print("Fragment Shader Error");
 		GLint logLength;
 		glGetShaderiv(fragShaderID, GL_INFO_LOG_LENGTH, &logLength);
 		char* buffer = new char[logLength];
@@ -254,7 +258,7 @@ void GeneralGLWindow::loadTextureBitmap(const char* filename)
 	width = image.width();
 	height = image.height();
 	uchar* imagePixels = image.bits();
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imagePixels);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imagePixels);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -318,13 +322,14 @@ void GeneralGLWindow::sendRenderableToShader(RenderableInfo* renderable)
 
 	if(renderable->texture != NULL)
 	{
-		GLint baseTextureLoc = glGetUniformLocation(programID, "baseTexture");
-		glUniform1i(baseTextureLoc, 0);
-		glActiveTexture(GL_TEXTURE0 + 0);
+		//GLint baseTextureLoc = glGetUniformLocation(programID, "baseTexture");
+		//glUniform1i(baseTextureLoc, 0);
+		//glActiveTexture(GL_TEXTURE0 + 0);
 		glBindTexture(GL_TEXTURE_2D, renderable->texture->textureID);
 	}
 	if(renderable->alphaMap != NULL)
 	{
+		cout << "ALPHA" << endl;
 		GLint alphaMapLoc = glGetUniformLocation(programID, "alphaMap");
 		glUniform1i(alphaMapLoc, 1);
 		glActiveTexture(GL_TEXTURE0 + 1);

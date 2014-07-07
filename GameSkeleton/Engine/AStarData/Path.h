@@ -25,7 +25,6 @@ public:
 	{
 		path = p;
 		totalNodes = numNodes;
-		cout << "numNodes " << totalNodes << endl;
 		speed = 0.5;//half a "unit" per stretch
 		isValidPath = numNodes>0;
 		currentPathIndex = 0;

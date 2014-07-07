@@ -19,7 +19,6 @@ void GameLevel::update(vec3 eye, mat4 worldToProjectionMatrix)
 void GameLevel::loadLevel(QString fileName)
 {
 	DebugNodeContainer::getInstance().clearAllNodes();
-	cout << "Loading Level" << endl;
 	ifstream in(fileName.toUtf8().constData(), std::ios::binary | std::ios::in);
 	if(in.fail())
 	{
@@ -52,8 +51,6 @@ void GameLevel::loadLevel(QString fileName)
 	char* nodeData = new char[nodeDataSize];//Reading in the node & connection data
 	in.read(nodeData, nodeDataSize);
 	in.close();
-
-	cout << "numNodes " << numNodes << endl;
 
 	DebugNodeContainer::getInstance().loadInNodes(numNodes, nodeData);
 	delete(nodeData);

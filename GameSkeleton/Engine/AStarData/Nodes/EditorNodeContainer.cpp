@@ -18,12 +18,10 @@ void EditorNodeContainer::loadInNodes(uint numNodes, char* nodeData)
 	//nodes = vec3, int num connections, uint where connections start
 	//connections = float, uint
 	//selectedNode->toggleAttachedNode(clickedNode);
-	cout << "-- loading nodes --"<< endl;
 	for(uint i = 0; i < numNodes; i++)
 	{
 		uint positionData = i * SERIALIZED_NODE_SIZE;
 		vec3 position = *(R_C(vec3*, nodeData + positionData));
-		cout << position.x << "," << position.y << "," << position.z << endl;
 		addNode(position);
 	}
 
@@ -62,19 +60,15 @@ void EditorNodeContainer::clearAllNodes()
 
 ofstream* EditorNodeContainer::serializeNodes(ofstream *stream, uint NODE_DATA_BASE)
 {
-	cout << "-- saving nodes --"<< endl;
-	cout << "num nodes" << numNodes<< endl;
 	uint NODE_DATA_BYTE_SIZE = numNodes * SERIALIZED_NODE_SIZE;
 	uint CONNECTION_DATA_BASE = NODE_DATA_BYTE_SIZE;
 	uint currentBits;
 	uint connectionFileOffset = CONNECTION_DATA_BASE;
 	for(int i = 0; i < numNodes; i++)
 	{
-		cout << "node" << i << endl;
 		stream->write(R_CS(nodes[i]->position));
 		currentBits = nodes[i]->numConnections;
 		stream->write(R_CS(currentBits));
-		cout << nodes[i]->numConnections << " connections" << endl;
 		stream->write(R_CS(connectionFileOffset));//where connections start
 		connectionFileOffset += nodes[i]->numConnections * SERIALIZED_CONNECTION_SIZE;//Where next node's connections will start
 	}
@@ -82,18 +76,13 @@ ofstream* EditorNodeContainer::serializeNodes(ofstream *stream, uint NODE_DATA_B
 	float cost;
 	for(int i = 0; i < numNodes; i++)
 	{
-		cout << "i="<< i << endl;
 		for(int j = 0; j < nodes[i]->numConnections; j++)
 		{
-			cout << "j="<< j << endl;
-			cout << "-- saving connections --"<< endl;
 			cost = nodes[i]->connections[j]->cost;
-			cout << "cost "<< cost << endl;
 			stream->write(R_CS(cost));
 
 			fileAdress = (nodes.indexOf(nodes[i]->connections[j]->node));
 			stream->write(R_CS(fileAdress));
-			cout << "target index "<< fileAdress << endl;
 		}
 	}
 	return stream;
@@ -144,7 +133,6 @@ bool EditorNodeContainer::nodeHasBeenClicked(vec3 clickDirection, vec3 clickOrig
 			{
 				foundClickedNode = true;
 				clickedNode = nodes[i];
-				cout<< "Node clicked" << endl;
 			}
 		}
 	}

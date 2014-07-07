@@ -29,21 +29,15 @@ void DebugNodeContainer::loadInNodes(uint numNodes, char* nodeData)
 	//nodes = vec3, int num connections, uint where connections start
 	//connections = float, uint
 	//selectedNode->toggleAttachedNode(clickedNode);
-	cout << "-- loading nodes --"<< endl;
 	for(uint i = 0; i < numNodes; i++)
 	{
 		uint positionData = i * SERIALIZED_NODE_SIZE;
-		cout << "positionData " << positionData << endl;
 		vec3 position = *(R_C(vec3*, nodeData + positionData));
-		cout << "node " << i << endl;
-		cout << position.x << "," << position.y << "," << position.z << endl;
 		addNode(position);
 	}
 
-	cout << "-- loading connections --"<< endl;
 	for(uint i = 0; i < numNodes; i++)
 	{
-		cout << "node " << i << endl;
 		uint positionData = i * SERIALIZED_NODE_SIZE;
 
 		uint attachedNodeData = positionData + sizeof(vec3);

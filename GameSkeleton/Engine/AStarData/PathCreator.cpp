@@ -3,7 +3,6 @@
 
 Path PathCreator::calculatePath(DebugNode* start, DebugNode* end)
 {
-	cout << "started calculating Path" << endl;
 	startNode = start;
 	endNode = end;
 
@@ -51,7 +50,6 @@ Path PathCreator::calculatePath(DebugNode* start, DebugNode* end)
 		cout << "IMPOSSIBLE PATH" << endl;
 	}
 	processedNodes.clear();
-	cout << "finished calculating path" << endl;
 	return p;
 }
 void PathCreator::processNode(DebugNode* node, float costSoFar, PathingNode* parent)

@@ -61,19 +61,21 @@ public:
 		mat4 rotation;
 		mat4 fullTransform;
 		vec3 position;
+		vec3 scaling;
 		float angle;
 		vec3 rotateAxis;
-		void setupTransforms(float angl, vec3 axis, vec3 pos, mat4 worldToProjectionMatrix)
+		void setupTransforms(float angl, vec3 axis, vec3 pos, vec3 scale, mat4 worldToProjectionMatrix)
 		{
 			angle = angl;
 			rotateAxis = axis;
 			position = pos;
+			scaling = scale;
 			updateTransforms(worldToProjectionMatrix);
 		}
 		void updateTransforms(mat4 worldToProjectionMatrix)
 		{
 			rotation = glm::rotate(angle, rotateAxis);
-			modelToWorld = glm::translate(position) * rotation;
+			modelToWorld = glm::translate(position) * rotation * glm::scale(scaling);
 			fullTransform = worldToProjectionMatrix * modelToWorld;
 		}
 	};
@@ -87,6 +89,7 @@ protected:
 	void setupRenderables();
 	void addLightingAndTextureShaderUniforms(RenderableInfo* renderable, float* fullTransform, float* rotationMatrix);
 	void setupReadInGeometryVertexArrayInfo(GeometryInfo* geometry);
+	void setupNuGeometryVertexArrayInfo(GeometryInfo* geometry);
 	Camera camera;
 	void keyPressEvent(QKeyEvent* event);
 	void updateShaderInfo();

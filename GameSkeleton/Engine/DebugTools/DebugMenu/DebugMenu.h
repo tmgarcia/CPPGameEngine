@@ -8,9 +8,12 @@
 #include <Qt\qtabwidget.h>
 #include <Qt\qlist.h>
 #include <Qt\qstring.h>
+#include <Qt\qpushbutton.h>
+#include <Qt\qlist.h>
 #include <iostream>
 
 #include "FloatSlider.h"
+#include "Vec3Slider.h"
 #include "..\ConsolePrinter.h"
 
 #include "..\DebugSlider.h"
@@ -31,6 +34,10 @@ public:
 	{
 		ConsolePrinter::getInstance();
 		numTabs = 0;
+		printButtonAdded = false;
+		printButton = new QPushButton("Print All Variables");
+		QObject::connect(printButton, SIGNAL(clicked()), this, SLOT(printAllValues()));
+		//QObject::connect(printButton, SIGNAL(
 		this->show();
 	}
 	void addFloatSlider(QString tabName, float* variable, float min, float max, QString labelText);
@@ -38,9 +45,12 @@ public:
 	void addIntSlider(QString tabName, int* variable, int min, int max, QString labelText);
 	void addCheckBox(QString tabName, bool* variable, QString labelText);
 	void addDisplay(QString tabName, float* variable, QString labelText);
+	void addPrintButton();
 	int tabExists(QString name);
 
 private:
+	QPushButton* printButton;
+	bool printButtonAdded;
 	struct DebugTab : public QWidget
 	{
 		QString name;
@@ -73,13 +83,26 @@ private:
 			displayLayouts = new QVBoxLayout();
 			mainLayout->addLayout(displayLayouts);
 		}
+		void printValues()
+		{
+			QList<QWidget*> floatSliders = findChildren<QWidget*>("floatSlider");
+			for(int i = 0; i < floatSliders.size(); i++)
+			{
+				ConsolePrinter::getInstance().print(*(((FloatSlider*)floatSliders[i])->trackingVariable),((FloatSlider*)floatSliders[i])->label+": ");
+			}
+			QList<QWidget*> vec3Sliders = findChildren<QWidget*>("vec3Slider");
+			for(int i = 0; i < vec3Sliders.size(); i++)
+			{
+				ConsolePrinter::getInstance().print(*(((Vec3Slider*)vec3Sliders[i])->trackingVariable),((Vec3Slider*)vec3Sliders[i])->label+": ");
+			}
+		}
 	};
 	int numTabs;
 	QList<DebugTab*> tabs;
-	
+	DebugTab* getTab(QString tabName);
 
 
-signals:
-
+private slots:
+	void printAllValues();
 };
 

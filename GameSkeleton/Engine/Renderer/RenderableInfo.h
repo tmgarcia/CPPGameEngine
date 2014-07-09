@@ -3,6 +3,7 @@
 #include "ShaderInfo.h"
 #include "TextureInfo.h"
 #include "AlphaMapInfo.h"
+#include "NormalMapInfo.h"
 #include "ShaderUniformParameter.h"
 #include "PriorityLevel.h"
 using glm::mat4;
@@ -21,10 +22,14 @@ class RenderableInfo
 	ShaderUniformParameter uniformParameters[MAX_UNIFORM_PARAMETERS];
 public:
 	bool enableDepth;
+	bool hasAlphaMap;
+	bool hasTexture;
+	bool hasNormalMap;
 	mat4 whereMatrix;
 	GeometryInfo* whatGeometry;
 	TextureInfo* texture;
 	AlphaMapInfo* alphaMap;
+	NormalMapInfo* normalMap;
 	bool visible;
 	PriorityLevel priority;
 };

@@ -5,6 +5,7 @@
 #pragma region Variables
 #pragma region GeometryInfos
 GeometryInfo* cube;
+GeometryInfo* plane;
 GeometryInfo* alchemyTableGeo;
 GeometryInfo* alchemyTableAperturesGeo;
 GeometryInfo* alchemyTableGlasswareGeo;
@@ -18,18 +19,19 @@ GeometryInfo* alchemyRoomGeo;
 GeometryInfo* alchemyRoomOuterGeo;
 #pragma endregion
 
-ShaderInfo* alphaTextureShader;
+ShaderInfo* lightingTextureAlphaNormalShader;
+ShaderInfo* passThroughShader;
 
 mat4 viewToProjectionMatrix;
 mat4 worldToViewMatrix;
 mat4 worldToProjectionMatrix;
 
-vec3 lightPosition = vec3(0,25,4.0f);
-float diffusionIntensity = 1;
+vec3 lightPosition = vec3(1.2f,6.2f,16.5f);
+float diffusionIntensity = 0.5f;
 vec4 specularColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
 float specularExponent = 10;
 vec3 overridingObjectColor = vec3(0.9f,0.9f,0.9f);
-vec3 ambientLight = vec3(1.0f, 1.0f, 1.0f);
+vec3 ambientLight = vec3(0.4f, 0.4f, 0.4f);
 vec3 eyePosition;
 
 
@@ -49,7 +51,9 @@ MainWindow::GameObject* potV2;
 MainWindow::GameObject* potV3;
 MainWindow::GameObject* potV4;
 MainWindow::GameObject* potV5;
+MainWindow::GameObject* normalPlane;
 
+MainWindow::GameObject* lightBulb;
 #pragma endregion
 
 mat4 cube1ModelToWorld;
@@ -70,13 +74,14 @@ TextureInfo* potWTexture1;
 TextureInfo* potVTexture1;
 
 #pragma endregion
+NormalMapInfo* testNormal;
 
 #pragma endregion
 
 void MainWindow::setup()
 {
 	camera.setPosition(vec3(0,5,20.0f));
-	camera.setViewDirection(vec3(0,0.3f,-1));
+	camera.setViewDirection(vec3(0,0.0f,-1));
 
 	/*Neumont::ShapeData cubeData = Neumont::ShapeGenerator::makeCube();
 	cube = GeneralGLWindow::getInstance().addGeometry(cubeData.verts, cubeData.vertexBufferSize(), cubeData.indices, cubeData.numIndices, GL_TRIANGLES);
@@ -89,13 +94,17 @@ void MainWindow::setup()
 
 	setupTransforms();
 
-	alphaTextureShader = GeneralGLWindow::getInstance().createShaderInfo("../Resources/Shaders/LightingAndTextureVertexShader.glsl", "../Resources/Shaders/LightingAndTextureFragmentShader.glsl");
+	lightingTextureAlphaNormalShader = GeneralGLWindow::getInstance().createShaderInfo("../Resources/Shaders/LightingTextureAlphaNormalVertexShader.glsl", "../Resources/Shaders/LightingTextureAlphaNormalFragmentShader.glsl");
+	passThroughShader = GeneralGLWindow::getInstance().createShaderInfo("../Resources/Shaders/PassThroughVertexShader.glsl", "../Resources/Shaders/PassThroughFragmentShader.glsl");
 
 	//cube1ModelToWorld = glm::translate(vec3(0.5f,0,0.5f));
 
 	setupTextures();
 
 	setupRenderables();
+
+	dMenu->addFloatSlider("Lighting", &diffusionIntensity, 0,1.5f, "Diffusion intensity");
+	dMenu->addFloatSlider("Lighting", &specularExponent, 0,50, "Specular Exponent");
 
 	//cube1FullTransform = worldToProjectionMatrix * cube1ModelToWorld;
 
@@ -104,6 +113,14 @@ void MainWindow::setup()
 
 void MainWindow::setupGeometry()
 {
+	Neumont::ShapeData cubeData = Neumont::ShapeGenerator::makeCube();
+	cube = GeneralGLWindow::getInstance().addGeometry(cubeData.verts, cubeData.vertexBufferSize(), cubeData.indices, cubeData.numIndices, GL_TRIANGLES);
+	setupNuGeometryVertexArrayInfo(cube);
+
+	Neumont::ShapeData planeData = Neumont::ShapeGenerator::makePlane(2);
+	plane = GeneralGLWindow::getInstance().addGeometry(planeData.verts, planeData.vertexBufferSize(), planeData.indices, planeData.numIndices, GL_TRIANGLES);
+	setupNuGeometryVertexArrayInfo(plane);
+
 	BinReader reader;
 
 	BinReader::ShapeData alchemyRoomData = reader.readInShape("../Resources/Models/alchemyRoom.bin");
@@ -151,6 +168,7 @@ void MainWindow::setupGeometry()
 	setupReadInGeometryVertexArrayInfo(potionVialGeo);
 }
 
+vec3 noScale = vec3(1,1,1);
 void MainWindow::setupTransforms()
 {
 	eyePosition = camera.getPosition();
@@ -158,46 +176,53 @@ void MainWindow::setupTransforms()
 	worldToViewMatrix = camera.getWorldToViewMatrix();
 	worldToProjectionMatrix = viewToProjectionMatrix * worldToViewMatrix;
 
+	lightBulb = new GameObject();
+	lightBulb->setupTransforms(0, vec3(0,1,0),lightPosition, vec3(0.25f, 0.25f, 0.25f), worldToProjectionMatrix);
+	dMenu->addVec3Slider("Lighting", &lightBulb->position, -10,10,0,30,-20,20,"Light position");
+
+	normalPlane = new GameObject();
+	normalPlane->setupTransforms(90, vec3(1,0,0),vec3(0,4,15),noScale,worldToProjectionMatrix);
+
 	alchRoom = new GameObject();
-	alchRoom->setupTransforms(0,vec3(0,1,0),vec3(0,0,0),worldToProjectionMatrix);
+	alchRoom->setupTransforms(0,vec3(0,1,0),vec3(0,0,0),noScale,worldToProjectionMatrix);
 
 	alchRoomOuter = new GameObject();
-	alchRoomOuter->setupTransforms(0,vec3(0,1,0),vec3(0,0,8),worldToProjectionMatrix);
+	alchRoomOuter->setupTransforms(0,vec3(0,1,0),vec3(0,0,8),noScale,worldToProjectionMatrix);
 
 	alchTable = new GameObject();
-	alchTable->setupTransforms(0,vec3(0,1,0),vec3(0,0,0),worldToProjectionMatrix);
+	alchTable->setupTransforms(0,vec3(0,1,0),vec3(0,0,0),noScale,worldToProjectionMatrix);
 
 	alchTableGlass = new GameObject();
-	alchTableGlass->setupTransforms(0,vec3(0,1,0),vec3(0,0,0),worldToProjectionMatrix);
+	alchTableGlass->setupTransforms(0,vec3(0,1,0),vec3(0,0,0),noScale,worldToProjectionMatrix);
 
 	alchTableMetal = new GameObject();
-	alchTableMetal->setupTransforms(0,vec3(0,1,0),vec3(0,0,0),worldToProjectionMatrix);
+	alchTableMetal->setupTransforms(0,vec3(0,1,0),vec3(0,0,0),noScale,worldToProjectionMatrix);
 
 	alchTableLiquids = new GameObject();
-	alchTableLiquids->setupTransforms(0,vec3(0,1,0),vec3(0,0,0),worldToProjectionMatrix);
+	alchTableLiquids->setupTransforms(0,vec3(0,1,0),vec3(0,0,0),noScale,worldToProjectionMatrix);
 
 	potL1 = new GameObject();
-	potL1->setupTransforms(0,vec3(0,1,0),vec3(-1.1f,3.8f, -2.5f),worldToProjectionMatrix);
+	potL1->setupTransforms(0,vec3(0,1,0),vec3(-1.1f,3.8f, -2.5f),noScale,worldToProjectionMatrix);
 	
 	potS1 = new GameObject();
-	potS1->setupTransforms(0,vec3(0,1,0),vec3(-2.5f,4.6f, -2.8f),worldToProjectionMatrix);
+	potS1->setupTransforms(0,vec3(0,1,0),vec3(-2.5f,4.6f, -2.8f),noScale,worldToProjectionMatrix);
 
 	potT1 = new GameObject();
-	potT1->setupTransforms(0,vec3(0,1,0),vec3(-3.6f,4.5f, -1.9f),worldToProjectionMatrix);
+	potT1->setupTransforms(0,vec3(0,1,0),vec3(-3.6f,4.5f, -1.9f),noScale,worldToProjectionMatrix);
 
 	potW1 = new GameObject();
-	potW1->setupTransforms(180,vec3(0,1,0),vec3(-1.9f,3.8f, -1.5f),worldToProjectionMatrix);
+	potW1->setupTransforms(180,vec3(0,1,0),vec3(-1.9f,3.8f, -1.5f),noScale,worldToProjectionMatrix);
 
 	potV1 = new GameObject();
-	potV1->setupTransforms(96.5f,vec3(0.5f,1,-1),vec3(-2.6f,3.8f,0.2f),worldToProjectionMatrix);
+	potV1->setupTransforms(96.5f,vec3(0.5f,1,-1),vec3(-2.6f,3.8f,0.2f),noScale,worldToProjectionMatrix);
 	potV2 = new GameObject();
-	potV2->setupTransforms(79.7f,vec3(-0.3f,0.6f,0.1f),vec3(-3.5f,3.8f,-0.2f),worldToProjectionMatrix);
+	potV2->setupTransforms(79.7f,vec3(-0.3f,0.6f,0.1f),vec3(-3.5f,3.8f,-0.2f),noScale,worldToProjectionMatrix);
 	potV3 = new GameObject();
-	potV3->setupTransforms(256.9f,vec3(0.6f,1,-1),vec3(-3.1f,3.8f,0.5f),worldToProjectionMatrix);
+	potV3->setupTransforms(256.9f,vec3(0.6f,1,-1),vec3(-3.1f,3.8f,0.5f),noScale,worldToProjectionMatrix);
 	potV4 = new GameObject();
-	potV4->setupTransforms(88.1f,vec3(-0.3f,1,0.4f),vec3(-3.4f,3.8f,-0.6f),worldToProjectionMatrix);
+	potV4->setupTransforms(88.1f,vec3(-0.3f,1,0.4f),vec3(-3.4f,3.8f,-0.6f),noScale,worldToProjectionMatrix);
 	potV5 = new GameObject();
-	potV5->setupTransforms(99,vec3(-0.9f,1,-1),vec3(-3,3.8f,-0.2f),worldToProjectionMatrix);
+	potV5->setupTransforms(99,vec3(-0.9f,1,-1),vec3(-3,3.8f,-0.2f),noScale,worldToProjectionMatrix);
 
 	//dMenu->addVec3Slider("tab1", &potionL1Angle, -10,10,-10,10,-10,10,"Large");
 	//dMenu->addFloatSlider("tab1", &potionL1Angle,0,360,"Large");
@@ -225,9 +250,18 @@ void MainWindow::setupReadInGeometryVertexArrayInfo(GeometryInfo* geometry)
 	GeneralGLWindow::getInstance().addShaderStreamedParameter(geometry, 3, PT_VEC2, BinReader::UV_OFFSET, BinReader::STRIDE);
 }
 
+void MainWindow::setupNuGeometryVertexArrayInfo(GeometryInfo* geometry)
+{
+	GeneralGLWindow::getInstance().addShaderStreamedParameter(geometry, 0, PT_VEC3, Neumont::Vertex::POSITION_OFFSET, Neumont::Vertex::STRIDE);
+	GeneralGLWindow::getInstance().addShaderStreamedParameter(geometry, 1, PT_VEC4, Neumont::Vertex::COLOR_OFFSET, Neumont::Vertex::STRIDE);
+	GeneralGLWindow::getInstance().addShaderStreamedParameter(geometry, 2, PT_VEC3, Neumont::Vertex::NORMAL_OFFSET, Neumont::Vertex::STRIDE);
+	GeneralGLWindow::getInstance().addShaderStreamedParameter(geometry, 3, PT_VEC2, Neumont::Vertex::UV_OFFSET, Neumont::Vertex::STRIDE);
+}
+
 void MainWindow::setupTextures()
 {
 	//testTexture1 = GeneralGLWindow::getInstance().addTexture("../Resources/Textures/alchemyTableTexture.png");
+	testNormal = GeneralGLWindow::getInstance().addNormalMap("../Resources/NormalMaps/Shapes.png");
 	alchRoomTexture = GeneralGLWindow::getInstance().addTexture("../Resources/Textures/alchemyRoomTexture.png");
 	alchRoomOuterTexture = GeneralGLWindow::getInstance().addTexture("../Resources/Textures/alchemyRoomOuterTexture.png");
 	alchTableTexture = GeneralGLWindow::getInstance().addTexture("../Resources/Textures/alchemyTableTexture.png");
@@ -243,50 +277,56 @@ void MainWindow::setupTextures()
 
 void MainWindow::setupRenderables()
 {
-	//cube1 = GeneralGLWindow::getInstance().addRenderable(cube, cube1ModelToWorld, alphaTextureShader, true, PRIORITY_1, true, testTexture1);
-	alchRoomOuter->renderable = GeneralGLWindow::getInstance().addRenderable(alchemyRoomOuterGeo, alchRoomOuter->modelToWorld, alphaTextureShader, true, PRIORITY_1, true, alchRoomOuterTexture);
+	//normalCube = GeneralGLWindow::getInstance().addRenderable(cube, cube1ModelToWorld, lightingTextureAlphaNormalShader, true, PRIORITY_1, true, testTexture1);
+	lightBulb->renderable = GeneralGLWindow::getInstance().addRenderable(cube, lightBulb->modelToWorld, passThroughShader, true, PRIORITY_1, true, NULL, NULL, NULL);
+	addLightingAndTextureShaderUniforms(lightBulb->renderable, &lightBulb->fullTransform[0][0], &lightBulb->rotation[0][0]);
+
+	normalPlane->renderable = GeneralGLWindow::getInstance().addRenderable(plane, normalPlane->modelToWorld, lightingTextureAlphaNormalShader, true, PRIORITY_1, true, NULL, NULL, testNormal);
+	addLightingAndTextureShaderUniforms(normalPlane->renderable, &normalPlane->fullTransform[0][0], &normalPlane->rotation[0][0]);
+
+	alchRoomOuter->renderable = GeneralGLWindow::getInstance().addRenderable(alchemyRoomOuterGeo, alchRoomOuter->modelToWorld, lightingTextureAlphaNormalShader, true, PRIORITY_1, true, alchRoomOuterTexture);
 	addLightingAndTextureShaderUniforms(alchRoomOuter->renderable, &alchRoomOuter->fullTransform[0][0], &alchRoomOuter->rotation[0][0]);
 
-	alchRoom->renderable = GeneralGLWindow::getInstance().addRenderable(alchemyRoomGeo, alchRoom->modelToWorld, alphaTextureShader, true, PRIORITY_1, true, alchRoomTexture);
+	alchRoom->renderable = GeneralGLWindow::getInstance().addRenderable(alchemyRoomGeo, alchRoom->modelToWorld, lightingTextureAlphaNormalShader, true, PRIORITY_1, true, alchRoomTexture);
 	addLightingAndTextureShaderUniforms(alchRoom->renderable, &alchRoom->fullTransform[0][0], &alchRoom->rotation[0][0]);
 
-	alchTable->renderable = GeneralGLWindow::getInstance().addRenderable(alchemyTableGeo, alchTable->modelToWorld, alphaTextureShader, true, PRIORITY_1, true, alchTableTexture);
+	alchTable->renderable = GeneralGLWindow::getInstance().addRenderable(alchemyTableGeo, alchTable->modelToWorld, lightingTextureAlphaNormalShader, true, PRIORITY_1, true, alchTableTexture);
 	addLightingAndTextureShaderUniforms(alchTable->renderable, &alchTable->fullTransform[0][0], &alchTable->rotation[0][0]);
 		
-	alchTableMetal->renderable = GeneralGLWindow::getInstance().addRenderable(alchemyTableAperturesGeo, alchTableMetal->modelToWorld, alphaTextureShader, true, PRIORITY_1, true, alchTableMetalTexture);
+	alchTableMetal->renderable = GeneralGLWindow::getInstance().addRenderable(alchemyTableAperturesGeo, alchTableMetal->modelToWorld, lightingTextureAlphaNormalShader, true, PRIORITY_1, true, alchTableMetalTexture);
 	addLightingAndTextureShaderUniforms(alchTableMetal->renderable, &alchTableMetal->fullTransform[0][0], &alchTableMetal->rotation[0][0]);
 
-	alchTableLiquids->renderable = GeneralGLWindow::getInstance().addRenderable(alchemyTableLiquidsGeo, alchTableLiquids->modelToWorld, alphaTextureShader, true, PRIORITY_1, true, alchTableLiquidsTexture);
+	alchTableLiquids->renderable = GeneralGLWindow::getInstance().addRenderable(alchemyTableLiquidsGeo, alchTableLiquids->modelToWorld, lightingTextureAlphaNormalShader, true, PRIORITY_1, true, alchTableLiquidsTexture);
 	addLightingAndTextureShaderUniforms(alchTableLiquids->renderable, &alchTableLiquids->fullTransform[0][0], &alchTableLiquids->rotation[0][0]);
 
-	alchTableGlass->renderable = GeneralGLWindow::getInstance().addRenderable(alchemyTableGlasswareGeo, alchTableGlass->modelToWorld, alphaTextureShader, true, PRIORITY_1, true, alchTableGlassTexture);
+	alchTableGlass->renderable = GeneralGLWindow::getInstance().addRenderable(alchemyTableGlasswareGeo, alchTableGlass->modelToWorld, lightingTextureAlphaNormalShader, true, PRIORITY_1, true, alchTableGlassTexture);
 	addLightingAndTextureShaderUniforms(alchTableGlass->renderable, &alchTableGlass->fullTransform[0][0], &alchTableGlass->rotation[0][0]);
 	
-	potL1->renderable = GeneralGLWindow::getInstance().addRenderable(potionLargeGeo, potL1->modelToWorld, alphaTextureShader, true, PRIORITY_1, true, potLTexture1);
+	potL1->renderable = GeneralGLWindow::getInstance().addRenderable(potionLargeGeo, potL1->modelToWorld, lightingTextureAlphaNormalShader, true, PRIORITY_1, true, potLTexture1);
 	addLightingAndTextureShaderUniforms(potL1->renderable, &potL1->fullTransform[0][0], &potL1->rotation[0][0]);
 
-	potS1->renderable = GeneralGLWindow::getInstance().addRenderable(potionSmallGeo, potS1->modelToWorld, alphaTextureShader, true, PRIORITY_1, true, potSTexture1);
+	potS1->renderable = GeneralGLWindow::getInstance().addRenderable(potionSmallGeo, potS1->modelToWorld, lightingTextureAlphaNormalShader, true, PRIORITY_1, true, potSTexture1);
 	addLightingAndTextureShaderUniforms(potS1->renderable, &potS1->fullTransform[0][0], &potS1->rotation[0][0]);
 
-	potT1->renderable = GeneralGLWindow::getInstance().addRenderable(potionThinGeo, potT1->modelToWorld, alphaTextureShader, true, PRIORITY_1, true, potTTexture1);
+	potT1->renderable = GeneralGLWindow::getInstance().addRenderable(potionThinGeo, potT1->modelToWorld, lightingTextureAlphaNormalShader, true, PRIORITY_1, true, potTTexture1);
 	addLightingAndTextureShaderUniforms(potT1->renderable, &potT1->fullTransform[0][0], &potT1->rotation[0][0]);
 
-	potW1->renderable = GeneralGLWindow::getInstance().addRenderable(potionWideGeo, potW1->modelToWorld, alphaTextureShader, true, PRIORITY_1, true, potWTexture1);
+	potW1->renderable = GeneralGLWindow::getInstance().addRenderable(potionWideGeo, potW1->modelToWorld, lightingTextureAlphaNormalShader, true, PRIORITY_1, true, potWTexture1);
 	addLightingAndTextureShaderUniforms(potW1->renderable, &potW1->fullTransform[0][0], &potW1->rotation[0][0]);
 
-	potV1->renderable = GeneralGLWindow::getInstance().addRenderable(potionVialGeo, potV1->modelToWorld, alphaTextureShader, true, PRIORITY_1, true, potVTexture1);
+	potV1->renderable = GeneralGLWindow::getInstance().addRenderable(potionVialGeo, potV1->modelToWorld, lightingTextureAlphaNormalShader, true, PRIORITY_1, true, potVTexture1);
 	addLightingAndTextureShaderUniforms(potV1->renderable, &potV1->fullTransform[0][0], &potV1->rotation[0][0]);
 
-	potV2->renderable = GeneralGLWindow::getInstance().addRenderable(potionVialGeo, potV2->modelToWorld, alphaTextureShader, true, PRIORITY_1, true, potVTexture1);
+	potV2->renderable = GeneralGLWindow::getInstance().addRenderable(potionVialGeo, potV2->modelToWorld, lightingTextureAlphaNormalShader, true, PRIORITY_1, true, potVTexture1);
 	addLightingAndTextureShaderUniforms(potV2->renderable, &potV2->fullTransform[0][0], &potV2->rotation[0][0]);
 
-	potV3->renderable = GeneralGLWindow::getInstance().addRenderable(potionVialGeo, potV3->modelToWorld, alphaTextureShader, true, PRIORITY_1, true, potVTexture1);
+	potV3->renderable = GeneralGLWindow::getInstance().addRenderable(potionVialGeo, potV3->modelToWorld, lightingTextureAlphaNormalShader, true, PRIORITY_1, true, potVTexture1);
 	addLightingAndTextureShaderUniforms(potV3->renderable, &potV3->fullTransform[0][0], &potV3->rotation[0][0]);
 
-	potV4->renderable = GeneralGLWindow::getInstance().addRenderable(potionVialGeo, potV4->modelToWorld, alphaTextureShader, true, PRIORITY_1, true, potVTexture1);
+	potV4->renderable = GeneralGLWindow::getInstance().addRenderable(potionVialGeo, potV4->modelToWorld, lightingTextureAlphaNormalShader, true, PRIORITY_1, true, potVTexture1);
 	addLightingAndTextureShaderUniforms(potV4->renderable, &potV4->fullTransform[0][0], &potV4->rotation[0][0]);
 
-	potV5->renderable = GeneralGLWindow::getInstance().addRenderable(potionVialGeo, potV5->modelToWorld, alphaTextureShader, true, PRIORITY_1, true, potVTexture1);
+	potV5->renderable = GeneralGLWindow::getInstance().addRenderable(potionVialGeo, potV5->modelToWorld, lightingTextureAlphaNormalShader, true, PRIORITY_1, true, potVTexture1);
 	addLightingAndTextureShaderUniforms(potV5->renderable, &potV5->fullTransform[0][0], &potV5->rotation[0][0]);
 
 }
@@ -312,6 +352,7 @@ void MainWindow::update()
 	alchRoomOuter->angle+= 0.4f;
 	updateShaderInfo();
 	frame++;
+	lightPosition = lightBulb->position;
 }
 
 void MainWindow::updateShaderInfo()
@@ -320,6 +361,9 @@ void MainWindow::updateShaderInfo()
 	viewToProjectionMatrix = glm::perspective(60.0f, ((float)WINDOW_WIDTH) / WINDOW_HEIGHT, 0.1f, 90.0f);
 	worldToViewMatrix = camera.getWorldToViewMatrix();
 	worldToProjectionMatrix = viewToProjectionMatrix * worldToViewMatrix;
+
+	lightBulb->updateTransforms(worldToProjectionMatrix);
+	normalPlane->updateTransforms(worldToProjectionMatrix);
 
 	alchRoom->updateTransforms(worldToProjectionMatrix);
 	alchRoomOuter->updateTransforms(worldToProjectionMatrix);

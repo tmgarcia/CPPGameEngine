@@ -14,9 +14,17 @@ void ConsolePrinter::print(float f, char* label = "")
 {
 	cout << label << f << endl;
 }
+void ConsolePrinter::print(float f, QString label = "")
+{
+	cout << label.toLocal8Bit().constData() << f << endl;
+}
 void ConsolePrinter::print(vec3 v, char* label = "")
 {
 	cout << label << "("<< v.x << "," << v.y << "," << v.z << ")" << endl;
+}
+void ConsolePrinter::print(vec3 v, QString label = "")
+{
+	cout << label.toLocal8Bit().constData() << "("<< v.x << "," << v.y << "," << v.z << ")" << endl;
 }
 void ConsolePrinter::print(vec2 v, char* label = "")
 {

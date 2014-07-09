@@ -4,6 +4,44 @@
 #include "CheckBox.h"
 #include "Vec3Slider.h"
 
+void DebugMenu::addPrintButton()
+{
+	this->setCornerWidget(printButton, Qt::TopRightCorner);
+	printButtonAdded = true;
+}
+
+void DebugMenu::printAllValues()
+{
+	ConsolePrinter::getInstance().print("Printing All Current Values");
+	for(int i = 0; i<numTabs; i++)
+	{
+		ConsolePrinter::getInstance().print(tabs[i]->name, "Values of tab: ");
+		tabs[i]->printValues();
+	}
+}
+
+DebugMenu::DebugTab* DebugMenu::getTab(QString tabName)
+{
+	DebugTab* tab;
+	int tabIndex = tabExists(tabName);
+	if(tabIndex!= -1)
+	{
+		tab = tabs[tabIndex];
+	}
+	else
+	{
+		tab = new DebugTab(tabName);
+		tabs.append(tab);
+		numTabs++;
+		this->addTab(tab, tabName);
+		if(!printButtonAdded)
+		{
+			addPrintButton();
+		}
+	}
+	return tab;
+}
+
 int DebugMenu::tabExists(QString name)
 {
 	int index = -1;
@@ -19,84 +57,30 @@ int DebugMenu::tabExists(QString name)
 
 void DebugMenu::addFloatSlider(QString tabName, float* variable, float min, float max, QString labelText="")
 {
-	ConsolePrinter::getInstance().print(tabName, "Add float slider: ");
-	DebugTab* tab;
-	int tabIndex = tabExists(tabName);
-	if(tabIndex!= -1)
-	{
-		tab = tabs[tabIndex];
-	}
-	else
-	{
-		tab = new DebugTab(tabName);
-		tabs.append(tab);
-		numTabs++;
-		this->addTab(tab, tabName);
-		//tab->show();
-	}
+	DebugTab* tab = getTab(tabName);
 	FloatSlider* f = new FloatSlider(variable, min, max, labelText);
-	//f->setFixedWidth(800);
+	f->setObjectName("floatSlider");
 	tab->slidersLayout->addWidget(f);
 }
 
 void DebugMenu::addVec3Slider(QString tabName, vec3* vector, float minX, float maxX, float minY, float maxY, float minZ, float maxZ, QString labelText)
 {
-	ConsolePrinter::getInstance().print(tabName, "Add float slider: ");
-	DebugTab* tab;
-	int tabIndex = tabExists(tabName);
-	if(tabIndex!= -1)
-	{
-		tab = tabs[tabIndex];
-	}
-	else
-	{
-		tab = new DebugTab(tabName);
-		tabs.append(tab);
-		numTabs++;
-		this->addTab(tab, tabName);
-		//tab->show();
-	}
+	DebugTab* tab = getTab(tabName);
 	Vec3Slider* f = new Vec3Slider(vector, minX, maxX, minY, maxY, minZ, maxZ, labelText);
-	//f->setFixedWidth(800);
+	f->setObjectName("vec3Slider");
 	tab->slidersLayout->addWidget(f);
 }
 
 void DebugMenu::addIntSlider(QString tabName, int* variable, int min, int max, QString labelText="")
 {
-	DebugTab* tab;
-	int tabIndex = tabExists(tabName);
-	if(tabIndex!= -1)
-	{
-		tab = tabs[tabIndex];
-	}
-	else
-	{
-		tab = new DebugTab(tabName);
-		tabs.append(tab);
-		numTabs++;
-		this->addTab(tab, tabName);
-		//tab->show();
-	}
+	DebugTab* tab = getTab(tabName);
 	IntSlider* f = new IntSlider(variable, min, max, labelText);
 	tab->slidersLayout->addWidget(f);
 }
 
 void DebugMenu::addCheckBox(QString tabName, bool* variable, QString labelText="")
 {
-	DebugTab* tab;
-	int tabIndex = tabExists(tabName);
-	if(tabIndex!= -1)
-	{
-		tab = tabs[tabIndex];
-	}
-	else
-	{
-		tab = new DebugTab(tabName);
-		tabs.append(tab);
-		numTabs++;
-		this->addTab(tab, tabName);
-		//tab->show();
-	}
+	DebugTab* tab = getTab(tabName);
 	QHBoxLayout* checkBoxGroup;
 	if(tab->numCheckBoxes == 0 || tab->numCheckBoxes%4==0)
 	{
@@ -121,19 +105,7 @@ void DebugMenu::addCheckBox(QString tabName, bool* variable, QString labelText="
 
 void DebugMenu::addDisplay(QString tabName, float* variable, QString labelText="")
 {
-	DebugTab* tab;
-	int tabIndex = tabExists(tabName);
-	if(tabIndex!= -1)
-	{
-		tab = tabs[tabIndex];
-	}
-	else
-	{
-		tab = new DebugTab(tabName);
-		tabs.append(tab);
-		numTabs++;
-		addTab(tab, tabName);
-	}
+	DebugTab* tab = getTab(tabName);
 	QHBoxLayout* displayGroup = new QHBoxLayout();
 	if(tab->numDisplays == 0 || tab->numDisplays%4==0)
 	{

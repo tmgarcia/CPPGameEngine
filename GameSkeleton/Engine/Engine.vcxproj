@@ -100,7 +100,6 @@
     <ClCompile Include="AStarData\Nodes\DebugNode.cpp" />
     <ClCompile Include="AStarData\Nodes\DebugNodeContainer.cpp" />
     <ClCompile Include="DebugTools\DebugMenu\DebugMenu.cpp" />
-    <ClCompile Include="DebugToolBar.cpp" />
     <ClCompile Include="DebugTools\DebugMenu\DebugMenu_moc.cpp" />
     <ClCompile Include="DebugTools\DebugMenu\FloatSlider_moc.cpp" />
     <ClCompile Include="DebugTools\DebugShapes.cpp" />
@@ -143,7 +142,6 @@
     <ClInclude Include="AStarData\Nodes\DebugNodeContainer.h" />
     <ClInclude Include="DebugTools\DebugMenu\CheckBox.h" />
     <ClInclude Include="DebugTools\DebugMenu\DebugMenu.h" />
-    <ClInclude Include="DebugToolBar.h" />
     <ClInclude Include="DebugTools\DebugMenu\FloatSlider.h" />
     <ClInclude Include="DebugTools\DebugMenu\IntSlider.h" />
     <ClInclude Include="DebugTools\DebugShapes.h" />
@@ -169,6 +167,7 @@
     <ClInclude Include="DebugTools\List.h" />
     <ClInclude Include="DebugTools\Logger.h" />
     <ClInclude Include="BinReader.h" />
+    <ClInclude Include="Renderer\NormalMapInfo.h" />
     <ClInclude Include="Renderer\ParameterType.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="DebugTools\Profiler.h" />

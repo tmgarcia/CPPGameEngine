@@ -21,7 +21,6 @@
       <Filter>Math</Filter>
     </ClCompile>
     <ClCompile Include="MathTools\TransformationMatrixMaker.cpp" />
-    <ClCompile Include="DebugToolBar.cpp" />
     <ClCompile Include="AStarDebugToolbar.cpp" />
     <ClCompile Include="DebugTools\DebugSlider.cpp" />
     <ClCompile Include="DebugTools\DebugSlider_moc.cpp" />
@@ -76,7 +75,6 @@
       <Filter>Math</Filter>
     </ClInclude>
     <ClInclude Include="MathTools\TransformationMatrixMaker.h" />
-    <ClInclude Include="DebugToolBar.h" />
     <ClInclude Include="AStarDebugToolbar.h" />
     <ClInclude Include="DebugTools\DebugSlider.h" />
     <ClInclude Include="AStarData\Nodes\DebugNode.h" />
@@ -104,5 +102,6 @@
     <ClInclude Include="GraphicObjects\BlinkingEyeGroup.h" />
     <ClInclude Include="DebugTools\ConsolePrinter.h" />
     <ClInclude Include="DebugTools\DebugMenu\Vec3Slider.h" />
+    <ClInclude Include="Renderer\NormalMapInfo.h" />
   </ItemGroup>
 </Project>

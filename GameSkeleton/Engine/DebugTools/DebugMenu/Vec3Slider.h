@@ -13,19 +13,20 @@ class Vec3Slider: public QWidget
 {
 	Q_OBJECT
 
-	vec3* trackingVariable;
 	DebugSlider* sliderX;
 	DebugSlider* sliderY;
 	DebugSlider* sliderZ;
 	QHBoxLayout* layout;
 
 public:
+	QString label;
+	vec3* trackingVariable;
 	Vec3Slider(vec3* variable, float minX, float maxX, float minY, float maxY, float minZ, float maxZ, QString labelText="")
 	{
 		trackingVariable = variable;
 
 		layout = new QHBoxLayout();
-
+		label = labelText;
 		sliderX = new DebugSlider(minX, maxX, false, (maxX-minX)*10);
 		sliderX->setValue((*variable).x);
 		sliderY = new DebugSlider(minY, maxY, false, (maxY-minY)*10);

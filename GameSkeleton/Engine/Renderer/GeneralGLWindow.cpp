@@ -24,12 +24,14 @@ GLuint currentShaderIndex = 0;
 GLuint currentRenderIndex = 0;
 GLuint currentTextureIndex = 0;
 GLuint currentAlphaMapIndex = 0;
+GLuint currentNormalMapIndex = 0;
 
 const GLuint MAX_NUM_BUFFERS = 80;
 const GLuint MAX_NUM_GEOMETRIES = 30;
 const GLuint MAX_NUM_SHADERS = 10;
 const GLuint MAX_NUM_TEXTURES = 30;
 const GLuint MAX_NUM_ALPHAMAPS= 20;
+const GLuint MAX_NUM_NORMALMAPS= 20;
 const GLuint MAX_NUM_RENDERABLES = 600;
 const GLuint BUFFER_SIZE = 1000000;
 
@@ -38,6 +40,7 @@ GeometryInfo* geometryInfos[MAX_NUM_GEOMETRIES];
 ShaderInfo* shaderInfos[MAX_NUM_SHADERS];
 TextureInfo* textureInfos[MAX_NUM_TEXTURES];
 AlphaMapInfo* alphaMapInfos[MAX_NUM_ALPHAMAPS];
+NormalMapInfo* normalMapInfos[MAX_NUM_NORMALMAPS];
 RenderableInfo* renderableInfos[MAX_NUM_RENDERABLES];
 
 void GeneralGLWindow::initializeGL()
@@ -238,6 +241,18 @@ AlphaMapInfo* GeneralGLWindow::addAlphaMap(const char* fileName)
 	return ret;
 }
 
+NormalMapInfo* GeneralGLWindow::addNormalMap(const char* fileName)
+{
+
+	normalMapInfos[currentNormalMapIndex] = new NormalMapInfo();
+	NormalMapInfo* ret = normalMapInfos[currentNormalMapIndex];
+	glGenTextures(1, &(ret->textureID));
+	glBindTexture(GL_TEXTURE_2D, ret->textureID);
+	loadTextureBitmap(fileName);
+	currentNormalMapIndex++;
+	return ret;
+}
+
 TextureInfo* GeneralGLWindow::addTexture(const char* fileName)
 {
 
@@ -273,9 +288,9 @@ RenderableInfo* GeneralGLWindow::addRenderable(
 	PriorityLevel priority,
 	bool depthEnabled,
 	TextureInfo* texture,
-	AlphaMapInfo* alphaMap)
+	AlphaMapInfo* alphaMap,
+	NormalMapInfo* normalMap)
 {
-
 	renderableInfos[currentRenderIndex] = new RenderableInfo();
 	RenderableInfo* ret = renderableInfos[currentRenderIndex];
 	ret->whatGeometry = whatGeometry;
@@ -286,7 +301,12 @@ RenderableInfo* GeneralGLWindow::addRenderable(
 	ret->enableDepth = depthEnabled;
 	ret->texture = texture;
 	ret->alphaMap = alphaMap;
+	ret->normalMap = normalMap;
 	
+	ret->hasTexture = (texture!=NULL);
+	ret->hasAlphaMap = (alphaMap!=NULL);
+	ret->hasNormalMap = (normalMap!=NULL);
+
 	currentRenderIndex++;
 	return ret;
 }
@@ -320,14 +340,14 @@ void GeneralGLWindow::sendRenderableToShader(RenderableInfo* renderable)
 	GLuint programID = renderable->howShaders->programID;
 	glUseProgram(programID);
 
-	if(renderable->texture != NULL)
+	if(renderable->hasTexture)
 	{
-		//GLint baseTextureLoc = glGetUniformLocation(programID, "baseTexture");
-		//glUniform1i(baseTextureLoc, 0);
-		//glActiveTexture(GL_TEXTURE0 + 0);
+		GLint baseTextureLoc = glGetUniformLocation(programID, "baseTexture");
+		glUniform1i(baseTextureLoc, 0);
+		glActiveTexture(GL_TEXTURE0 + 0);
 		glBindTexture(GL_TEXTURE_2D, renderable->texture->textureID);
 	}
-	if(renderable->alphaMap != NULL)
+	if(renderable->hasAlphaMap)
 	{
 		cout << "ALPHA" << endl;
 		GLint alphaMapLoc = glGetUniformLocation(programID, "alphaMap");
@@ -335,6 +355,20 @@ void GeneralGLWindow::sendRenderableToShader(RenderableInfo* renderable)
 		glActiveTexture(GL_TEXTURE0 + 1);
 		glBindTexture(GL_TEXTURE_2D, renderable->alphaMap->textureID);
 	}
+	if(renderable->hasNormalMap)
+	{
+		//cout << "NORMAL" << endl;
+		GLint normalMapLoc = glGetUniformLocation(programID, "normalMap");
+		glUniform1i(normalMapLoc, 2);
+		glActiveTexture(GL_TEXTURE0 + 2);
+		glBindTexture(GL_TEXTURE_2D, renderable->normalMap->textureID);
+	}
+	GLint uniformLocation = glGetUniformLocation(programID, "hasTexture");
+	glUniform1i(uniformLocation, renderable->hasTexture);
+	uniformLocation = glGetUniformLocation(programID, "hasAlphaMap");
+	glUniform1i(uniformLocation, renderable->hasAlphaMap);
+	uniformLocation = glGetUniformLocation(programID, "hasNormalMap");
+	glUniform1i(uniformLocation, renderable->hasNormalMap);
 
 	for(uint i=0; i<renderable->numUniformParameters;i++)
 	{

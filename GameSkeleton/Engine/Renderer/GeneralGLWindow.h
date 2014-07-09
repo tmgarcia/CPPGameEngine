@@ -23,6 +23,7 @@
 #include "RenderableInfo.h"
 #include "TextureInfo.h"
 #include "AlphaMapInfo.h"
+#include "NormalMapInfo.h"
 #include "ShaderInfo.h"
 #include "ShaderUniformParameter.h"
 #include "ParameterType.h"
@@ -66,6 +67,7 @@ public:
 
 	TextureInfo* addTexture(const char* fileName);
 	AlphaMapInfo* addAlphaMap(const char* fileName);
+	NormalMapInfo* addNormalMap(const char* fileName);
 
 	RenderableInfo* addRenderable(
 		GeometryInfo* whatGeometry,
@@ -75,7 +77,8 @@ public:
 		PriorityLevel priority,
 		bool depthEnabled = true,
 		TextureInfo* texture = NULL,
-		AlphaMapInfo* alphaMap = NULL);
+		AlphaMapInfo* alphaMap = NULL,
+		NormalMapInfo* normalMap = NULL);
 
 	void addShaderStreamedParameter(
 		GeometryInfo* geometry,

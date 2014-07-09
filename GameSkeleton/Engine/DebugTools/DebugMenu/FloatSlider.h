@@ -10,11 +10,12 @@ class FloatSlider: public QWidget
 {
 	Q_OBJECT
 
-	float* trackingVariable;
 	DebugSlider* slider;
 	QHBoxLayout* layout;
 
 public:
+	QString label;
+	float* trackingVariable;
 	FloatSlider(float* variable, float min, float max, QString labelText="")
 	{
 		trackingVariable = variable;
@@ -25,11 +26,11 @@ public:
 		slider->setValue(*variable);
 
 		QObject::connect(slider, SIGNAL(valueChanged(float)), this, SLOT(updateValue(float)));
-
+		label = labelText;
 		if(!labelText.isNull() && !labelText.isEmpty())
 		{
-			QLabel* label = new QLabel(labelText);
-			layout->addWidget(label);
+			QLabel* qlabel = new QLabel(labelText);
+			layout->addWidget(qlabel);
 		}
 		layout->addWidget(slider);
 		this->setLayout(layout);

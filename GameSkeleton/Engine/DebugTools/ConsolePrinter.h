@@ -22,6 +22,8 @@ private:
 public:
 	static ConsolePrinter& getInstance();
 	void print(float f, char* label);
+	void print(float f, QString label);
+	void print(vec3 v, QString label);
 	void print(vec3 v, char* label);
 	void print(vec2 v, char* label);
 	void print(vec4 v, char* label);

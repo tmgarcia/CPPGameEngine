@@ -22,9 +22,10 @@ class RenderableInfo
 	ShaderUniformParameter uniformParameters[MAX_UNIFORM_PARAMETERS];
 public:
 	bool enableDepth;
-	bool hasAlphaMap;
-	bool hasTexture;
-	bool hasNormalMap;
+	bool usingAlphaMap;
+	bool usingTexture;
+	bool usingNormalMap;
+	bool usingAmbientOcclusionMap;
 	mat4 whereMatrix;
 	GeometryInfo* whatGeometry;
 	TextureInfo* texture;

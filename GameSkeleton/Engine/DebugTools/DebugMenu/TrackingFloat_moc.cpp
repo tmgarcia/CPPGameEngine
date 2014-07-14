@@ -1,15 +1,15 @@
 /****************************************************************************
-** Meta object code from reading C++ file 'DebugMenu.h'
+** Meta object code from reading C++ file 'TrackingFloat.h'
 **
-** Created: Tue Jul 8 21:44:48 2014
+** Created: Sun Jul 13 23:47:07 2014
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.0)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
-#include "DebugMenu.h"
+#include "TrackingFloat.h"
 #if !defined(Q_MOC_OUTPUT_REVISION)
-#error "The header file 'DebugMenu.h' doesn't include <QObject>."
+#error "The header file 'TrackingFloat.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 63
 #error "This file was generated using the moc from 4.8.0. It"
 #error "cannot be used with the include files from this version of Qt."
@@ -17,7 +17,7 @@
 #endif
 
 QT_BEGIN_MOC_NAMESPACE
-static const uint qt_meta_data_DebugMenu[] = {
+static const uint qt_meta_data_TrackingFloat[] = {
 
  // content:
        6,       // revision
@@ -31,57 +31,56 @@ static const uint qt_meta_data_DebugMenu[] = {
        0,       // signalCount
 
  // slots: signature, parameters, type, tag, flags
-      11,   10,   10,   10, 0x08,
+      24,   15,   14,   14, 0x0a,
 
        0        // eod
 };
 
-static const char qt_meta_stringdata_DebugMenu[] = {
-    "DebugMenu\0\0printAllValues()\0"
+static const char qt_meta_stringdata_TrackingFloat[] = {
+    "TrackingFloat\0\0newValue\0updateValue(float)\0"
 };
 
-void DebugMenu::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+void TrackingFloat::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
     if (_c == QMetaObject::InvokeMetaMethod) {
         Q_ASSERT(staticMetaObject.cast(_o));
-        DebugMenu *_t = static_cast<DebugMenu *>(_o);
+        TrackingFloat *_t = static_cast<TrackingFloat *>(_o);
         switch (_id) {
-        case 0: _t->printAllValues(); break;
+        case 0: _t->updateValue((*reinterpret_cast< float(*)>(_a[1]))); break;
         default: ;
         }
     }
-    Q_UNUSED(_a);
 }
 
-const QMetaObjectExtraData DebugMenu::staticMetaObjectExtraData = {
+const QMetaObjectExtraData TrackingFloat::staticMetaObjectExtraData = {
     0,  qt_static_metacall 
 };
 
-const QMetaObject DebugMenu::staticMetaObject = {
-    { &QTabWidget::staticMetaObject, qt_meta_stringdata_DebugMenu,
-      qt_meta_data_DebugMenu, &staticMetaObjectExtraData }
+const QMetaObject TrackingFloat::staticMetaObject = {
+    { &QObject::staticMetaObject, qt_meta_stringdata_TrackingFloat,
+      qt_meta_data_TrackingFloat, &staticMetaObjectExtraData }
 };
 
 #ifdef Q_NO_DATA_RELOCATION
-const QMetaObject &DebugMenu::getStaticMetaObject() { return staticMetaObject; }
+const QMetaObject &TrackingFloat::getStaticMetaObject() { return staticMetaObject; }
 #endif //Q_NO_DATA_RELOCATION
 
-const QMetaObject *DebugMenu::metaObject() const
+const QMetaObject *TrackingFloat::metaObject() const
 {
     return QObject::d_ptr->metaObject ? QObject::d_ptr->metaObject : &staticMetaObject;
 }
 
-void *DebugMenu::qt_metacast(const char *_clname)
+void *TrackingFloat::qt_metacast(const char *_clname)
 {
     if (!_clname) return 0;
-    if (!strcmp(_clname, qt_meta_stringdata_DebugMenu))
-        return static_cast<void*>(const_cast< DebugMenu*>(this));
-    return QTabWidget::qt_metacast(_clname);
+    if (!strcmp(_clname, qt_meta_stringdata_TrackingFloat))
+        return static_cast<void*>(const_cast< TrackingFloat*>(this));
+    return QObject::qt_metacast(_clname);
 }
 
-int DebugMenu::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+int TrackingFloat::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
-    _id = QTabWidget::qt_metacall(_c, _id, _a);
+    _id = QObject::qt_metacall(_c, _id, _a);
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {

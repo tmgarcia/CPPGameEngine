@@ -1,12 +1,12 @@
 #version 430
  
-in vec3 rotatedNormal; 
+in vec3 rotatedNormal;
+in vec3 rotatedTangent;
+in vec3 rotatedBitangent;
 in vec3 modelToWorldPosition;
 in vec4 ambientColor;
 in vec4 objectColor;
 in vec2 UV;
-
-in mat4 rotationMat;
 
 uniform vec3 lightPosition;
 uniform float diffusionIntensity;
@@ -34,8 +34,9 @@ void main()
 		normalFromMap.x = (normTexel.x*2)-1;
 		normalFromMap.y = (normTexel.y*2)-1;
 		normalFromMap.z = (normTexel.z*2)-1;
-		//normRotated = mat3(rotationMat) * normalFromMap;
-		normRotated = normalFromMap;
+		
+		mat3 normalRotation = mat3(rotatedTangent,rotatedBitangent,rotatedNormal);
+		normRotated = normalRotation*normalFromMap;
 	}
 	vec3 lightVector = normalize(lightPosition - modelToWorldPosition);
 	float brightness = dot(lightVector, normRotated);

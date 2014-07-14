@@ -303,9 +303,9 @@ RenderableInfo* GeneralGLWindow::addRenderable(
 	ret->alphaMap = alphaMap;
 	ret->normalMap = normalMap;
 	
-	ret->hasTexture = (texture!=NULL);
-	ret->hasAlphaMap = (alphaMap!=NULL);
-	ret->hasNormalMap = (normalMap!=NULL);
+	ret->usingTexture = (texture!=NULL);
+	ret->usingAlphaMap = (alphaMap!=NULL);
+	ret->usingNormalMap = (normalMap!=NULL);
 
 	currentRenderIndex++;
 	return ret;
@@ -340,14 +340,14 @@ void GeneralGLWindow::sendRenderableToShader(RenderableInfo* renderable)
 	GLuint programID = renderable->howShaders->programID;
 	glUseProgram(programID);
 
-	if(renderable->hasTexture)
+	if(renderable->usingTexture)
 	{
 		GLint baseTextureLoc = glGetUniformLocation(programID, "baseTexture");
 		glUniform1i(baseTextureLoc, 0);
 		glActiveTexture(GL_TEXTURE0 + 0);
 		glBindTexture(GL_TEXTURE_2D, renderable->texture->textureID);
 	}
-	if(renderable->hasAlphaMap)
+	if(renderable->usingAlphaMap)
 	{
 		cout << "ALPHA" << endl;
 		GLint alphaMapLoc = glGetUniformLocation(programID, "alphaMap");
@@ -355,7 +355,7 @@ void GeneralGLWindow::sendRenderableToShader(RenderableInfo* renderable)
 		glActiveTexture(GL_TEXTURE0 + 1);
 		glBindTexture(GL_TEXTURE_2D, renderable->alphaMap->textureID);
 	}
-	if(renderable->hasNormalMap)
+	if(renderable->usingNormalMap)
 	{
 		//cout << "NORMAL" << endl;
 		GLint normalMapLoc = glGetUniformLocation(programID, "normalMap");
@@ -364,11 +364,11 @@ void GeneralGLWindow::sendRenderableToShader(RenderableInfo* renderable)
 		glBindTexture(GL_TEXTURE_2D, renderable->normalMap->textureID);
 	}
 	GLint uniformLocation = glGetUniformLocation(programID, "hasTexture");
-	glUniform1i(uniformLocation, renderable->hasTexture);
+	glUniform1i(uniformLocation, renderable->usingTexture);
 	uniformLocation = glGetUniformLocation(programID, "hasAlphaMap");
-	glUniform1i(uniformLocation, renderable->hasAlphaMap);
+	glUniform1i(uniformLocation, renderable->usingAlphaMap);
 	uniformLocation = glGetUniformLocation(programID, "hasNormalMap");
-	glUniform1i(uniformLocation, renderable->hasNormalMap);
+	glUniform1i(uniformLocation, renderable->usingNormalMap);
 
 	for(uint i=0; i<renderable->numUniformParameters;i++)
 	{

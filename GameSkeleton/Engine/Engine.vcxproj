@@ -93,7 +93,9 @@
     <ClCompile Include="DebugTools\ConsolePrinter.cpp" />
     <ClCompile Include="DebugTools\DebugMenu\CheckBox_moc.cpp" />
     <ClCompile Include="DebugTools\DebugMenu\IntSlider_moc.cpp" />
+    <ClCompile Include="DebugTools\DebugMenu\TrackingFloat_moc.cpp" />
     <ClCompile Include="DebugTools\DebugMenu\Vec3Slider_moc.cpp" />
+    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GraphicObjects\BlinkingEyeGroup.cpp" />
     <ClCompile Include="GraphicObjects\BlinkingEye.cpp" />
     <ClCompile Include="Camera.cpp" />
@@ -134,7 +136,10 @@
     <ClInclude Include="AStarData\Nodes\PathingNode.h" />
     <ClInclude Include="AStarDebugToolbar.h" />
     <ClInclude Include="DebugTools\ConsolePrinter.h" />
+    <ClInclude Include="DebugTools\DebugMenu\MultipleFloatsSlider.h" />
+    <ClInclude Include="DebugTools\DebugMenu\TrackingFloat.h" />
     <ClInclude Include="DebugTools\DebugMenu\Vec3Slider.h" />
+    <ClInclude Include="GameObject.h" />
     <ClInclude Include="GraphicObjects\BlinkingEyeGroup.h" />
     <ClInclude Include="GraphicObjects\BlinkingEye.h" />
     <ClInclude Include="Camera.h" />

@@ -32,26 +32,22 @@ void printFloat(char* title, float f)
 	cout << title << f << endl;
 }
 
-void printRotation(float x, float y)
-{
-	printFloat("x ", x);
-	printFloat("y ", y);
-	printFloat("atan2f(y,x) ", atan2f(y,x));
-	printFloat("atan2f(y,x)-2.356194490192345 ", atan2f(y,x)-2.356194490192345);
-	cout << ""<< endl;
-}
 
-//int main()
-//{
-//	ScratchWindow window;
-//	window.show();
-//}
 int main(int argc, char* argv[])
 {
 	QApplication app(argc, argv);
 
 	ScratchWindow window;
 	window.show();
+
+	/*Neumont::ShapeData cubeData = Neumont::ShapeGenerator::makeCube();
+	printFloat("vertexBufferSize(): ", (float)cubeData.vertexBufferSize());
+	printFloat("numIndices: ", (float)cubeData.numIndices);
+	printFloat("Neumont::Vertex::POSITION_OFFSET: ", (float)Neumont::Vertex::POSITION_OFFSET);
+	printFloat("Neumont::Vertex::STRIDE: ", (float)Neumont::Vertex::STRIDE);
+	printFloat("Num verts: ", (float)cubeData.numVerts);*/
+	//cube = GeneralGLWindow::getInstance().addGeometry(cubeData.verts, cubeData.vertexBufferSize(), cubeData.indices, cubeData.numIndices, GL_TRIANGLES);
+	//GeneralGLWindow::getInstance().addShaderStreamedParameter(cube, 0, PT_VEC3, Neumont::Vertex::POSITION_OFFSET, Neumont::Vertex::STRIDE);
 
 	return app.exec();
 }

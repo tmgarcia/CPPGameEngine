@@ -14,6 +14,8 @@
 
 #include "FloatSlider.h"
 #include "Vec3Slider.h"
+#include "MultipleFloatsSlider.h"
+#include "TrackingFloat.h"
 #include "..\ConsolePrinter.h"
 
 #include "..\DebugSlider.h"
@@ -43,6 +45,7 @@ public:
 	void addFloatSlider(QString tabName, float* variable, float min, float max, QString labelText);
 	void addVec3Slider(QString tabName, vec3* vector, float minX, float maxX, float minY, float maxY, float minZ, float maxZ, QString labelText);
 	void addIntSlider(QString tabName, int* variable, int min, int max, QString labelText);
+	void addMultipleFloatSlider(QString tabName, QList<TrackingFloat*> floatsToTrack, QString labelText);
 	void addCheckBox(QString tabName, bool* variable, QString labelText);
 	void addDisplay(QString tabName, float* variable, QString labelText);
 	void addPrintButton();

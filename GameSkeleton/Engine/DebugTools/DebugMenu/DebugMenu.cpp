@@ -78,6 +78,13 @@ void DebugMenu::addIntSlider(QString tabName, int* variable, int min, int max, Q
 	tab->slidersLayout->addWidget(f);
 }
 
+void DebugMenu::addMultipleFloatSlider(QString tabName, QList<TrackingFloat*> floatsToTrack, QString labelText)
+{
+	DebugTab* tab = getTab(tabName);
+	MultipleFloatsSlider* f = new MultipleFloatsSlider(floatsToTrack, labelText);
+	tab->slidersLayout->addWidget(f);
+}
+
 void DebugMenu::addCheckBox(QString tabName, bool* variable, QString labelText="")
 {
 	DebugTab* tab = getTab(tabName);

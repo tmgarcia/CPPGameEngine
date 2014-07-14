@@ -51,20 +51,9 @@ public:
 
 		QObject::connect(&GeneralGLWindow::getInstance(), SIGNAL(keyPressed(QKeyEvent*)), this, SLOT(keyPressReaction(QKeyEvent*)));
 		QObject::connect(&GeneralGLWindow::getInstance(), SIGNAL(mouseMoved(QMouseEvent*)), this, SLOT(mouseMoveReaction(QMouseEvent*)));
-		cubePosX = 2;
-		cubePosZ = 0;
-		dMenu->addFloatSlider("CubeTab",&cubePosX, -5, 5, "float cube x");
-		dMenu->addIntSlider("CubeTab",&cubePosZ, -5, 5, "int cube z");
-
-		spherePosX = -2;
-		spherePosZ = 0;
-		dMenu->addFloatSlider("SphereTab",&spherePosX, -5, 5, "float sphere x");
-		dMenu->addIntSlider("SphereTab",&spherePosZ, -5, 5, "int sphere z");
 
 		setup();
 
-
-		//this->setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 		this->resize(WINDOW_WIDTH, WINDOW_HEIGHT);
 		this->move(300, 0);
 	}
@@ -74,14 +63,12 @@ public:
 	}
 protected:
 	DebugMenu* dMenu;
-	float cubePosX;
-	int cubePosZ;
-	float spherePosX;
-	int spherePosZ;
 	void setup();
 	Camera camera;
 	void keyPressEvent(QKeyEvent *event);
 	void updateShaderInfo();
+	void makeCube();
+	void addLightingAndTextureShaderUniforms(RenderableInfo* renderable, float* fullTransform, float* rotationMatrix);
 private slots:
 	void update();
 

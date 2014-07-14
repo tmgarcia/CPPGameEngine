@@ -48,6 +48,8 @@
     <ClCompile Include="DebugTools\DebugMenu\CheckBox_moc.cpp" />
     <ClCompile Include="DebugTools\ConsolePrinter.cpp" />
     <ClCompile Include="DebugTools\DebugMenu\Vec3Slider_moc.cpp" />
+    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="DebugTools\DebugMenu\TrackingFloat_moc.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h" />
@@ -103,5 +105,8 @@
     <ClInclude Include="DebugTools\ConsolePrinter.h" />
     <ClInclude Include="DebugTools\DebugMenu\Vec3Slider.h" />
     <ClInclude Include="Renderer\NormalMapInfo.h" />
+    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="DebugTools\DebugMenu\TrackingFloat.h" />
+    <ClInclude Include="DebugTools\DebugMenu\MultipleFloatsSlider.h" />
   </ItemGroup>
 </Project>

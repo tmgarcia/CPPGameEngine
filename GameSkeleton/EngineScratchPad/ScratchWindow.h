@@ -28,7 +28,7 @@ public:
 	ScratchWindow()
 	{
 		this->show();
-		
+		cameraFrozen = false;
 		connect(&updateTimer, SIGNAL(timeout()), this, SLOT(update()));
 		updateTimer.setInterval(1);
 		updateTimer.start(0);
@@ -62,6 +62,7 @@ public:
 
 	}
 protected:
+	bool cameraFrozen;
 	DebugMenu* dMenu;
 	void setup();
 	Camera camera;

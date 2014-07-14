@@ -216,6 +216,9 @@ void ScratchWindow::setup()
 	dMenu->addMultipleFloatSlider("Cube controls", floats, "Rotation");
 	dMenu->addVec3Slider("Cube controls", &normalMapCube->position,-5,5,-5,5,-5,5,"Position");
 	dMenu->addVec3Slider("Light Controls", &lightBulb->position, -5,5,-5,5,-5,5,"Light");
+	dMenu->addFloatSlider("Light Controls", &diffusionIntensity, 0,5,"Diffusion Intensity");
+	dMenu->addFloatSlider("Light Controls", &specularExponent, 0.1,100,"Specular Exponent");
+	dMenu->addVec3Slider("Light Controls", &ambientLight, 0,1,0,1,0,1,"Ambient Light");
 
 	lightBulb->renderable = GeneralGLWindow::getInstance().addRenderable(nucube, lightBulb->modelToWorldMatrix, passThroughShader, true, PRIORITY_1, true, NULL, NULL, NULL);
 	addLightingAndTextureShaderUniforms(lightBulb->renderable, &lightBulb->fullTransformMatrix[0][0], &lightBulb->rotationMatrix[0][0]);
@@ -287,14 +290,18 @@ void ScratchWindow::keyPressReaction(QKeyEvent* e)
 	case Qt::Key::Key_F:
 		camera.moveDown();
 		break;
+	case Qt::Key::Key_0:
+		cameraFrozen = !cameraFrozen;
+		break;
 	}
 	update();
 }
 
 void ScratchWindow::mouseMoveReaction(QMouseEvent* e)
 {
-	camera.mouseUpdate(glm::vec2(e->x(), e->y()));
-	//updateShaderUniforms();
-	update();
-	//GeneralGLWindow::getInstance().repaint();
+	if(!cameraFrozen)
+	{
+		camera.mouseUpdate(glm::vec2(e->x(), e->y()));
+		update();
+	}
 }

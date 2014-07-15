@@ -65,6 +65,12 @@ protected:
 	bool cameraFrozen;
 	DebugMenu* dMenu;
 	void setup();
+	void setupGeometry();
+	void setupTransforms();
+	void setupTextures();
+	void setupRenderables();
+	void setupReadInGeometryVertexArrayInfo(GeometryInfo* geometry);
+	void setupNuShapesGeometryVertexArrayInfo(GeometryInfo* geometry);
 	Camera camera;
 	void keyPressEvent(QKeyEvent *event);
 	void updateShaderInfo();

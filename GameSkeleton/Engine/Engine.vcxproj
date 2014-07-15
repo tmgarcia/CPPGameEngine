@@ -166,6 +166,7 @@
     <ClInclude Include="GameObjects\Flag.h" />
     <ClInclude Include="GameObjects\GameLevel.h" />
     <ClInclude Include="Renderer\AlphaMapInfo.h" />
+    <ClInclude Include="Renderer\AmbientOcclusionMapInfo.h" />
     <ClInclude Include="Renderer\BufferInfo.h" />
     <ClInclude Include="Renderer\GeneralGLWindow.h" />
     <ClInclude Include="Renderer\GeometryInfo.h" />

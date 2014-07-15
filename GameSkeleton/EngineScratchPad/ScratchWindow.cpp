@@ -25,6 +25,7 @@ ShaderInfo* passThroughShader;
 
 GeometryInfo* cube;
 GeometryInfo* nucube;
+GeometryInfo* ogreGeo;
 
 mat4 cubeModelToWorld;
 mat4 cubeRotation;
@@ -35,8 +36,12 @@ mat4 lightBulbFullTransform;
 
 GameObject* normalMapCube;
 GameObject* lightBulb;
+GameObject* ogre;
 
 NormalMapInfo* testNormal;
+TextureInfo* ogreTexture;
+NormalMapInfo* ogreNormal;
+AmbientOcclusionMapInfo* ogreAO;
 
 void ScratchWindow::makeCube()
 {
@@ -181,50 +186,113 @@ void ScratchWindow::makeCube()
 
 void ScratchWindow::setup()
 {
-	camera.setPosition(vec3(0,5,7));
-	camera.setViewDirection(vec3(0,-0.5f,-1));
+	camera.setPosition(vec3(0,0,5));
+	camera.setViewDirection(vec3(0,0,-1));
+
+	setupGeometry();
+	setupTransforms();
+	setupTextures();
+	setupRenderables();
+
+	QList<TrackingFloat*> cubeRfloats;
+	TrackingFloat* rf1 = new TrackingFloat(&normalMapCube->xRotationAngle, 0, 360, "X Angle");
+	TrackingFloat* rf2 = new TrackingFloat(&normalMapCube->yRotationAngle, 0, 360, "Y Angle");
+	TrackingFloat* rf3 = new TrackingFloat(&normalMapCube->zRotationAngle, 0, 360, "Z Angle");
+	cubeRfloats.append(rf1);
+	cubeRfloats.append(rf2);
+	cubeRfloats.append(rf3);
+	dMenu->addMultipleFloatSlider("Normal Map Cube", cubeRfloats, "Rotation");
+	dMenu->addVec3Slider("Normal Map Cube", &normalMapCube->position,-5,5,-5,5,-5,5,"Position");
+	dMenu->addCheckBox("Normal Map Cube", &normalMapCube->renderable->visible, "Show Normal Map Cube");
+
+	QList<TrackingFloat*> floats;
+	TrackingFloat* f1 = new TrackingFloat(&ogre->xRotationAngle, 0, 360, "X Angle");
+	TrackingFloat* f2 = new TrackingFloat(&ogre->yRotationAngle, 0, 360, "Y Angle");
+	TrackingFloat* f3 = new TrackingFloat(&ogre->zRotationAngle, 0, 360, "Z Angle");
+	floats.append(f1);
+	floats.append(f2);
+	floats.append(f3);
+	dMenu->addMultipleFloatSlider("Ogre", floats, "Rotation");
+	dMenu->addCheckBox("Ogre", &ogre->renderable->visible, "Show Ogre");
+	dMenu->addCheckBox("Ogre", &ogre->renderable->usingAmbientOcclusionMap, "Toggle Ambient Occlusion");
+	dMenu->addCheckBox("Ogre", &ogre->renderable->usingNormalMap, "Toggle Normal Map");
+	dMenu->addCheckBox("Ogre", &ogre->renderable->usingTexture, "Toggle Diffuse Map");
+
+	dMenu->addVec3Slider("Light Controls", &lightBulb->position, -5,5,-5,5,-5,5,"Light");
+	dMenu->addFloatSlider("Light Controls", &diffusionIntensity, 0,5,"Diffusion Intensity");
+	dMenu->addFloatSlider("Light Controls", &specularExponent, 0.1,100,"Specular Exponent");
+	dMenu->addVec3Slider("Light Controls", &ambientLight, 0,1,0,1,0,1,"Ambient Light");
+}
+
+void ScratchWindow::setupGeometry()
+{
 	makeCube();
 	Neumont::ShapeData cubeData = Neumont::ShapeGenerator::makeCube();
 	nucube = GeneralGLWindow::getInstance().addGeometry(cubeData.verts, cubeData.vertexBufferSize(), cubeData.indices, cubeData.numIndices, GL_TRIANGLES);
-	GeneralGLWindow::getInstance().addShaderStreamedParameter(nucube, 0, PT_VEC3, Neumont::Vertex::POSITION_OFFSET, Neumont::Vertex::STRIDE);
-	GeneralGLWindow::getInstance().addShaderStreamedParameter(nucube, 1, PT_VEC4, Neumont::Vertex::COLOR_OFFSET, Neumont::Vertex::STRIDE);
-	GeneralGLWindow::getInstance().addShaderStreamedParameter(nucube, 2, PT_VEC3, Neumont::Vertex::NORMAL_OFFSET, Neumont::Vertex::STRIDE);
-	GeneralGLWindow::getInstance().addShaderStreamedParameter(nucube, 3, PT_VEC2, Neumont::Vertex::UV_OFFSET, Neumont::Vertex::STRIDE);
+	setupNuShapesGeometryVertexArrayInfo(nucube);
 
+	BinReader reader;
+
+	BinReader::ShapeData ogreData = reader.readInShape("../Resources/AssetGroups/Ogre/Ogre.bin");
+	ogreGeo = GeneralGLWindow::getInstance().addGeometry(ogreData.vertices, ogreData.vertexDataSize, ogreData.indices, ogreData.numIndices, GL_TRIANGLES);
+	setupReadInGeometryVertexArrayInfo(ogreGeo);
+}
+
+void ScratchWindow::setupTransforms()
+{
 	eyePosition = camera.getPosition();
 	viewToProjectionMatrix = glm::perspective(60.0f, ((float)WINDOW_WIDTH) / WINDOW_HEIGHT, 0.1f, 90.0f);
 	worldToViewMatrix = camera.getWorldToViewMatrix();
 	worldToProjectionMatrix = viewToProjectionMatrix * worldToViewMatrix;
 
-	testNormal = GeneralGLWindow::getInstance().addNormalMap("../Resources/NormalMaps/Shapes.png");
-
 	normalMapCube = new GameObject();
-	normalMapCube->setupTransforms(vec3(0,2,0),vec3(0.5f,0.5f,0.5f),0,0,0,worldToProjectionMatrix);
-	lightBulb = new GameObject();
-	lightBulb->setupTransforms(vec3(0,3,0),vec3(0.25f,0.25f,0.25f),0,0,0,worldToProjectionMatrix);
+	normalMapCube->setupTransforms(vec3(0,-2,0),vec3(0.5f,0.5f,0.5f),0,0,0,worldToProjectionMatrix);
 
+	lightBulb = new GameObject();
+	lightBulb->setupTransforms(vec3(0,0,0),vec3(0.25f,0.25f,0.25f),0,0,0,worldToProjectionMatrix);
+
+	ogre = new GameObject();
+	ogre->setupTransforms(vec3(1,-2,0),vec3(1,1,1),0,0,0,worldToProjectionMatrix);
+}
+
+void ScratchWindow::setupTextures()
+{
 	mapsAndLightingShader = GeneralGLWindow::getInstance().createShaderInfo("../Resources/Shaders/LightingTextureAlphaNormalVertexShader.glsl", "../Resources/Shaders/LightingTextureAlphaNormalFragmentShader.glsl");
 	passThroughShader = GeneralGLWindow::getInstance().createShaderInfo("../Resources/Shaders/PassThroughVertexShader.glsl", "../Resources/Shaders/PassThroughFragmentShader.glsl");
-	
-	QList<TrackingFloat*> floats;
-	TrackingFloat* f1 = new TrackingFloat(&normalMapCube->xRotationAngle, 0, 360, "X Angle");
-	TrackingFloat* f2 = new TrackingFloat(&normalMapCube->yRotationAngle, 0, 360, "Y Angle");
-	TrackingFloat* f3 = new TrackingFloat(&normalMapCube->zRotationAngle, 0, 360, "Z Angle");
-	floats.append(f1);
-	floats.append(f2);
-	floats.append(f3);
-	dMenu->addMultipleFloatSlider("Cube controls", floats, "Rotation");
-	dMenu->addVec3Slider("Cube controls", &normalMapCube->position,-5,5,-5,5,-5,5,"Position");
-	dMenu->addVec3Slider("Light Controls", &lightBulb->position, -5,5,-5,5,-5,5,"Light");
-	dMenu->addFloatSlider("Light Controls", &diffusionIntensity, 0,5,"Diffusion Intensity");
-	dMenu->addFloatSlider("Light Controls", &specularExponent, 0.1,100,"Specular Exponent");
-	dMenu->addVec3Slider("Light Controls", &ambientLight, 0,1,0,1,0,1,"Ambient Light");
 
+	ogreNormal = GeneralGLWindow::getInstance().addNormalMap("../Resources/AssetGroups/Ogre/ogre_normalmap.png");
+	ogreTexture = GeneralGLWindow::getInstance().addTexture("../Resources/AssetGroups/Ogre/diffuse.png");
+	ogreAO = GeneralGLWindow::getInstance().addAmbientOcclusionMap("../Resources/AssetGroups/Ogre/ao_ears.png");
+
+	testNormal = GeneralGLWindow::getInstance().addNormalMap("../Resources/NormalMaps/Shapes.png");
+}
+
+void ScratchWindow::setupRenderables()
+{
 	lightBulb->renderable = GeneralGLWindow::getInstance().addRenderable(nucube, lightBulb->modelToWorldMatrix, passThroughShader, true, PRIORITY_1, true, NULL, NULL, NULL);
 	addLightingAndTextureShaderUniforms(lightBulb->renderable, &lightBulb->fullTransformMatrix[0][0], &lightBulb->rotationMatrix[0][0]);
 
 	normalMapCube->renderable = GeneralGLWindow::getInstance().addRenderable(cube, normalMapCube->modelToWorldMatrix, mapsAndLightingShader, true, PRIORITY_1, true, NULL, NULL, testNormal);
 	addLightingAndTextureShaderUniforms(normalMapCube->renderable, &normalMapCube->fullTransformMatrix[0][0], &normalMapCube->rotationMatrix[0][0]);
+
+	ogre->renderable = GeneralGLWindow::getInstance().addRenderable(ogreGeo, ogre->modelToWorldMatrix, mapsAndLightingShader, false, PRIORITY_1, true, ogreTexture, NULL, ogreNormal, ogreAO);
+	addLightingAndTextureShaderUniforms(ogre->renderable, &ogre->fullTransformMatrix[0][0], &ogre->rotationMatrix[0][0]);
+}
+
+void ScratchWindow::setupReadInGeometryVertexArrayInfo(GeometryInfo* geometry)
+{
+	GeneralGLWindow::getInstance().addShaderStreamedParameter(geometry, 0, PT_VEC3, BinReader::POSITION_OFFSET, BinReader::STRIDE);
+	GeneralGLWindow::getInstance().addShaderStreamedParameter(geometry, 1, PT_VEC3, BinReader::TANGENT_OFFSET, BinReader::STRIDE);
+	GeneralGLWindow::getInstance().addShaderStreamedParameter(geometry, 2, PT_VEC3, BinReader::NORMAL_OFFSET, BinReader::STRIDE);
+	GeneralGLWindow::getInstance().addShaderStreamedParameter(geometry, 3, PT_VEC2, BinReader::UV_OFFSET, BinReader::STRIDE);
+}
+
+void ScratchWindow::setupNuShapesGeometryVertexArrayInfo(GeometryInfo* geometry)
+{
+	GeneralGLWindow::getInstance().addShaderStreamedParameter(geometry, 0, PT_VEC3, Neumont::Vertex::POSITION_OFFSET, Neumont::Vertex::STRIDE);
+	GeneralGLWindow::getInstance().addShaderStreamedParameter(geometry, 1, PT_VEC4, Neumont::Vertex::COLOR_OFFSET, Neumont::Vertex::STRIDE);
+	GeneralGLWindow::getInstance().addShaderStreamedParameter(geometry, 2, PT_VEC3, Neumont::Vertex::NORMAL_OFFSET, Neumont::Vertex::STRIDE);
+	GeneralGLWindow::getInstance().addShaderStreamedParameter(geometry, 3, PT_VEC2, Neumont::Vertex::UV_OFFSET, Neumont::Vertex::STRIDE);
 }
 
 void ScratchWindow::addLightingAndTextureShaderUniforms(RenderableInfo* renderable, float* fullTransform, float* rotationMatrix)
@@ -247,6 +315,7 @@ void ScratchWindow::update()
 {
 	updateShaderInfo();
 	frame++;
+	//GeneralGLWindow::
 	lightPosition = lightBulb->position;
 }
 
@@ -261,6 +330,7 @@ void ScratchWindow::updateShaderInfo()
 
 	lightBulb->updateTransforms(worldToProjectionMatrix);
 	normalMapCube->updateTransforms(worldToProjectionMatrix);
+	ogre->updateTransforms(worldToProjectionMatrix);
 	GeneralGLWindow::getInstance().repaint();
 }
 

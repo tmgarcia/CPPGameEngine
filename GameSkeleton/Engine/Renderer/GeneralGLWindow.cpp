@@ -24,6 +24,7 @@ GLuint currentShaderIndex = 0;
 GLuint currentRenderIndex = 0;
 GLuint currentTextureIndex = 0;
 GLuint currentAlphaMapIndex = 0;
+GLuint currentAmbientOcclusionMapIndex = 0;
 GLuint currentNormalMapIndex = 0;
 
 const GLuint MAX_NUM_BUFFERS = 80;
@@ -31,6 +32,7 @@ const GLuint MAX_NUM_GEOMETRIES = 30;
 const GLuint MAX_NUM_SHADERS = 10;
 const GLuint MAX_NUM_TEXTURES = 30;
 const GLuint MAX_NUM_ALPHAMAPS= 20;
+const GLuint MAX_NUM_AMBIENT_OCCLUSION_MAPS= 20;
 const GLuint MAX_NUM_NORMALMAPS= 20;
 const GLuint MAX_NUM_RENDERABLES = 600;
 const GLuint BUFFER_SIZE = 1000000;
@@ -39,6 +41,7 @@ BufferInfo* bufferInfos[MAX_NUM_BUFFERS];
 GeometryInfo* geometryInfos[MAX_NUM_GEOMETRIES];
 ShaderInfo* shaderInfos[MAX_NUM_SHADERS];
 TextureInfo* textureInfos[MAX_NUM_TEXTURES];
+AmbientOcclusionMapInfo* ambientOcclusionMapInfos[MAX_NUM_AMBIENT_OCCLUSION_MAPS];
 AlphaMapInfo* alphaMapInfos[MAX_NUM_ALPHAMAPS];
 NormalMapInfo* normalMapInfos[MAX_NUM_NORMALMAPS];
 RenderableInfo* renderableInfos[MAX_NUM_RENDERABLES];
@@ -61,6 +64,7 @@ void GeneralGLWindow::debugMethod()
 void GeneralGLWindow::paintGL()
 {
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+	//glClearColor(1,1,1,1);
 	glViewport(0,0,width(), height());
 
 	for(uint i = 0; i < currentRenderIndex; i++)
@@ -229,6 +233,17 @@ std::string GeneralGLWindow::readShaderCode(const char *filename)
 		std::istreambuf_iterator<char>());
 }
 
+AmbientOcclusionMapInfo* GeneralGLWindow::addAmbientOcclusionMap(const char* fileName)
+{
+	ambientOcclusionMapInfos[currentAmbientOcclusionMapIndex] = new AmbientOcclusionMapInfo();
+	AmbientOcclusionMapInfo* ret = ambientOcclusionMapInfos[currentAmbientOcclusionMapIndex];
+	glGenTextures(1, &(ret->textureID));
+	glBindTexture(GL_TEXTURE_2D, ret->textureID);
+	loadTextureBitmap(fileName);
+	currentAmbientOcclusionMapIndex++;
+	return ret;
+}
+
 AlphaMapInfo* GeneralGLWindow::addAlphaMap(const char* fileName)
 {
 
@@ -289,7 +304,8 @@ RenderableInfo* GeneralGLWindow::addRenderable(
 	bool depthEnabled,
 	TextureInfo* texture,
 	AlphaMapInfo* alphaMap,
-	NormalMapInfo* normalMap)
+	NormalMapInfo* normalMap,
+	AmbientOcclusionMapInfo* ambientOcclusionMap)
 {
 	renderableInfos[currentRenderIndex] = new RenderableInfo();
 	RenderableInfo* ret = renderableInfos[currentRenderIndex];
@@ -302,10 +318,12 @@ RenderableInfo* GeneralGLWindow::addRenderable(
 	ret->texture = texture;
 	ret->alphaMap = alphaMap;
 	ret->normalMap = normalMap;
+	ret->ambientOcclusionMap = ambientOcclusionMap;
 	
 	ret->usingTexture = (texture!=NULL);
 	ret->usingAlphaMap = (alphaMap!=NULL);
 	ret->usingNormalMap = (normalMap!=NULL);
+	ret->usingAmbientOcclusionMap = (ambientOcclusionMap!=NULL);
 
 	currentRenderIndex++;
 	return ret;
@@ -363,12 +381,22 @@ void GeneralGLWindow::sendRenderableToShader(RenderableInfo* renderable)
 		glActiveTexture(GL_TEXTURE0 + 2);
 		glBindTexture(GL_TEXTURE_2D, renderable->normalMap->textureID);
 	}
+	if(renderable->usingAmbientOcclusionMap)
+	{
+		//cout << "NORMAL" << endl;
+		GLint ambOcclusionLoc = glGetUniformLocation(programID, "ambientOcclusionMap");
+		glUniform1i(ambOcclusionLoc, 3);
+		glActiveTexture(GL_TEXTURE0 + 3);
+		glBindTexture(GL_TEXTURE_2D, renderable->ambientOcclusionMap->textureID);
+	}
 	GLint uniformLocation = glGetUniformLocation(programID, "hasTexture");
 	glUniform1i(uniformLocation, renderable->usingTexture);
 	uniformLocation = glGetUniformLocation(programID, "hasAlphaMap");
 	glUniform1i(uniformLocation, renderable->usingAlphaMap);
 	uniformLocation = glGetUniformLocation(programID, "hasNormalMap");
 	glUniform1i(uniformLocation, renderable->usingNormalMap);
+	uniformLocation = glGetUniformLocation(programID, "hasAmbientOcclusion");
+	glUniform1i(uniformLocation, renderable->usingAmbientOcclusionMap);
 
 	for(uint i=0; i<renderable->numUniformParameters;i++)
 	{

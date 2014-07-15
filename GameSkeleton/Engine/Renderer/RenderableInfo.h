@@ -3,6 +3,7 @@
 #include "ShaderInfo.h"
 #include "TextureInfo.h"
 #include "AlphaMapInfo.h"
+#include "AmbientOcclusionMapInfo.h"
 #include "NormalMapInfo.h"
 #include "ShaderUniformParameter.h"
 #include "PriorityLevel.h"
@@ -31,6 +32,7 @@ public:
 	TextureInfo* texture;
 	AlphaMapInfo* alphaMap;
 	NormalMapInfo* normalMap;
+	AmbientOcclusionMapInfo* ambientOcclusionMap;
 	bool visible;
 	PriorityLevel priority;
 };

@@ -17,10 +17,12 @@ uniform vec3 eyePosition;
 uniform sampler2D baseTexture;
 uniform sampler2D alphaMap;
 uniform sampler2D normalMap;
+uniform sampler2D ambientOcclusionMap;
 
 uniform int hasTexture;
 uniform int hasAlphaMap;
 uniform int hasNormalMap;
+uniform int hasAmbientOcclusion;
 
 out vec4 theFinalColor; 
  
@@ -51,7 +53,13 @@ void main()
 
 	vec4 specularLighting = specularColor * specularAngle;
 
-	theFinalColor= (ambientColor + vec4(brightness, brightness, brightness, 1))* objectColor + specularLighting;
+	vec4 finalAmbient = ambientColor;
+	if(hasAmbientOcclusion>0)
+	{
+		vec4 aoTexel = texture(ambientOcclusionMap, UV);
+		finalAmbient *= aoTexel;
+	}
+	theFinalColor= (finalAmbient + vec4(brightness, brightness, brightness, 1))* objectColor + specularLighting;
 	if(hasTexture>0)
 	{
 		vec4 texel = texture(baseTexture, UV);

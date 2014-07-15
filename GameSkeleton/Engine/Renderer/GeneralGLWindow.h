@@ -22,6 +22,7 @@
 #include "GeometryInfo.h"
 #include "RenderableInfo.h"
 #include "TextureInfo.h"
+#include "AmbientOcclusionMapInfo.h"
 #include "AlphaMapInfo.h"
 #include "NormalMapInfo.h"
 #include "ShaderInfo.h"
@@ -68,6 +69,7 @@ public:
 	TextureInfo* addTexture(const char* fileName);
 	AlphaMapInfo* addAlphaMap(const char* fileName);
 	NormalMapInfo* addNormalMap(const char* fileName);
+	AmbientOcclusionMapInfo* addAmbientOcclusionMap(const char* fileName);
 
 	RenderableInfo* addRenderable(
 		GeometryInfo* whatGeometry,
@@ -78,7 +80,8 @@ public:
 		bool depthEnabled = true,
 		TextureInfo* texture = NULL,
 		AlphaMapInfo* alphaMap = NULL,
-		NormalMapInfo* normalMap = NULL);
+		NormalMapInfo* normalMap = NULL,
+		AmbientOcclusionMapInfo* ambientOcclusionMap = NULL);
 
 	void addShaderStreamedParameter(
 		GeometryInfo* geometry,

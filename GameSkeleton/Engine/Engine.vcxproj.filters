@@ -48,8 +48,9 @@
     <ClCompile Include="DebugTools\DebugMenu\CheckBox_moc.cpp" />
     <ClCompile Include="DebugTools\ConsolePrinter.cpp" />
     <ClCompile Include="DebugTools\DebugMenu\Vec3Slider_moc.cpp" />
-    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="DebugTools\DebugMenu\TrackingFloat_moc.cpp" />
+    <ClCompile Include="Renderer\RendererHelper.cpp" />
+    <ClCompile Include="GameObjects\GameObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h" />
@@ -61,7 +62,6 @@
     <ClInclude Include="Renderer\RenderableInfo.h" />
     <ClInclude Include="Renderer\ShaderInfo.h" />
     <ClInclude Include="Renderer\ShaderUniformParameter.h" />
-    <ClInclude Include="Renderer\TextureInfo.h" />
     <ClInclude Include="Renderer\GeometryInfo.h" />
     <ClInclude Include="Renderer\BufferInfo.h" />
     <ClInclude Include="DebugTools\DebugMemory.h" />
@@ -105,9 +105,11 @@
     <ClInclude Include="DebugTools\ConsolePrinter.h" />
     <ClInclude Include="DebugTools\DebugMenu\Vec3Slider.h" />
     <ClInclude Include="Renderer\NormalMapInfo.h" />
-    <ClInclude Include="GameObject.h" />
     <ClInclude Include="DebugTools\DebugMenu\TrackingFloat.h" />
     <ClInclude Include="DebugTools\DebugMenu\MultipleFloatsSlider.h" />
     <ClInclude Include="Renderer\AmbientOcclusionMapInfo.h" />
+    <ClInclude Include="Renderer\DiffuseMapInfo.h" />
+    <ClInclude Include="Renderer\RendererHelper.h" />
+    <ClInclude Include="GameObjects\GameObject.h" />
   </ItemGroup>
 </Project>

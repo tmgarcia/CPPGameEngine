@@ -20,7 +20,7 @@ private:
 public:
 	BlinkingEye(vec3 pos, float _scale, int _blinkFrame);
 
-	void setupRenderable(GeometryInfo* plane, ShaderInfo* alphaTextureShader, TextureInfo* eyeTexture, AlphaMapInfo* eyeAlpha1);
+	void setupRenderable(GeometryInfo* plane, ShaderInfo* alphaTextureShader, DiffuseMapInfo* eyeTexture, AlphaMapInfo* eyeAlpha1);
 	void checkBlinkFrame(int frame);
 	void updateTransforms(vec3 cameraPosition, vec3 cameraUp, mat4 worldToProjection);
 	void startBlink();

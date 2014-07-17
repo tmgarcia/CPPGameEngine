@@ -153,29 +153,17 @@ namespace ObjToBinaryWriter
         public void WriteContents(BinaryWriter bw)
         {
             bw.Write(position.x);
-            //Console.WriteLine("Position x " + position.x);
             bw.Write(position.y);
-            //Console.WriteLine("Position y " + position.y);
             bw.Write(position.z);
-            //Console.WriteLine("Position z " + position.z);
             bw.Write(tangent.x);
-            Console.WriteLine("Tangent x " + tangent.x);
             bw.Write(tangent.y);
-            Console.WriteLine("Tangent y " + tangent.y);
             bw.Write(tangent.z);
-            Console.WriteLine("Tangent z " + tangent.z);
             bw.Write(tangent.w);
-            Console.WriteLine("Tangent w " + tangent.w);
             bw.Write(normal.x);
-            //Console.WriteLine("Normal x " + normal.x);
             bw.Write(normal.y);
-            //Console.WriteLine("Normal y " + normal.y);
             bw.Write(normal.z);
-            //Console.WriteLine("Normal z " + normal.z);
             bw.Write(textureCoord.x);
-            //Console.WriteLine("UV x " + textureCoord.x);
             bw.Write(textureCoord.y);
-            //Console.WriteLine("UV y " + textureCoord.y);
         }
     }
     class ObjToBinaryConverter
@@ -196,21 +184,60 @@ namespace ObjToBinaryWriter
             //converter.readInObj(args[0]);
             //converter.WriteToBinary(args[1]);
 
-            Console.WriteLine("Converting");
+            //Console.WriteLine("Converting");
             ObjToBinaryConverter converter = new ObjToBinaryConverter();
-            Console.WriteLine("Reading in OBJ");
-            converter.readInObj("../../../../Resources/AssetGroups/Ogre/bs_ears.obj");
-            Console.WriteLine("Writing out BIN");
-            converter.WriteToBinary("Ogre.bin");
+            //converter.readInObj("../../../../Resources/Models/alchemyRoom.obj");
+            //converter.WriteToBinary("alchemyRoom.bin");
+
+            //Console.WriteLine("Converting");
+            //converter.readInObj("../../../../Resources/Models/alchemyRoomOuter.obj");
+            //converter.WriteToBinary("alchemyRoomOuter.bin");
+
+            //Console.WriteLine("Converting");
+            //converter.readInObj("../../../../Resources/Models/alchemyTable.obj");
+            //converter.WriteToBinary("alchemyTable.bin");
+
+            //Console.WriteLine("Converting");
+            //converter.readInObj("../../../../Resources/Models/alchemyTableApertures.obj");
+            //converter.WriteToBinary("alchemyTableApertures.bin");
+
+            //Console.WriteLine("Converting");
+            //converter.readInObj("../../../../Resources/Models/alchemyTableGlassware.obj");
+            //converter.WriteToBinary("alchemyTableGlassware.bin");
+
+            //Console.WriteLine("Converting");
+            //converter.readInObj("../../../../Resources/Models/alchemyTableLiquids.obj");
+            //converter.WriteToBinary("alchemyTableLiquids.bin");
+
+            //Console.WriteLine("Converting");
+            //converter.readInObj("../../../../Resources/Models/potionLarge.obj");
+            //converter.WriteToBinary("potionLarge.bin");
+
+            //Console.WriteLine("Converting");
+            //converter.readInObj("../../../../Resources/Models/potionSmall.obj");
+            //converter.WriteToBinary("potionSmall.bin");
+
+            //Console.WriteLine("Converting");
+            //converter.readInObj("../../../../Resources/Models/potionThin.obj");
+            //converter.WriteToBinary("potionThin.bin");
+
+            //Console.WriteLine("Converting");
+            //converter.readInObj("../../../../Resources/Models/potionWide.obj");
+            //converter.WriteToBinary("potionWide.bin");
+
+            //Console.WriteLine("Converting");
+            //converter.readInObj("../../../../Resources/Models/potionVial.obj");
+            //converter.WriteToBinary("potionVial.bin");
+
             Console.WriteLine("Done");
         }
 
         private void readInObj(string inFileName)
         {
             StreamReader input = new StreamReader(inFileName);
-            
-            //input.ReadLine();
-            //input.ReadLine();
+
+            input.ReadLine();
+            input.ReadLine();
             //input.ReadLine();
             string line;
             while ((line = input.ReadLine()) != null)
@@ -348,12 +375,6 @@ namespace ObjToBinaryWriter
                 float t1 = w2.y - w1.y;
                 float t2 = w3.y - w1.y;
 
-                Console.WriteLine("s1=" + s1);
-                Console.WriteLine("s2=" + s2);
-                Console.WriteLine("t1=" + t1);
-                Console.WriteLine("t2=" + t2);
-
-
                 float r = 1.0f / (s1 * t2 - s2 * t1);
                 Vec3 sdir = new Vec3();
                 sdir.x = (t2 * x1 - t1 * x2) * r;
@@ -364,16 +385,9 @@ namespace ObjToBinaryWriter
                 tdir.y = (s1 * y2 - s2 * y1) * r;
                 tdir.z = (s1 * z2 - s2 * z1) * r;
 
-                Console.WriteLine("sdir=(" + sdir.x + "," + sdir.y + "," + sdir.z + ")");
-                Console.WriteLine("tdir=(" + tdir.x + "," + tdir.y + "," + tdir.z + ")");
-
-
                 tan1[i1] += sdir;
-                Console.WriteLine("tan1[i1] - tan[" + i1 + "]=(" + tan1[i1].x + "," + tan1[i1].y + "," + tan1[i1].z + ")");
                 tan1[i2] += sdir;
-                Console.WriteLine("tan1[i2] - tan[" + i2 + "]=(" + tan1[i2].x + "," + tan1[i2].y + "," + tan1[i2].z + ")");
                 tan1[i3] += sdir;
-                Console.WriteLine("tan1[i3] - tan[" + i3 + "]=(" + tan1[i3].x + "," + tan1[i3].y + "," + tan1[i3].z + ")");
 
                 tan2[i1] += tdir;
                 tan2[i2] += tdir;

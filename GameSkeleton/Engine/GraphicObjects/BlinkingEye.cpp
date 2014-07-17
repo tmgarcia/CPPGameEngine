@@ -8,7 +8,7 @@ BlinkingEye::BlinkingEye(vec3 pos, float _scale, int _blinkFrame)
 	isBlinking = false;
 	isClosing = false;
 }
-void BlinkingEye::setupRenderable(GeometryInfo* plane, ShaderInfo* alphaTextureShader, TextureInfo* eyeTexture, AlphaMapInfo* eyeAlpha1)
+void BlinkingEye::setupRenderable(GeometryInfo* plane, ShaderInfo* alphaTextureShader, DiffuseMapInfo* eyeTexture, AlphaMapInfo* eyeAlpha1)
 {
 	renderable = GeneralGLWindow::getInstance().addRenderable(plane, modelToWorld, alphaTextureShader, true, PRIORITY_1, true, eyeTexture, eyeAlpha1);
 	GeneralGLWindow::getInstance().addRenderableUniformParameter(renderable, "fullTransformMatrix", PT_MAT4, &fullTransform[0][0]);

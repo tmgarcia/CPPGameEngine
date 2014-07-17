@@ -1,7 +1,7 @@
 #pragma once
 #include "GeometryInfo.h"
 #include "ShaderInfo.h"
-#include "TextureInfo.h"
+#include "DiffuseMapInfo.h"
 #include "AlphaMapInfo.h"
 #include "AmbientOcclusionMapInfo.h"
 #include "NormalMapInfo.h"
@@ -24,12 +24,12 @@ class RenderableInfo
 public:
 	bool enableDepth;
 	bool usingAlphaMap;
-	bool usingTexture;
+	bool usingDiffuseMap;
 	bool usingNormalMap;
 	bool usingAmbientOcclusionMap;
 	mat4 whereMatrix;
 	GeometryInfo* whatGeometry;
-	TextureInfo* texture;
+	DiffuseMapInfo* diffuseMap;
 	AlphaMapInfo* alphaMap;
 	NormalMapInfo* normalMap;
 	AmbientOcclusionMapInfo* ambientOcclusionMap;

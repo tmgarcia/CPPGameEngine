@@ -1,6 +1,6 @@
 #pragma once
 
-class TextureInfo
+class DiffuseMapInfo
 {
 	friend class GeneralGLWindow;
 public:

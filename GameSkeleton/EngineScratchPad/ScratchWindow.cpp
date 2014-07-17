@@ -1,200 +1,38 @@
 #include "ScratchWindow.h"
 #include "GameObjects\GameLevel.h"
 #include "DebugMenu\DebugMenu.h"
-#include "GameObject.h"
+#include "GameObjects\GameObject.h"
 #include "DebugMenu\TrackingFloat.h"
 #include <iostream>
 
 using std::cout;
 using std::endl;
 
-vec3 lightPosition = vec3(1.2f,6.2f,16.5f);
-float diffusionIntensity = 0.5f;
-vec4 specularColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
-float specularExponent = 10;
-vec3 overridingObjectColor = vec3(0.9f,0.9f,0.9f);
-vec3 ambientLight = vec3(0.4f, 0.4f, 0.4f);
-vec3 eyePosition;
-
 mat4 viewToProjectionMatrix;
 mat4 worldToViewMatrix;
 mat4 worldToProjectionMatrix;
-
-ShaderInfo* mapsAndLightingShader;
-ShaderInfo* passThroughShader;
-
-GeometryInfo* cube;
-GeometryInfo* nucube;
-GeometryInfo* ogreGeo;
-
-mat4 cubeModelToWorld;
-mat4 cubeRotation;
-mat4 cubeFullTransform;
-
-mat4 lightBulbModelToWorld;
-mat4 lightBulbFullTransform;
-
-GameObject* normalMapCube;
-GameObject* lightBulb;
-GameObject* ogre;
-
-NormalMapInfo* testNormal;
-TextureInfo* ogreTexture;
-NormalMapInfo* ogreNormal;
-AmbientOcclusionMapInfo* ogreAO;
-
-void ScratchWindow::makeCube()
-{
-	//NXT
-	//X-U-T
-	//Y-V-B
-	Neumont::Vertex stackVerts[]=
-	{
-		// Top
-		vec3(-1.0f, +1.0f, +1.0f), // 0
-		vec4(+1.0f, +0.0f, +0.0f, -1.0f), // Tangent //was Coor
-		vec3(+0.0f, +1.0f, +0.0f), // Normal
-		vec2(+0.0f, +1.0f), // UV
-		vec3(+1.0f, +1.0f, +1.0f), // 1
-		vec4(+1.0f, +0.0f, +0.0f, -1.0f), // Tangent
-		vec3(+0.0f, +1.0f, +0.0f), // Normal
-		vec2(+1.0f, +1.0f), // UV
-		vec3(+1.0f, +1.0f, -1.0f), // 2
-		vec4(+1.0f, +0.0f, +0.0f, -1.0f), // Tangent
-		vec3(+0.0f, +1.0f, +0.0f), // Normal
-		vec2(+1.0f, +0.0f), // UV
-		vec3(-1.0f, +1.0f, -1.0f), // 3
-		vec4(+1.0f, +0.0f, +0.0f, -1.0f), // Tangent
-		vec3(+0.0f, +1.0f, +0.0f), // Normal
-		vec2(+0.0f, +0.0f), // UV
-
-		// Front
-		vec3(-1.0f, +1.0f, -1.0f), // 4
-		vec4(+1.0f, +0.0f, +0.0f, -1.0f), // Tangent
-		vec3(+0.0f, +0.0f, -1.0f), // Normal -z,-x, +y
-		vec2(+0.0f, +1.0f), // UV
-		vec3(+1.0f, +1.0f, -1.0f), // 5
-		vec4(+1.0f, +0.0f, +0.0f, -1.0f), // Tangent
-		vec3(+0.0f, +0.0f, -1.0f), // Normal
-		vec2(+1.0f, +1.0f), // UV
-		vec3(+1.0f, -1.0f, -1.0f), // 6
-		vec4(+1.0f, +0.0f, +0.0f, -1.0f), // Tangent
-		vec3(+0.0f, +0.0f, -1.0f), // Normal
-		vec2(+1.0f, +0.0f), // UV
-		vec3(-1.0f, -1.0f, -1.0f), // 7
-		vec4(+1.0f, +0.0f, +0.0f, -1.0f), // Tangent
-		vec3(+0.0f, +0.0f, -1.0f), // Normal
-		vec2(+0.0f, +0.0f), // UV
-
-		// Right
-		vec3(+1.0f, +1.0f, -1.0f), // 8
-		vec4(+0.0f, +0.0f, -1.0f, -1.0f), // Tangent
-		vec3(+1.0f, +0.0f, +0.0f), // Normal +x,+z,+y
-		vec2(+1.0f, +0.0f), // UV
-		vec3(+1.0f, +1.0f, +1.0f), // 9
-		vec4(+0.0f, +0.0f, -1.0f, -1.0f), // Tangent
-		vec3(+1.0f, +0.0f, +0.0f), // Normal
-		vec2(+0.0f, +0.0f), // UV
-		vec3(+1.0f, -1.0f, +1.0f), // 10
-		vec4(+0.0f, +0.0f, -1.0f, -1.0f), // Tangent
-		vec3(+1.0f, +0.0f, +0.0f), // Normal
-		vec2(+0.0f, +1.0f), // UV
-		vec3(+1.0f, -1.0f, -1.0f), // 11
-		vec4(+0.0f, +0.0f, -1.0f, -1.0f), // Tangent
-		vec3(+1.0f, +0.0f, +0.0f), // Normal
-		vec2(+1.0f, +1.0f), // UV
-
-		// Left
-		vec3(-1.0f, +1.0f, +1.0f), // 12
-		vec4(+0.0f, +0.0f, +1.0f, -1.0f), // Tangent
-		vec3(-1.0f, +0.0f, +0.0f), // Normal -x -z +y
-		vec2(+1.0f, +0.0f), // UV
-		vec3(-1.0f, +1.0f, -1.0f), // 13
-		vec4(+0.0f, +0.0f, +1.0f, -1.0f), // Tangent
-		vec3(-1.0f, +0.0f, +0.0f), // Normal
-		vec2(+0.0f, +0.0f), // UV
-		vec3(-1.0f, -1.0f, -1.0f), // 14
-		vec4(+0.0f, +0.0f, +1.0f, -1.0f), // Tangent
-		vec3(-1.0f, +0.0f, +0.0f), // Normal
-		vec2(+0.0f, +1.0f), // UV
-		vec3(-1.0f, -1.0f, +1.0f), // 15
-		vec4(+0.0f, +0.0f, +1.0f, -1.0f), // Tangent
-		vec3(-1.0f, +0.0f, +0.0f), // Normal
-		vec2(+1.0f, +1.0f), // UV
-
-		// Back
-		vec3(+1.0f, +1.0f, +1.0f), // 16
-		vec4(+1.0f, +0.0f, +0.0f, -1.0f), // Tangent
-		vec3(+0.0f, +0.0f, +1.0f), // Normal +z +x +y
-		vec2(+1.0f, +0.0f), // UV
-		vec3(-1.0f, +1.0f, +1.0f), // 17
-		vec4(+1.0f, +0.0f, +0.0f, -1.0f), // Tangent
-		vec3(+0.0f, +0.0f, +1.0f), // Normal
-		vec2(+0.0f, +0.0f), // UV
-		vec3(-1.0f, -1.0f, +1.0f), // 18
-		vec4(+1.0f, +0.0f, +0.0f, -1.0f), // Tangent
-		vec3(+0.0f, +0.0f, +1.0f), // Normal
-		vec2(+0.0f, +1.0f), // UV
-		vec3(+1.0f, -1.0f, +1.0f), // 19
-		vec4(+1.0f, +0.0f, +0.0f, -1.0f), // Tangent
-		vec3(+0.0f, +0.0f, +1.0f), // Normal
-		vec2(+1.0f, +1.0f), // UV
-
-		// Bottom
-		vec3(+1.0f, -1.0f, -1.0f), // 20
-		vec4(+1.0f, +0.0f, +0.0f, -1.0f), // Tangent
-		vec3(+0.0f, -1.0f, +0.0f), // Normal -y +x +z
-		vec2(+1.0f, +1.0f), // UV
-		vec3(-1.0f, -1.0f, -1.0f), // 21
-		vec4(+1.0f, +0.0f, +0.0f, -1.0f), // Tangent
-		vec3(+0.0f, -1.0f, +0.0f), // Normal
-		vec2(+0.0f, +1.0f), // UV
-		vec3(-1.0f, -1.0f, +1.0f), // 22
-		vec4(+1.0f, +0.0f, +0.0f, -1.0f), // Tangent
-		vec3(+0.0f, -1.0f, +0.0f), // Normal
-		vec2(+0.0f, +0.0f), // UV
-		vec3(+1.0f, -1.0f, +1.0f), // 23
-		vec4(+1.0f, +0.0f, +0.0f, -1.0f), // Tangent
-		vec3(+0.0f, -1.0f, +0.0f), // Normal
-		vec2(+1.0f, +0.0f), // UV
-	};
-	unsigned short stackIndices[] = {
-		0, 1, 2, 0, 2, 3, // Top
-		4, 5, 6, 4, 6, 7, // Front
-		8, 9, 10, 8, 10, 11, // Right
-		12, 13, 14, 12, 14, 15, // Left
-		16, 17, 18, 16, 18, 19, // Back
-		20, 22, 21, 20, 23, 22, // Bottom
-	};
-
-	GLuint numVerts = 24;
-	GLuint vertexBufferSize = numVerts*sizeof(Neumont::Vertex);
-	GLuint numIndices = 36;
-
-	GLuint positionOffset = 0;
-	GLuint tangentOffset = sizeof(vec3);//where color used to be
-	GLuint normalOffset = tangentOffset + sizeof(vec4);
-	GLuint uvOffset = normalOffset + sizeof(vec3);
-	GLuint stride = 12*sizeof(float);
-
-	cube = GeneralGLWindow::getInstance().addGeometry(stackVerts, vertexBufferSize, stackIndices, numIndices, GL_TRIANGLES);
-	GeneralGLWindow::getInstance().addShaderStreamedParameter(cube, 0, PT_VEC3, positionOffset, stride);
-	GeneralGLWindow::getInstance().addShaderStreamedParameter(cube, 1, PT_VEC4, tangentOffset, stride);
-	GeneralGLWindow::getInstance().addShaderStreamedParameter(cube, 2, PT_VEC3, normalOffset, stride);
-	GeneralGLWindow::getInstance().addShaderStreamedParameter(cube, 3, PT_VEC2, uvOffset, stride);
-}
 
 void ScratchWindow::setup()
 {
 	camera.setPosition(vec3(0,0,5));
 	camera.setViewDirection(vec3(0,0,-1));
 
+	renderer = new RendererHelper();
+
+	renderer->lightPosition = vec3(1.2f,6.2f,16.5f);
+	renderer->diffusionIntensity = 0.5f;
+	renderer->specularColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+	renderer->specularExponent = 10;
+	renderer->overridingObjectColor = vec3(0.9f,0.9f,0.9f);
+	renderer->ambientLight = vec3(0.4f, 0.4f, 0.4f);
+	renderer->eyePosition;
+
 	setupGeometry();
 	setupTransforms();
 	setupTextures();
 	setupRenderables();
 
-	QList<TrackingFloat*> cubeRfloats;
+	/*QList<TrackingFloat*> cubeRfloats;
 	TrackingFloat* rf1 = new TrackingFloat(&normalMapCube->xRotationAngle, 0, 360, "X Angle");
 	TrackingFloat* rf2 = new TrackingFloat(&normalMapCube->yRotationAngle, 0, 360, "Y Angle");
 	TrackingFloat* rf3 = new TrackingFloat(&normalMapCube->zRotationAngle, 0, 360, "Z Angle");
@@ -216,98 +54,48 @@ void ScratchWindow::setup()
 	dMenu->addCheckBox("Ogre", &ogre->renderable->visible, "Show Ogre");
 	dMenu->addCheckBox("Ogre", &ogre->renderable->usingAmbientOcclusionMap, "Toggle Ambient Occlusion");
 	dMenu->addCheckBox("Ogre", &ogre->renderable->usingNormalMap, "Toggle Normal Map");
-	dMenu->addCheckBox("Ogre", &ogre->renderable->usingTexture, "Toggle Diffuse Map");
+	dMenu->addCheckBox("Ogre", &ogre->renderable->usingDiffuseMap, "Toggle Diffuse Map");
 
 	dMenu->addVec3Slider("Light Controls", &lightBulb->position, -5,5,-5,5,-5,5,"Light");
 	dMenu->addFloatSlider("Light Controls", &diffusionIntensity, 0,5,"Diffusion Intensity");
 	dMenu->addFloatSlider("Light Controls", &specularExponent, 0.1,100,"Specular Exponent");
-	dMenu->addVec3Slider("Light Controls", &ambientLight, 0,1,0,1,0,1,"Ambient Light");
+	dMenu->addVec3Slider("Light Controls", &ambientLight, 0,1,0,1,0,1,"Ambient Light");*/
 }
 
 void ScratchWindow::setupGeometry()
 {
-	makeCube();
-	Neumont::ShapeData cubeData = Neumont::ShapeGenerator::makeCube();
-	nucube = GeneralGLWindow::getInstance().addGeometry(cubeData.verts, cubeData.vertexBufferSize(), cubeData.indices, cubeData.numIndices, GL_TRIANGLES);
-	setupNuShapesGeometryVertexArrayInfo(nucube);
+	renderer->addNUGeo(RendererHelper::NUShapes::NU_CUBE, "NUCube");
 
-	BinReader reader;
-
-	BinReader::ShapeData ogreData = reader.readInShape("../Resources/AssetGroups/Ogre/Ogre.bin");
-	ogreGeo = GeneralGLWindow::getInstance().addGeometry(ogreData.vertices, ogreData.vertexDataSize, ogreData.indices, ogreData.numIndices, GL_TRIANGLES);
-	setupReadInGeometryVertexArrayInfo(ogreGeo);
+	renderer->addGeoFromBin("../Resources/AssetGroups/Ogre/Ogre.bin","ogreGeo");
 }
 
 void ScratchWindow::setupTransforms()
 {
-	eyePosition = camera.getPosition();
+	renderer->eyePosition = camera.getPosition();
 	viewToProjectionMatrix = glm::perspective(60.0f, ((float)WINDOW_WIDTH) / WINDOW_HEIGHT, 0.1f, 90.0f);
 	worldToViewMatrix = camera.getWorldToViewMatrix();
 	worldToProjectionMatrix = viewToProjectionMatrix * worldToViewMatrix;
 
-	normalMapCube = new GameObject();
-	normalMapCube->setupTransforms(vec3(0,-2,0),vec3(0.5f,0.5f,0.5f),0,0,0,worldToProjectionMatrix);
+	renderer->addGameObject(vec3(0,0,0),vec3(0.25f,0.25f,0.25f),0,0,0,worldToProjectionMatrix, "lightBulb");
 
-	lightBulb = new GameObject();
-	lightBulb->setupTransforms(vec3(0,0,0),vec3(0.25f,0.25f,0.25f),0,0,0,worldToProjectionMatrix);
-
-	ogre = new GameObject();
-	ogre->setupTransforms(vec3(1,-2,0),vec3(1,1,1),0,0,0,worldToProjectionMatrix);
+	renderer->addGameObject(vec3(1,-2,0),vec3(1,1,1),0,0,0,worldToProjectionMatrix,"ogre");
 }
 
 void ScratchWindow::setupTextures()
 {
-	mapsAndLightingShader = GeneralGLWindow::getInstance().createShaderInfo("../Resources/Shaders/LightingTextureAlphaNormalVertexShader.glsl", "../Resources/Shaders/LightingTextureAlphaNormalFragmentShader.glsl");
-	passThroughShader = GeneralGLWindow::getInstance().createShaderInfo("../Resources/Shaders/PassThroughVertexShader.glsl", "../Resources/Shaders/PassThroughFragmentShader.glsl");
+	renderer->addShader("../Resources/Shaders/LightingTextureAlphaNormalVertexShader.glsl", "../Resources/Shaders/LightingTextureAlphaNormalFragmentShader.glsl",RendererHelper::ShaderType::SHADER_LIGHTING_TEXTURE, "textureLightingShader");
+	renderer->addShader("../Resources/Shaders/PassThroughVertexShader.glsl", "../Resources/Shaders/PassThroughFragmentShader.glsl",RendererHelper::ShaderType::SHADER_PASSTHROUGH, "passThroughShader");
 
-	ogreNormal = GeneralGLWindow::getInstance().addNormalMap("../Resources/AssetGroups/Ogre/ogre_normalmap.png");
-	ogreTexture = GeneralGLWindow::getInstance().addTexture("../Resources/AssetGroups/Ogre/diffuse.png");
-	ogreAO = GeneralGLWindow::getInstance().addAmbientOcclusionMap("../Resources/AssetGroups/Ogre/ao_ears.png");
-
-	testNormal = GeneralGLWindow::getInstance().addNormalMap("../Resources/NormalMaps/Shapes.png");
+	renderer->addNormalMap("../Resources/AssetGroups/Ogre/ogre_normalmap.png", "ogreNormal");
+	renderer->addDiffuseMap("../Resources/AssetGroups/Ogre/diffuse.png", "ogreDiffuse");
+	renderer->addAmbientOcclusionMap("../Resources/AssetGroups/Ogre/ao_ears.png", "ogreAO");
 }
 
 void ScratchWindow::setupRenderables()
 {
-	lightBulb->renderable = GeneralGLWindow::getInstance().addRenderable(nucube, lightBulb->modelToWorldMatrix, passThroughShader, true, PRIORITY_1, true, NULL, NULL, NULL);
-	addLightingAndTextureShaderUniforms(lightBulb->renderable, &lightBulb->fullTransformMatrix[0][0], &lightBulb->rotationMatrix[0][0]);
+	renderer->setupGameObjectRenderable("lightBulb","NUCube","passThroughShader",true,PRIORITY_1,true,"","","","");
 
-	normalMapCube->renderable = GeneralGLWindow::getInstance().addRenderable(cube, normalMapCube->modelToWorldMatrix, mapsAndLightingShader, true, PRIORITY_1, true, NULL, NULL, testNormal);
-	addLightingAndTextureShaderUniforms(normalMapCube->renderable, &normalMapCube->fullTransformMatrix[0][0], &normalMapCube->rotationMatrix[0][0]);
-
-	ogre->renderable = GeneralGLWindow::getInstance().addRenderable(ogreGeo, ogre->modelToWorldMatrix, mapsAndLightingShader, false, PRIORITY_1, true, ogreTexture, NULL, ogreNormal, ogreAO);
-	addLightingAndTextureShaderUniforms(ogre->renderable, &ogre->fullTransformMatrix[0][0], &ogre->rotationMatrix[0][0]);
-}
-
-void ScratchWindow::setupReadInGeometryVertexArrayInfo(GeometryInfo* geometry)
-{
-	GeneralGLWindow::getInstance().addShaderStreamedParameter(geometry, 0, PT_VEC3, BinReader::POSITION_OFFSET, BinReader::STRIDE);
-	GeneralGLWindow::getInstance().addShaderStreamedParameter(geometry, 1, PT_VEC3, BinReader::TANGENT_OFFSET, BinReader::STRIDE);
-	GeneralGLWindow::getInstance().addShaderStreamedParameter(geometry, 2, PT_VEC3, BinReader::NORMAL_OFFSET, BinReader::STRIDE);
-	GeneralGLWindow::getInstance().addShaderStreamedParameter(geometry, 3, PT_VEC2, BinReader::UV_OFFSET, BinReader::STRIDE);
-}
-
-void ScratchWindow::setupNuShapesGeometryVertexArrayInfo(GeometryInfo* geometry)
-{
-	GeneralGLWindow::getInstance().addShaderStreamedParameter(geometry, 0, PT_VEC3, Neumont::Vertex::POSITION_OFFSET, Neumont::Vertex::STRIDE);
-	GeneralGLWindow::getInstance().addShaderStreamedParameter(geometry, 1, PT_VEC4, Neumont::Vertex::COLOR_OFFSET, Neumont::Vertex::STRIDE);
-	GeneralGLWindow::getInstance().addShaderStreamedParameter(geometry, 2, PT_VEC3, Neumont::Vertex::NORMAL_OFFSET, Neumont::Vertex::STRIDE);
-	GeneralGLWindow::getInstance().addShaderStreamedParameter(geometry, 3, PT_VEC2, Neumont::Vertex::UV_OFFSET, Neumont::Vertex::STRIDE);
-}
-
-void ScratchWindow::addLightingAndTextureShaderUniforms(RenderableInfo* renderable, float* fullTransform, float* rotationMatrix)
-{
-	GeneralGLWindow::getInstance().addRenderableUniformParameter(renderable, "lightPosition", PT_VEC3, &lightPosition[0]);
-	GeneralGLWindow::getInstance().addRenderableUniformParameter(renderable, "diffusionIntensity", PT_FLOAT, &diffusionIntensity);
-	GeneralGLWindow::getInstance().addRenderableUniformParameter(renderable, "specularColor", PT_VEC4, &specularColor[0]);
-	GeneralGLWindow::getInstance().addRenderableUniformParameter(renderable, "specularExponent", PT_FLOAT, &specularExponent);
-	GeneralGLWindow::getInstance().addRenderableUniformParameter(renderable, "eyePosition", PT_VEC3, &eyePosition[0]);
-	GeneralGLWindow::getInstance().addRenderableUniformParameter(renderable, "overridingObjectColor", PT_VEC3, &overridingObjectColor[0]);
-	GeneralGLWindow::getInstance().addRenderableUniformParameter(renderable, "ambientLight", PT_VEC3, &ambientLight[0]);
-
-	GeneralGLWindow::getInstance().addRenderableUniformParameter(renderable, "fullTransformMatrix", PT_MAT4, fullTransform);
-	GeneralGLWindow::getInstance().addRenderableUniformParameter(renderable, "rotationMatrix", PT_MAT4, rotationMatrix);
-	GeneralGLWindow::getInstance().addRenderableUniformParameter(renderable, "modelToWorldMatrix", PT_MAT4, &renderable->whereMatrix[0][0]);
+	renderer->setupGameObjectRenderable("ogre","ogreGeo","textureLightingShader",true,PRIORITY_1,true,"ogreDiffuse","","ogreNormal","ogreAO");
 }
 
 int frame = 0;
@@ -315,8 +103,7 @@ void ScratchWindow::update()
 {
 	updateShaderInfo();
 	frame++;
-	//GeneralGLWindow::
-	lightPosition = lightBulb->position;
+	renderer->lightPosition = renderer->getGameObject("lightBulb")->position;
 }
 
 void ScratchWindow::updateShaderInfo()
@@ -328,9 +115,7 @@ void ScratchWindow::updateShaderInfo()
 
 	DebugShapes::updateWorldToProjection(worldToProjectionMatrix);
 
-	lightBulb->updateTransforms(worldToProjectionMatrix);
-	normalMapCube->updateTransforms(worldToProjectionMatrix);
-	ogre->updateTransforms(worldToProjectionMatrix);
+	renderer->updateShaderInfo(worldToProjectionMatrix);
 	GeneralGLWindow::getInstance().repaint();
 }
 

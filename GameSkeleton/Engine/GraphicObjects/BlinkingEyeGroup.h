@@ -7,7 +7,7 @@
 class __declspec(dllexport) BlinkingEyeGroup
 {
 private:
-	TextureInfo* eyeTexture;
+	DiffuseMapInfo* eyeTexture;
 	GeometryInfo* plane;
 	ShaderInfo* alphaTextureShader;
 

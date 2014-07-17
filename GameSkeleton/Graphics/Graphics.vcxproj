@@ -46,13 +46,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\External Dependencies\NeumontTools\include;$(SolutionDir)..\External Dependencies\glew\include;$(SolutionDir)..\External Dependencies\glm;$(SolutionDir)..\Engine\DebugTools\DebugMenu;$(SolutionDir)..\Engine\DebugTools;$(SolutionDir)..\Engine\Renderer;$(SolutionDir)..\Engine;$(SolutionDir)..\External Dependencies\Qt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\External Dependencies\libnoise\include;$(SolutionDir)..\External Dependencies\libnoise\include\noise;$(SolutionDir)..\External Dependencies\NeumontTools\include;$(SolutionDir)..\External Dependencies\glew\include;$(SolutionDir)..\External Dependencies\glm;$(SolutionDir)..\Engine\DebugTools\DebugMenu;$(SolutionDir)..\Engine\DebugTools;$(SolutionDir)..\Engine\Renderer;$(SolutionDir)..\Engine;$(SolutionDir)..\External Dependencies\Qt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_DEBUG;DEBUGSHAPES_ON;ASSERT_ON;LOG_ON;PROFILING_ON;WIN32;_WINDOWS;_USRDLL;ENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)..\External Dependencies\Qt\lib;$(SolutionDir)..\External Dependencies\NeumontTools\lib;$(SolutionDir)..\External Dependencies\glew\lib;$(SolutionDir)..\Engine\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Engine.lib;opengl32.lib;glew32.lib;glew32d.lib;NeumontTools.lib;QtCored4.lib;QtGuid4.lib;QtOpenGLd4.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\External Dependencies\Qt\lib;$(SolutionDir)..\External Dependencies\NeumontTools\lib;$(SolutionDir)..\External Dependencies\glew\lib;$(SolutionDir)..\External Dependencies\libnoise\bin;$(SolutionDir)..\Engine\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Engine.lib;opengl32.lib;glew32.lib;glew32d.lib;NeumontTools.lib;QtCored4.lib;QtGuid4.lib;QtOpenGLd4.lib;libnoise.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>copy "$(ProjectDir)..\Engine\$(Configuration)\Engine.dll" "$(OutDir)"

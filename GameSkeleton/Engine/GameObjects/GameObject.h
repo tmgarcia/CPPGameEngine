@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Renderer\GeneralGLWindow.h"
+#include "..\Renderer\GeneralGLWindow.h"
 //#include <glm\glm.hpp>
 //#include "glm\gtx\transform.hpp"
 //#include "Renderer\RenderableInfo.h"

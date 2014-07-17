@@ -32,7 +32,7 @@ void BlinkingEyeGroup::setupEyeRendererObjects()
 
 	alphaTextureShader = GeneralGLWindow::getInstance().createShaderInfo("../Resources/Shaders/TextureAndAlphaMapVertexShader.glsl", "../Resources/Shaders/TextureAndAlphaMapFragmentShader.glsl");
 
-	eyeTexture = GeneralGLWindow::getInstance().addTexture("../Resources/Textures/madEyeTexture.bmp");
+	eyeTexture = GeneralGLWindow::getInstance().addDiffuseMap("../Resources/Textures/madEyeTexture.bmp");
 	
 	eyeAlpha1 = GeneralGLWindow::getInstance().addAlphaMap("../Resources/AlphaMaps/madEyeAlphaMap1.bmp");
 	eyeAlpha2 = GeneralGLWindow::getInstance().addAlphaMap("../Resources/AlphaMaps/madEyeAlphaMap2.bmp");

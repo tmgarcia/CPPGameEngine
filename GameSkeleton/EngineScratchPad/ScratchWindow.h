@@ -9,6 +9,7 @@
 #include "MathTools\Random.h"
 #include "GraphicObjects\BlinkingEyeGroup.h"
 #include <Qt\qdockwidget.h>
+#include "RendererHelper.h"
 
 #include <iostream>
 
@@ -64,18 +65,19 @@ public:
 protected:
 	bool cameraFrozen;
 	DebugMenu* dMenu;
+	RendererHelper* renderer;
 	void setup();
 	void setupGeometry();
 	void setupTransforms();
 	void setupTextures();
 	void setupRenderables();
-	void setupReadInGeometryVertexArrayInfo(GeometryInfo* geometry);
-	void setupNuShapesGeometryVertexArrayInfo(GeometryInfo* geometry);
+	//void setupReadInGeometryVertexArrayInfo(GeometryInfo* geometry);
+	//void setupNuShapesGeometryVertexArrayInfo(GeometryInfo* geometry);
 	Camera camera;
 	void keyPressEvent(QKeyEvent *event);
 	void updateShaderInfo();
-	void makeCube();
-	void addLightingAndTextureShaderUniforms(RenderableInfo* renderable, float* fullTransform, float* rotationMatrix);
+	//void makeCube();
+	//void addLightingAndTextureShaderUniforms(RenderableInfo* renderable, float* fullTransform, float* rotationMatrix);
 private slots:
 	void update();
 

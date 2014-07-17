@@ -21,7 +21,7 @@
 #include "BufferInfo.h"
 #include "GeometryInfo.h"
 #include "RenderableInfo.h"
-#include "TextureInfo.h"
+#include "DiffuseMapInfo.h"
 #include "AmbientOcclusionMapInfo.h"
 #include "AlphaMapInfo.h"
 #include "NormalMapInfo.h"
@@ -66,10 +66,14 @@ public:
 		const char* vertexShaderFilename,
 		const char* fragmentShaderFilename);
 
-	TextureInfo* addTexture(const char* fileName);
+	DiffuseMapInfo* addDiffuseMap(const char* fileName);
+	DiffuseMapInfo* addDiffuseMap(const uchar* bytes, uint width, uint height);
 	AlphaMapInfo* addAlphaMap(const char* fileName);
+	AlphaMapInfo* addAlphaMap(const uchar* bytes, uint width, uint height);
 	NormalMapInfo* addNormalMap(const char* fileName);
+	NormalMapInfo* addNormalMap(const uchar* bytes, uint width, uint height);
 	AmbientOcclusionMapInfo* addAmbientOcclusionMap(const char* fileName);
+	AmbientOcclusionMapInfo* addAmbientOcclusionMap(const uchar* bytes, uint width, uint height);
 
 	RenderableInfo* addRenderable(
 		GeometryInfo* whatGeometry,
@@ -78,7 +82,7 @@ public:
 		bool visible,
 		PriorityLevel priority,
 		bool depthEnabled = true,
-		TextureInfo* texture = NULL,
+		DiffuseMapInfo* diffuseMap = NULL,
 		AlphaMapInfo* alphaMap = NULL,
 		NormalMapInfo* normalMap = NULL,
 		AmbientOcclusionMapInfo* ambientOcclusionMap = NULL);
@@ -105,7 +109,8 @@ public:
 	void keyPressEvent(QKeyEvent* e);
 
 private:
-	void loadTextureBitmap(const char* filename);
+	void loadTextureFromFile(const char* filename);
+	void loadTextureFromBytes(const uchar* bytes, uint width, uint height);
 	std::string readShaderCode(const char *filename);
 	GLuint getNextAvailableBufferIndex(GLuint dataSize);
 

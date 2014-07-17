@@ -18,11 +18,12 @@
 #include "../DebugTools/ConsolePrinter.h"
 //#include "../
 
+#pragma region OBJECT_VARIABLES
 GLuint currentNumBuffers = 0;
 GLuint currentGeometryIndex = 0;
 GLuint currentShaderIndex = 0;
 GLuint currentRenderIndex = 0;
-GLuint currentTextureIndex = 0;
+GLuint currentDiffuseMapIndex = 0;
 GLuint currentAlphaMapIndex = 0;
 GLuint currentAmbientOcclusionMapIndex = 0;
 GLuint currentNormalMapIndex = 0;
@@ -30,21 +31,22 @@ GLuint currentNormalMapIndex = 0;
 const GLuint MAX_NUM_BUFFERS = 80;
 const GLuint MAX_NUM_GEOMETRIES = 30;
 const GLuint MAX_NUM_SHADERS = 10;
-const GLuint MAX_NUM_TEXTURES = 30;
-const GLuint MAX_NUM_ALPHAMAPS= 20;
+const GLuint MAX_NUM_DIFFUSE_MAPS = 30;
+const GLuint MAX_NUM_ALPHA_MAPS= 20;
 const GLuint MAX_NUM_AMBIENT_OCCLUSION_MAPS= 20;
-const GLuint MAX_NUM_NORMALMAPS= 20;
+const GLuint MAX_NUM_NORMAL_MAPS= 20;
 const GLuint MAX_NUM_RENDERABLES = 600;
 const GLuint BUFFER_SIZE = 1000000;
 
 BufferInfo* bufferInfos[MAX_NUM_BUFFERS];
 GeometryInfo* geometryInfos[MAX_NUM_GEOMETRIES];
 ShaderInfo* shaderInfos[MAX_NUM_SHADERS];
-TextureInfo* textureInfos[MAX_NUM_TEXTURES];
+DiffuseMapInfo* diffuseMapInfos[MAX_NUM_DIFFUSE_MAPS];
+AlphaMapInfo* alphaMapInfos[MAX_NUM_ALPHA_MAPS];
+NormalMapInfo* normalMapInfos[MAX_NUM_NORMAL_MAPS];
 AmbientOcclusionMapInfo* ambientOcclusionMapInfos[MAX_NUM_AMBIENT_OCCLUSION_MAPS];
-AlphaMapInfo* alphaMapInfos[MAX_NUM_ALPHAMAPS];
-NormalMapInfo* normalMapInfos[MAX_NUM_NORMALMAPS];
 RenderableInfo* renderableInfos[MAX_NUM_RENDERABLES];
+#pragma endregion
 
 void GeneralGLWindow::initializeGL()
 {
@@ -233,14 +235,27 @@ std::string GeneralGLWindow::readShaderCode(const char *filename)
 		std::istreambuf_iterator<char>());
 }
 
-AmbientOcclusionMapInfo* GeneralGLWindow::addAmbientOcclusionMap(const char* fileName)
+DiffuseMapInfo* GeneralGLWindow::addDiffuseMap(const char* fileName)
 {
-	ambientOcclusionMapInfos[currentAmbientOcclusionMapIndex] = new AmbientOcclusionMapInfo();
-	AmbientOcclusionMapInfo* ret = ambientOcclusionMapInfos[currentAmbientOcclusionMapIndex];
+
+	diffuseMapInfos[currentDiffuseMapIndex] = new DiffuseMapInfo();
+	DiffuseMapInfo* ret = diffuseMapInfos[currentDiffuseMapIndex];
 	glGenTextures(1, &(ret->textureID));
 	glBindTexture(GL_TEXTURE_2D, ret->textureID);
-	loadTextureBitmap(fileName);
-	currentAmbientOcclusionMapIndex++;
+	loadTextureFromFile(fileName);
+	currentDiffuseMapIndex++;
+	return ret;
+}
+
+DiffuseMapInfo* GeneralGLWindow::addDiffuseMap(const uchar* bytes, uint width, uint height)
+{
+
+	diffuseMapInfos[currentDiffuseMapIndex] = new DiffuseMapInfo();
+	DiffuseMapInfo* ret = diffuseMapInfos[currentDiffuseMapIndex];
+	glGenTextures(1, &(ret->textureID));
+	glBindTexture(GL_TEXTURE_2D, ret->textureID);
+	loadTextureFromBytes(bytes, width, height);
+	currentDiffuseMapIndex++;
 	return ret;
 }
 
@@ -251,7 +266,19 @@ AlphaMapInfo* GeneralGLWindow::addAlphaMap(const char* fileName)
 	AlphaMapInfo* ret = alphaMapInfos[currentAlphaMapIndex];
 	glGenTextures(1, &(ret->textureID));
 	glBindTexture(GL_TEXTURE_2D, ret->textureID);
-	loadTextureBitmap(fileName);
+	loadTextureFromFile(fileName);
+	currentAlphaMapIndex++;
+	return ret;
+}
+
+AlphaMapInfo* GeneralGLWindow::addAlphaMap(const uchar* bytes, uint width, uint height)
+{
+
+	alphaMapInfos[currentAlphaMapIndex] = new AlphaMapInfo();
+	AlphaMapInfo* ret = alphaMapInfos[currentAlphaMapIndex];
+	glGenTextures(1, &(ret->textureID));
+	glBindTexture(GL_TEXTURE_2D, ret->textureID);
+	loadTextureFromBytes(bytes, width, height);
 	currentAlphaMapIndex++;
 	return ret;
 }
@@ -263,24 +290,46 @@ NormalMapInfo* GeneralGLWindow::addNormalMap(const char* fileName)
 	NormalMapInfo* ret = normalMapInfos[currentNormalMapIndex];
 	glGenTextures(1, &(ret->textureID));
 	glBindTexture(GL_TEXTURE_2D, ret->textureID);
-	loadTextureBitmap(fileName);
+	loadTextureFromFile(fileName);
 	currentNormalMapIndex++;
 	return ret;
 }
 
-TextureInfo* GeneralGLWindow::addTexture(const char* fileName)
+NormalMapInfo* GeneralGLWindow::addNormalMap(const uchar* bytes, uint width, uint height)
 {
 
-	textureInfos[currentTextureIndex] = new TextureInfo();
-	TextureInfo* ret = textureInfos[currentTextureIndex];
+	normalMapInfos[currentNormalMapIndex] = new NormalMapInfo();
+	NormalMapInfo* ret = normalMapInfos[currentNormalMapIndex];
 	glGenTextures(1, &(ret->textureID));
 	glBindTexture(GL_TEXTURE_2D, ret->textureID);
-	loadTextureBitmap(fileName);
-	currentTextureIndex++;
+	loadTextureFromBytes(bytes, width, height);
+	currentNormalMapIndex++;
 	return ret;
 }
 
-void GeneralGLWindow::loadTextureBitmap(const char* filename)
+AmbientOcclusionMapInfo* GeneralGLWindow::addAmbientOcclusionMap(const char* fileName)
+{
+	ambientOcclusionMapInfos[currentAmbientOcclusionMapIndex] = new AmbientOcclusionMapInfo();
+	AmbientOcclusionMapInfo* ret = ambientOcclusionMapInfos[currentAmbientOcclusionMapIndex];
+	glGenTextures(1, &(ret->textureID));
+	glBindTexture(GL_TEXTURE_2D, ret->textureID);
+	loadTextureFromFile(fileName);
+	currentAmbientOcclusionMapIndex++;
+	return ret;
+}
+
+AmbientOcclusionMapInfo* GeneralGLWindow::addAmbientOcclusionMap(const uchar* bytes, uint width, uint height)
+{
+	ambientOcclusionMapInfos[currentAmbientOcclusionMapIndex] = new AmbientOcclusionMapInfo();
+	AmbientOcclusionMapInfo* ret = ambientOcclusionMapInfos[currentAmbientOcclusionMapIndex];
+	glGenTextures(1, &(ret->textureID));
+	glBindTexture(GL_TEXTURE_2D, ret->textureID);
+	loadTextureFromBytes(bytes, width, height);
+	currentAmbientOcclusionMapIndex++;
+	return ret;
+}
+
+void GeneralGLWindow::loadTextureFromFile(const char* filename)
 {
 	int width, height;
 	QImage image = QImage(filename);
@@ -295,6 +344,15 @@ void GeneralGLWindow::loadTextureBitmap(const char* filename)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 }
 
+void GeneralGLWindow::loadTextureFromBytes(const uchar* bytes, uint width, uint height)
+{
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, bytes);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+}
+
 RenderableInfo* GeneralGLWindow::addRenderable(
 	GeometryInfo* whatGeometry,
 	mat4 whereMatrix,
@@ -302,7 +360,7 @@ RenderableInfo* GeneralGLWindow::addRenderable(
 	bool visible,
 	PriorityLevel priority,
 	bool depthEnabled,
-	TextureInfo* texture,
+	DiffuseMapInfo* diffuseMap,
 	AlphaMapInfo* alphaMap,
 	NormalMapInfo* normalMap,
 	AmbientOcclusionMapInfo* ambientOcclusionMap)
@@ -315,12 +373,12 @@ RenderableInfo* GeneralGLWindow::addRenderable(
 	ret->visible = visible;
 	ret->priority = priority;
 	ret->enableDepth = depthEnabled;
-	ret->texture = texture;
+	ret->diffuseMap = diffuseMap;
 	ret->alphaMap = alphaMap;
 	ret->normalMap = normalMap;
 	ret->ambientOcclusionMap = ambientOcclusionMap;
 	
-	ret->usingTexture = (texture!=NULL);
+	ret->usingDiffuseMap = (diffuseMap!=NULL);
 	ret->usingAlphaMap = (alphaMap!=NULL);
 	ret->usingNormalMap = (normalMap!=NULL);
 	ret->usingAmbientOcclusionMap = (ambientOcclusionMap!=NULL);
@@ -358,16 +416,16 @@ void GeneralGLWindow::sendRenderableToShader(RenderableInfo* renderable)
 	GLuint programID = renderable->howShaders->programID;
 	glUseProgram(programID);
 
-	if(renderable->usingTexture)
+	if(renderable->usingDiffuseMap)
 	{
-		GLint baseTextureLoc = glGetUniformLocation(programID, "baseTexture");
-		glUniform1i(baseTextureLoc, 0);
+		GLint diffuseMapLoc = glGetUniformLocation(programID, "diffuseMap");
+		glUniform1i(diffuseMapLoc, 0);
 		glActiveTexture(GL_TEXTURE0 + 0);
-		glBindTexture(GL_TEXTURE_2D, renderable->texture->textureID);
+		glBindTexture(GL_TEXTURE_2D, renderable->diffuseMap->textureID);
 	}
 	if(renderable->usingAlphaMap)
 	{
-		cout << "ALPHA" << endl;
+		//cout << "ALPHA" << endl;
 		GLint alphaMapLoc = glGetUniformLocation(programID, "alphaMap");
 		glUniform1i(alphaMapLoc, 1);
 		glActiveTexture(GL_TEXTURE0 + 1);
@@ -389,8 +447,8 @@ void GeneralGLWindow::sendRenderableToShader(RenderableInfo* renderable)
 		glActiveTexture(GL_TEXTURE0 + 3);
 		glBindTexture(GL_TEXTURE_2D, renderable->ambientOcclusionMap->textureID);
 	}
-	GLint uniformLocation = glGetUniformLocation(programID, "hasTexture");
-	glUniform1i(uniformLocation, renderable->usingTexture);
+	GLint uniformLocation = glGetUniformLocation(programID, "hasDiffuseMap");
+	glUniform1i(uniformLocation, renderable->usingDiffuseMap);
 	uniformLocation = glGetUniformLocation(programID, "hasAlphaMap");
 	glUniform1i(uniformLocation, renderable->usingAlphaMap);
 	uniformLocation = glGetUniformLocation(programID, "hasNormalMap");

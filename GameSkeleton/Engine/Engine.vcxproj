@@ -95,7 +95,7 @@
     <ClCompile Include="DebugTools\DebugMenu\IntSlider_moc.cpp" />
     <ClCompile Include="DebugTools\DebugMenu\TrackingFloat_moc.cpp" />
     <ClCompile Include="DebugTools\DebugMenu\Vec3Slider_moc.cpp" />
-    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GameObjects\GameObject.cpp" />
     <ClCompile Include="GraphicObjects\BlinkingEyeGroup.cpp" />
     <ClCompile Include="GraphicObjects\BlinkingEye.cpp" />
     <ClCompile Include="Camera.cpp" />
@@ -120,6 +120,7 @@
     <ClCompile Include="Entities\FetchingFlagState.cpp" />
     <ClCompile Include="GameObjects\Flag.cpp" />
     <ClCompile Include="GameObjects\GameLevel.cpp" />
+    <ClCompile Include="Renderer\RendererHelper.cpp" />
     <ClCompile Include="Renderer\GeneralGLWindow.cpp" />
     <ClCompile Include="Renderer\GeneralGLWindow_moc.cpp" />
     <ClCompile Include="DebugTools\Logger.cpp" />
@@ -139,7 +140,7 @@
     <ClInclude Include="DebugTools\DebugMenu\MultipleFloatsSlider.h" />
     <ClInclude Include="DebugTools\DebugMenu\TrackingFloat.h" />
     <ClInclude Include="DebugTools\DebugMenu\Vec3Slider.h" />
-    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GameObjects\GameObject.h" />
     <ClInclude Include="GraphicObjects\BlinkingEyeGroup.h" />
     <ClInclude Include="GraphicObjects\BlinkingEye.h" />
     <ClInclude Include="Camera.h" />
@@ -165,6 +166,7 @@
     <ClInclude Include="Entities\FetchingFlagState.h" />
     <ClInclude Include="GameObjects\Flag.h" />
     <ClInclude Include="GameObjects\GameLevel.h" />
+    <ClInclude Include="Renderer\RendererHelper.h" />
     <ClInclude Include="Renderer\AlphaMapInfo.h" />
     <ClInclude Include="Renderer\AmbientOcclusionMapInfo.h" />
     <ClInclude Include="Renderer\BufferInfo.h" />
@@ -182,7 +184,7 @@
     <ClInclude Include="Renderer\RenderableInfo.h" />
     <ClInclude Include="Renderer\ShaderInfo.h" />
     <ClInclude Include="Renderer\ShaderUniformParameter.h" />
-    <ClInclude Include="Renderer\TextureInfo.h" />
+    <ClInclude Include="Renderer\DiffuseMapInfo.h" />
     <ClInclude Include="MathTools\TransformationMatrixMaker.h" />
     <ClInclude Include="Entities\State.h" />
     <ClInclude Include="Entities\ReturningToBaseState.h" />

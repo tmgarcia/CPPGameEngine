@@ -184,50 +184,10 @@ namespace ObjToBinaryWriter
             //converter.readInObj(args[0]);
             //converter.WriteToBinary(args[1]);
 
-            //Console.WriteLine("Converting");
+            Console.WriteLine("Converting");
             ObjToBinaryConverter converter = new ObjToBinaryConverter();
-            //converter.readInObj("../../../../Resources/Models/alchemyRoom.obj");
-            //converter.WriteToBinary("alchemyRoom.bin");
-
-            //Console.WriteLine("Converting");
-            //converter.readInObj("../../../../Resources/Models/alchemyRoomOuter.obj");
-            //converter.WriteToBinary("alchemyRoomOuter.bin");
-
-            //Console.WriteLine("Converting");
-            //converter.readInObj("../../../../Resources/Models/alchemyTable.obj");
-            //converter.WriteToBinary("alchemyTable.bin");
-
-            //Console.WriteLine("Converting");
-            //converter.readInObj("../../../../Resources/Models/alchemyTableApertures.obj");
-            //converter.WriteToBinary("alchemyTableApertures.bin");
-
-            //Console.WriteLine("Converting");
-            //converter.readInObj("../../../../Resources/Models/alchemyTableGlassware.obj");
-            //converter.WriteToBinary("alchemyTableGlassware.bin");
-
-            //Console.WriteLine("Converting");
-            //converter.readInObj("../../../../Resources/Models/alchemyTableLiquids.obj");
-            //converter.WriteToBinary("alchemyTableLiquids.bin");
-
-            //Console.WriteLine("Converting");
-            //converter.readInObj("../../../../Resources/Models/potionLarge.obj");
-            //converter.WriteToBinary("potionLarge.bin");
-
-            //Console.WriteLine("Converting");
-            //converter.readInObj("../../../../Resources/Models/potionSmall.obj");
-            //converter.WriteToBinary("potionSmall.bin");
-
-            //Console.WriteLine("Converting");
-            //converter.readInObj("../../../../Resources/Models/potionThin.obj");
-            //converter.WriteToBinary("potionThin.bin");
-
-            //Console.WriteLine("Converting");
-            //converter.readInObj("../../../../Resources/Models/potionWide.obj");
-            //converter.WriteToBinary("potionWide.bin");
-
-            //Console.WriteLine("Converting");
-            //converter.readInObj("../../../../Resources/Models/potionVial.obj");
-            //converter.WriteToBinary("potionVial.bin");
+            converter.readInObj("../../../../Resources/AssetGroups/cauldron/cauldronInner.obj");
+            converter.WriteToBinary("cauldronInner.bin");
 
             Console.WriteLine("Done");
         }

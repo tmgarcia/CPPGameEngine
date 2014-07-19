@@ -11,6 +11,11 @@ uniform vec3 ambientLight;
 uniform mat4 rotationMatrix;
 uniform mat4 modelToWorldMatrix;
  
+uniform float octaveIndex;
+uniform float heightScalar;
+uniform int hasAlphaMap;
+uniform sampler2D alphaMap;
+ 
 out vec3 rotatedNormal;
 out vec3 rotatedTangent;
 out vec3 rotatedBitangent;
@@ -23,13 +28,24 @@ out vec2 UV;
 void main() 
 { 
 	vec4 v = vec4(passedInPosition,1.0f); 
+	vec3 updatedNorm = passedInNormal;
+	if(hasAlphaMap>0)
+	{
+		vec4 texel = texture(alphaMap, passedInUV);
+		int index = int(octaveIndex);
+		float noiseValue = texel[index];
+		float factor = (noiseValue*2)-1;
+		v.y = v.y + (factor*heightScalar);
+		updatedNorm.y = updatedNorm.y + (factor*heightScalar);
+	}
+	
 	gl_Position = fullTransformMatrix * v;
 	modelToWorldPosition = vec3(modelToWorldMatrix * v);
 	
 	float handedness = passedInTangent.w;
-	rotatedNormal = mat3(rotationMatrix) * passedInNormal;
+	rotatedNormal = mat3(rotationMatrix) * updatedNorm;
 	rotatedTangent = mat3(rotationMatrix) * vec3(passedInTangent);
-	vec3 bitangent = handedness*(cross(passedInNormal,vec3(passedInTangent)));
+	vec3 bitangent = handedness*(cross(updatedNorm,vec3(passedInTangent)));
 	rotatedBitangent = mat3(rotationMatrix) * bitangent;
 	
 	ambientColor = vec4(ambientLight, 1.0f);

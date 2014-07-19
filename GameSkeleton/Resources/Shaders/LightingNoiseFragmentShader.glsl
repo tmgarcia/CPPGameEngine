@@ -8,8 +8,6 @@ in vec4 ambientColor;
 in vec4 objectColor;
 in vec2 UV;
 
-uniform float octaveIndex;
-
 uniform vec3 lightPosition;
 uniform float diffusionIntensity;
 uniform vec4 specularColor;
@@ -17,14 +15,15 @@ uniform float specularExponent;
 uniform vec3 eyePosition;
 
 uniform sampler2D diffuseMap;
-uniform sampler2D alphaMap;
 uniform sampler2D normalMap;
 uniform sampler2D ambientOcclusionMap;
 
 uniform int hasDiffuseMap;
-uniform int hasAlphaMap;
 uniform int hasNormalMap;
 uniform int hasAmbientOcclusion;
+
+uniform float burnThreshold;
+uniform float octaveIndex;
 
 out vec4 theFinalColor; 
  
@@ -56,27 +55,27 @@ void main()
 	vec4 specularLighting = specularColor * specularAngle;
 
 	vec4 finalAmbient = ambientColor;
-	if(hasAmbientOcclusion>0)
-	{
-		vec4 aoTexel = texture(ambientOcclusionMap, UV);
-		finalAmbient *= aoTexel;
-	}
+
 	theFinalColor= (finalAmbient + vec4(brightness, brightness, brightness, 1))* objectColor + specularLighting;
 	if(hasDiffuseMap>0)
 	{
 		vec4 texel = texture(diffuseMap, UV);
+		theFinalColor= texel * theFinalColor;
+		theFinalColor.a = texel.a;
+	}
+	
+	if(hasAmbientOcclusion>0)
+	{
+		vec4 texel = texture(ambientOcclusionMap, UV);
 		int index = int(octaveIndex);
 		float noiseValue = texel[index];
-		vec4 bwNoise = vec4(noiseValue,noiseValue,noiseValue,1);
-		theFinalColor= bwNoise * theFinalColor;
-		theFinalColor.a = bwNoise.a;
-	}
-	if(hasAlphaMap>0)
-	{
-		vec4 alphaTexel = texture(alphaMap, UV);
-		if(alphaTexel.r > 0.5 )
+		if(noiseValue>burnThreshold)
 		{
 			discard;
+		}
+		else if(noiseValue+0.02f>burnThreshold)
+		{
+			theFinalColor = vec4(0,0.4f,0.5f,0.5f);
 		}
 	}
 }

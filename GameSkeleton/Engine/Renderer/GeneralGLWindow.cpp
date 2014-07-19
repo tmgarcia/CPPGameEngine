@@ -259,6 +259,12 @@ DiffuseMapInfo* GeneralGLWindow::addDiffuseMap(const uchar* bytes, uint width, u
 	return ret;
 }
 
+void GeneralGLWindow::modifyDiffuseMapData(DiffuseMapInfo* mapToModify, const uchar* bytes, uint width, uint height)
+{
+	glBindTexture(GL_TEXTURE_2D, mapToModify->textureID);
+	loadTextureFromBytes(bytes, width, height);
+}
+
 AlphaMapInfo* GeneralGLWindow::addAlphaMap(const char* fileName)
 {
 

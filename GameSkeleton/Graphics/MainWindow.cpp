@@ -7,20 +7,27 @@ mat4 viewToProjectionMatrix;
 mat4 worldToViewMatrix;
 mat4 worldToProjectionMatrix;
 
+AlphaMapInfo* noiseMap;
 
+float heightMin = -0.5f;
+float heightMax = 0.5f;
+float heightIncrement = 0.01f;
+
+float heightScalar = 0.5f;
+float burnThreshold = 0.0f;
 void MainWindow::setup()
 {
-	camera.setPosition(vec3(0,5,20.0f));
-	camera.setViewDirection(vec3(0,0.0f,-1));
+	camera.setPosition(vec3(0,5,13.0f));
+	camera.setViewDirection(vec3(0,-0.6f,-1));
 	
 	renderer = new RendererHelper();
 
-	renderer->lightPosition = vec3(0,10,16.5f);
+	renderer->lightPosition = vec3(0,4,6);
 	renderer->diffusionIntensity = 0.5f;
 	renderer->specularColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
 	renderer->specularExponent = 10;
-	renderer->overridingObjectColor = vec3(0.9f,0.9f,0.9f);
-	renderer->ambientLight = vec3(0.9f, 0.9f, 0.9f);
+	renderer->overridingObjectColor = vec3(0.5f,0.5f,0.5f);
+	renderer->ambientLight = vec3(0.7f, 0.7f, 0.7f);
 	renderer->eyePosition;
 
 	setupGeometry();
@@ -30,46 +37,67 @@ void MainWindow::setup()
 	renderer->addShader("../Resources/Shaders/PassThroughVertexShader.glsl", "../Resources/Shaders/PassThroughFragmentShader.glsl",RendererHelper::ShaderType::SHADER_PASSTHROUGH, "passThroughShader");
 	setupTextures();
 	setupRenderables();
+
+
+	dMenu->addVec3Slider("tab", &(renderer->lightPosition),-20,20,-20,20,-20,20,"light");
+	/*dMenu->addFloatSlider("tab", &heightMin, -1, 0, "Height Min");
+	dMenu->addFloatSlider("tab", &heightMax, 0,1, "Height Max");
+	dMenu->addFloatSlider("tab", &heightIncrement, 0.01f, 1, "Increment");
+	dMenu->addFloatSlider("tab", &burnThreshold, 0.0f, 1, "burnThreshold");*/
 }
 
 float octaveIndex = 3;
-void MainWindow::createNoiseTexture()
+int noiseWidth = 128;
+int noiseHeight = 128;
+uchar* MainWindow::createNoiseTexture()
 {
-	int width = 128;
-	int height = 128;
 	noise::module::Perlin perlinNoise;
-	perlinNoise.SetFrequency(4.0);
-	uchar *data = new GLubyte[ width * height * 4 ];
+	float frequency = Random::getInstance().randomFloatRange(1,5);
+	perlinNoise.SetFrequency(frequency);
+	uchar *data = new GLubyte[ noiseWidth * noiseHeight * 4 ];
 	uint BYTES_PER_COLOR = 4;
 	float xRange = 1.0;
 	float yRange = 1.0;
-	float xFactor = xRange / width;
-	float yFactor = yRange / height;
+	float xFactor = xRange / noiseWidth;
+	float yFactor = yRange / noiseHeight;
 	//GLubyte SCALE = 0xFF;
 
-	for(int oct = 0; oct<4; oct++)
+	for( int oct = 0; oct< 4; oct++ ) 
 	{
 		perlinNoise.SetOctaveCount(oct+1);
-		for(int i = 0; i<width; i++)
+		for( int i = 0; i < noiseWidth; i++ ) 
 		{
-			for(int j = 0; j<height; j++)
+			for( int j = 0 ; j < noiseHeight; j++ ) 
 			{
-				float x = xFactor*i;
-				float y = yFactor*j;
-				float z = 0;
-				float val = (float)perlinNoise.GetValue(x,y,z);
+				float x = xFactor * i;
+				float y = yFactor * j;
+				float z = 0.0;
+				float val = 0.0f;
 
-				val = (val + 1.0f)*0.5f;
-				val = (val>1.0f)? 1.0f : val;
-				val = (val<0.0f)? 0.0f : val;
+				float a, b, c, d;
+				a = perlinNoise.GetValue(x ,y ,z);
+				b = perlinNoise.GetValue(x+xRange,y ,z);
+				c = perlinNoise.GetValue(x ,y+yRange,z);
+				d = perlinNoise.GetValue(x+xRange,y+yRange,z);
 
-				data[((j*width+ i)*4) + oct] = val*255.0f;
+				float xmix = 1.0 - x / xRange;
+				float ymix = 1.0 - y / yRange;
+				float x1 = glm::mix( a, b, xmix );
+				float x2 = glm::mix( c, d, xmix );
+
+				val = glm::mix(x1, x2, ymix );
+				val = (val + 1.0f) * 0.5f;
+				val = val> 1.0 ? 1.0 :val;
+				val = val< 0.0 ? 0.0 :val;
+
+				data[((j * noiseWidth + i) * 4) + oct] =( val * 255.0f );
 			}
 		}
 	}
-	renderer->addDiffuseMap(data, width, height, "noiseTexture");
+	//noiseMap = renderer->addDiffuseMap(data, noiseWidth, noiseHeight, "noiseTexture");
 
-	dMenu->addFloatSlider("tab", &octaveIndex, 0,3,"Octave");
+	//dMenu->addFloatSlider("tab", &octaveIndex, 0,3,"Octave");
+	return data;
 }
 
 void MainWindow::setupGeometry()
@@ -77,6 +105,9 @@ void MainWindow::setupGeometry()
 	renderer->addNUGeo(RendererHelper::NUShapes::NU_CUBE, "NUCube");
 
 	renderer->addNUGeo(RendererHelper::NUShapes::NU_PLANE, "NUPlane");
+
+	renderer->addGeoFromBin("../Resources/AssetGroups/Cauldron/cauldron.bin","cauldronGeo");
+	renderer->addGeoFromBin("../Resources/AssetGroups/Cauldron/cauldronInner.bin","cauldronInnerGeo");
 
 	renderer->addGeoFromBin("../Resources/Models/alchemyRoom.bin","alchemyRoomGeo");
 
@@ -107,7 +138,11 @@ void MainWindow::setupTransforms()
 	worldToViewMatrix = camera.getWorldToViewMatrix();
 	worldToProjectionMatrix = viewToProjectionMatrix * worldToViewMatrix;
 
-	renderer->addGameObject(vec3(0,5,18),vec3(1,1,1),90.0f,0,0,worldToProjectionMatrix,"noisePlane");
+	//renderer->addGameObject(vec3(0,5,18),vec3(1,1,1),0.0f,0,0,worldToProjectionMatrix,"noisePlane");
+
+	renderer->addGameObject(vec3(0,1,10),vec3(1,1,1),0,0,0,worldToProjectionMatrix,"cauldron");
+	renderer->addGameObject(vec3(0,1,10),vec3(1,1,1),0,0,0,worldToProjectionMatrix,"cauldronInner");
+	renderer->addGameObject(vec3(0,1.01,10),vec3(1,1,1),0,0,0,worldToProjectionMatrix,"cauldronInnerBurn");
 
 	renderer->addGameObject(renderer->lightPosition,vec3(0.1f,0.1f,0.1f),0,0,0,worldToProjectionMatrix, "lightBulb");
 
@@ -142,10 +177,16 @@ void MainWindow::setupTransforms()
 
 void MainWindow::setupTextures()
 {
-	renderer->addNormalMap("../Resources/AssetGroups/Ogre/ogre_normalmap.png", "ogreNormal");
-	renderer->addDiffuseMap("../Resources/AssetGroups/Ogre/diffuse.png", "ogreDiffuse");
-	renderer->addAmbientOcclusionMap("../Resources/AssetGroups/Ogre/ao_ears.png", "ogreAO");
+	//renderer->addNormalMap("../Resources/AssetGroups/Ogre/ogre_normalmap.png", "ogreNormal");
+	//renderer->addDiffuseMap("../Resources/AssetGroups/Ogre/diffuse.png", "ogreDiffuse");
+	//renderer->addAmbientOcclusionMap("../Resources/AssetGroups/Ogre/ao_ears.png", "ogreAO");
 
+	renderer->addNormalMap("../Resources/AssetGroups/Cauldron/cauldronNormal.png", "cauldronNormal");
+	renderer->addDiffuseMap("../Resources/AssetGroups/Cauldron/cauldronDiffuse.png", "cauldronDiffuse");
+	renderer->addNormalMap("../Resources/AssetGroups/Cauldron/liquidBurnNormal.png", "liquidBurnNormal");
+	renderer->addNormalMap("../Resources/AssetGroups/Cauldron/liquidNormal.png", "liquidNormal");
+	renderer->addDiffuseMap("../Resources/AssetGroups/Cauldron/liquidBurnDiffuse.png", "liquidBurnDiffuse");
+	renderer->addDiffuseMap("../Resources/AssetGroups/Cauldron/liquidDiffuse.png", "liquidDiffuse");
 	renderer->addDiffuseMap("../Resources/Textures/alchemyRoomTexture.png", "alchRoomTexture");
 	renderer->addDiffuseMap("../Resources/Textures/alchemyRoomOuterTexture.png", "alchRoomOuterTexture");
 	renderer->addDiffuseMap("../Resources/Textures/alchemyTableTexture.png", "alchTableTexture");
@@ -158,13 +199,33 @@ void MainWindow::setupTextures()
 	renderer->addDiffuseMap("../Resources/Textures/potionWideTexture1.png", "potWTexture1");
 	renderer->addDiffuseMap("../Resources/Textures/potionSkoomaTexture1.png", "potVTexture1");
 
-	createNoiseTexture();
+	uchar* data = createNoiseTexture();
+	noiseMap = renderer->addAlphaMap(data, noiseWidth, noiseHeight, "noiseTexture");
+	dMenu->addFloatSlider("tab", &octaveIndex, 0,3,"Octave");
+	data = createNoiseTexture();
+	renderer->addAmbientOcclusionMap(data, noiseWidth, noiseHeight, "burnNoise");
 }
+
 
 void MainWindow::setupRenderables()
 {
-	GameObject* noise = renderer->setupGameObjectRenderable("noisePlane","NUPlane","lightingNoiseShader",true,PRIORITY_1,true,"noiseTexture","","","");
+	//GameObject* noise = renderer->setupGameObjectRenderable("noisePlane","NUPlane","lightingNoiseShader",true,PRIORITY_1,true,"noiseTexture","","","");
+	//GeneralGLWindow::getInstance().addRenderableUniformParameter(noise->renderable, "octaveIndex", PT_FLOAT, &octaveIndex);
+
+	GameObject* noise = renderer->setupGameObjectRenderable("cauldronInner","cauldronInnerGeo","lightingNoiseShader",true,PRIORITY_1,true,"liquidDiffuse","noiseTexture","liquidNormal","");
 	GeneralGLWindow::getInstance().addRenderableUniformParameter(noise->renderable, "octaveIndex", PT_FLOAT, &octaveIndex);
+	GeneralGLWindow::getInstance().addRenderableUniformParameter(noise->renderable, "heightScalar", PT_FLOAT, &heightScalar);
+	
+	GameObject* noiseB = renderer->setupGameObjectRenderable("cauldronInnerBurn","cauldronInnerGeo","lightingNoiseShader",true,PRIORITY_1,true,"liquidBurnDiffuse","noiseTexture","liquidBurnNormal","burnNoise");
+	GeneralGLWindow::getInstance().addRenderableUniformParameter(noiseB->renderable, "octaveIndex", PT_FLOAT, &octaveIndex);
+	GeneralGLWindow::getInstance().addRenderableUniformParameter(noiseB->renderable, "heightScalar", PT_FLOAT, &heightScalar);
+	GeneralGLWindow::getInstance().addRenderableUniformParameter(noiseB->renderable, "burnThreshold", PT_FLOAT, &burnThreshold);
+	//dMenu->addFloatSlider("tab", &heightScalar, 0,1,"Height Scalar");
+
+	//GameObject* noise = renderer->setupGameObjectRenderable("cauldronInner","cauldronInnerGeo","lightingNoiseShader",true,PRIORITY_1,true,"","noiseTexture","liquidNormal","");
+
+
+	renderer->setupGameObjectRenderable("cauldron","cauldronGeo","textureLightingShader",true,PRIORITY_1,true,"cauldronDiffuse","","cauldronNormal","");
 
 	renderer->setupGameObjectRenderable("lightBulb","NUCube","passThroughShader",true,PRIORITY_1,true,"","","","");
 
@@ -200,12 +261,44 @@ void MainWindow::setupRenderables()
 }
 
 int frame = 0;
+
+bool heightUp = true;
+
+float burnMax = 0.8f;
+float burnMin = 0.1f;
+float burnIncrement = 0.001f;
+bool burnUp = true;
+
 void MainWindow::update()
 {
 	renderer->getGameObject("alchRoomOuter")->yRotationAngle+= 0.4f;
 	updateShaderInfo();
 	frame++;
-	renderer->lightPosition = renderer->getGameObject("lightBulb")->position;
+	renderer->getGameObject("lightBulb")->position = renderer->lightPosition;
+	//renderer->lightPosition = renderer->getGameObject("lightBulb")->position;
+
+	burnThreshold += (burnUp)? burnIncrement: -burnIncrement;
+	if(burnThreshold >= burnMax)
+	{
+		burnThreshold = burnMax;
+		burnUp = false;
+	}
+	if(burnThreshold <= burnMin)
+	{
+		burnThreshold = burnMin;
+		burnUp = true;
+	}
+	heightScalar += (heightUp)? heightIncrement: -heightIncrement;
+	if(heightScalar>=heightMax)
+	{
+		heightScalar = heightMax;
+		heightUp = false;
+	}
+	if(heightScalar<=heightMin)
+	{
+		heightScalar = heightMin;
+		heightUp = true;
+	}
 }
 
 void MainWindow::updateShaderInfo()

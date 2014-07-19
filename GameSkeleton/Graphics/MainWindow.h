@@ -62,7 +62,7 @@ protected:
 	void setupTransforms();
 	void setupTextures();
 	void setupRenderables();
-	void createNoiseTexture();
+	uchar* createNoiseTexture();
 	Camera camera;
 	void keyPressEvent(QKeyEvent* event);
 	void updateShaderInfo();

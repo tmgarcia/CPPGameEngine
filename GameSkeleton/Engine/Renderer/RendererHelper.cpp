@@ -47,7 +47,7 @@ GeometryInfo* RendererHelper::addNUGeo(NUShapes shape, QString name)
 		geoData = Neumont::ShapeGenerator::makeCube();
 		break;
 	case(NU_PLANE):
-		geoData = Neumont::ShapeGenerator::makePlane(2);
+		geoData = Neumont::ShapeGenerator::makePlane(10);
 		break;
 	case(NU_SPHERE):
 		geoData = Neumont::ShapeGenerator::makeSphere(10);

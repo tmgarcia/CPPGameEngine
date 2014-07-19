@@ -66,6 +66,7 @@ public:
 		const char* vertexShaderFilename,
 		const char* fragmentShaderFilename);
 
+	void modifyDiffuseMapData(DiffuseMapInfo* mapToModify, const uchar* bytes, uint width, uint height);
 	DiffuseMapInfo* addDiffuseMap(const char* fileName);
 	DiffuseMapInfo* addDiffuseMap(const uchar* bytes, uint width, uint height);
 	AlphaMapInfo* addAlphaMap(const char* fileName);

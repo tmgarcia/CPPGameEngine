@@ -51,7 +51,8 @@ private:
 
 public:
 	void debugMethod();
-
+	GLuint WINDOW_WIDTH;
+	GLuint WINDOW_HEIGHT;
 	static GeneralGLWindow& getInstance();
 
 	GeometryInfo* addGeometry(
@@ -124,6 +125,7 @@ protected:
 	void paintGL();
 	void mouseMoveEvent(QMouseEvent* e);
 	void mouseReleaseEvent(QMouseEvent* e);
+	void resizeEvent(QResizeEvent* e);
 
 signals:
 	void keyPressed(QKeyEvent* e);

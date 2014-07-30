@@ -18,6 +18,7 @@ PassInfo* pass1;
 PassInfo* pass2;
 void ScratchWindow::setup()
 {
+	cout << "setup" << endl;
 	camera.setPosition(vec3(0,0,10));
 	camera.setViewDirection(vec3(0,0,-1));
 
@@ -31,6 +32,8 @@ void ScratchWindow::setup()
 	renderHelper->ambientLight = vec3(0.4f, 0.4f, 0.4f);
 	renderHelper->eyePosition;
 
+	GeneralGLWindow::getInstance().WINDOW_HEIGHT = WINDOW_HEIGHT;
+	GeneralGLWindow::getInstance().WINDOW_WIDTH = WINDOW_WIDTH;
 	pass1 = GeneralGLWindow::getInstance().addPass(false,false);
 	GeneralGLWindow::getInstance().storePassColorTexture(pass1,DIMENSIONS,DIMENSIONS);
 	GeneralGLWindow::getInstance().storePassDepthTexture(pass1,DIMENSIONS,DIMENSIONS);
@@ -46,6 +49,8 @@ void ScratchWindow::setup()
 
 void ScratchWindow::setupGeometry()
 {
+	cout << "setup geometry" << endl;
+
 	renderHelper->addNUGeo(RendererHelper::NUShapes::NU_TEAPOT, "NUCube");
 	renderHelper->addGeoFromBin("../Resources/Models/plane.bin","plane");
 

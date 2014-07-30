@@ -28,7 +28,10 @@ class ScratchWindow : public QMainWindow
 public:
 	ScratchWindow()
 	{
+
 		this->show();
+		//this->resize(WINDOW_WIDTH, WINDOW_HEIGHT);
+
 		cameraFrozen = false;
 		connect(&updateTimer, SIGNAL(timeout()), this, SLOT(update()));
 		updateTimer.setInterval(1);
@@ -56,6 +59,7 @@ public:
 
 		this->resize(WINDOW_WIDTH, WINDOW_HEIGHT);
 		this->move(300, 0);
+		
 	}
 	~ScratchWindow()
 	{
@@ -73,6 +77,7 @@ protected:
 	Camera camera;
 	void keyPressEvent(QKeyEvent *event);
 	void updateShaderInfo();
+	//void resizeEvent(QResizeEvent* e);
 private slots:
 	void update();
 

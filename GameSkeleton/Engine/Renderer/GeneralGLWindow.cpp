@@ -43,11 +43,12 @@ RenderableInfo* renderableInfos[MAX_NUM_RENDERABLES];
 PassInfo* passes[MAX_NUM_PASSES];
 #pragma endregion
 
-GLuint frameBufferID;
+//GLuint frameBufferID;
 
 
 void GeneralGLWindow::initializeGL()
 {
+	cout << "INITIALIZE" << endl;
 	setMouseTracking(true);
 	glewInit();
 	glDisable(GL_CULL_FACE);
@@ -280,7 +281,7 @@ TextureInfo* GeneralGLWindow::addTexture(uint width, uint height)
 	ret->width = width;
 	ret->height = height;
 	glGenTextures(1, &(ret->textureID));
-	glBindTexture(GL_TEXTURE_2D, ret->textureID);//need?
+	//glBindTexture(GL_TEXTURE_2D, ret->textureID);//need?
 	currentTextureIndex++;
 	return ret;
 }
@@ -393,7 +394,7 @@ void GeneralGLWindow::setupFrameBuffer(PassInfo* pass)
 			glBindTexture(GL_TEXTURE_2D, pass->colorTexture->textureID);
 			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1024, 1024,0,GL_RGBA,GL_UNSIGNED_BYTE,0);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, WINDOW_WIDTH, WINDOW_HEIGHT, 0,GL_RGBA,GL_UNSIGNED_BYTE,0);
 			glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D,pass->colorTexture->textureID,0);
 			GLuint status = glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER);
 			if(status!=GL_FRAMEBUFFER_COMPLETE)
@@ -408,7 +409,7 @@ void GeneralGLWindow::setupFrameBuffer(PassInfo* pass)
 			glBindTexture(GL_TEXTURE_2D, pass->depthTexture->textureID);
 			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32,1024,1024,0,GL_DEPTH_COMPONENT,GL_FLOAT,0);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32,WINDOW_WIDTH,WINDOW_HEIGHT,0,GL_DEPTH_COMPONENT,GL_FLOAT,0);
 			glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, pass->depthTexture->textureID, 0);
 			GLuint status = glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER);
 			if(status!=GL_FRAMEBUFFER_COMPLETE)
@@ -421,6 +422,26 @@ void GeneralGLWindow::setupFrameBuffer(PassInfo* pass)
 		if(status!=GL_FRAMEBUFFER_COMPLETE)
 		{
 			qDebug() << "Frame buffer incomplete";
+			
+		}
+	}
+}
+
+void GeneralGLWindow::resizeEvent(QResizeEvent* event)
+{
+	cout << "RESIZE EVENT" << endl;
+	//resizeGL(event->size().width(), event->size().height());
+	//initializeGL();
+	QGLWidget::resizeEvent(event);
+	QSize newSize = event->size();
+	WINDOW_HEIGHT = newSize.height();
+	WINDOW_WIDTH = newSize.width();
+
+	if(currentPassIndex > 0)
+	{
+		for(int i = 0; i < currentPassIndex; i++)
+		{
+			setupFrameBuffer(passes[i]);
 		}
 	}
 }

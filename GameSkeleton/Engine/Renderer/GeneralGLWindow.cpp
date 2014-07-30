@@ -429,9 +429,6 @@ void GeneralGLWindow::setupFrameBuffer(PassInfo* pass)
 
 void GeneralGLWindow::resizeEvent(QResizeEvent* event)
 {
-	cout << "RESIZE EVENT" << endl;
-	//resizeGL(event->size().width(), event->size().height());
-	//initializeGL();
 	QGLWidget::resizeEvent(event);
 	QSize newSize = event->size();
 	WINDOW_HEIGHT = newSize.height();

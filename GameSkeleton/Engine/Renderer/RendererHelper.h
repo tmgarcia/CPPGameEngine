@@ -56,35 +56,22 @@ public:
 	GeometryInfo* addGeoFromBin(char* fileName, QString name="");
 	void addGeometry(GeometryInfo* geometry, QString name);
 	
-	GameObject* addGameObject(vec3 _position, vec3 _scale, float xRotation, float yRotation, float zRotation, mat4 worldToProjectionMatrix, QString name="");
+	GameObject* addGameObject(vec3 _position, vec3 _scale, float xRotation, float yRotation, float zRotation, mat4 worldToProjectionMatrix, QString name="", bool project=true);
 	void addGameObject(GameObject* object, QString name="");
+
 	//void setupGameObjectRenderable(GameObject* object, GeometryInfo* geo, ShaderInfo* shader, bool visible, PriorityLevel priority, bool depth, DiffuseMapInfo* diffuseMap, AlphaMapInfo* alphaMap, NormalMapInfo* normalMap);
+	
 	void setupGameObjectRenderable(GameObject* object, QString geometryName, QString shaderName, bool visible, PriorityLevel priorityLevel, bool depth, QString diffuseMapName, QString alphaMapName, QString normalMapName, QString ambientOcclusionMapName);
 	GameObject* setupGameObjectRenderable(QString gameObjectName, QString geometryName, QString shaderName, bool visible, PriorityLevel priorityLevel, bool depth, QString diffuseMapName, QString alphaMapName, QString normalMapName, QString ambientOcclusionMapName);
 	
-	DiffuseMapInfo* addDiffuseMap(const char* fileName, QString name="");
-	DiffuseMapInfo* addDiffuseMap(const uchar* bytes, uint width, uint height, QString name="");
-	void addDiffuseMap(DiffuseMapInfo* diffuseMap, QString name="");
+	TextureInfo* addTexture(const char* fileName, QString name="");
+	TextureInfo* addTexture(const uchar* bytes, uint width, uint height, QString name="");
+	void addTexture(TextureInfo* diffuseMap, QString name="");
 	
-	AlphaMapInfo* addAlphaMap(const char* fileName, QString name="");
-	AlphaMapInfo* addAlphaMap(const uchar* bytes, uint width, uint height, QString name="");
-	void addAlphaMap(AlphaMapInfo* alphaMap, QString name="");
-	
-	NormalMapInfo* addNormalMap(const char* fileName, QString name="");
-	NormalMapInfo* addNormalMap(const uchar* bytes, uint width, uint height, QString name="");
-	void addNormalMap(NormalMapInfo* normalMap, QString name="");
-	
-	AmbientOcclusionMapInfo* addAmbientOcclusionMap(const char* fileName, QString name="");
-	AmbientOcclusionMapInfo* addAmbientOcclusionMap(const uchar* bytes, uint width, uint height, QString name="");
-	void addAmbientOcclusionMap(AmbientOcclusionMapInfo* ambientOcclusionMap, QString name="");
-
 	GeometryInfo* getGeometry(QString name);
 	GameObject* getGameObject(QString name);
 	ShaderInfo* getShader(QString name);
-	DiffuseMapInfo* getDiffuseMap(QString name);
-	AlphaMapInfo* getAlphaMap(QString name);
-	NormalMapInfo* getNormalMap(QString name);
-	AmbientOcclusionMapInfo* getAmbientOcclusionMap(QString name);
+	TextureInfo* getTexture(QString name);
 
 	void updateShaderInfo(mat4 worldToProjectionMatrix);
 
@@ -99,24 +86,9 @@ public:
 		GeometryInfo* geoInfo;
 		QString name;
 	};
-	struct DiffuseMap
+	struct Texture
 	{
-		DiffuseMapInfo* mapInfo;
-		QString name;
-	};
-	struct AlphaMap
-	{
-		AlphaMapInfo* mapInfo;
-		QString name;
-	};
-	struct NormalMap
-	{
-		NormalMapInfo* mapInfo;
-		QString name;
-	};
-	struct AmbientOcclusionMap
-	{
-		AmbientOcclusionMapInfo* mapInfo;
+		TextureInfo* textureInfo;
 		QString name;
 	};
 	struct Shader
@@ -132,7 +104,7 @@ private:
 	void setupReadInGeoVertexArrayInfo(GeometryInfo* geometry);
 	void addLightingAndTextureShaderUniforms(GameObject* gameObject);
 	void addPassThroughShaderUniforms(GameObject* gameObject);
-
+	void addTextureShaderUniforms(GameObject* gameObject);
 
 	ShaderType getShaderType(QString shaderName);
 
@@ -141,10 +113,6 @@ private:
 	QList<Object> gameObjects;
 	QList<Geometry> geometries;
 	QList<Shader> shaders;
-	QList<DiffuseMap> diffuseMaps;
-	QList<AlphaMap> alphaMaps;
-	QList<NormalMap> normalMaps;
-	QList<AmbientOcclusionMap> ambientOcclusionMaps;
-
+	QList<Texture> textures;
 };
 

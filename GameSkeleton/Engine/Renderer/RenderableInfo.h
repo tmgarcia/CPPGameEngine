@@ -1,10 +1,7 @@
 #pragma once
 #include "GeometryInfo.h"
 #include "ShaderInfo.h"
-#include "DiffuseMapInfo.h"
-#include "AlphaMapInfo.h"
-#include "AmbientOcclusionMapInfo.h"
-#include "NormalMapInfo.h"
+#include "TextureInfo.h"
 #include "ShaderUniformParameter.h"
 #include "PriorityLevel.h"
 using glm::mat4;
@@ -29,10 +26,10 @@ public:
 	bool usingAmbientOcclusionMap;
 	mat4 whereMatrix;
 	GeometryInfo* whatGeometry;
-	DiffuseMapInfo* diffuseMap;
-	AlphaMapInfo* alphaMap;
-	NormalMapInfo* normalMap;
-	AmbientOcclusionMapInfo* ambientOcclusionMap;
+	TextureInfo* diffuseMap;
+	TextureInfo* alphaMap;
+	TextureInfo* normalMap;
+	TextureInfo* ambientOcclusionMap;
 	bool visible;
 	PriorityLevel priority;
 };

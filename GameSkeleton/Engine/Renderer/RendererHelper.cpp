@@ -47,7 +47,7 @@ GeometryInfo* RendererHelper::addNUGeo(NUShapes shape, QString name)
 		geoData = Neumont::ShapeGenerator::makeCube();
 		break;
 	case(NU_PLANE):
-		geoData = Neumont::ShapeGenerator::makePlane(10);
+		geoData = Neumont::ShapeGenerator::makePlane(2);
 		break;
 	case(NU_SPHERE):
 		geoData = Neumont::ShapeGenerator::makeSphere(10);
@@ -122,9 +122,10 @@ void RendererHelper::addGeometry(GeometryInfo* geometry, QString name)
 #pragma endregion
 
 #pragma region GameObjectMethods
-GameObject* RendererHelper::addGameObject(vec3 position, vec3 scale, float xRotation, float yRotation, float zRotation, mat4 worldToProjectionMatrix, QString name)
+GameObject* RendererHelper::addGameObject(vec3 position, vec3 scale, float xRotation, float yRotation, float zRotation, mat4 worldToProjectionMatrix, QString name, bool project)
 {
 	GameObject* gameObject = new GameObject();
+	gameObject->project = project;
 	gameObject->setupTransforms(position, scale, xRotation, yRotation, zRotation, worldToProjectionMatrix);
 	Object object;
 	object.gameObject = gameObject;
@@ -156,20 +157,26 @@ void RendererHelper::addGameObject(GameObject* gameObject, QString name)
 }
 void RendererHelper::setupGameObjectRenderable(GameObject* object, QString geometryName, QString shaderName, bool visible, PriorityLevel priorityLevel, bool depth, QString diffuseMapName, QString alphaMapName, QString normalMapName, QString ambientOcclusionMapName)
 {
-	object->renderable = GeneralGLWindow::getInstance().addRenderable(getGeometry(geometryName), object->modelToWorldMatrix, getShader(shaderName), true, PRIORITY_1, true, getDiffuseMap(diffuseMapName), getAlphaMap(alphaMapName), getNormalMap(normalMapName),getAmbientOcclusionMap(ambientOcclusionMapName));
-	if(getShaderType(shaderName) == ShaderType::SHADER_LIGHTING_TEXTURE)
+	object->renderable = GeneralGLWindow::getInstance().addRenderable(getGeometry(geometryName), object->modelToWorldMatrix, getShader(shaderName), true, PRIORITY_1, true, getTexture(diffuseMapName), getTexture(alphaMapName), getTexture(normalMapName),getTexture(ambientOcclusionMapName));
+	ShaderType shaderType = getShaderType(shaderName);
+	if(shaderType == ShaderType::SHADER_LIGHTING_TEXTURE)
 	{
 		addLightingAndTextureShaderUniforms(object);
 	}
-	else if(getShaderType(shaderName) == ShaderType::SHADER_PASSTHROUGH)
+	else if(shaderType == ShaderType::SHADER_PASSTHROUGH)
 	{
 		addPassThroughShaderUniforms(object);
+	}
+	else if(shaderType == ShaderType::SHADER_TEXTURE)
+	{
+		addTextureShaderUniforms(object);
 	}
 }
 GameObject* RendererHelper::setupGameObjectRenderable(QString gameObjectName, QString geometryName, QString shaderName, bool visible, PriorityLevel priorityLevel, bool depth, QString diffuseMapName, QString alphaMapName, QString normalMapName, QString ambientOcclusionMapName)
 {
 	GameObject* object = getGameObject(gameObjectName);
-	object->renderable = GeneralGLWindow::getInstance().addRenderable(getGeometry(geometryName), object->modelToWorldMatrix, getShader(shaderName), true, PRIORITY_1, true, getDiffuseMap(diffuseMapName), getAlphaMap(alphaMapName), getNormalMap(normalMapName),getAmbientOcclusionMap(ambientOcclusionMapName));
+	object->renderable = GeneralGLWindow::getInstance().addRenderable(getGeometry(geometryName), object->modelToWorldMatrix, getShader(shaderName), true, PRIORITY_1, true, getTexture(diffuseMapName), getTexture(alphaMapName), getTexture(normalMapName),getTexture(ambientOcclusionMapName));
+	ShaderType shaderType = getShaderType(shaderName);
 	if(getShaderType(shaderName) == ShaderType::SHADER_LIGHTING_TEXTURE)
 	{
 		addLightingAndTextureShaderUniforms(object);
@@ -178,203 +185,60 @@ GameObject* RendererHelper::setupGameObjectRenderable(QString gameObjectName, QS
 	{
 		addPassThroughShaderUniforms(object);
 	}
+	else if(shaderType == ShaderType::SHADER_TEXTURE)
+	{
+		addTextureShaderUniforms(object);
+	}
 	return object;
 }
 #pragma endregion
 
-#pragma region DiffuseMethods
-DiffuseMapInfo* RendererHelper::addDiffuseMap(const char* fileName, QString name)
+#pragma region Texture Methods
+TextureInfo* RendererHelper::addTexture(const char* fileName, QString name)
 {
-	DiffuseMapInfo* mapInfo = GeneralGLWindow::getInstance().addDiffuseMap(fileName);
-	DiffuseMap map;
-	map.mapInfo = mapInfo;
+	TextureInfo* mapInfo = GeneralGLWindow::getInstance().addTexture(fileName);
+	Texture map;
+	map.textureInfo = mapInfo;
 	if(name.isNull() || name.isEmpty())
 	{
-		map.name = "diffuseMap" + QString::number(diffuseMaps.count());
+		map.name = "texture" + QString::number(textures.count());
 	}
 	else
 	{
 		map.name = name;
 	}
-	diffuseMaps.append(map);
+	textures.append(map);
 	return mapInfo;
 }
-DiffuseMapInfo* RendererHelper::addDiffuseMap(const uchar* bytes, uint width, uint height, QString name)
+TextureInfo* RendererHelper::addTexture(const uchar* bytes, uint width, uint height, QString name)
 {
-	DiffuseMapInfo* mapInfo = GeneralGLWindow::getInstance().addDiffuseMap(bytes, width, height);
-	DiffuseMap map;
-	map.mapInfo = mapInfo;
+	TextureInfo* mapInfo = GeneralGLWindow::getInstance().addTexture(bytes, width, height);
+	Texture map;
+	map.textureInfo = mapInfo;
 	if(name.isNull() || name.isEmpty())
 	{
-		map.name = "diffuseMap" + QString::number(diffuseMaps.count());
+		map.name = "texture" + QString::number(textures.count());
 	}
 	else
 	{
 		map.name = name;
 	}
-	diffuseMaps.append(map);
+	textures.append(map);
 	return mapInfo;
 }
-void RendererHelper::addDiffuseMap(DiffuseMapInfo* mapInfo, QString name)
+void RendererHelper::addTexture(TextureInfo* mapInfo, QString name)
 {
-	DiffuseMap map;
-	map.mapInfo = mapInfo;
+	Texture map;
+	map.textureInfo = mapInfo;
 	if(name.isNull() || name.isEmpty())
 	{
-		map.name = "diffuseMap" + QString::number(diffuseMaps.count());
+		map.name = "diffuseMap" + QString::number(textures.count());
 	}
 	else
 	{
 		map.name = name;
 	}
-	diffuseMaps.append(map);
-}
-#pragma endregion
-
-#pragma region AlphaMapMethods
-AlphaMapInfo* RendererHelper::addAlphaMap(const char* fileName, QString name)
-{
-	AlphaMapInfo* mapInfo = GeneralGLWindow::getInstance().addAlphaMap(fileName);
-	AlphaMap map;
-	map.mapInfo = mapInfo;
-	if(name.isNull() || name.isEmpty())
-	{
-		map.name = "alphaMap" + QString::number(alphaMaps.count());
-	}
-	else
-	{
-		map.name = name;
-	}
-	alphaMaps.append(map);
-	return mapInfo;
-}
-AlphaMapInfo* RendererHelper::addAlphaMap(const uchar* bytes, uint width, uint height, QString name)
-{
-	AlphaMapInfo* mapInfo = GeneralGLWindow::getInstance().addAlphaMap(bytes, width, height);
-	AlphaMap map;
-	map.mapInfo = mapInfo;
-	if(name.isNull() || name.isEmpty())
-	{
-		map.name = "alphaMap" + QString::number(alphaMaps.count());
-	}
-	else
-	{
-		map.name = name;
-	}
-	alphaMaps.append(map);
-	return mapInfo;
-}
-void RendererHelper::addAlphaMap(AlphaMapInfo* mapInfo, QString name)
-{
-	AlphaMap map;
-	map.mapInfo = mapInfo;
-	if(name.isNull() || name.isEmpty())
-	{
-		map.name = "alphaMap" + QString::number(alphaMaps.count());
-	}
-	else
-	{
-		map.name = name;
-	}
-	alphaMaps.append(map);
-}
-#pragma endregion
-
-#pragma region NormalMapMethods
-NormalMapInfo* RendererHelper::addNormalMap(const char* fileName, QString name)
-{
-	NormalMapInfo* mapInfo = GeneralGLWindow::getInstance().addNormalMap(fileName);
-	NormalMap map;
-	map.mapInfo = mapInfo;
-	if(name.isNull() || name.isEmpty())
-	{
-		map.name = "normalMap" + QString::number(normalMaps.count());
-	}
-	else
-	{
-		map.name = name;
-	}
-	normalMaps.append(map);
-	return mapInfo;
-}
-NormalMapInfo* RendererHelper::addNormalMap(const uchar* bytes, uint width, uint height, QString name)
-{
-	NormalMapInfo* mapInfo = GeneralGLWindow::getInstance().addNormalMap(bytes, width, height);
-	NormalMap map;
-	map.mapInfo = mapInfo;
-	if(name.isNull() || name.isEmpty())
-	{
-		map.name = "normalMap" + QString::number(normalMaps.count());
-	}
-	else
-	{
-		map.name = name;
-	}
-	normalMaps.append(map);
-	return mapInfo;
-}
-void RendererHelper::addNormalMap(NormalMapInfo* mapInfo, QString name)
-{
-	NormalMap map;
-	map.mapInfo = mapInfo;
-	if(name.isNull() || name.isEmpty())
-	{
-		map.name = "normalMap" + QString::number(normalMaps.count());
-	}
-	else
-	{
-		map.name = name;
-	}
-	normalMaps.append(map);
-}
-#pragma endregion
-
-#pragma region AmbientMapMethods
-AmbientOcclusionMapInfo* RendererHelper::addAmbientOcclusionMap(const char* fileName, QString name)
-{
-	AmbientOcclusionMapInfo* mapInfo = GeneralGLWindow::getInstance().addAmbientOcclusionMap(fileName);
-	AmbientOcclusionMap map;
-	map.mapInfo = mapInfo;
-	if(name.isNull() || name.isEmpty())
-	{
-		map.name = "ambientOcclusionMap" + QString::number(ambientOcclusionMaps.count());
-	}
-	else
-	{
-		map.name = name;
-	}
-	ambientOcclusionMaps.append(map);
-	return mapInfo;
-}
-AmbientOcclusionMapInfo* RendererHelper::addAmbientOcclusionMap(const uchar* bytes, uint width, uint height, QString name)
-{
-	AmbientOcclusionMapInfo* mapInfo = GeneralGLWindow::getInstance().addAmbientOcclusionMap(bytes, width, height);
-	AmbientOcclusionMap map;
-	map.mapInfo = mapInfo;
-	if(name.isNull() || name.isEmpty())
-	{
-		map.name = "ambientOcclusionMap" + QString::number(ambientOcclusionMaps.count());
-	}
-	else
-	{
-		map.name = name;
-	}
-	ambientOcclusionMaps.append(map);
-	return mapInfo;
-}
-void RendererHelper::addAmbientOcclusionMap(AmbientOcclusionMapInfo* mapInfo, QString name)
-{
-	AmbientOcclusionMap map;
-	map.mapInfo = mapInfo;
-	if(name.isNull() || name.isEmpty())
-	{
-		map.name = "ambientOcclusionMap" + QString::number(ambientOcclusionMaps.count());
-	}
-	else
-	{
-		map.name = name;
-	}
-	ambientOcclusionMaps.append(map);
+	textures.append(map);
 }
 #pragma endregion
 
@@ -479,103 +343,28 @@ RendererHelper::ShaderType RendererHelper::getShaderType(QString shaderName)
 	}
 	return type;
 }
-DiffuseMapInfo* RendererHelper::getDiffuseMap(QString name)
+TextureInfo* RendererHelper::getTexture(QString name)
 {
-	DiffuseMapInfo* obj = NULL;
+	TextureInfo* obj = NULL;
 	if(!name.isNull() && !name.isEmpty())
 	{
 		bool found = false;
-		for(int i = 0; i < diffuseMaps.count() && !found; i++)
+		for(int i = 0; i < textures.count() && !found; i++)
 		{
-			if(diffuseMaps[i].name == name)
+			if(textures[i].name == name)
 			{
 				found = true;
-				obj = diffuseMaps[i].mapInfo;
+				obj = textures[i].textureInfo;
 			}
 		}
 		if(!found)
 		{
-			ConsolePrinter::getInstance().print(name, "CANNOT FIND DIFFUSE MAP: ");
+			ConsolePrinter::getInstance().print(name, "CANNOT FIND TEXTURE: ");
 		}
 	}
 	else
 	{
 		//ConsolePrinter::getInstance().print("NO DIFFUSE MAP: ");
-	}
-	return obj;
-}
-AlphaMapInfo* RendererHelper::getAlphaMap(QString name)
-{
-	AlphaMapInfo* obj = NULL;
-	if(!name.isNull() && !name.isEmpty())
-	{
-		bool found = false;
-		for(int i = 0; i < alphaMaps.count() && !found; i++)
-		{
-			if(alphaMaps[i].name == name)
-			{
-				found = true;
-				obj = alphaMaps[i].mapInfo;
-			}
-		}
-		if(!found)
-		{
-			ConsolePrinter::getInstance().print(name, "CANNOT FIND ALPHA MAP: ");
-		}
-	}
-	else
-	{
-		//ConsolePrinter::getInstance().print("NO ALPHA MAP: ");
-	}
-	return obj;
-}
-NormalMapInfo* RendererHelper::getNormalMap(QString name)
-{
-	NormalMapInfo* obj = NULL;
-	if(!name.isNull() && !name.isEmpty())
-	{
-		bool found = false;
-		for(int i = 0; i < normalMaps.count() && !found; i++)
-		{
-			if(normalMaps[i].name == name)
-			{
-				found = true;
-				obj = normalMaps[i].mapInfo;
-			}
-		}
-		if(!found)
-		{
-			ConsolePrinter::getInstance().print(name, "CANNOT FIND NORMAL MAP: ");
-		}
-	}
-	else
-	{
-		//ConsolePrinter::getInstance().print("NO NORMAL MAP: ");
-	}
-	return obj;
-}
-AmbientOcclusionMapInfo* RendererHelper::getAmbientOcclusionMap(QString name)
-{
-	AmbientOcclusionMapInfo* obj = NULL;
-	if(!name.isNull() && !name.isEmpty())
-	{
-		bool found = false;
-		for(int i = 0; i < ambientOcclusionMaps.count() && !found; i++)
-		{
-			if(ambientOcclusionMaps[i].name == name)
-			{
-				found = true;
-				obj = ambientOcclusionMaps[i].mapInfo;
-			}
-		}
-		if(!found)
-		{
-			ConsolePrinter::getInstance().print(name, "CANNOT FIND AMBIENT OCCLUSION MAP: ");
-		}
-	}
-	else
-	{
-		//ConsolePrinter::getInstance().print("NO AO MAP");
 	}
 	return obj;
 }
@@ -618,6 +407,10 @@ void RendererHelper::addLightingAndTextureShaderUniforms(GameObject* gameObject)
 	GeneralGLWindow::getInstance().addRenderableUniformParameter(gameObject->renderable, "modelToWorldMatrix", PT_MAT4, &gameObject->modelToWorldMatrix[0][0]);
 }
 void RendererHelper::addPassThroughShaderUniforms(GameObject* gameObject)
+{
+	GeneralGLWindow::getInstance().addRenderableUniformParameter(gameObject->renderable, "fullTransformMatrix", PT_MAT4, &gameObject->fullTransformMatrix[0][0]);
+}
+void RendererHelper::addTextureShaderUniforms(GameObject* gameObject)
 {
 	GeneralGLWindow::getInstance().addRenderableUniformParameter(gameObject->renderable, "fullTransformMatrix", PT_MAT4, &gameObject->fullTransformMatrix[0][0]);
 }

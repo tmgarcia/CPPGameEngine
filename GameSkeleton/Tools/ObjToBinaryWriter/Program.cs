@@ -186,8 +186,8 @@ namespace ObjToBinaryWriter
 
             Console.WriteLine("Converting");
             ObjToBinaryConverter converter = new ObjToBinaryConverter();
-            converter.readInObj("../../../../Resources/AssetGroups/cauldron/cauldronInner.obj");
-            converter.WriteToBinary("cauldronInner.bin");
+            converter.readInObj("../../../../Resources/Models/plane.obj");
+            converter.WriteToBinary("plane.bin");
 
             Console.WriteLine("Done");
         }

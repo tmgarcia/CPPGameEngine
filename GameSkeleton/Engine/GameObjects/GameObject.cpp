@@ -15,5 +15,5 @@ void GameObject::updateTransforms(mat4 worldToProjectionMatrix)
 	rotationMatrix = glm::rotate(xRotationAngle, vec3(1,0,0)) * glm::rotate(yRotationAngle, vec3(0,1,0)) * glm::rotate(zRotationAngle, vec3(0,0,1));
 	scalingMatrix = glm::scale(scale);
 	modelToWorldMatrix = translationMatrix * rotationMatrix * scalingMatrix;
-	fullTransformMatrix = worldToProjectionMatrix * modelToWorldMatrix;
+	fullTransformMatrix = (project)? worldToProjectionMatrix * modelToWorldMatrix : modelToWorldMatrix;
 }

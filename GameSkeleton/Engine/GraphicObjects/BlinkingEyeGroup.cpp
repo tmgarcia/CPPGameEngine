@@ -32,14 +32,14 @@ void BlinkingEyeGroup::setupEyeRendererObjects()
 
 	alphaTextureShader = GeneralGLWindow::getInstance().createShaderInfo("../Resources/Shaders/TextureAndAlphaMapVertexShader.glsl", "../Resources/Shaders/TextureAndAlphaMapFragmentShader.glsl");
 
-	eyeTexture = GeneralGLWindow::getInstance().addDiffuseMap("../Resources/Textures/madEyeTexture.bmp");
+	eyeTexture = GeneralGLWindow::getInstance().addTexture("../Resources/Textures/madEyeTexture.bmp");
 	
-	eyeAlpha1 = GeneralGLWindow::getInstance().addAlphaMap("../Resources/AlphaMaps/madEyeAlphaMap1.bmp");
-	eyeAlpha2 = GeneralGLWindow::getInstance().addAlphaMap("../Resources/AlphaMaps/madEyeAlphaMap2.bmp");
-	eyeAlpha3 = GeneralGLWindow::getInstance().addAlphaMap("../Resources/AlphaMaps/madEyeAlphaMap3.bmp");
-	eyeAlpha4 = GeneralGLWindow::getInstance().addAlphaMap("../Resources/AlphaMaps/madEyeAlphaMap4.bmp");
-	eyeAlpha5 = GeneralGLWindow::getInstance().addAlphaMap("../Resources/AlphaMaps/madEyeAlphaMap5.bmp");
-	eyeAlpha6 = GeneralGLWindow::getInstance().addAlphaMap("../Resources/AlphaMaps/madEyeAlphaMap6.bmp");
+	eyeAlpha1 = GeneralGLWindow::getInstance().addTexture("../Resources/AlphaMaps/madEyeAlphaMap1.bmp");
+	eyeAlpha2 = GeneralGLWindow::getInstance().addTexture("../Resources/AlphaMaps/madEyeAlphaMap2.bmp");
+	eyeAlpha3 = GeneralGLWindow::getInstance().addTexture("../Resources/AlphaMaps/madEyeAlphaMap3.bmp");
+	eyeAlpha4 = GeneralGLWindow::getInstance().addTexture("../Resources/AlphaMaps/madEyeAlphaMap4.bmp");
+	eyeAlpha5 = GeneralGLWindow::getInstance().addTexture("../Resources/AlphaMaps/madEyeAlphaMap5.bmp");
+	eyeAlpha6 = GeneralGLWindow::getInstance().addTexture("../Resources/AlphaMaps/madEyeAlphaMap6.bmp");
 
 }
 void BlinkingEyeGroup::setupEyes()
@@ -85,7 +85,7 @@ void BlinkingEyeGroup::updateEyeTransforms(vec3 cameraPosition, vec3 cameraUp, m
 }
 void BlinkingEyeGroup::updateBlinkAlpha(BlinkingEye* eye)
 {
-	AlphaMapInfo* nextAlpha = new AlphaMapInfo();
+	TextureInfo* nextAlpha = new TextureInfo();
 	switch(eye->blinkStage)
 	{
 	case 0: nextAlpha = eyeAlpha1;

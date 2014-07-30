@@ -30,6 +30,7 @@ public:
 	void print(mat4 m, char* label);
 	void print(bool b, char* label);
 	void print(QString qstr, char* label);
+	void print(QString qstr);
 	void print(char* text);
 
 };

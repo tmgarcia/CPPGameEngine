@@ -78,7 +78,7 @@ void GameLevel::setVisible(bool visible)
 void GameLevel::setupLevelGeometry()
 {
 	geometry = GeneralGLWindow::getInstance().addGeometry(shapeData.vertices, shapeData.vertexDataSize, shapeData.indices, shapeData.numIndices, GL_TRIANGLES);
-	texture = GeneralGLWindow::getInstance().addDiffuseMap("../Resources/Textures/shalMapTexture.bmp");
+	texture = GeneralGLWindow::getInstance().addTexture("../Resources/Textures/shalMapTexture.bmp");
 	shader = GeneralGLWindow::getInstance().createShaderInfo("../Resources/Shaders/LightingAndTextureVertexShader.glsl", "../Resources/Shaders/LightingAndTextureFragmentShader.glsl");
 
 	GeneralGLWindow::getInstance().addShaderStreamedParameter(geometry, 0, PT_VEC3, BinReader::POSITION_OFFSET, BinReader::STRIDE);

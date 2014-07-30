@@ -7,16 +7,16 @@
 class __declspec(dllexport) BlinkingEyeGroup
 {
 private:
-	DiffuseMapInfo* eyeTexture;
+	TextureInfo* eyeTexture;
 	GeometryInfo* plane;
 	ShaderInfo* alphaTextureShader;
 
-	AlphaMapInfo* eyeAlpha1;
-	AlphaMapInfo* eyeAlpha2;
-	AlphaMapInfo* eyeAlpha3;
-	AlphaMapInfo* eyeAlpha4;
-	AlphaMapInfo* eyeAlpha5;
-	AlphaMapInfo* eyeAlpha6;
+	TextureInfo* eyeAlpha1;
+	TextureInfo* eyeAlpha2;
+	TextureInfo* eyeAlpha3;
+	TextureInfo* eyeAlpha4;
+	TextureInfo* eyeAlpha5;
+	TextureInfo* eyeAlpha6;
 
 	int numEyes;
 	vec3 eyesCenter;

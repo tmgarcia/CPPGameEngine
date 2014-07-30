@@ -166,16 +166,14 @@
     <ClInclude Include="Entities\FetchingFlagState.h" />
     <ClInclude Include="GameObjects\Flag.h" />
     <ClInclude Include="GameObjects\GameLevel.h" />
+    <ClInclude Include="Renderer\PassInfo.h" />
     <ClInclude Include="Renderer\RendererHelper.h" />
-    <ClInclude Include="Renderer\AlphaMapInfo.h" />
-    <ClInclude Include="Renderer\AmbientOcclusionMapInfo.h" />
     <ClInclude Include="Renderer\BufferInfo.h" />
     <ClInclude Include="Renderer\GeneralGLWindow.h" />
     <ClInclude Include="Renderer\GeometryInfo.h" />
     <ClInclude Include="DebugTools\List.h" />
     <ClInclude Include="DebugTools\Logger.h" />
     <ClInclude Include="BinReader.h" />
-    <ClInclude Include="Renderer\NormalMapInfo.h" />
     <ClInclude Include="Renderer\ParameterType.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="DebugTools\Profiler.h" />
@@ -184,10 +182,10 @@
     <ClInclude Include="Renderer\RenderableInfo.h" />
     <ClInclude Include="Renderer\ShaderInfo.h" />
     <ClInclude Include="Renderer\ShaderUniformParameter.h" />
-    <ClInclude Include="Renderer\DiffuseMapInfo.h" />
     <ClInclude Include="MathTools\TransformationMatrixMaker.h" />
     <ClInclude Include="Entities\State.h" />
     <ClInclude Include="Entities\ReturningToBaseState.h" />
+    <ClInclude Include="Renderer\TextureInfo.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -17,14 +17,11 @@
 #include <iostream>
 #include <glm\glm.hpp>
 
-
+#include "PassInfo.h"
 #include "BufferInfo.h"
 #include "GeometryInfo.h"
 #include "RenderableInfo.h"
-#include "DiffuseMapInfo.h"
-#include "AmbientOcclusionMapInfo.h"
-#include "AlphaMapInfo.h"
-#include "NormalMapInfo.h"
+#include "TextureInfo.h"
 #include "ShaderInfo.h"
 #include "ShaderUniformParameter.h"
 #include "ParameterType.h"
@@ -66,15 +63,10 @@ public:
 		const char* vertexShaderFilename,
 		const char* fragmentShaderFilename);
 
-	void modifyDiffuseMapData(DiffuseMapInfo* mapToModify, const uchar* bytes, uint width, uint height);
-	DiffuseMapInfo* addDiffuseMap(const char* fileName);
-	DiffuseMapInfo* addDiffuseMap(const uchar* bytes, uint width, uint height);
-	AlphaMapInfo* addAlphaMap(const char* fileName);
-	AlphaMapInfo* addAlphaMap(const uchar* bytes, uint width, uint height);
-	NormalMapInfo* addNormalMap(const char* fileName);
-	NormalMapInfo* addNormalMap(const uchar* bytes, uint width, uint height);
-	AmbientOcclusionMapInfo* addAmbientOcclusionMap(const char* fileName);
-	AmbientOcclusionMapInfo* addAmbientOcclusionMap(const uchar* bytes, uint width, uint height);
+	void modifyTextureData(TextureInfo* textureToModify, const uchar* bytes, uint width, uint height);
+	TextureInfo* addTexture(const char* fileName);
+	TextureInfo* addTexture(const uchar* bytes, uint width, uint height);
+	TextureInfo* addTexture(uint width, uint height);
 
 	RenderableInfo* addRenderable(
 		GeometryInfo* whatGeometry,
@@ -83,10 +75,10 @@ public:
 		bool visible,
 		PriorityLevel priority,
 		bool depthEnabled = true,
-		DiffuseMapInfo* diffuseMap = NULL,
-		AlphaMapInfo* alphaMap = NULL,
-		NormalMapInfo* normalMap = NULL,
-		AmbientOcclusionMapInfo* ambientOcclusionMap = NULL);
+		TextureInfo* diffuseMap = NULL,
+		TextureInfo* alphaMap = NULL,
+		TextureInfo* normalMap = NULL,
+		TextureInfo* ambientOcclusionMap = NULL);
 
 	void addShaderStreamedParameter(
 		GeometryInfo* geometry,
@@ -102,14 +94,27 @@ public:
 		ParameterType parameterType,
 		const float* value);
 
-	void sendRenderableToShader(
-		RenderableInfo* renderable);
+	PassInfo* addPass(
+		bool addAllPreviousRenderables,
+		bool setAsCurrentPass);
+	TextureInfo* storePassColorTexture(PassInfo* pass, uint width,uint height);
+	TextureInfo* storePassDepthTexture(PassInfo* pass, uint width,uint height);
+
+	void setCurrentPass(
+		PassInfo* passToMakeCurrent);
+
+	void unsetCurrentPass();
 
 	void initializeGL();
 
 	void keyPressEvent(QKeyEvent* e);
+	void setupFrameBuffer(PassInfo* pass);
 
 private:
+	void drawPass(PassInfo* pass);
+	void drawRenderables(RenderableInfo* renderablesArray[], GLuint numRenderabelsToDraw);
+	void sendRenderableToShader(RenderableInfo* renderable);
+
 	void loadTextureFromFile(const char* filename);
 	void loadTextureFromBytes(const uchar* bytes, uint width, uint height);
 	std::string readShaderCode(const char *filename);

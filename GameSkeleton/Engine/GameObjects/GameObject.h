@@ -28,6 +28,8 @@ public:
 	float yRotationAngle;
 	float zRotationAngle;
 
+	bool project;
+
 	void setupTransforms(vec3 _position, vec3 _scale, float xRotation, float yRotation, float zRotation, mat4 worldToProjectionMatrix);
 	void updateTransforms(mat4 worldToProjectionMatrix);
 };

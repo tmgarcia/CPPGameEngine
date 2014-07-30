@@ -1,8 +1,10 @@
 #pragma once
 
-class AmbientOcclusionMapInfo
+class TextureInfo
 {
 	friend class GeneralGLWindow;
 public:
 	GLuint textureID;
+	int width;
+	int height;
 };

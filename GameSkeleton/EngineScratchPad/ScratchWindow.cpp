@@ -12,90 +12,78 @@ mat4 viewToProjectionMatrix;
 mat4 worldToViewMatrix;
 mat4 worldToProjectionMatrix;
 
+uint DIMENSIONS = 256;
+
+PassInfo* pass1;
+PassInfo* pass2;
 void ScratchWindow::setup()
 {
-	camera.setPosition(vec3(0,0,5));
+	camera.setPosition(vec3(0,0,10));
 	camera.setViewDirection(vec3(0,0,-1));
 
-	renderer = new RendererHelper();
+	renderHelper = new RendererHelper();
 
-	renderer->lightPosition = vec3(1.2f,6.2f,16.5f);
-	renderer->diffusionIntensity = 0.5f;
-	renderer->specularColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
-	renderer->specularExponent = 10;
-	renderer->overridingObjectColor = vec3(0.9f,0.9f,0.9f);
-	renderer->ambientLight = vec3(0.4f, 0.4f, 0.4f);
-	renderer->eyePosition;
+	renderHelper->lightPosition = vec3(0.0f,5.0f,0.0f);
+	renderHelper->diffusionIntensity = 0.5f;
+	renderHelper->specularColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+	renderHelper->specularExponent = 10;
+	renderHelper->overridingObjectColor = vec3(0.9f,0.9f,0.9f);
+	renderHelper->ambientLight = vec3(0.4f, 0.4f, 0.4f);
+	renderHelper->eyePosition;
+
+	pass1 = GeneralGLWindow::getInstance().addPass(false,false);
+	GeneralGLWindow::getInstance().storePassColorTexture(pass1,DIMENSIONS,DIMENSIONS);
+	GeneralGLWindow::getInstance().storePassDepthTexture(pass1,DIMENSIONS,DIMENSIONS);
+	pass2 = GeneralGLWindow::getInstance().addPass(false,false);
 
 	setupGeometry();
 	setupTransforms();
 	setupTextures();
 	setupRenderables();
-
-	/*QList<TrackingFloat*> cubeRfloats;
-	TrackingFloat* rf1 = new TrackingFloat(&normalMapCube->xRotationAngle, 0, 360, "X Angle");
-	TrackingFloat* rf2 = new TrackingFloat(&normalMapCube->yRotationAngle, 0, 360, "Y Angle");
-	TrackingFloat* rf3 = new TrackingFloat(&normalMapCube->zRotationAngle, 0, 360, "Z Angle");
-	cubeRfloats.append(rf1);
-	cubeRfloats.append(rf2);
-	cubeRfloats.append(rf3);
-	dMenu->addMultipleFloatSlider("Normal Map Cube", cubeRfloats, "Rotation");
-	dMenu->addVec3Slider("Normal Map Cube", &normalMapCube->position,-5,5,-5,5,-5,5,"Position");
-	dMenu->addCheckBox("Normal Map Cube", &normalMapCube->renderable->visible, "Show Normal Map Cube");
-
-	QList<TrackingFloat*> floats;
-	TrackingFloat* f1 = new TrackingFloat(&ogre->xRotationAngle, 0, 360, "X Angle");
-	TrackingFloat* f2 = new TrackingFloat(&ogre->yRotationAngle, 0, 360, "Y Angle");
-	TrackingFloat* f3 = new TrackingFloat(&ogre->zRotationAngle, 0, 360, "Z Angle");
-	floats.append(f1);
-	floats.append(f2);
-	floats.append(f3);
-	dMenu->addMultipleFloatSlider("Ogre", floats, "Rotation");
-	dMenu->addCheckBox("Ogre", &ogre->renderable->visible, "Show Ogre");
-	dMenu->addCheckBox("Ogre", &ogre->renderable->usingAmbientOcclusionMap, "Toggle Ambient Occlusion");
-	dMenu->addCheckBox("Ogre", &ogre->renderable->usingNormalMap, "Toggle Normal Map");
-	dMenu->addCheckBox("Ogre", &ogre->renderable->usingDiffuseMap, "Toggle Diffuse Map");
-
-	dMenu->addVec3Slider("Light Controls", &lightBulb->position, -5,5,-5,5,-5,5,"Light");
-	dMenu->addFloatSlider("Light Controls", &diffusionIntensity, 0,5,"Diffusion Intensity");
-	dMenu->addFloatSlider("Light Controls", &specularExponent, 0.1,100,"Specular Exponent");
-	dMenu->addVec3Slider("Light Controls", &ambientLight, 0,1,0,1,0,1,"Ambient Light");*/
+	GeneralGLWindow::getInstance().setupFrameBuffer(pass1);
+	GeneralGLWindow::getInstance().setupFrameBuffer(pass2);
 }
 
 void ScratchWindow::setupGeometry()
 {
-	renderer->addNUGeo(RendererHelper::NUShapes::NU_CUBE, "NUCube");
+	renderHelper->addNUGeo(RendererHelper::NUShapes::NU_TEAPOT, "NUCube");
+	renderHelper->addGeoFromBin("../Resources/Models/plane.bin","plane");
 
-	renderer->addGeoFromBin("../Resources/AssetGroups/Ogre/Ogre.bin","ogreGeo");
 }
-
+GameObject* colorPlane;
+GameObject* depthPlane;
 void ScratchWindow::setupTransforms()
 {
-	renderer->eyePosition = camera.getPosition();
+	renderHelper->eyePosition = camera.getPosition();
 	viewToProjectionMatrix = glm::perspective(60.0f, ((float)WINDOW_WIDTH) / WINDOW_HEIGHT, 0.1f, 90.0f);
 	worldToViewMatrix = camera.getWorldToViewMatrix();
 	worldToProjectionMatrix = viewToProjectionMatrix * worldToViewMatrix;
 
-	renderer->addGameObject(vec3(0,0,0),vec3(0.25f,0.25f,0.25f),0,0,0,worldToProjectionMatrix, "lightBulb");
-
-	renderer->addGameObject(vec3(1,-2,0),vec3(1,1,1),0,0,0,worldToProjectionMatrix,"ogre");
+	renderHelper->addGameObject(vec3(0,0,0),vec3(1,1,1),0,45,0,worldToProjectionMatrix,"Cube");
+	colorPlane = renderHelper->addGameObject(vec3(0.2f,0.7f,-0.9999f),vec3(0.25f,1,0.25f),90,0,0,worldToProjectionMatrix,"ColorPlane", false);
+	depthPlane = renderHelper->addGameObject(vec3(0.7f,0.7f,-0.9999f),vec3(0.25f,1,0.25f),90,0,0,worldToProjectionMatrix,"DepthPlane", false);
 }
 
 void ScratchWindow::setupTextures()
 {
-	renderer->addShader("../Resources/Shaders/LightingTextureAlphaNormalVertexShader.glsl", "../Resources/Shaders/LightingTextureAlphaNormalFragmentShader.glsl",RendererHelper::ShaderType::SHADER_LIGHTING_TEXTURE, "textureLightingShader");
-	renderer->addShader("../Resources/Shaders/PassThroughVertexShader.glsl", "../Resources/Shaders/PassThroughFragmentShader.glsl",RendererHelper::ShaderType::SHADER_PASSTHROUGH, "passThroughShader");
+	renderHelper->addShader("../Resources/Shaders/LightingTextureAlphaNormalVertexShader.glsl", "../Resources/Shaders/LightingTextureAlphaNormalFragmentShader.glsl",RendererHelper::ShaderType::SHADER_LIGHTING_TEXTURE, "textureLightingShader");
+	renderHelper->addShader("../Resources/Shaders/PassThroughVertexShader.glsl", "../Resources/Shaders/PassThroughFragmentShader.glsl",RendererHelper::ShaderType::SHADER_PASSTHROUGH, "passThroughShader");
+	renderHelper->addShader("../Resources/Shaders/JustTextureVertexShader.glsl", "../Resources/Shaders/JustTextureFragmentShader.glsl",RendererHelper::ShaderType::SHADER_TEXTURE, "textureShader");
+	renderHelper->addShader("../Resources/Shaders/DepthTextureVertexShader.glsl", "../Resources/Shaders/DepthTextureFragmentShader.glsl",RendererHelper::ShaderType::SHADER_TEXTURE, "deptTextureShader");
 
-	renderer->addNormalMap("../Resources/AssetGroups/Ogre/ogre_normalmap.png", "ogreNormal");
-	renderer->addDiffuseMap("../Resources/AssetGroups/Ogre/diffuse.png", "ogreDiffuse");
-	renderer->addAmbientOcclusionMap("../Resources/AssetGroups/Ogre/ao_ears.png", "ogreAO");
+	renderHelper->addTexture(pass1->colorTexture, "pass1Color");
+	renderHelper->addTexture(pass1->depthTexture, "pass1Depth");
+	renderHelper->addTexture("../Resources/Textures/lava1Texture.bmp","lavaText");
 }
 
 void ScratchWindow::setupRenderables()
 {
-	renderer->setupGameObjectRenderable("lightBulb","NUCube","passThroughShader",true,PRIORITY_1,true,"","","","");
+	GeneralGLWindow::getInstance().setCurrentPass(pass1);
+	renderHelper->setupGameObjectRenderable("Cube","NUCube","textureLightingShader",true,PRIORITY_1,true,"","","","");
 
-	renderer->setupGameObjectRenderable("ogre","ogreGeo","textureLightingShader",true,PRIORITY_1,true,"ogreDiffuse","","ogreNormal","ogreAO");
+	GeneralGLWindow::getInstance().setCurrentPass(pass2);
+	renderHelper->setupGameObjectRenderable("ColorPlane","plane","textureShader",true,PRIORITY_1,true,"pass1Color","","","");
+	renderHelper->setupGameObjectRenderable("DepthPlane","plane","deptTextureShader",true,PRIORITY_1,true,"pass1Depth","","","");
 }
 
 int frame = 0;
@@ -103,19 +91,20 @@ void ScratchWindow::update()
 {
 	updateShaderInfo();
 	frame++;
-	renderer->lightPosition = renderer->getGameObject("lightBulb")->position;
+	//renderHelper->lightPosition = renderHelper->getGameObject("lightBulb")->position;
 }
 
 void ScratchWindow::updateShaderInfo()
 {
 	vec3 eyePosition = camera.getPosition();
-	viewToProjectionMatrix = glm::perspective(60.0f, ((float)WINDOW_WIDTH) / WINDOW_HEIGHT, 0.1f, 90.0f);
+	viewToProjectionMatrix = glm::perspective(60.0f, 1.0f, 0.1f, 90.0f);
+	//viewToProjectionMatrix = glm::perspective(60.0f, ((float)WINDOW_WIDTH) / WINDOW_HEIGHT, 0.1f, 90.0f);
 	worldToViewMatrix = camera.getWorldToViewMatrix();
 	worldToProjectionMatrix = viewToProjectionMatrix * worldToViewMatrix;
 
 	DebugShapes::updateWorldToProjection(worldToProjectionMatrix);
 
-	renderer->updateShaderInfo(worldToProjectionMatrix);
+	renderHelper->updateShaderInfo(worldToProjectionMatrix);
 	GeneralGLWindow::getInstance().repaint();
 }
 

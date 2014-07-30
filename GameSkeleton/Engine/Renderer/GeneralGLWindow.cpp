@@ -16,37 +16,35 @@
 #include <qt\qtimer.h>
 #include <iostream>
 #include "../DebugTools/ConsolePrinter.h"
-//#include "../
 
 #pragma region OBJECT_VARIABLES
 GLuint currentNumBuffers = 0;
 GLuint currentGeometryIndex = 0;
 GLuint currentShaderIndex = 0;
-GLuint currentRenderIndex = 0;
-GLuint currentDiffuseMapIndex = 0;
-GLuint currentAlphaMapIndex = 0;
-GLuint currentAmbientOcclusionMapIndex = 0;
-GLuint currentNormalMapIndex = 0;
+GLuint currentRenderableIndex = 0;
+GLuint currentTextureIndex = 0;
+GLuint currentPassIndex = 0;
+
+int activePassIndex = -1;
 
 const GLuint MAX_NUM_BUFFERS = 80;
 const GLuint MAX_NUM_GEOMETRIES = 30;
 const GLuint MAX_NUM_SHADERS = 10;
-const GLuint MAX_NUM_DIFFUSE_MAPS = 30;
-const GLuint MAX_NUM_ALPHA_MAPS= 20;
-const GLuint MAX_NUM_AMBIENT_OCCLUSION_MAPS= 20;
-const GLuint MAX_NUM_NORMAL_MAPS= 20;
+const GLuint MAX_NUM_TEXTURES = 100;
 const GLuint MAX_NUM_RENDERABLES = 600;
+const GLuint MAX_NUM_PASSES = 10;
 const GLuint BUFFER_SIZE = 1000000;
 
 BufferInfo* bufferInfos[MAX_NUM_BUFFERS];
 GeometryInfo* geometryInfos[MAX_NUM_GEOMETRIES];
 ShaderInfo* shaderInfos[MAX_NUM_SHADERS];
-DiffuseMapInfo* diffuseMapInfos[MAX_NUM_DIFFUSE_MAPS];
-AlphaMapInfo* alphaMapInfos[MAX_NUM_ALPHA_MAPS];
-NormalMapInfo* normalMapInfos[MAX_NUM_NORMAL_MAPS];
-AmbientOcclusionMapInfo* ambientOcclusionMapInfos[MAX_NUM_AMBIENT_OCCLUSION_MAPS];
+TextureInfo* textureInfos[MAX_NUM_TEXTURES];
 RenderableInfo* renderableInfos[MAX_NUM_RENDERABLES];
+PassInfo* passes[MAX_NUM_PASSES];
 #pragma endregion
+
+GLuint frameBufferID;
+
 
 void GeneralGLWindow::initializeGL()
 {
@@ -65,38 +63,53 @@ void GeneralGLWindow::debugMethod()
 
 void GeneralGLWindow::paintGL()
 {
+	//glBindFramebuffer(GL_DRAW_FRAMEBUFFER, frameBufferID);
+	//glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+	//glClearColor(0.5f,0.5f,1.0f,0);
+	//glViewport(0,0,width(), height());
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-	//glClearColor(1,1,1,1);
+	//glClearColor(0.5f,0.5f,1.0f,1);
 	glViewport(0,0,width(), height());
-
-	for(uint i = 0; i < currentRenderIndex; i++)
+	if(currentPassIndex!=0)
 	{
-		if(renderableInfos[i]->visible && renderableInfos[i]->priority == PRIORITY_1)
+		for(int i = 0; i < currentPassIndex; i++)
 		{
-			if(renderableInfos[i]->enableDepth)
-				glEnable(GL_DEPTH_TEST);
-			else
-				glDisable(GL_DEPTH_TEST);
-
-			sendRenderableToShader(renderableInfos[i]);
-			glBindVertexArray(renderableInfos[i]->whatGeometry->vertexArrayID);
-			glDrawElements(renderableInfos[i]->whatGeometry->indexingMode, renderableInfos[i]->whatGeometry->numIndices, GL_UNSIGNED_SHORT, (void*)renderableInfos[i]->whatGeometry->indexDataOffset);
+			drawPass(passes[i]);
 		}
 	}
-	for(uint i = 0; i < currentRenderIndex; i++)
+	else
 	{
-		if(renderableInfos[i]->visible && renderableInfos[i]->priority == PRIORITY_2)
-		{
-			if(renderableInfos[i]->enableDepth)
-				glEnable(GL_DEPTH_TEST);
-			else
-				glDisable(GL_DEPTH_TEST);
-
-			sendRenderableToShader(renderableInfos[i]);
-			glBindVertexArray(renderableInfos[i]->whatGeometry->vertexArrayID);
-			glDrawElements(renderableInfos[i]->whatGeometry->indexingMode, renderableInfos[i]->whatGeometry->numIndices, GL_UNSIGNED_SHORT, (void*)renderableInfos[i]->whatGeometry->indexDataOffset);
-		}
+		drawRenderables(renderableInfos, currentRenderableIndex);
 	}
+	//for(uint i = 0; i < currentRenderableIndex; i++)
+	//{
+	//	if(renderableInfos[i]->visible && renderableInfos[i]->priority == PRIORITY_1)
+	//	{
+	//		if(renderableInfos[i]->enableDepth)
+	//			glEnable(GL_DEPTH_TEST);
+	//		else
+	//			glDisable(GL_DEPTH_TEST);
+
+	//		sendRenderableToShader(renderableInfos[i]);
+	//		glBindVertexArray(renderableInfos[i]->whatGeometry->vertexArrayID);
+	//		glDrawElements(renderableInfos[i]->whatGeometry->indexingMode, renderableInfos[i]->whatGeometry->numIndices, GL_UNSIGNED_SHORT, (void*)renderableInfos[i]->whatGeometry->indexDataOffset);
+	//	}
+	//}
+	//for(uint i = 0; i < currentRenderableIndex; i++)
+	//{
+	//	if(renderableInfos[i]->visible && renderableInfos[i]->priority == PRIORITY_2)
+	//	{
+	//		if(renderableInfos[i]->enableDepth)
+	//			glEnable(GL_DEPTH_TEST);
+	//		else
+	//			glDisable(GL_DEPTH_TEST);
+
+	//		sendRenderableToShader(renderableInfos[i]);
+	//		glBindVertexArray(renderableInfos[i]->whatGeometry->vertexArrayID);
+	//		glDrawElements(renderableInfos[i]->whatGeometry->indexingMode, renderableInfos[i]->whatGeometry->numIndices, GL_UNSIGNED_SHORT, (void*)renderableInfos[i]->whatGeometry->indexDataOffset);
+	//	}
+	//}
 }
 
 GeometryInfo* GeneralGLWindow::addGeometry(
@@ -168,7 +181,6 @@ ShaderInfo* GeneralGLWindow:: createShaderInfo(
 		const char* vertexShaderFilename,
 		const char* fragmentShaderFilename)
 {
-
 	shaderInfos[currentShaderIndex] = new ShaderInfo();
 	ShaderInfo* ret = shaderInfos[currentShaderIndex];
 
@@ -235,104 +247,48 @@ std::string GeneralGLWindow::readShaderCode(const char *filename)
 		std::istreambuf_iterator<char>());
 }
 
-DiffuseMapInfo* GeneralGLWindow::addDiffuseMap(const char* fileName)
+TextureInfo* GeneralGLWindow::addTexture(const char* fileName)
 {
 
-	diffuseMapInfos[currentDiffuseMapIndex] = new DiffuseMapInfo();
-	DiffuseMapInfo* ret = diffuseMapInfos[currentDiffuseMapIndex];
+	textureInfos[currentTextureIndex] = new TextureInfo();
+	TextureInfo* ret = textureInfos[currentTextureIndex];
 	glGenTextures(1, &(ret->textureID));
 	glBindTexture(GL_TEXTURE_2D, ret->textureID);
 	loadTextureFromFile(fileName);
-	currentDiffuseMapIndex++;
+	currentTextureIndex++;
 	return ret;
 }
 
-DiffuseMapInfo* GeneralGLWindow::addDiffuseMap(const uchar* bytes, uint width, uint height)
+TextureInfo* GeneralGLWindow::addTexture(const uchar* bytes, uint width, uint height)
 {
-
-	diffuseMapInfos[currentDiffuseMapIndex] = new DiffuseMapInfo();
-	DiffuseMapInfo* ret = diffuseMapInfos[currentDiffuseMapIndex];
+	textureInfos[currentTextureIndex] = new TextureInfo();
+	TextureInfo* ret = textureInfos[currentTextureIndex];
+	ret->width = width;
+	ret->height = height;
 	glGenTextures(1, &(ret->textureID));
 	glBindTexture(GL_TEXTURE_2D, ret->textureID);
 	loadTextureFromBytes(bytes, width, height);
-	currentDiffuseMapIndex++;
+	currentTextureIndex++;
 	return ret;
 }
 
-void GeneralGLWindow::modifyDiffuseMapData(DiffuseMapInfo* mapToModify, const uchar* bytes, uint width, uint height)
+TextureInfo* GeneralGLWindow::addTexture(uint width, uint height)
 {
-	glBindTexture(GL_TEXTURE_2D, mapToModify->textureID);
+
+	textureInfos[currentTextureIndex] = new TextureInfo();
+	TextureInfo* ret = textureInfos[currentTextureIndex];
+	ret->width = width;
+	ret->height = height;
+	glGenTextures(1, &(ret->textureID));
+	glBindTexture(GL_TEXTURE_2D, ret->textureID);//need?
+	currentTextureIndex++;
+	return ret;
+}
+
+void GeneralGLWindow::modifyTextureData(TextureInfo* textureToModify, const uchar* bytes, uint width, uint height)
+{
+	glBindTexture(GL_TEXTURE_2D, textureToModify->textureID);
 	loadTextureFromBytes(bytes, width, height);
-}
-
-AlphaMapInfo* GeneralGLWindow::addAlphaMap(const char* fileName)
-{
-
-	alphaMapInfos[currentAlphaMapIndex] = new AlphaMapInfo();
-	AlphaMapInfo* ret = alphaMapInfos[currentAlphaMapIndex];
-	glGenTextures(1, &(ret->textureID));
-	glBindTexture(GL_TEXTURE_2D, ret->textureID);
-	loadTextureFromFile(fileName);
-	currentAlphaMapIndex++;
-	return ret;
-}
-
-AlphaMapInfo* GeneralGLWindow::addAlphaMap(const uchar* bytes, uint width, uint height)
-{
-
-	alphaMapInfos[currentAlphaMapIndex] = new AlphaMapInfo();
-	AlphaMapInfo* ret = alphaMapInfos[currentAlphaMapIndex];
-	glGenTextures(1, &(ret->textureID));
-	glBindTexture(GL_TEXTURE_2D, ret->textureID);
-	loadTextureFromBytes(bytes, width, height);
-	currentAlphaMapIndex++;
-	return ret;
-}
-
-NormalMapInfo* GeneralGLWindow::addNormalMap(const char* fileName)
-{
-
-	normalMapInfos[currentNormalMapIndex] = new NormalMapInfo();
-	NormalMapInfo* ret = normalMapInfos[currentNormalMapIndex];
-	glGenTextures(1, &(ret->textureID));
-	glBindTexture(GL_TEXTURE_2D, ret->textureID);
-	loadTextureFromFile(fileName);
-	currentNormalMapIndex++;
-	return ret;
-}
-
-NormalMapInfo* GeneralGLWindow::addNormalMap(const uchar* bytes, uint width, uint height)
-{
-
-	normalMapInfos[currentNormalMapIndex] = new NormalMapInfo();
-	NormalMapInfo* ret = normalMapInfos[currentNormalMapIndex];
-	glGenTextures(1, &(ret->textureID));
-	glBindTexture(GL_TEXTURE_2D, ret->textureID);
-	loadTextureFromBytes(bytes, width, height);
-	currentNormalMapIndex++;
-	return ret;
-}
-
-AmbientOcclusionMapInfo* GeneralGLWindow::addAmbientOcclusionMap(const char* fileName)
-{
-	ambientOcclusionMapInfos[currentAmbientOcclusionMapIndex] = new AmbientOcclusionMapInfo();
-	AmbientOcclusionMapInfo* ret = ambientOcclusionMapInfos[currentAmbientOcclusionMapIndex];
-	glGenTextures(1, &(ret->textureID));
-	glBindTexture(GL_TEXTURE_2D, ret->textureID);
-	loadTextureFromFile(fileName);
-	currentAmbientOcclusionMapIndex++;
-	return ret;
-}
-
-AmbientOcclusionMapInfo* GeneralGLWindow::addAmbientOcclusionMap(const uchar* bytes, uint width, uint height)
-{
-	ambientOcclusionMapInfos[currentAmbientOcclusionMapIndex] = new AmbientOcclusionMapInfo();
-	AmbientOcclusionMapInfo* ret = ambientOcclusionMapInfos[currentAmbientOcclusionMapIndex];
-	glGenTextures(1, &(ret->textureID));
-	glBindTexture(GL_TEXTURE_2D, ret->textureID);
-	loadTextureFromBytes(bytes, width, height);
-	currentAmbientOcclusionMapIndex++;
-	return ret;
 }
 
 void GeneralGLWindow::loadTextureFromFile(const char* filename)
@@ -366,13 +322,13 @@ RenderableInfo* GeneralGLWindow::addRenderable(
 	bool visible,
 	PriorityLevel priority,
 	bool depthEnabled,
-	DiffuseMapInfo* diffuseMap,
-	AlphaMapInfo* alphaMap,
-	NormalMapInfo* normalMap,
-	AmbientOcclusionMapInfo* ambientOcclusionMap)
+	TextureInfo* diffuseMap,
+	TextureInfo* alphaMap,
+	TextureInfo* normalMap,
+	TextureInfo* ambientOcclusionMap)
 {
-	renderableInfos[currentRenderIndex] = new RenderableInfo();
-	RenderableInfo* ret = renderableInfos[currentRenderIndex];
+	renderableInfos[currentRenderableIndex] = new RenderableInfo();
+	RenderableInfo* ret = renderableInfos[currentRenderableIndex];
 	ret->whatGeometry = whatGeometry;
 	ret->whereMatrix = whereMatrix;
 	ret->howShaders = howShaders;
@@ -389,7 +345,14 @@ RenderableInfo* GeneralGLWindow::addRenderable(
 	ret->usingNormalMap = (normalMap!=NULL);
 	ret->usingAmbientOcclusionMap = (ambientOcclusionMap!=NULL);
 
-	currentRenderIndex++;
+	currentRenderableIndex++;
+
+	if(activePassIndex != -1)
+	{
+		passes[activePassIndex]->renderables[passes[activePassIndex]->numRenderables] = ret;
+		passes[activePassIndex]->numRenderables++;
+	}
+
 	return ret;
 }
 
@@ -415,6 +378,85 @@ void GeneralGLWindow::addRenderableUniformParameter(
 	renderable->uniformParameters[renderable->numUniformParameters].parameterType = parameterType;
 	renderable->uniformParameters[renderable->numUniformParameters].value = value;
 	renderable->numUniformParameters++;
+}
+
+void GeneralGLWindow::setupFrameBuffer(PassInfo* pass)
+{
+	glGenFramebuffers(1, &(pass->frameBufferID));
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, pass->frameBufferID);
+	if(pass->storingColorTexture || pass->storingDepthTexture)
+	{
+		glActiveTexture(GL_TEXTURE0);
+		if(pass->storingColorTexture)
+		{
+			glGenTextures(1, &(pass->colorTexture->textureID));
+			glBindTexture(GL_TEXTURE_2D, pass->colorTexture->textureID);
+			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1024, 1024,0,GL_RGBA,GL_UNSIGNED_BYTE,0);
+			glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D,pass->colorTexture->textureID,0);
+			GLuint status = glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER);
+			if(status!=GL_FRAMEBUFFER_COMPLETE)
+			{
+				ConsolePrinter::getInstance().print("Frame buffer incomplete - Color");
+				qDebug() << "Frame buffer incomplete - Color";
+			}
+		}
+		if(pass->storingDepthTexture)
+		{
+			glGenTextures(1, &(pass->depthTexture->textureID));
+			glBindTexture(GL_TEXTURE_2D, pass->depthTexture->textureID);
+			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32,1024,1024,0,GL_DEPTH_COMPONENT,GL_FLOAT,0);
+			glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, pass->depthTexture->textureID, 0);
+			GLuint status = glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER);
+			if(status!=GL_FRAMEBUFFER_COMPLETE)
+			{
+				ConsolePrinter::getInstance().print("Frame buffer incomplete - Depth");
+				qDebug() << "Frame buffer incomplete - Depth";
+			}
+		}
+		GLuint status = glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER);
+		if(status!=GL_FRAMEBUFFER_COMPLETE)
+		{
+			qDebug() << "Frame buffer incomplete";
+		}
+	}
+}
+
+void GeneralGLWindow::drawPass(PassInfo* pass)
+{
+	//drawRenderables(pass->renderables, pass->numRenderables);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, pass->frameBufferID);
+	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+	//glClearColor(0.5f,0.5f,1.0f,0);
+	glViewport(0,0,width(), height());
+	drawRenderables(pass->renderables, pass->numRenderables);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	drawRenderables(pass->renderables, pass->numRenderables);
+}
+
+void GeneralGLWindow::drawRenderables(RenderableInfo* renderablesArray[], GLuint numRenderabelsToDraw)
+{
+	for(int priority = 0; priority < 2; priority++)
+	{
+		for(uint i = 0; i < numRenderabelsToDraw; i++)
+		{
+			RenderableInfo* currentRenderable = renderablesArray[i];
+			if(currentRenderable->visible && currentRenderable->priority == (PriorityLevel)priority)
+			{
+				if(currentRenderable->enableDepth)
+					glEnable(GL_DEPTH_TEST);
+				else
+					glDisable(GL_DEPTH_TEST);
+
+				sendRenderableToShader(currentRenderable);
+				glBindVertexArray(currentRenderable->whatGeometry->vertexArrayID);
+				glDrawElements(currentRenderable->whatGeometry->indexingMode, currentRenderable->whatGeometry->numIndices, GL_UNSIGNED_SHORT, (void*)currentRenderable->whatGeometry->indexDataOffset);
+			}
+		}
+	}
 }
 
 void GeneralGLWindow::sendRenderableToShader(RenderableInfo* renderable)
@@ -488,6 +530,51 @@ void GeneralGLWindow::sendRenderableToShader(RenderableInfo* renderable)
 			break;
 		}
 	}
+}
+
+PassInfo* GeneralGLWindow::addPass(bool addAllPreviousRenderables,bool setAsCurrentPass)
+{
+	passes[currentPassIndex] = new PassInfo();
+	PassInfo* ret = passes[currentPassIndex];
+	ret->index = currentPassIndex;
+	if(addAllPreviousRenderables)
+	{
+		for(int i = 0; i < currentRenderableIndex; i++)
+		{
+			ret->renderables[i] = renderableInfos[i];
+			ret->numRenderables++;
+		}
+	}
+	if(setAsCurrentPass)
+	{
+		activePassIndex = currentPassIndex;
+	}
+	currentPassIndex++;
+	return ret;
+}
+
+TextureInfo* GeneralGLWindow::storePassColorTexture(PassInfo* pass, uint width, uint height)
+{
+	pass->colorTexture = addTexture(width, height);
+	pass->storingColorTexture = true;
+	return pass->colorTexture;
+}
+
+TextureInfo* GeneralGLWindow::storePassDepthTexture(PassInfo* pass, uint width, uint height)
+{
+	pass->depthTexture = addTexture(width, height);
+	pass->storingDepthTexture = true;
+	return pass->depthTexture;
+}
+
+void GeneralGLWindow::setCurrentPass(PassInfo* passToMakeCurrent)
+{
+	activePassIndex = passToMakeCurrent->index;
+}
+
+void GeneralGLWindow::unsetCurrentPass()
+{
+	activePassIndex = -1;
 }
 
 void GeneralGLWindow::keyPressEvent(QKeyEvent* e)

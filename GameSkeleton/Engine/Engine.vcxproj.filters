@@ -99,17 +99,15 @@
     <ClInclude Include="DebugTools\DebugMenu\FloatSlider.h" />
     <ClInclude Include="DebugTools\DebugMenu\IntSlider.h" />
     <ClInclude Include="DebugTools\DebugMenu\CheckBox.h" />
-    <ClInclude Include="Renderer\AlphaMapInfo.h" />
     <ClInclude Include="GraphicObjects\BlinkingEye.h" />
     <ClInclude Include="GraphicObjects\BlinkingEyeGroup.h" />
     <ClInclude Include="DebugTools\ConsolePrinter.h" />
     <ClInclude Include="DebugTools\DebugMenu\Vec3Slider.h" />
-    <ClInclude Include="Renderer\NormalMapInfo.h" />
     <ClInclude Include="DebugTools\DebugMenu\TrackingFloat.h" />
     <ClInclude Include="DebugTools\DebugMenu\MultipleFloatsSlider.h" />
-    <ClInclude Include="Renderer\AmbientOcclusionMapInfo.h" />
-    <ClInclude Include="Renderer\DiffuseMapInfo.h" />
     <ClInclude Include="Renderer\RendererHelper.h" />
     <ClInclude Include="GameObjects\GameObject.h" />
+    <ClInclude Include="Renderer\TextureInfo.h" />
+    <ClInclude Include="Renderer\PassInfo.h" />
   </ItemGroup>
 </Project>

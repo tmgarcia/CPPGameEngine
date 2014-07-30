@@ -50,7 +50,7 @@ private:
 	GeometryInfo* geometry;
 	RenderableInfo* renderable;
 	ShaderInfo* shader;
-	DiffuseMapInfo* texture;
+	TextureInfo* texture;
 	BinReader::ShapeData shapeData;
 
 	mat4 modelToWorldTransform;

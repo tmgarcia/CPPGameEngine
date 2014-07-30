@@ -44,7 +44,6 @@ public:
 		addDockWidget(Qt::TopDockWidgetArea, menuDock);
 
 		GeneralGLWindow::getInstance();
-		//GeneralGLWindow::getInstance().setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 		setCentralWidget(&GeneralGLWindow::getInstance());
 		GeneralGLWindow::getInstance().show();
 
@@ -65,19 +64,15 @@ public:
 protected:
 	bool cameraFrozen;
 	DebugMenu* dMenu;
-	RendererHelper* renderer;
+	RendererHelper* renderHelper;
 	void setup();
 	void setupGeometry();
 	void setupTransforms();
 	void setupTextures();
 	void setupRenderables();
-	//void setupReadInGeometryVertexArrayInfo(GeometryInfo* geometry);
-	//void setupNuShapesGeometryVertexArrayInfo(GeometryInfo* geometry);
 	Camera camera;
 	void keyPressEvent(QKeyEvent *event);
 	void updateShaderInfo();
-	//void makeCube();
-	//void addLightingAndTextureShaderUniforms(RenderableInfo* renderable, float* fullTransform, float* rotationMatrix);
 private slots:
 	void update();
 

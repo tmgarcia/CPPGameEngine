@@ -8,7 +8,7 @@ BlinkingEye::BlinkingEye(vec3 pos, float _scale, int _blinkFrame)
 	isBlinking = false;
 	isClosing = false;
 }
-void BlinkingEye::setupRenderable(GeometryInfo* plane, ShaderInfo* alphaTextureShader, DiffuseMapInfo* eyeTexture, AlphaMapInfo* eyeAlpha1)
+void BlinkingEye::setupRenderable(GeometryInfo* plane, ShaderInfo* alphaTextureShader, TextureInfo* eyeTexture, TextureInfo* eyeAlpha1)
 {
 	renderable = GeneralGLWindow::getInstance().addRenderable(plane, modelToWorld, alphaTextureShader, true, PRIORITY_1, true, eyeTexture, eyeAlpha1);
 	GeneralGLWindow::getInstance().addRenderableUniformParameter(renderable, "fullTransformMatrix", PT_MAT4, &fullTransform[0][0]);
@@ -38,7 +38,7 @@ void BlinkingEye::stopBlink()
 	isClosing = false;
 	blinkStage = 0;
 }
-void BlinkingEye::updateBlinkStage(AlphaMapInfo* nextAlpha)
+void BlinkingEye::updateBlinkStage(TextureInfo* nextAlpha)
 {
 	if(blinkStage < 0)
 	{
@@ -65,7 +65,7 @@ void BlinkingEye::updateBlinkStage(AlphaMapInfo* nextAlpha)
 		}
 	}
 }
-void BlinkingEye::blink(AlphaMapInfo* nextAlpha)
+void BlinkingEye::blink(TextureInfo* nextAlpha)
 {
 	renderable->alphaMap = nextAlpha;
 }

@@ -60,3 +60,8 @@ void ConsolePrinter::print(char* text)
 {
 	cout << text << endl;
 }
+void ConsolePrinter::print(QString qstr)
+{
+	cout << qstr.toLocal8Bit().constData() << endl;
+
+}

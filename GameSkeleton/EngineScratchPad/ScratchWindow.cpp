@@ -124,7 +124,7 @@ void ScratchWindow::setupGameObjects()
 	reflector = renderHelper->setupGameObjectRenderable("reflectingSphere", "NUSphere","cubeReflectionShader",true,PRIORITY_1,true,"","","","","cubeMapTextureB");
 	GeneralGLWindow::getInstance().addRenderableUniformParameter(reflector->renderable,"reflectionFactor",PT_FLOAT,&reflectionFactor);
 
-	map = renderHelper->addGameObject(vec3(0,0,0),vec3(10,10,10),0,0,0,worldToProjectionMatrix,"skyMap");
+	map = renderHelper->addGameObject(vec3(0,0,0),vec3(12,12,12),0,0,0,worldToProjectionMatrix,"skyMap");
 	renderHelper->setupGameObjectRenderable(map, "NUCube","cubeMapShader",true,PRIORITY_1,true,"","","","","cubeMapTextureB");
 	//GeneralGLWindow::getInstance().addRenderableUniformParameter(map->renderable,"reflectionFactor",PT_FLOAT,&reflectionFactor);
 

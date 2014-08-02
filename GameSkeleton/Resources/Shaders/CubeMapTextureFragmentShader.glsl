@@ -5,7 +5,7 @@ in vec3 reflectionDirection;
 uniform samplerCube cubeMap;
 
 out vec4 theFinalColor; 
- 
+
 void main() 
 { 
 	vec4 texel = texture(cubeMap, reflectionDirection);

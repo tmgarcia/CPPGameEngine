@@ -17,8 +17,8 @@ void main()
 	vec4 v = vec4(passedInPosition,1.0f);
 	vec3 modelToWorldPosition = vec3(modelToWorldMatrix * v);
 	vec3 rotatedNormal = mat3(rotationMatrix) * passedInNormal;
-	vec3 positionToEye = normalize(modelToWorldPosition - eyePosition);
-	reflectionDirection = reflect(-positionToEye, rotatedNormal);
+	vec3 positionToEye = normalize( eyePosition-modelToWorldPosition);
+	reflectionDirection = reflect(positionToEye, rotatedNormal);
 	
 	gl_Position = fullTransformMatrix * v;
 } 

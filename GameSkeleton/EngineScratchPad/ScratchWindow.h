@@ -65,15 +65,29 @@ public:
 	{
 
 	}
+
+	template <class T> class VPtr
+	{
+	public:
+		static T* asPtr(QVariant v)
+		{
+			return (T *) v.value<void *>();
+		}
+
+		static QVariant asQVariant(T* ptr)
+		{
+			return qVariantFromValue((void *) ptr);
+		}
+	};
+
 protected:
 	bool cameraFrozen;
 	DebugMenu* dMenu;
 	RendererHelper* renderHelper;
 	void setup();
 	void setupGeometry();
-	void setupTransforms();
+	void setupGameObjects();
 	void setupTextures();
-	void setupRenderables();
 	Camera camera;
 	void keyPressEvent(QKeyEvent *event);
 	void updateShaderInfo();

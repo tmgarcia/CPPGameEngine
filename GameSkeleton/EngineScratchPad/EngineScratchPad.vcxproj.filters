@@ -14,6 +14,7 @@
     <ClCompile Include="CheckBox_moc.cpp" />
     <ClCompile Include="Vec3Slider_moc.cpp" />
     <ClCompile Include="TrackingFloat_moc.cpp" />
+    <ClCompile Include="ComboBox_moc.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ScratchWindow.h" />

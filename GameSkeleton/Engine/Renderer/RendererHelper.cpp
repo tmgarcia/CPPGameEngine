@@ -50,7 +50,7 @@ GeometryInfo* RendererHelper::addNUGeo(NUShapes shape, QString name)
 		geoData = Neumont::ShapeGenerator::makePlane(2);
 		break;
 	case(NU_SPHERE):
-		geoData = Neumont::ShapeGenerator::makeSphere(10);
+		geoData = Neumont::ShapeGenerator::makeSphere(20);
 		break;
 	case(NU_CONE):
 		geoData = Neumont::ShapeGenerator::makeCone();
@@ -155,9 +155,9 @@ void RendererHelper::addGameObject(GameObject* gameObject, QString name)
 	}
 	gameObjects.append(object);
 }
-void RendererHelper::setupGameObjectRenderable(GameObject* object, QString geometryName, QString shaderName, bool visible, PriorityLevel priorityLevel, bool depth, QString diffuseMapName, QString alphaMapName, QString normalMapName, QString ambientOcclusionMapName)
+void RendererHelper::setupGameObjectRenderable(GameObject* object, QString geometryName, QString shaderName, bool visible, PriorityLevel priorityLevel, bool depth, QString diffuseMapName, QString alphaMapName, QString normalMapName, QString ambientOcclusionMapName, QString cubeMapName)
 {
-	object->renderable = GeneralGLWindow::getInstance().addRenderable(getGeometry(geometryName), object->modelToWorldMatrix, getShader(shaderName), true, PRIORITY_1, true, getTexture(diffuseMapName), getTexture(alphaMapName), getTexture(normalMapName),getTexture(ambientOcclusionMapName));
+	object->renderable = GeneralGLWindow::getInstance().addRenderable(getGeometry(geometryName), object->modelToWorldMatrix, getShader(shaderName), true, PRIORITY_1, true, getTexture(diffuseMapName), getTexture(alphaMapName), getTexture(normalMapName),getTexture(ambientOcclusionMapName),getTexture(cubeMapName));
 	ShaderType shaderType = getShaderType(shaderName);
 	if(shaderType == ShaderType::SHADER_LIGHTING_TEXTURE)
 	{
@@ -172,10 +172,10 @@ void RendererHelper::setupGameObjectRenderable(GameObject* object, QString geome
 		addTextureShaderUniforms(object);
 	}
 }
-GameObject* RendererHelper::setupGameObjectRenderable(QString gameObjectName, QString geometryName, QString shaderName, bool visible, PriorityLevel priorityLevel, bool depth, QString diffuseMapName, QString alphaMapName, QString normalMapName, QString ambientOcclusionMapName)
+GameObject* RendererHelper::setupGameObjectRenderable(QString gameObjectName, QString geometryName, QString shaderName, bool visible, PriorityLevel priorityLevel, bool depth, QString diffuseMapName, QString alphaMapName, QString normalMapName, QString ambientOcclusionMapName, QString cubeMapName)
 {
 	GameObject* object = getGameObject(gameObjectName);
-	object->renderable = GeneralGLWindow::getInstance().addRenderable(getGeometry(geometryName), object->modelToWorldMatrix, getShader(shaderName), true, PRIORITY_1, true, getTexture(diffuseMapName), getTexture(alphaMapName), getTexture(normalMapName),getTexture(ambientOcclusionMapName));
+	object->renderable = GeneralGLWindow::getInstance().addRenderable(getGeometry(geometryName), object->modelToWorldMatrix, getShader(shaderName), true, PRIORITY_1, true, getTexture(diffuseMapName), getTexture(alphaMapName), getTexture(normalMapName),getTexture(ambientOcclusionMapName),getTexture(cubeMapName));
 	ShaderType shaderType = getShaderType(shaderName);
 	if(getShaderType(shaderName) == ShaderType::SHADER_LIGHTING_TEXTURE)
 	{

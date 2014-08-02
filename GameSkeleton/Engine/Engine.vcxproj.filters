@@ -51,6 +51,7 @@
     <ClCompile Include="DebugTools\DebugMenu\TrackingFloat_moc.cpp" />
     <ClCompile Include="Renderer\RendererHelper.cpp" />
     <ClCompile Include="GameObjects\GameObject.cpp" />
+    <ClCompile Include="DebugTools\DebugMenu\ComboBox_moc.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h" />
@@ -109,5 +110,6 @@
     <ClInclude Include="GameObjects\GameObject.h" />
     <ClInclude Include="Renderer\TextureInfo.h" />
     <ClInclude Include="Renderer\PassInfo.h" />
+    <ClInclude Include="DebugTools\DebugMenu\ComboBox.h" />
   </ItemGroup>
 </Project>

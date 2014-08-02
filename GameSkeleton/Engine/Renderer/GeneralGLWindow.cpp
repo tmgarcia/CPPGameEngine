@@ -48,7 +48,6 @@ PassInfo* passes[MAX_NUM_PASSES];
 
 void GeneralGLWindow::initializeGL()
 {
-	cout << "INITIALIZE" << endl;
 	setMouseTracking(true);
 	glewInit();
 	glDisable(GL_CULL_FACE);
@@ -286,13 +285,31 @@ TextureInfo* GeneralGLWindow::addTexture(uint width, uint height)
 	return ret;
 }
 
+TextureInfo* GeneralGLWindow::addCubeMap(const char* fileNames[6])
+{
+	//pos x, neg x, pos y, neg y, pos z, neg z
+	textureInfos[currentTextureIndex] = new TextureInfo();
+	TextureInfo* ret = textureInfos[currentTextureIndex];
+	glGenTextures(1, &(ret->textureID));
+	glBindTexture(GL_TEXTURE_CUBE_MAP, ret->textureID);
+	loadTextureFromFile(fileNames[0], GL_TEXTURE_CUBE_MAP_POSITIVE_X);
+	loadTextureFromFile(fileNames[1], GL_TEXTURE_CUBE_MAP_NEGATIVE_X);
+	loadTextureFromFile(fileNames[2], GL_TEXTURE_CUBE_MAP_POSITIVE_Y);
+	loadTextureFromFile(fileNames[3], GL_TEXTURE_CUBE_MAP_NEGATIVE_Y);
+	loadTextureFromFile(fileNames[4], GL_TEXTURE_CUBE_MAP_POSITIVE_Z);
+	loadTextureFromFile(fileNames[5], GL_TEXTURE_CUBE_MAP_NEGATIVE_Z);
+	currentTextureIndex++;
+	return ret;
+}
+
 void GeneralGLWindow::modifyTextureData(TextureInfo* textureToModify, const uchar* bytes, uint width, uint height)
 {
 	glBindTexture(GL_TEXTURE_2D, textureToModify->textureID);
 	loadTextureFromBytes(bytes, width, height);
 }
 
-void GeneralGLWindow::loadTextureFromFile(const char* filename)
+
+void GeneralGLWindow::loadTextureFromFile(const char* filename, GLenum target)
 {
 	int width, height;
 	QImage image = QImage(filename);
@@ -300,11 +317,23 @@ void GeneralGLWindow::loadTextureFromFile(const char* filename)
 	width = image.width();
 	height = image.height();
 	uchar* imagePixels = image.bits();
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imagePixels);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexImage2D(target, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imagePixels);
+	if(target == GL_TEXTURE_2D)
+	{
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	}
+	else
+	{
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	}
+
 }
 
 void GeneralGLWindow::loadTextureFromBytes(const uchar* bytes, uint width, uint height)
@@ -326,7 +355,8 @@ RenderableInfo* GeneralGLWindow::addRenderable(
 	TextureInfo* diffuseMap,
 	TextureInfo* alphaMap,
 	TextureInfo* normalMap,
-	TextureInfo* ambientOcclusionMap)
+	TextureInfo* ambientOcclusionMap,
+	TextureInfo* cubeMap)
 {
 	renderableInfos[currentRenderableIndex] = new RenderableInfo();
 	RenderableInfo* ret = renderableInfos[currentRenderableIndex];
@@ -340,11 +370,13 @@ RenderableInfo* GeneralGLWindow::addRenderable(
 	ret->alphaMap = alphaMap;
 	ret->normalMap = normalMap;
 	ret->ambientOcclusionMap = ambientOcclusionMap;
+	ret->cubeMap = cubeMap;
 	
 	ret->usingDiffuseMap = (diffuseMap!=NULL);
 	ret->usingAlphaMap = (alphaMap!=NULL);
 	ret->usingNormalMap = (normalMap!=NULL);
 	ret->usingAmbientOcclusionMap = (ambientOcclusionMap!=NULL);
+	ret->usingCubeMap = (cubeMap!=NULL);
 
 	currentRenderableIndex++;
 
@@ -383,10 +415,12 @@ void GeneralGLWindow::addRenderableUniformParameter(
 
 void GeneralGLWindow::setupFrameBuffer(PassInfo* pass)
 {
+	cout << "SETUP" << endl;
 	glGenFramebuffers(1, &(pass->frameBufferID));
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, pass->frameBufferID);
 	if(pass->storingColorTexture || pass->storingDepthTexture)
 	{
+		cout << "STORING THINGS" << endl;
 		glActiveTexture(GL_TEXTURE0);
 		if(pass->storingColorTexture)
 		{
@@ -449,7 +483,7 @@ void GeneralGLWindow::drawPass(PassInfo* pass)
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, pass->frameBufferID);
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 	//glClearColor(0.5f,0.5f,1.0f,0);
-	glViewport(0,0,width(), height());
+	//glViewport(0,0,width(), height());
 	drawRenderables(pass->renderables, pass->numRenderables);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	drawRenderables(pass->renderables, pass->numRenderables);
@@ -513,6 +547,14 @@ void GeneralGLWindow::sendRenderableToShader(RenderableInfo* renderable)
 		glActiveTexture(GL_TEXTURE0 + 3);
 		glBindTexture(GL_TEXTURE_2D, renderable->ambientOcclusionMap->textureID);
 	}
+	if(renderable->usingCubeMap)
+	{
+		//cout << "NORMAL" << endl;
+		GLint cubeMapLoc = glGetUniformLocation(programID, "cubeMap");
+		glUniform1i(cubeMapLoc, 4);
+		glActiveTexture(GL_TEXTURE0 + 4);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, renderable->cubeMap->textureID);
+	}
 	GLint uniformLocation = glGetUniformLocation(programID, "hasDiffuseMap");
 	glUniform1i(uniformLocation, renderable->usingDiffuseMap);
 	uniformLocation = glGetUniformLocation(programID, "hasAlphaMap");
@@ -521,6 +563,8 @@ void GeneralGLWindow::sendRenderableToShader(RenderableInfo* renderable)
 	glUniform1i(uniformLocation, renderable->usingNormalMap);
 	uniformLocation = glGetUniformLocation(programID, "hasAmbientOcclusion");
 	glUniform1i(uniformLocation, renderable->usingAmbientOcclusionMap);
+	uniformLocation = glGetUniformLocation(programID, "hasCubeMap");
+	glUniform1i(uniformLocation, renderable->usingCubeMap);
 
 	for(uint i=0; i<renderable->numUniformParameters;i++)
 	{

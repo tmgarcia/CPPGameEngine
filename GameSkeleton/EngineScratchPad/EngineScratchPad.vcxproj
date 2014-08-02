@@ -65,6 +65,7 @@ copy "$(ProjectDir)..\Engine\DebugTools\DebugMenu\Vec3Slider_moc.cpp" "$(Project
 copy "$(ProjectDir)..\Engine\DebugTools\DebugMenu\IntSlider_moc.cpp" "$(ProjectDir)"
 copy "$(ProjectDir)..\Engine\DebugTools\DebugMenu\TrackingFloat_moc.cpp" "$(ProjectDir)"
 copy "$(ProjectDir)..\Engine\DebugTools\DebugMenu\CheckBox_moc.cpp" "$(ProjectDir)"
+copy "$(ProjectDir)..\Engine\DebugTools\DebugMenu\ComboBox_moc.cpp" "$(ProjectDir)"
 copy "$(ProjectDir)..\Tools\ObjToBinaryWriter\bin\Debug\ObjToBinaryWriter.exe" "$(ProjectDir)"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -84,6 +85,7 @@ copy "$(ProjectDir)..\Tools\ObjToBinaryWriter\bin\Debug\ObjToBinaryWriter.exe" "
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CheckBox_moc.cpp" />
+    <ClCompile Include="ComboBox_moc.cpp" />
     <ClCompile Include="DebugMenu_moc.cpp" />
     <ClCompile Include="DebugShapes_moc.cpp" />
     <ClCompile Include="DebugSlider_moc.cpp" />

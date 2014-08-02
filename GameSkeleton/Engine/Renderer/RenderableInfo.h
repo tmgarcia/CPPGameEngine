@@ -24,12 +24,14 @@ public:
 	bool usingDiffuseMap;
 	bool usingNormalMap;
 	bool usingAmbientOcclusionMap;
+	bool usingCubeMap;
 	mat4 whereMatrix;
 	GeometryInfo* whatGeometry;
 	TextureInfo* diffuseMap;
 	TextureInfo* alphaMap;
 	TextureInfo* normalMap;
 	TextureInfo* ambientOcclusionMap;
+	TextureInfo* cubeMap;
 	bool visible;
 	PriorityLevel priority;
 };

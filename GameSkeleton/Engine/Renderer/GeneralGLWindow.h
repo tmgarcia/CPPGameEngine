@@ -42,9 +42,7 @@ class __declspec(dllexport) GeneralGLWindow: public QGLWidget
 	Q_OBJECT
 
 private:
-	GeneralGLWindow()
-	{
-	}
+	GeneralGLWindow(){}
 	GeneralGLWindow(GeneralGLWindow const&);
 	GeneralGLWindow& operator = (GeneralGLWindow const&);
 	static GeneralGLWindow* theInstance;
@@ -68,6 +66,7 @@ public:
 	TextureInfo* addTexture(const char* fileName);
 	TextureInfo* addTexture(const uchar* bytes, uint width, uint height);
 	TextureInfo* addTexture(uint width, uint height);
+	TextureInfo* addCubeMap(const char* fileNames[6] );//pos x, neg x, pos y, neg y, pos z, neg z
 
 	RenderableInfo* addRenderable(
 		GeometryInfo* whatGeometry,
@@ -79,7 +78,8 @@ public:
 		TextureInfo* diffuseMap = NULL,
 		TextureInfo* alphaMap = NULL,
 		TextureInfo* normalMap = NULL,
-		TextureInfo* ambientOcclusionMap = NULL);
+		TextureInfo* ambientOcclusionMap = NULL,
+		TextureInfo* cubeMap = NULL);
 
 	void addShaderStreamedParameter(
 		GeometryInfo* geometry,
@@ -116,7 +116,7 @@ private:
 	void drawRenderables(RenderableInfo* renderablesArray[], GLuint numRenderabelsToDraw);
 	void sendRenderableToShader(RenderableInfo* renderable);
 
-	void loadTextureFromFile(const char* filename);
+	void loadTextureFromFile(const char* filename, GLenum target=GL_TEXTURE_2D);
 	void loadTextureFromBytes(const uchar* bytes, uint width, uint height);
 	std::string readShaderCode(const char *filename);
 	GLuint getNextAvailableBufferIndex(GLuint dataSize);

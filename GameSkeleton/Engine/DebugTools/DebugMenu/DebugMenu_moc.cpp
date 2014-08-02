@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'DebugMenu.h'
 **
-** Created: Tue Jul 8 21:44:48 2014
+** Created: Fri Aug 1 19:41:19 2014
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.0)
 **
 ** WARNING! All changes made in this file will be lost!

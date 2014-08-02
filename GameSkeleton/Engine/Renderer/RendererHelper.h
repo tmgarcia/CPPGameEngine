@@ -61,8 +61,8 @@ public:
 
 	//void setupGameObjectRenderable(GameObject* object, GeometryInfo* geo, ShaderInfo* shader, bool visible, PriorityLevel priority, bool depth, DiffuseMapInfo* diffuseMap, AlphaMapInfo* alphaMap, NormalMapInfo* normalMap);
 	
-	void setupGameObjectRenderable(GameObject* object, QString geometryName, QString shaderName, bool visible, PriorityLevel priorityLevel, bool depth, QString diffuseMapName, QString alphaMapName, QString normalMapName, QString ambientOcclusionMapName);
-	GameObject* setupGameObjectRenderable(QString gameObjectName, QString geometryName, QString shaderName, bool visible, PriorityLevel priorityLevel, bool depth, QString diffuseMapName, QString alphaMapName, QString normalMapName, QString ambientOcclusionMapName);
+	void setupGameObjectRenderable(GameObject* object, QString geometryName, QString shaderName, bool visible, PriorityLevel priorityLevel, bool depth, QString diffuseMapName, QString alphaMapName, QString normalMapName, QString ambientOcclusionMapName, QString cubeMapName);
+	GameObject* setupGameObjectRenderable(QString gameObjectName, QString geometryName, QString shaderName, bool visible, PriorityLevel priorityLevel, bool depth, QString diffuseMapName, QString alphaMapName, QString normalMapName, QString ambientOcclusionMapName, QString cubeMapName);
 	
 	TextureInfo* addTexture(const char* fileName, QString name="");
 	TextureInfo* addTexture(const uchar* bytes, uint width, uint height, QString name="");

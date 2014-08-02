@@ -16,6 +16,7 @@
 #include "Vec3Slider.h"
 #include "MultipleFloatsSlider.h"
 #include "TrackingFloat.h"
+#include "ComboBox.h"
 #include "..\ConsolePrinter.h"
 
 #include "..\DebugSlider.h"
@@ -48,8 +49,12 @@ public:
 	void addMultipleFloatSlider(QString tabName, QList<TrackingFloat*> floatsToTrack, QString labelText);
 	void addCheckBox(QString tabName, bool* variable, QString labelText);
 	void addDisplay(QString tabName, float* variable, QString labelText);
+	//template<typename T> void addComboBox(QString tabName, QVariant variableToTrack, QMap<QString,QVariant>optionsList, QString labelText="");
 	void addPrintButton();
 	int tabExists(QString name);
+
+	//template<typename T>
+	void addComboBox(QString tabName, GLuint* variableToTrack, QMap<QString,GLuint>optionsList, QString labelText);
 
 private:
 	QPushButton* printButton;

@@ -84,7 +84,29 @@ void DebugMenu::addMultipleFloatSlider(QString tabName, QList<TrackingFloat*> fl
 	MultipleFloatsSlider* f = new MultipleFloatsSlider(floatsToTrack, labelText);
 	tab->slidersLayout->addWidget(f);
 }
-
+void DebugMenu::addComboBox(QString tabName, GLuint* variableToTrack, QMap<QString,GLuint>optionsList, QString labelText)
+	{
+		DebugTab* tab = getTab(tabName);
+		QHBoxLayout* checkBoxGroup;
+		if(tab->numCheckBoxes == 0 || tab->numCheckBoxes%4 ==0)
+		{
+			checkBoxGroup = new QHBoxLayout();
+			checkBoxGroup->setDirection(QBoxLayout::RightToLeft);
+			checkBoxGroup->setMargin(0);
+			checkBoxGroup->setContentsMargins(0,0,0,0);
+			checkBoxGroup->setSpacing(0);
+			checkBoxGroup->setObjectName("group" + QString::number(tab->numCheckBoxes/4));
+			checkBoxGroup->addSpacerItem(new QSpacerItem(0,0,QSizePolicy::Expanding, QSizePolicy::Expanding));
+			tab->checkBoxLayouts->addLayout(checkBoxGroup);
+		}
+		else
+		{
+			checkBoxGroup = tab->checkBoxLayouts->findChild<QHBoxLayout*>("group" + QString::number(tab->numCheckBoxes - tab->numCheckBoxes%4));
+		}
+		ComboBox* c = new ComboBox(variableToTrack, optionsList, labelText);
+		checkBoxGroup->addWidget(c,0);
+		tab->numCheckBoxes++;
+	}
 void DebugMenu::addCheckBox(QString tabName, bool* variable, QString labelText="")
 {
 	DebugTab* tab = getTab(tabName);
@@ -109,6 +131,30 @@ void DebugMenu::addCheckBox(QString tabName, bool* variable, QString labelText="
 	checkBoxGroup->addWidget(c,0,Qt::AlignLeft);
 	tab->numCheckBoxes++;
 }
+//template<typename T>
+//void DebugMenu::addComboBox(QString tabName, QVariant variableToTrack, QMap<QString,QVariant>optionsList, QString labelText)
+//{
+//	DebugTab* tab = getTab(tabName);
+//	QHBoxLayout* checkBoxGroup;
+//	if(tab->numCheckBoxes == 0 || tab->numCheckBoxes%4 ==0)
+//	{
+//		checkBoxGroup = new QHBoxLayout();
+//		checkBoxGroup->setDirection(QBoxLayout::RightToLeft);
+//		checkBoxGroup->setMargin(0);
+//		checkBoxGroup->setContentsMargins(0,0,0,0);
+//		checkBoxGroup->setSpacing(0);
+//		checkBoxGroup->setObjectName("group" + QString::number(tab->numCheckBoxes/4));
+//		checkBoxGroup->addSpacerItem(new QSpacerItem(0,0,QSizePolicy::Expanding, QSizePolicy::Expanding));
+//		tab->checkBoxLayouts->addLayout(checkBoxGroup);
+//	}
+//	else
+//	{
+//		checkBoxGroup = tab->checkBoxLayouts->findChild<QHBoxLayout*>("group" + QString::number(tab->numCheckBoxes - tab->numCheckBoxes%4));
+//	}
+//	ComboBox* c = new ComboBox<T>(variableToTrack, optionsList, labelText);
+//	checkBoxGroup->addWidget(c,0);
+//	tab->numCheckBoxes++;
+//}
 
 void DebugMenu::addDisplay(QString tabName, float* variable, QString labelText="")
 {

@@ -27,6 +27,7 @@ public:
 	vec3 eyePosition;
 	vec3 overridingObjectColor;
 	vec3 ambientLight;
+	mat4 worldToProjectionMatrix;
 
 	static RendererHelper& getInstance();
 	enum NUShapes

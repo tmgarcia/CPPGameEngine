@@ -21,6 +21,7 @@ public:
 	mat4 modelToWorldMatrix;
 	mat4 fullTransformMatrix;
 
+
 	vec3 position;
 	vec3 scale;
 

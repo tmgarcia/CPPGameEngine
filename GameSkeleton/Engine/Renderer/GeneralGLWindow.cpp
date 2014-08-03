@@ -82,34 +82,7 @@ void GeneralGLWindow::paintGL()
 	{
 		drawRenderables(renderableInfos, currentRenderableIndex);
 	}
-	//for(uint i = 0; i < currentRenderableIndex; i++)
-	//{
-	//	if(renderableInfos[i]->visible && renderableInfos[i]->priority == PRIORITY_1)
-	//	{
-	//		if(renderableInfos[i]->enableDepth)
-	//			glEnable(GL_DEPTH_TEST);
-	//		else
-	//			glDisable(GL_DEPTH_TEST);
 
-	//		sendRenderableToShader(renderableInfos[i]);
-	//		glBindVertexArray(renderableInfos[i]->whatGeometry->vertexArrayID);
-	//		glDrawElements(renderableInfos[i]->whatGeometry->indexingMode, renderableInfos[i]->whatGeometry->numIndices, GL_UNSIGNED_SHORT, (void*)renderableInfos[i]->whatGeometry->indexDataOffset);
-	//	}
-	//}
-	//for(uint i = 0; i < currentRenderableIndex; i++)
-	//{
-	//	if(renderableInfos[i]->visible && renderableInfos[i]->priority == PRIORITY_2)
-	//	{
-	//		if(renderableInfos[i]->enableDepth)
-	//			glEnable(GL_DEPTH_TEST);
-	//		else
-	//			glDisable(GL_DEPTH_TEST);
-
-	//		sendRenderableToShader(renderableInfos[i]);
-	//		glBindVertexArray(renderableInfos[i]->whatGeometry->vertexArrayID);
-	//		glDrawElements(renderableInfos[i]->whatGeometry->indexingMode, renderableInfos[i]->whatGeometry->numIndices, GL_UNSIGNED_SHORT, (void*)renderableInfos[i]->whatGeometry->indexDataOffset);
-	//	}
-	//}
 }
 
 GeometryInfo* GeneralGLWindow::addGeometry(
@@ -412,15 +385,26 @@ void GeneralGLWindow::addRenderableUniformParameter(
 	renderable->uniformParameters[renderable->numUniformParameters].value = value;
 	renderable->numUniformParameters++;
 }
+void GeneralGLWindow::addPassUniformParameter(
+		PassInfo* pass,
+		const char* name,
+		ParameterType parameterType,
+		const float* value)
+{
+	pass->overridingUniformParameters[pass->numOverridingUniformParameters].name = name;
+	pass->overridingUniformParameters[pass->numOverridingUniformParameters].parameterType = parameterType;
+	pass->overridingUniformParameters[pass->numOverridingUniformParameters].value = value;
+	pass->numOverridingUniformParameters++;
+}
 
 void GeneralGLWindow::setupFrameBuffer(PassInfo* pass)
 {
-	cout << "SETUP" << endl;
+	//cout << "SETUP" << endl;
 	glGenFramebuffers(1, &(pass->frameBufferID));
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, pass->frameBufferID);
 	if(pass->storingColorTexture || pass->storingDepthTexture)
 	{
-		cout << "STORING THINGS" << endl;
+		//cout << "STORING THINGS" << endl;
 		glActiveTexture(GL_TEXTURE0);
 		if(pass->storingColorTexture)
 		{
@@ -441,8 +425,8 @@ void GeneralGLWindow::setupFrameBuffer(PassInfo* pass)
 		{
 			glGenTextures(1, &(pass->depthTexture->textureID));
 			glBindTexture(GL_TEXTURE_2D, pass->depthTexture->textureID);
-			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32,WINDOW_WIDTH,WINDOW_HEIGHT,0,GL_DEPTH_COMPONENT,GL_FLOAT,0);
 			glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, pass->depthTexture->textureID, 0);
 			GLuint status = glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER);
@@ -480,16 +464,29 @@ void GeneralGLWindow::resizeEvent(QResizeEvent* event)
 void GeneralGLWindow::drawPass(PassInfo* pass)
 {
 	//drawRenderables(pass->renderables, pass->numRenderables);
+	//cout << "DRAW PASS" << endl;
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, pass->frameBufferID);
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-	//glClearColor(0.5f,0.5f,1.0f,0);
-	//glViewport(0,0,width(), height());
-	drawRenderables(pass->renderables, pass->numRenderables);
+	if(pass->uniformParametersOverrideBufferDraw)
+	{
+		drawRenderables(pass->renderables, pass->numRenderables, pass);
+	}
+	else
+	{
+		drawRenderables(pass->renderables, pass->numRenderables);
+	}
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-	drawRenderables(pass->renderables, pass->numRenderables);
+	if(pass->uniformParametersOverrideScreenDraw)
+	{
+		drawRenderables(pass->renderables, pass->numRenderables, pass);
+	}
+	else
+	{
+		drawRenderables(pass->renderables, pass->numRenderables);
+	}
 }
 
-void GeneralGLWindow::drawRenderables(RenderableInfo* renderablesArray[], GLuint numRenderabelsToDraw)
+void GeneralGLWindow::drawRenderables(RenderableInfo* renderablesArray[], GLuint numRenderabelsToDraw, PassInfo* pass)
 {
 	for(int priority = 0; priority < 2; priority++)
 	{
@@ -502,8 +499,14 @@ void GeneralGLWindow::drawRenderables(RenderableInfo* renderablesArray[], GLuint
 					glEnable(GL_DEPTH_TEST);
 				else
 					glDisable(GL_DEPTH_TEST);
-
-				sendRenderableToShader(currentRenderable);
+				if(pass == NULL)
+				{
+					sendRenderableToShader(currentRenderable);
+				}
+				else
+				{
+					sendRenderableToShader(currentRenderable, pass);
+				}
 				glBindVertexArray(currentRenderable->whatGeometry->vertexArrayID);
 				glDrawElements(currentRenderable->whatGeometry->indexingMode, currentRenderable->whatGeometry->numIndices, GL_UNSIGNED_SHORT, (void*)currentRenderable->whatGeometry->indexDataOffset);
 			}
@@ -511,7 +514,7 @@ void GeneralGLWindow::drawRenderables(RenderableInfo* renderablesArray[], GLuint
 	}
 }
 
-void GeneralGLWindow::sendRenderableToShader(RenderableInfo* renderable)
+void GeneralGLWindow::sendRenderableToShader(RenderableInfo* renderable, PassInfo* pass)
 {
 	GLuint programID = renderable->howShaders->programID;
 	glUseProgram(programID);
@@ -525,7 +528,6 @@ void GeneralGLWindow::sendRenderableToShader(RenderableInfo* renderable)
 	}
 	if(renderable->usingAlphaMap)
 	{
-		//cout << "ALPHA" << endl;
 		GLint alphaMapLoc = glGetUniformLocation(programID, "alphaMap");
 		glUniform1i(alphaMapLoc, 1);
 		glActiveTexture(GL_TEXTURE0 + 1);
@@ -533,7 +535,6 @@ void GeneralGLWindow::sendRenderableToShader(RenderableInfo* renderable)
 	}
 	if(renderable->usingNormalMap)
 	{
-		//cout << "NORMAL" << endl;
 		GLint normalMapLoc = glGetUniformLocation(programID, "normalMap");
 		glUniform1i(normalMapLoc, 2);
 		glActiveTexture(GL_TEXTURE0 + 2);
@@ -541,7 +542,6 @@ void GeneralGLWindow::sendRenderableToShader(RenderableInfo* renderable)
 	}
 	if(renderable->usingAmbientOcclusionMap)
 	{
-		//cout << "NORMAL" << endl;
 		GLint ambOcclusionLoc = glGetUniformLocation(programID, "ambientOcclusionMap");
 		glUniform1i(ambOcclusionLoc, 3);
 		glActiveTexture(GL_TEXTURE0 + 3);
@@ -549,11 +549,17 @@ void GeneralGLWindow::sendRenderableToShader(RenderableInfo* renderable)
 	}
 	if(renderable->usingCubeMap)
 	{
-		//cout << "NORMAL" << endl;
 		GLint cubeMapLoc = glGetUniformLocation(programID, "cubeMap");
 		glUniform1i(cubeMapLoc, 4);
 		glActiveTexture(GL_TEXTURE0 + 4);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, renderable->cubeMap->textureID);
+	}
+	if(renderable->usingShadowMap)
+	{
+		GLint shadowMapLoc = glGetUniformLocation(programID, "shadowMap");
+		glUniform1i(shadowMapLoc, 5);
+		glActiveTexture(GL_TEXTURE0 + 5);
+		glBindTexture(GL_TEXTURE_2D, renderable->shadowMap->textureID);
 	}
 	GLint uniformLocation = glGetUniformLocation(programID, "hasDiffuseMap");
 	glUniform1i(uniformLocation, renderable->usingDiffuseMap);
@@ -565,6 +571,8 @@ void GeneralGLWindow::sendRenderableToShader(RenderableInfo* renderable)
 	glUniform1i(uniformLocation, renderable->usingAmbientOcclusionMap);
 	uniformLocation = glGetUniformLocation(programID, "hasCubeMap");
 	glUniform1i(uniformLocation, renderable->usingCubeMap);
+	uniformLocation = glGetUniformLocation(programID, "hasShadowMap");
+	glUniform1i(uniformLocation, renderable->usingShadowMap);
 
 	for(uint i=0; i<renderable->numUniformParameters;i++)
 	{
@@ -590,6 +598,38 @@ void GeneralGLWindow::sendRenderableToShader(RenderableInfo* renderable)
 		case PT_MAT4:
 			glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, renderable->uniformParameters[i].value);
 			break;
+		}
+	}
+	if(pass != NULL)
+	{
+		if(pass->numOverridingUniformParameters >0)
+		{
+			for(uint i=0; i<pass->numOverridingUniformParameters;i++)
+			{
+				GLint uniformLocation = glGetUniformLocation(programID, pass->overridingUniformParameters[i].name);
+		
+				switch(pass->overridingUniformParameters[i].parameterType)
+				{
+				case PT_FLOAT:
+					glUniform1f(uniformLocation, *pass->overridingUniformParameters[i].value);
+					break;
+				case PT_VEC2:
+					glUniform2fv(uniformLocation, 1, pass->overridingUniformParameters[i].value);
+					break;
+				case PT_VEC3:
+					glUniform3fv(uniformLocation, 1, pass->overridingUniformParameters[i].value);
+					break;
+				case PT_VEC4:
+					glUniform4fv(uniformLocation, 1,pass->overridingUniformParameters[i].value);
+					break;
+				case PT_MAT3:
+					glUniformMatrix3fv(uniformLocation, 1, GL_FALSE, pass->overridingUniformParameters[i].value);
+					break;
+				case PT_MAT4:
+					glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, pass->overridingUniformParameters[i].value);
+					break;
+				}
+			}
 		}
 	}
 }

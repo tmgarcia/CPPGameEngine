@@ -5,12 +5,14 @@ in layout(location=1) vec4 passedInTangent;
 in layout(location=2) vec3 passedInNormal;
 in layout(location=3) vec2 passedInUV;
 
+uniform mat4 worldToLightProjectionMatrix;
 uniform mat4 worldToProjectionMatrix;
 uniform vec3 overridingObjectColor;
 uniform vec3 ambientLight;
 uniform mat4 rotationMatrix;
 uniform mat4 modelToWorldMatrix;
  
+out vec4 shadowPos;
 out vec3 rotatedNormal;
 out vec3 rotatedTangent;
 out vec3 rotatedBitangent;
@@ -36,4 +38,7 @@ void main()
 	ambientColor = vec4(ambientLight, 1.0f);
 	objectColor = vec4(overridingObjectColor, 1.0f);
 	UV = passedInUV;
+	
+	vec4 worldPos = modelToWorldMatrix * v;
+	shadowPos = worldToLightProjectionMatrix * worldPos;
 } 

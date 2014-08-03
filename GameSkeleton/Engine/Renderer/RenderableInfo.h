@@ -25,6 +25,7 @@ public:
 	bool usingNormalMap;
 	bool usingAmbientOcclusionMap;
 	bool usingCubeMap;
+	bool usingShadowMap;
 	mat4 whereMatrix;
 	GeometryInfo* whatGeometry;
 	TextureInfo* diffuseMap;
@@ -32,6 +33,7 @@ public:
 	TextureInfo* normalMap;
 	TextureInfo* ambientOcclusionMap;
 	TextureInfo* cubeMap;
+	TextureInfo* shadowMap;
 	bool visible;
 	PriorityLevel priority;
 };

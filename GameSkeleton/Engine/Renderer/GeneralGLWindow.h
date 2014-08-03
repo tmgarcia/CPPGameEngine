@@ -94,6 +94,11 @@ public:
 		const char* name,
 		ParameterType parameterType,
 		const float* value);
+	void addPassUniformParameter(
+		PassInfo* renderable,
+		const char* name,
+		ParameterType parameterType,
+		const float* value);
 
 	PassInfo* addPass(
 		bool addAllPreviousRenderables,
@@ -113,8 +118,8 @@ public:
 
 private:
 	void drawPass(PassInfo* pass);
-	void drawRenderables(RenderableInfo* renderablesArray[], GLuint numRenderabelsToDraw);
-	void sendRenderableToShader(RenderableInfo* renderable);
+	void drawRenderables(RenderableInfo* renderablesArray[], GLuint numRenderabelsToDraw, PassInfo* pass = NULL);
+	void sendRenderableToShader(RenderableInfo* renderable, PassInfo* pass = NULL);
 
 	void loadTextureFromFile(const char* filename, GLenum target=GL_TEXTURE_2D);
 	void loadTextureFromBytes(const uchar* bytes, uint width, uint height);

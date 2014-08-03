@@ -59,7 +59,7 @@ GeometryInfo* RendererHelper::addNUGeo(NUShapes shape, QString name)
 		geoData = Neumont::ShapeGenerator::makeCylinder();
 		break;
 	case(NU_TEAPOT):
-		geoData = Neumont::ShapeGenerator::makeTeapot(10, mat4());
+		geoData = Neumont::ShapeGenerator::makeTeapot(20, mat4());
 		break;
 	case(NU_TORUS):
 		geoData = Neumont::ShapeGenerator::makeTorus(10);
@@ -370,8 +370,9 @@ TextureInfo* RendererHelper::getTexture(QString name)
 }
 #pragma endregion
 
-void RendererHelper::updateShaderInfo(mat4 worldToProjectionMatrix)
+void RendererHelper::updateShaderInfo(mat4 _worldToProjectionMatrix)
 {
+	worldToProjectionMatrix = _worldToProjectionMatrix;
 	for(int i = 0; i < gameObjects.count(); i++)
 	{
 		gameObjects[i].gameObject->updateTransforms(worldToProjectionMatrix);
@@ -402,7 +403,7 @@ void RendererHelper::addLightingAndTextureShaderUniforms(GameObject* gameObject)
 	GeneralGLWindow::getInstance().addRenderableUniformParameter(gameObject->renderable, "overridingObjectColor", PT_VEC3, &overridingObjectColor[0]);
 	GeneralGLWindow::getInstance().addRenderableUniformParameter(gameObject->renderable, "ambientLight", PT_VEC3, &ambientLight[0]);
 																 
-	GeneralGLWindow::getInstance().addRenderableUniformParameter(gameObject->renderable, "fullTransformMatrix", PT_MAT4, &gameObject->fullTransformMatrix[0][0]);
+	GeneralGLWindow::getInstance().addRenderableUniformParameter(gameObject->renderable, "worldToProjectionMatrix", PT_MAT4, &worldToProjectionMatrix[0][0]);
 	GeneralGLWindow::getInstance().addRenderableUniformParameter(gameObject->renderable, "rotationMatrix", PT_MAT4, &gameObject->rotationMatrix[0][0]);
 	GeneralGLWindow::getInstance().addRenderableUniformParameter(gameObject->renderable, "modelToWorldMatrix", PT_MAT4, &gameObject->modelToWorldMatrix[0][0]);
 }

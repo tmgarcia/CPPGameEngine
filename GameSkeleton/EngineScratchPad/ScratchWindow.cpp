@@ -316,7 +316,6 @@ void ScratchWindow::updateShaderInfo()
 		if(frame%5 == 0)
 		{
 			int ind = (int)(Random::getInstance().randomFloatRange(1,16));
-			t->creepObject->renderable->diffuseMap->textureID = (int)(Random::getInstance().randomFloatRange(1,14))+1;
 			switch(ind)
 			{
 			case 1:

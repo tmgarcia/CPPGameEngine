@@ -20,6 +20,21 @@ TextureInfo* creep1Alpha;
 TextureInfo* creep2Alpha;
 TextureInfo* creep3Alpha;
 TextureInfo* creep4Alpha;
+TextureInfo* noise1;
+TextureInfo* noise2;
+TextureInfo* noise3;
+TextureInfo* noise4;
+TextureInfo* noise5;
+TextureInfo* noise6;
+TextureInfo* noise7;
+TextureInfo* noise8;
+TextureInfo* noise9;
+TextureInfo* noise10;
+TextureInfo* noise11;
+TextureInfo* noise12;
+TextureInfo* noise13;
+TextureInfo* noise14;
+TextureInfo* noise15;
 using std::cout;
 using std::endl;
 
@@ -191,21 +206,21 @@ void ScratchWindow::setupTextures()
 	renderHelper->addShader("../Resources/Shaders/CubeMapReflectionTextureVertexShader.glsl", "../Resources/Shaders/CubeMapReflectionTextureFragmentShader.glsl",RendererHelper::ShaderType::SHADER_LIGHTING_TEXTURE, "cubeReflectionShader");
 	renderHelper->addShader("../Resources/Shaders/CubeMapTextureVertexShader.glsl", "../Resources/Shaders/CubeMapTextureFragmentShader.glsl",RendererHelper::ShaderType::SHADER_LIGHTING_TEXTURE, "cubeMapShader");
 
-	renderHelper->addTexture("../Resources/AssetGroups/Noise/noise10.png", "noise10");
-	renderHelper->addTexture("../Resources/AssetGroups/Noise/noise11.png", "noise11");
-	renderHelper->addTexture("../Resources/AssetGroups/Noise/noise12.png", "noise12");
-	renderHelper->addTexture("../Resources/AssetGroups/Noise/noise13.png", "noise13");
-	renderHelper->addTexture("../Resources/AssetGroups/Noise/noise14.png", "noise14");
-	renderHelper->addTexture("../Resources/AssetGroups/Noise/noise15.png", "noise15");
-	renderHelper->addTexture("../Resources/AssetGroups/Noise/noise16.png", "noise16");
-	renderHelper->addTexture("../Resources/AssetGroups/Noise/noise17.png", "noise17");
-	renderHelper->addTexture("../Resources/AssetGroups/Noise/noise18.png", "noise18");
-	renderHelper->addTexture("../Resources/AssetGroups/Noise/noise19.png", "noise19");
-	renderHelper->addTexture("../Resources/AssetGroups/Noise/noise20.png", "noise20");
-	renderHelper->addTexture("../Resources/AssetGroups/Noise/noise21.png", "noise21");
-	renderHelper->addTexture("../Resources/AssetGroups/Noise/noise22.png", "noise22");
-	renderHelper->addTexture("../Resources/AssetGroups/Noise/noise23.png", "noise23");
-	renderHelper->addTexture("../Resources/AssetGroups/Noise/noise24.png", "noise24");
+	noise1 = renderHelper->addTexture("../Resources/AssetGroups/Noise/noise10.png", "noise10");
+	noise2 = renderHelper->addTexture("../Resources/AssetGroups/Noise/noise11.png", "noise11");
+	noise3 = renderHelper->addTexture("../Resources/AssetGroups/Noise/noise12.png", "noise12");
+	noise4 = renderHelper->addTexture("../Resources/AssetGroups/Noise/noise13.png", "noise13");
+	noise5 = renderHelper->addTexture("../Resources/AssetGroups/Noise/noise14.png", "noise14");
+	noise6 = renderHelper->addTexture("../Resources/AssetGroups/Noise/noise15.png", "noise15");
+	noise7 = renderHelper->addTexture("../Resources/AssetGroups/Noise/noise16.png", "noise16");
+	noise8 = renderHelper->addTexture("../Resources/AssetGroups/Noise/noise17.png", "noise17");
+	noise9 = renderHelper->addTexture("../Resources/AssetGroups/Noise/noise18.png", "noise18");
+	noise10 = renderHelper->addTexture("../Resources/AssetGroups/Noise/noise19.png", "noise19");
+	noise11= renderHelper->addTexture("../Resources/AssetGroups/Noise/noise20.png", "noise20");
+	noise12 = renderHelper->addTexture("../Resources/AssetGroups/Noise/noise21.png", "noise21");
+	noise13 = renderHelper->addTexture("../Resources/AssetGroups/Noise/noise22.png", "noise22");
+	noise14 = renderHelper->addTexture("../Resources/AssetGroups/Noise/noise23.png", "noise23");
+	noise15 = renderHelper->addTexture("../Resources/AssetGroups/Noise/noise24.png", "noise24");
 
 	//1-14 = noise
 	emptyTreeAlpha = renderHelper->addTexture("../Resources/AssetGroups/CreepTrees/emptyTreeAlpha.png","emptyTreeAlpha");
@@ -300,7 +315,59 @@ void ScratchWindow::updateShaderInfo()
 		}
 		if(frame%5 == 0)
 		{
+			int ind = (int)(Random::getInstance().randomFloatRange(1,16));
 			t->creepObject->renderable->diffuseMap->textureID = (int)(Random::getInstance().randomFloatRange(1,14))+1;
+			switch(ind)
+			{
+			case 1:
+				t->creepObject->renderable->diffuseMap = noise1;
+				break;
+			case 2:
+				t->creepObject->renderable->diffuseMap = noise2;
+				break;
+			case 3:
+				t->creepObject->renderable->diffuseMap = noise3;
+				break;
+			case 4:
+				t->creepObject->renderable->diffuseMap = noise4;
+				break;
+			case 5:
+				t->creepObject->renderable->diffuseMap = noise5;
+				break;
+			case 6:
+				t->creepObject->renderable->diffuseMap = noise6;
+				break;
+			case 7:
+				t->creepObject->renderable->diffuseMap = noise7;
+				break;
+			case 8:
+				t->creepObject->renderable->diffuseMap = noise8;
+				break;
+			case 9:
+				t->creepObject->renderable->diffuseMap = noise9;
+				break;
+			case 10:
+				t->creepObject->renderable->diffuseMap = noise10;
+				break;
+			case 11:
+				t->creepObject->renderable->diffuseMap = noise11;
+				break;
+			case 12:
+				t->creepObject->renderable->diffuseMap = noise12;
+				break;
+			case 13:
+				t->creepObject->renderable->diffuseMap = noise13;
+				break;
+			case 14:
+				t->creepObject->renderable->diffuseMap = noise14;
+				break;
+			case 15:
+				t->creepObject->renderable->diffuseMap = noise15;
+				break;
+			defautl:
+				t->creepObject->renderable->diffuseMap = noise15;
+				break;
+			}
 		}
 	}
 

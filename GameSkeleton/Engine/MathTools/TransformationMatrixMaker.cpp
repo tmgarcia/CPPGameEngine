@@ -43,3 +43,19 @@ mat4 TransformationMatrixMaker::getBillboardTransformation(vec3 position, vec3 c
 	}
 	return transform;
 }
+
+mat4 TransformationMatrixMaker::getRestrictedYBillboardTransformation(vec3 position, vec3 cameraPosition, vec3 cameraUp, bool translate)
+{
+	vec3 look = glm::normalize(cameraPosition - position);
+	vec3 right = glm::cross(cameraUp, look);
+	vec3 up2 = glm::cross(look, right);
+	mat4 transform;
+	transform[0] = vec4(right, 0);
+	//transform[1] = vec4(up2, 0);
+	transform[2] = vec4(look, 0);
+	if(translate)
+	{
+		transform[3] = vec4(position, 1);
+	}
+	return transform;
+}

@@ -13,6 +13,7 @@ class RenderableInfo
 	RenderableInfo()
 	{
 		numUniformParameters = 0;
+		usingShadowMap = false;
 	}
 	friend class GeneralGLWindow;
 	ShaderInfo* howShaders;

@@ -3,8 +3,23 @@
 #include "DebugMenu\DebugMenu.h"
 #include "GameObjects\GameObject.h"
 #include "DebugMenu\TrackingFloat.h"
+#include "noise.h"
 #include <iostream>
 
+TextureInfo* emptyTreeDiffuse;
+TextureInfo* emptyTreeAlpha;
+TextureInfo* tree1Alpha;
+TextureInfo* tree2Alpha;
+TextureInfo* tree3Alpha;
+TextureInfo* tree4Alpha;
+TextureInfo* tree1Diffuse;
+TextureInfo* tree2Diffuse;
+TextureInfo* tree3Diffuse;
+TextureInfo* tree4Diffuse;
+TextureInfo* creep1Alpha;
+TextureInfo* creep2Alpha;
+TextureInfo* creep3Alpha;
+TextureInfo* creep4Alpha;
 using std::cout;
 using std::endl;
 
@@ -12,124 +27,160 @@ mat4 viewToProjectionMatrix;
 mat4 worldToViewMatrix;
 mat4 worldToProjectionMatrix;
 
-mat4 lightWorldToProjectionMatrix;
-vec3 lightPosition = vec3(-3.0f,4.5f,0.5f);
-vec3 lightView = vec3(1,-1,0);
-
-vec3 camOPos = vec3(0,0,10);
+vec3 camOPos = vec3(0,-0.5f,2);
 //vec3 camOPos = lightPosition;
 vec3 camOV = vec3(0,0,-1);
 //vec3 camOV = lightView;
 
 uint DIMENSIONS = 512;
 
-PassInfo* pass1;
-PassInfo* pass2;
-
-bool controllingLight = false;
-
+GameObject* reflector;
+GameObject* map;
+TextureInfo* cubeMapA;
+TextureInfo* cubeMapB;
+TextureInfo* cubeMapC;
 void ScratchWindow::setup()
 {
-	cout << "setup" << endl;
 	camera.setPosition(camOPos);
 	camera.setViewDirection(camOV);
 
 	renderHelper = new RendererHelper();
 
 	renderHelper->lightPosition = vec3(0.0f,5.0f,0.0f);
-	renderHelper->diffusionIntensity = 0.9f;
+	renderHelper->diffusionIntensity = -1.0f;
 	renderHelper->specularColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
 	renderHelper->specularExponent = 10;
 	renderHelper->overridingObjectColor = vec3(0.5f,0.5f,0.5f);
-	renderHelper->ambientLight = vec3(0.2f, 0.2f, 0.2f);
-	renderHelper->eyePosition;
+	renderHelper->ambientLight = vec3(0.0f, 0.0f, 0.0f);
+	renderHelper->eyePosition = camera.getPosition();
 
-	vec3 cameraPosition = camera.getPosition();
-	vec3 cameraView = camera.viewDirection;
-
-	camera.setPosition(lightPosition);
-	camera.setViewDirection(lightView);
-	viewToProjectionMatrix = glm::perspective(60.0f, ((float)WINDOW_WIDTH) / WINDOW_HEIGHT, 0.1f, 90.0f);
-	worldToViewMatrix = camera.getWorldToViewMatrix();
-	lightWorldToProjectionMatrix = viewToProjectionMatrix * worldToViewMatrix;
-
-	camera.setPosition(cameraPosition);
-	camera.setViewDirection(cameraView);
 
 	GeneralGLWindow::getInstance().WINDOW_HEIGHT = WINDOW_HEIGHT;
 	GeneralGLWindow::getInstance().WINDOW_WIDTH = WINDOW_WIDTH;
-	pass1 = GeneralGLWindow::getInstance().addPass(false,false);
-	GeneralGLWindow::getInstance().storePassDepthTexture(pass1,DIMENSIONS,DIMENSIONS);
-	GeneralGLWindow::getInstance().addPassUniformParameter(pass1, "worldToProjectionMatrix", PT_MAT4, &lightWorldToProjectionMatrix[0][0]);
-	pass1->uniformParametersOverrideBufferDraw = true;
-	pass2 = GeneralGLWindow::getInstance().addPass(false,false);
 
 	setupGeometry();
 	setupTextures();
 	setupGameObjects();
-	GeneralGLWindow::getInstance().setupFrameBuffer(pass1);
-	GeneralGLWindow::getInstance().setupFrameBuffer(pass2);
 
-	//dMenu->addVec3Slider("tab", &lightPosition, -10,10,-10,10,-10,10,"pos");
-	//dMenu->addVec3Slider("tab", &lightView, -10,10,-10,10,-10,10,"pos");
-
-	dMenu->addCheckBox("tab", &controllingLight, "Control Light");
+	//QMap<QString,GLuint> textureOptions;
+	//textureOptions["Debug Map"] = cubeMapC->textureID;
+	//textureOptions["Minecraft cube map"] = cubeMapA->textureID;
+	//textureOptions["Fishing cube map"] = cubeMapB->textureID;
+	//dMenu->addComboBox("tab",&(reflector->renderable->cubeMap->textureID), textureOptions, "Cube Map");
 }
-
 void ScratchWindow::setupGeometry()
 {
-	cout << "setup geometry" << endl;
+	//cout << "setup geometry" << endl;
 
-	renderHelper->addNUGeo(RendererHelper::NUShapes::NU_SPHERE, "NUCube");
+	renderHelper->addNUGeo(RendererHelper::NUShapes::NU_CUBE, "NUCube");
+	renderHelper->addNUGeo(RendererHelper::NUShapes::NU_SPHERE, "NUSphere");
 	renderHelper->addGeoFromBin("../Resources/Models/plane.bin","plane");
-
+	renderHelper->addGeoFromBin("../Resources/Models/wall.bin","wall");
 }
-GameObject* colorPlane;
-GameObject* depthPlane;
-TextureInfo* depthText;
+float reflectionFactor = 1.0f;
+GameObject* test1;
+GameObject* tree1;
+GameObject* creep1;
+int numTrees = 150;
+float minTreeDistance = 1;
+float maxTreeDistance = 20;
+float creepSpawnDistance = 5;
 void ScratchWindow::setupGameObjects()
 {
 	vec3 cameraPosition = camera.getPosition();
 	vec3 cameraView = camera.viewDirection;
 
-	camera.setPosition(lightPosition);
-	camera.setViewDirection(lightView);
-	viewToProjectionMatrix = glm::perspective(60.0f, ((float)WINDOW_WIDTH) / WINDOW_HEIGHT, 0.1f, 90.0f);
-	worldToViewMatrix = camera.getWorldToViewMatrix();
-	lightWorldToProjectionMatrix = viewToProjectionMatrix * worldToViewMatrix;
-
-	camera.setPosition(cameraPosition);
-	camera.setViewDirection(cameraView);
-
 	renderHelper->eyePosition = camera.getPosition();
 	viewToProjectionMatrix = glm::perspective(60.0f, ((float)WINDOW_WIDTH) / WINDOW_HEIGHT, 0.1f, 90.0f);
 	worldToViewMatrix = camera.getWorldToViewMatrix();
 	worldToProjectionMatrix = viewToProjectionMatrix * worldToViewMatrix;
+	
+	Random::getInstance();
+	for(int i = 0; i<numTrees; i++)
+	{
+		float distanceFromCenter = Random::getInstance().randomFloatRange(minTreeDistance, maxTreeDistance);
+		float angle = Random::getInstance().randomFloatRange(0, 359);
+		mat4 transform = glm::rotate(angle, vec3(0,1,0));
+		vec3 position = vec3((vec4(0,-0.05f,distanceFromCenter,1) * transform));
+		Tree* t = new Tree();
+		char* treeDiffuse = "emptyTreeDiffuse";
+		char* treeAlpha = "emptyTreeAlpha";
+		char* creepAlpha = "creep1Alpha";
+		//bool creeping = true;
+		bool creeping = distanceFromCenter>creepSpawnDistance;
+		GameObject* tree = renderHelper->addGameObject(position,vec3(1,1,1),0,0,0,worldToProjectionMatrix,"tree"+i);
+		renderHelper->setupGameObjectRenderable(tree,"plane","textureLightingShader",true,PRIORITY_1,true,"emptyTreeDiffuse","emptyTreeAlpha","","","");
+		GameObject* creep = renderHelper->addGameObject(position,vec3(1,1,1),0,0,0,worldToProjectionMatrix,"creep"+i);
+		renderHelper->setupGameObjectRenderable(creep,"plane","textureLightingShader",creeping,PRIORITY_1,true,"noise10","creep1Alpha","","","");
+		t->treeObject = tree;
+		t->creepObject = creep;
+		setupTreeTextures(t, creeping);
+		trees.append(t);
+	}
 
+	reflector = renderHelper->addGameObject(vec3(0,-1.3f,0),vec3(1,2,1),0,0,0,worldToProjectionMatrix,"reflectingSphere");
+	reflector = renderHelper->setupGameObjectRenderable("reflectingSphere", "wall","cubeReflectionShader",true,PRIORITY_1,true,"","","","","skyMap");
+	GeneralGLWindow::getInstance().addRenderableUniformParameter(reflector->renderable,"reflectionFactor",PT_FLOAT,&reflectionFactor);
+	reflector->renderable->usingShadowMap = false;
 
-	renderHelper->addGameObject(vec3(0,0,0),vec3(0.25f,0.25f,0.25f),-90,0,0,worldToProjectionMatrix,"Cube");
-	renderHelper->addGameObject(vec3(0,-0.5,0),vec3(1.25f,1.25f,1.25f),0,00,0,worldToProjectionMatrix,"Plane");
-	GeneralGLWindow::getInstance().setCurrentPass(pass1);
+	map = renderHelper->addGameObject(vec3(0,0,0),vec3(15,15,15),0,0,0,worldToProjectionMatrix,"skyBox");
+	renderHelper->setupGameObjectRenderable(map, "NUCube","cubeMapShader",true,PRIORITY_1,true,"","","","","skyMap");
+	//map->renderable->usingShadowMap = false;
 
-	GameObject* cube = renderHelper->setupGameObjectRenderable("Cube","NUCube","shadowShader",true,PRIORITY_1,true,"","","","","");
-	cube->renderable->shadowMap = pass1->depthTexture;
-	cube->renderable->usingShadowMap = true;
-	GeneralGLWindow::getInstance().addRenderableUniformParameter(cube->renderable, "worldToLightProjectionMatrix", PT_MAT4, &lightWorldToProjectionMatrix[0][0]);
-
-	GameObject* plane = renderHelper->setupGameObjectRenderable("Plane","plane","shadowShader",true,PRIORITY_1,true,"","","","","");
-	plane->renderable->shadowMap = pass1->depthTexture;
-	plane->renderable->usingShadowMap = true;
-	GeneralGLWindow::getInstance().addRenderableUniformParameter(plane->renderable, "worldToLightProjectionMatrix", PT_MAT4, &lightWorldToProjectionMatrix[0][0]);
-
-
-	//colorPlane = renderHelper->addGameObject(vec3(0.2f,0.7f,-0.9999f),vec3(0.25f,1,0.25f),90,0,0,worldToProjectionMatrix,"ColorPlane", false);
-	depthPlane = renderHelper->addGameObject(vec3(0.7f,0.7f,-0.9999f),vec3(0.25f,1,0.25f),90,0,0,worldToProjectionMatrix,"DepthPlane", false);
-	GeneralGLWindow::getInstance().setCurrentPass(pass2);
-	//renderHelper->setupGameObjectRenderable("ColorPlane","plane","textureShader",true,PRIORITY_1,true,"pass1Color","","","","");
-	GameObject* dc= renderHelper->setupGameObjectRenderable("DepthPlane","plane","deptTextureShader",true,PRIORITY_1,true,"pass1Depth","","","","");
-	dc->renderable->usingShadowMap = false;
+	//renderHelper->addGameObject(vec3(0,-0.9f,0),vec3(15.0f,1.0f,15.0f),0,0,0,worldToProjectionMatrix,"ground");
+	//renderHelper->setupGameObjectRenderable("ground", "plane","textureLightingShader",true,PRIORITY_1,true,"darkGround","","","","");
+	//GeneralGLWindow::getInstance().addRenderableUniformParameter(ground->renderable,"reflectionFactor",PT_FLOAT,&reflectionFactor);
 }
 
+float octaveIndex = 3;
+int noiseWidth = 128;
+int noiseHeight = 128;
+//float frequency = 1;
+uchar* ScratchWindow::createNoiseTexture(float frequency)
+{
+	noise::module::Perlin perlinNoise;
+	perlinNoise.SetFrequency(frequency);
+	uchar *data = new GLubyte[ noiseWidth * noiseHeight * 4 ];
+	uint BYTES_PER_COLOR = 4;
+	float xRange = 1.0;
+	float yRange = 1.0;
+	float xFactor = xRange / noiseWidth;
+	float yFactor = yRange / noiseHeight;
+	int oct = 20;
+	perlinNoise.SetOctaveCount(oct+1);
+	for( int i = 0; i < noiseWidth; i++ ) 
+	{
+		for( int j = 0 ; j < noiseHeight; j++ ) 
+		{
+			float x = xFactor * i;
+			float y = yFactor * j;
+			float z = 0.0;
+			float val = 0.0f;
+
+			float a, b, c, d;
+			a = perlinNoise.GetValue(x ,y ,z);
+			b = perlinNoise.GetValue(x+xRange,y ,z);
+			c = perlinNoise.GetValue(x ,y+yRange,z);
+			d = perlinNoise.GetValue(x+xRange,y+yRange,z);
+
+			float xmix = 1.0 - x / xRange;
+			float ymix = 1.0 - y / yRange;
+			float x1 = glm::mix( a, b, xmix );
+			float x2 = glm::mix( c, d, xmix );
+
+			val = glm::mix(x1, x2, ymix );
+			val = (val + 1.0f) * 0.5f;
+			val = val> 1.0 ? 1.0 :val;
+			val = val< 0.0 ? 0.0 :val;
+
+			data[((j * noiseWidth + i) * 4) + 0] =( val * 255.0f );
+			data[((j * noiseWidth + i) * 4) + 1] =( val * 255.0f );
+			data[((j * noiseWidth + i) * 4) + 2] =( val * 255.0f );
+			data[((j * noiseWidth + i) * 4) + 3] =( val * 255.0f );
+		}
+	}
+	return data;
+}
 
 void ScratchWindow::setupTextures()
 {
@@ -137,75 +188,165 @@ void ScratchWindow::setupTextures()
 	renderHelper->addShader("../Resources/Shaders/LightingTextureShadowVertexShader.glsl", "../Resources/Shaders/LightingTextureShadowFragmentShader.glsl",RendererHelper::ShaderType::SHADER_LIGHTING_TEXTURE, "shadowShader");
 	renderHelper->addShader("../Resources/Shaders/PassThroughVertexShader.glsl", "../Resources/Shaders/PassThroughFragmentShader.glsl",RendererHelper::ShaderType::SHADER_PASSTHROUGH, "passThroughShader");
 	renderHelper->addShader("../Resources/Shaders/JustTextureVertexShader.glsl", "../Resources/Shaders/JustTextureFragmentShader.glsl",RendererHelper::ShaderType::SHADER_TEXTURE, "textureShader");
-	renderHelper->addShader("../Resources/Shaders/DepthTextureVertexShader.glsl", "../Resources/Shaders/DepthTextureFragmentShader.glsl",RendererHelper::ShaderType::SHADER_TEXTURE, "deptTextureShader");
+	renderHelper->addShader("../Resources/Shaders/CubeMapReflectionTextureVertexShader.glsl", "../Resources/Shaders/CubeMapReflectionTextureFragmentShader.glsl",RendererHelper::ShaderType::SHADER_LIGHTING_TEXTURE, "cubeReflectionShader");
+	renderHelper->addShader("../Resources/Shaders/CubeMapTextureVertexShader.glsl", "../Resources/Shaders/CubeMapTextureFragmentShader.glsl",RendererHelper::ShaderType::SHADER_LIGHTING_TEXTURE, "cubeMapShader");
 
-	renderHelper->addTexture(pass1->colorTexture, "pass1Color");
-	renderHelper->addTexture(pass1->depthTexture, "pass1Depth");
-	renderHelper->addTexture("../Resources/Textures/lava1Texture.bmp","lavaText");
+	renderHelper->addTexture("../Resources/AssetGroups/Noise/noise10.png", "noise10");
+	renderHelper->addTexture("../Resources/AssetGroups/Noise/noise11.png", "noise11");
+	renderHelper->addTexture("../Resources/AssetGroups/Noise/noise12.png", "noise12");
+	renderHelper->addTexture("../Resources/AssetGroups/Noise/noise13.png", "noise13");
+	renderHelper->addTexture("../Resources/AssetGroups/Noise/noise14.png", "noise14");
+	renderHelper->addTexture("../Resources/AssetGroups/Noise/noise15.png", "noise15");
+	renderHelper->addTexture("../Resources/AssetGroups/Noise/noise16.png", "noise16");
+	renderHelper->addTexture("../Resources/AssetGroups/Noise/noise17.png", "noise17");
+	renderHelper->addTexture("../Resources/AssetGroups/Noise/noise18.png", "noise18");
+	renderHelper->addTexture("../Resources/AssetGroups/Noise/noise19.png", "noise19");
+	renderHelper->addTexture("../Resources/AssetGroups/Noise/noise20.png", "noise20");
+	renderHelper->addTexture("../Resources/AssetGroups/Noise/noise21.png", "noise21");
+	renderHelper->addTexture("../Resources/AssetGroups/Noise/noise22.png", "noise22");
+	renderHelper->addTexture("../Resources/AssetGroups/Noise/noise23.png", "noise23");
+	renderHelper->addTexture("../Resources/AssetGroups/Noise/noise24.png", "noise24");
+
+	//1-14 = noise
+	emptyTreeAlpha = renderHelper->addTexture("../Resources/AssetGroups/CreepTrees/emptyTreeAlpha.png","emptyTreeAlpha");
+	emptyTreeDiffuse = renderHelper->addTexture("../Resources/AssetGroups/CreepTrees/emptyTreeDiffuse.png","emptyTreeDiffuse");
+	//15-16 = empty tree
+	tree1Alpha = renderHelper->addTexture("../Resources/AssetGroups/CreepTrees/creepTree1Alpha.png","tree1Alpha");
+	tree2Alpha = renderHelper->addTexture("../Resources/AssetGroups/CreepTrees/creepTree2Alpha.png","tree2Alpha");
+	tree3Alpha = renderHelper->addTexture("../Resources/AssetGroups/CreepTrees/creepTree3Alpha.png","tree3Alpha");
+	tree4Alpha = renderHelper->addTexture("../Resources/AssetGroups/CreepTrees/creepTree4Alpha.png","tree4Alpha");
+	//17-20 = tree alpha
+	tree1Diffuse = renderHelper->addTexture("../Resources/AssetGroups/CreepTrees/creepTree1Diffuse.png","tree1Diffuse");
+	tree2Diffuse = renderHelper->addTexture("../Resources/AssetGroups/CreepTrees/creepTree2Diffuse.png","tree2Diffuse");
+	tree3Diffuse = renderHelper->addTexture("../Resources/AssetGroups/CreepTrees/creepTree3Diffuse.png","tree3Diffuse");
+	tree4Diffuse = renderHelper->addTexture("../Resources/AssetGroups/CreepTrees/creepTree4Diffuse.png","tree4Diffuse");
+	//21-24 = tree diffuse
+	creep1Alpha = renderHelper->addTexture("../Resources/AssetGroups/CreepTrees/creep1Alpha.png","creep1Alpha");
+	creep2Alpha = renderHelper->addTexture("../Resources/AssetGroups/CreepTrees/creep2Alpha.png","creep2Alpha");
+	creep3Alpha = renderHelper->addTexture("../Resources/AssetGroups/CreepTrees/creep3Alpha.png","creep3Alpha");
+	creep4Alpha = renderHelper->addTexture("../Resources/AssetGroups/CreepTrees/creep4Alpha.png","creep4Alpha");
+
+	renderHelper->addTexture("../Resources/Textures/darkGroundTexture.bmp","darkGround");
+	//25-28 = creep alpha
+	const char* fileNamesA[6] = {
+		"../Resources/Textures/CubeMapNight/posX.png",
+		"../Resources/Textures/CubeMapNight/negX.png",
+		"../Resources/Textures/CubeMapNight/negY.png",
+		"../Resources/Textures/CubeMapNight/posY.png",
+		"../Resources/Textures/CubeMapNight/posZ.png",
+		"../Resources/Textures/CubeMapNight/negZ.png",
+	};
+	cubeMapA = GeneralGLWindow::getInstance().addCubeMap(fileNamesA);
+	renderHelper->addTexture(cubeMapA, "skyMap");
 }
-
-bool lastControlState = controllingLight;
+bool wDown=false;
+bool sDown=false;
+bool aDown=false;
+bool dDown=false;
+bool rDown=false;
+bool fDown=false;
 int frame = 0;
-vec3 lastCameraPos;
-vec3 lastCameraView;
+GLuint lastTextureId = 0;
 void ScratchWindow::update()
 {
+	renderHelper->lightPosition = camera.getPosition();
 	updateShaderInfo();
 	frame++;
-
-	if(controllingLight)
+	keyMove();
+	if(frame == 50)
 	{
-		if(lastControlState != controllingLight)
-		{
-			lastCameraPos = camera.getPosition();
-			lastCameraView = camera.viewDirection;
-
-			camera.setPosition(lightPosition);
-			camera.setViewDirection(lightView);
-		}
-		lightPosition = camera.getPosition();
-		lightView = camera.viewDirection;
+		wDown=false;
+		sDown=false;
+		aDown=false;
+		dDown=false;
+		rDown=false;
+		fDown=false;
 	}
-	else
-	{
-		if(lastControlState != controllingLight)
-		{
-			camera.setPosition(lastCameraPos);
-			camera.setViewDirection(lastCameraView);
-		}
-	}
-	
-	lastControlState = controllingLight;
-	//renderHelper->lightPosition = renderHelper->getGameObject("lightBulb")->position;
 }
+
+
 
 void ScratchWindow::updateShaderInfo()
 {
-	vec3 cameraPosition = camera.getPosition();
-	vec3 cameraView = camera.viewDirection;
-
-	camera.setPosition(lightPosition);
-	camera.setViewDirection(lightView);
+	vec3 eyePosition = camera.getPosition();
 	viewToProjectionMatrix = glm::perspective(60.0f, ((float)WINDOW_WIDTH) / WINDOW_HEIGHT, 0.1f, 90.0f);
 	worldToViewMatrix = camera.getWorldToViewMatrix();
-	lightWorldToProjectionMatrix = viewToProjectionMatrix * worldToViewMatrix;
-
-	camera.setPosition(cameraPosition);
-	camera.setViewDirection(cameraView);
-
-	vec3 eyePosition = camera.getPosition();
-	viewToProjectionMatrix = glm::perspective(60.0f, 1.0f, 0.1f, 90.0f);
-	//viewToProjectionMatrix = glm::perspective(60.0f, ((float)WINDOW_WIDTH) / WINDOW_HEIGHT, 0.1f, 90.0f);
-	worldToViewMatrix = camera.getWorldToViewMatrix();
 	worldToProjectionMatrix = viewToProjectionMatrix * worldToViewMatrix;
+	renderHelper->eyePosition = eyePosition;
 
 	DebugShapes::updateWorldToProjection(worldToProjectionMatrix);
 
-	renderHelper->eyePosition = eyePosition;
-	renderHelper->lightPosition = lightPosition;
 	renderHelper->updateShaderInfo(worldToProjectionMatrix);
+
+	for(int i = 0; i < numTrees; i++)
+	{
+		Tree* t = trees[i];
+		mat4 rotation = TransformationMatrixMaker::getInstance().getRestrictedYBillboardTransformation(t->treeObject->position,camera.getPosition(),vec3(0,1,0),false);
+		t->resetTransforms(rotation, worldToProjectionMatrix);
+		if(trees[i]->empty)
+		{
+			if(glm::length(t->treeObject->position-camera.getPosition())>creepSpawnDistance)
+			{
+				setupTreeTextures(t, true);
+			}
+		}
+		else
+		{
+			
+			if(glm::length(t->treeObject->position -camera.getPosition())<creepSpawnDistance)
+			{
+				setupTreeTextures(t, false);
+			}
+		}
+		if(frame%5 == 0)
+		{
+			t->creepObject->renderable->diffuseMap->textureID = (int)(Random::getInstance().randomFloatRange(1,14))+1;
+		}
+	}
+
 	GeneralGLWindow::getInstance().repaint();
 }
+void ScratchWindow::setupTreeTextures(Tree* tree, bool creeping)
+{
+		if(creeping)
+		{
+			int index = (int)Random::getInstance().randomFloatRange(0,4);
+			cout << index << endl;
+			tree->creepObject->renderable->visible = true;
+			switch(index)
+			{
+			case 0:
+				tree->treeObject->renderable->diffuseMap = tree1Diffuse;
+				tree->treeObject->renderable->alphaMap = tree1Alpha;
+				tree->creepObject->renderable->alphaMap = creep1Alpha;
+				break;
+			case 1:
+				tree->treeObject->renderable->diffuseMap = tree2Diffuse;
+				tree->treeObject->renderable->alphaMap = tree2Alpha;
+				tree->creepObject->renderable->alphaMap = creep2Alpha;
+				break;
+			case 2:
+				tree->treeObject->renderable->diffuseMap = tree3Diffuse;
+				tree->treeObject->renderable->alphaMap = tree3Alpha;
+				tree->creepObject->renderable->alphaMap = creep3Alpha;
+				break;
+			case 3:
+				tree->treeObject->renderable->diffuseMap = tree4Diffuse;
+				tree->treeObject->renderable->alphaMap = tree4Alpha;
+				tree->creepObject->renderable->alphaMap = creep4Alpha;
+				break;
+			}
+		}
+		else
+		{
+			tree->treeObject->renderable->alphaMap = emptyTreeAlpha;
+			tree->treeObject->renderable->diffuseMap = emptyTreeDiffuse;
+
+			tree->creepObject->renderable->visible = false;
+		}
+	tree->empty = !creeping;
+}
+
 
 void ScratchWindow::keyPressEvent(QKeyEvent *event)
 {
@@ -216,35 +357,92 @@ void ScratchWindow::keyPressReaction(QKeyEvent* e)
 	switch(e->key())
 	{
 	case Qt::Key::Key_W:
-		camera.moveForward();
+		wDown = true;
+		sDown = false;
 		break;
 	case Qt::Key::Key_S:
-		camera.moveBackward();
+		sDown = true;
+		wDown = false;
 		break;
 	case Qt::Key::Key_A:
-		camera.strafeLeft();
+		aDown = true;
+		dDown = false;
 		break;
 	case Qt::Key::Key_D:
-		camera.strafeRight();
+		dDown = true;
+		aDown = false;
 		break;
-	case Qt::Key::Key_R:
-		camera.moveUp();
-		break;
-	case Qt::Key::Key_F:
-		camera.moveDown();
-		break;
+	//case Qt::Key::Key_R:
+	//	rDown = true;
+	//	break;
+	//case Qt::Key::Key_F:
+	//	fDown = true;
+	//	break;
 	case Qt::Key::Key_0:
 		cameraFrozen = !cameraFrozen;
 		break;
 	}
 	update();
 }
+void ScratchWindow::keyReleaseReaction(QKeyEvent* e)
+{
+	switch(e->key())
+	{
+	case Qt::Key::Key_W:
+		wDown = false;
+		break;
+	case Qt::Key::Key_S:
+		sDown = false;
+		break;
+	case Qt::Key::Key_A:
+		aDown = false;
+		break;
+	case Qt::Key::Key_D:
+		dDown = false;
+		break;
+	//case Qt::Key::Key_R:
+	//	rDown = false;
+	//	break;
+	//case Qt::Key::Key_F:
+	//	fDown = false;
+	//	break;
+	}
+	update();
+}
+
+void ScratchWindow::keyMove()
+{
+	if(wDown)
+	{
+		camera.moveForward();
+	}
+	if(sDown)
+	{
+		camera.moveBackward();
+	}
+	if(aDown)
+	{
+		camera.strafeLeft();
+	}
+	if(dDown)
+	{
+		camera.strafeRight();
+	}
+	//if(rDown)
+	//{
+	//	camera.moveUp();
+	//}
+	//if(fDown)
+	//{
+	//	camera.moveDown();
+	//}
+}
 
 void ScratchWindow::mouseMoveReaction(QMouseEvent* e)
 {
 	if(!cameraFrozen)
 	{
-		camera.mouseUpdate(glm::vec2(e->x(), e->y()));
+		camera.mouseUpdate(glm::vec2(e->x(), 0));
 		update();
 	}
 }

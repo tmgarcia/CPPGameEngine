@@ -114,7 +114,10 @@ public:
 	void initializeGL();
 
 	void keyPressEvent(QKeyEvent* e);
+	void keyReleaseEvent(QKeyEvent* e);
 	void setupFrameBuffer(PassInfo* pass);
+
+	void saveTexture(TextureInfo* texture, QString fileName);
 
 private:
 	void drawPass(PassInfo* pass);
@@ -134,6 +137,7 @@ protected:
 
 signals:
 	void keyPressed(QKeyEvent* e);
+	void keyReleased(QKeyEvent* e);
 	void mouseMoved(QMouseEvent* e);
 	void mouseClicked(QMouseEvent* e);
 };

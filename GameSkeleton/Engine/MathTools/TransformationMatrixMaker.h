@@ -20,5 +20,6 @@ private:
 public:
 	mat4 getRotationFromVector(vec3 v);
 	mat4 getBillboardTransformation(vec3 position, vec3 cameraPosition, vec3 cameraUp, bool translate);
+	mat4 getRestrictedYBillboardTransformation(vec3 position, vec3 cameraPosition, vec3 cameraUp, bool translate);
 };
 

@@ -403,6 +403,7 @@ void RendererHelper::addLightingAndTextureShaderUniforms(GameObject* gameObject)
 	GeneralGLWindow::getInstance().addRenderableUniformParameter(gameObject->renderable, "overridingObjectColor", PT_VEC3, &overridingObjectColor[0]);
 	GeneralGLWindow::getInstance().addRenderableUniformParameter(gameObject->renderable, "ambientLight", PT_VEC3, &ambientLight[0]);
 																 
+	GeneralGLWindow::getInstance().addRenderableUniformParameter(gameObject->renderable, "fullTransformMatrix", PT_MAT4, &gameObject->fullTransformMatrix[0][0]);
 	GeneralGLWindow::getInstance().addRenderableUniformParameter(gameObject->renderable, "worldToProjectionMatrix", PT_MAT4, &worldToProjectionMatrix[0][0]);
 	GeneralGLWindow::getInstance().addRenderableUniformParameter(gameObject->renderable, "rotationMatrix", PT_MAT4, &gameObject->rotationMatrix[0][0]);
 	GeneralGLWindow::getInstance().addRenderableUniformParameter(gameObject->renderable, "modelToWorldMatrix", PT_MAT4, &gameObject->modelToWorldMatrix[0][0]);

@@ -19,6 +19,8 @@ using std::endl;
 const GLuint WINDOW_WIDTH = 1300;
 const GLuint WINDOW_HEIGHT = 900;
 
+
+
 class ScratchWindow : public QMainWindow
 {
 	Q_OBJECT
@@ -53,6 +55,7 @@ public:
 		GeneralGLWindow::getInstance();
 
 		QObject::connect(&GeneralGLWindow::getInstance(), SIGNAL(keyPressed(QKeyEvent*)), this, SLOT(keyPressReaction(QKeyEvent*)));
+		QObject::connect(&GeneralGLWindow::getInstance(), SIGNAL(keyReleased(QKeyEvent*)), this, SLOT(keyReleaseReaction(QKeyEvent*)));
 		QObject::connect(&GeneralGLWindow::getInstance(), SIGNAL(mouseMoved(QMouseEvent*)), this, SLOT(mouseMoveReaction(QMouseEvent*)));
 
 		setup();
@@ -66,20 +69,6 @@ public:
 
 	}
 
-	template <class T> class VPtr
-	{
-	public:
-		static T* asPtr(QVariant v)
-		{
-			return (T *) v.value<void *>();
-		}
-
-		static QVariant asQVariant(T* ptr)
-		{
-			return qVariantFromValue((void *) ptr);
-		}
-	};
-
 protected:
 	bool cameraFrozen;
 	DebugMenu* dMenu;
@@ -90,13 +79,34 @@ protected:
 	void setupTextures();
 	Camera camera;
 	void keyPressEvent(QKeyEvent *event);
+	void keyMove();
 	void updateShaderInfo();
-	//void resizeEvent(QResizeEvent* e);
+	uchar* createNoiseTexture(float frequency);
+private:
+	struct Tree
+	{
+		void things();
+		bool empty;
+		GameObject* treeObject;
+		GameObject* creepObject;
+		void resetTransforms(mat4 rotation, mat4 worldToProjectionmatrix)
+		{
+			treeObject->rotationMatrix = rotation*glm::rotate(90.0f, vec3(1,0,0));
+			treeObject->modelToWorldMatrix = treeObject->translationMatrix * treeObject->rotationMatrix;
+			treeObject->fullTransformMatrix = worldToProjectionmatrix * treeObject->modelToWorldMatrix; 
+			creepObject->rotationMatrix = rotation*glm::rotate(90.0f, vec3(1,0,0));
+			creepObject->modelToWorldMatrix = treeObject->translationMatrix * creepObject->rotationMatrix;
+			creepObject->fullTransformMatrix = worldToProjectionmatrix * treeObject->modelToWorldMatrix; 
+		}
+	};
+	QList<Tree*> trees;
+	void setupTreeTextures(Tree* tree, bool creeping);
 private slots:
 	void update();
 
 public slots:
 	void keyPressReaction(QKeyEvent* e);
+	void keyReleaseReaction(QKeyEvent* e);
 	void mouseMoveReaction(QMouseEvent* e);
 };
 

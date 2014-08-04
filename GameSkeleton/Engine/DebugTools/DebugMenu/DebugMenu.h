@@ -42,6 +42,7 @@ public:
 		QObject::connect(printButton, SIGNAL(clicked()), this, SLOT(printAllValues()));
 		//QObject::connect(printButton, SIGNAL(
 		this->show();
+		setFocusPolicy(Qt::NoFocus);
 	}
 	void addFloatSlider(QString tabName, float* variable, float min, float max, QString labelText);
 	void addVec3Slider(QString tabName, vec3* vector, float minX, float maxX, float minY, float maxY, float minZ, float maxZ, QString labelText);

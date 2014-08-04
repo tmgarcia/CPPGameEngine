@@ -62,6 +62,9 @@ private slots:
 	//template<class T>
 	void updateValue(int optionIndex)
 	{
+		comboBox->setFocusPolicy(Qt::NoFocus);
+		comboBox->clearFocus();
+		clearFocus();
 		int index = 0;
 		bool foundOption = false;
 		int option = 0;

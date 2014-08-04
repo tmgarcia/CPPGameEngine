@@ -54,6 +54,7 @@ void GeneralGLWindow::initializeGL()
 	glEnable( GL_TEXTURE_2D );
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	setFocusPolicy(Qt::FocusPolicy::StrongFocus);
 }
 
 void GeneralGLWindow::debugMethod()
@@ -309,6 +310,23 @@ void GeneralGLWindow::loadTextureFromFile(const char* filename, GLenum target)
 
 }
 
+void GeneralGLWindow::saveTexture(TextureInfo* texture, QString fileName)
+{
+	ConsolePrinter::getInstance().print(fileName);
+	glBindTexture(GL_TEXTURE_2D, texture->textureID);
+	
+    uchar* rgbaTex = new uchar[texture->width * texture->height * 4];
+
+    glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, rgbaTex);
+
+    QImage qimg(rgbaTex, texture->width, texture->height, QImage::Format_ARGB32);
+
+    qimg = qimg.mirrored(false, true);
+	ConsolePrinter::getInstance().print(fileName);
+    assert(qimg.save(fileName));
+
+}
+
 void GeneralGLWindow::loadTextureFromBytes(const uchar* bytes, uint width, uint height)
 {
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, bytes);
@@ -492,6 +510,7 @@ void GeneralGLWindow::drawRenderables(RenderableInfo* renderablesArray[], GLuint
 	{
 		for(uint i = 0; i < numRenderabelsToDraw; i++)
 		{
+			//cout << "draw renderable " << i << endl;
 			RenderableInfo* currentRenderable = renderablesArray[i];
 			if(currentRenderable->visible && currentRenderable->priority == (PriorityLevel)priority)
 			{
@@ -602,6 +621,7 @@ void GeneralGLWindow::sendRenderableToShader(RenderableInfo* renderable, PassInf
 	}
 	if(pass != NULL)
 	{
+		//cout << "Pass overriding uniforms" << endl;
 		if(pass->numOverridingUniformParameters >0)
 		{
 			for(uint i=0; i<pass->numOverridingUniformParameters;i++)
@@ -682,6 +702,10 @@ void GeneralGLWindow::unsetCurrentPass()
 void GeneralGLWindow::keyPressEvent(QKeyEvent* e)
 {
 	emit keyPressed(e);
+}
+void GeneralGLWindow::keyReleaseEvent(QKeyEvent* e)
+{
+	emit keyReleased(e);
 }
 
 void GeneralGLWindow::mouseMoveEvent(QMouseEvent* e)

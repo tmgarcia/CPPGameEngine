@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{78CD8535-62BA-4F6A-8354-C15B6CE3C734}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>EngineGame</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IntDir>$(Configuration)\Junk</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\External Dependencies\libnoise\include;$(SolutionDir)..\External Dependencies\libnoise\include\noise;$(SolutionDir)..\External Dependencies\NeumontTools\include;$(SolutionDir)..\External Dependencies\glew\include;$(SolutionDir)..\External Dependencies\glm;$(SolutionDir)..\Engine2.0\DebugTools\DebugMenu;$(SolutionDir)..\Engine2.0\DebugTools;$(SolutionDir)..\Engine2.0\Renderer;$(SolutionDir)..\Engine2.0;$(SolutionDir)..\External Dependencies\Qt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\External Dependencies\Qt\lib;$(SolutionDir)..\External Dependencies\NeumontTools\lib;$(SolutionDir)..\External Dependencies\glew\lib;$(SolutionDir)..\External Dependencies\libnoise\bin;$(SolutionDir)..\Engine2.0\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Engine.lib;opengl32.lib;glew32.lib;glew32d.lib;NeumontTools.lib;QtCored4.lib;QtGuid4.lib;QtOpenGLd4.lib;libnoise.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PreBuildEvent>
+      <Command>copy "$(SolutionDir)..\Engine2.0\$(Configuration)\Engine.dll" "$(OutDir)"
+copy "$(SolutionDir)..\Engine2.0\Renderer\GeneralGLWindow_moc.cpp" "$(ProjectDir)"
+copy "$(SolutionDir)..\Engine2.0\DebugTools\DebugShapes_moc.cpp" "$(ProjectDir)"
+copy "$(SolutionDir)..\Engine2.0\DebugTools\DebugSlider_moc.cpp" "$(ProjectDir)"
+copy "$(SolutionDir)..\Engine2.0\DebugTools\DebugMenu\DebugMenu_moc.cpp" "$(ProjectDir)"
+copy "$(SolutionDir)..\Engine2.0\DebugTools\DebugMenu\FloatSlider_moc.cpp" "$(ProjectDir)"
+copy "$(SolutionDir)..\Engine2.0\DebugTools\DebugMenu\Vec3Slider_moc.cpp" "$(ProjectDir)"
+copy "$(SolutionDir)..\Engine2.0\DebugTools\DebugMenu\IntSlider_moc.cpp" "$(ProjectDir)"
+copy "$(SolutionDir)..\Engine2.0\DebugTools\DebugMenu\TrackingFloat_moc.cpp" "$(ProjectDir)"
+copy "$(SolutionDir)..\Engine2.0\DebugTools\DebugMenu\CheckBox_moc.cpp" "$(ProjectDir)"
+copy "$(SolutionDir)..\Engine2.0\DebugTools\DebugMenu\ComboBox_moc.cpp" "$(ProjectDir)"
+copy "$(SolutionDir)..\Tools\ObjToBinaryWriter\bin\Debug\ObjToBinaryWriter.exe" "$(ProjectDir)"</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="ControllerComponent.h" />
+    <ClInclude Include="InputActions.h" />
+    <ClInclude Include="KeyMap.h" />
+    <ClInclude Include="MainWindow.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CheckBox_moc.cpp" />
+    <ClCompile Include="ComboBox_moc.cpp" />
+    <ClCompile Include="ControllerComponent.cpp" />
+    <ClCompile Include="DebugMenu_moc.cpp" />
+    <ClCompile Include="DebugShapes_moc.cpp" />
+    <ClCompile Include="DebugSlider_moc.cpp" />
+    <ClCompile Include="FloatSlider_moc.cpp" />
+    <ClCompile Include="GeneralGLWindow_moc.cpp" />
+    <ClCompile Include="IntSlider_moc.cpp" />
+    <ClCompile Include="KeyMap.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MainWindow.cpp" />
+    <ClCompile Include="MainWindow_moc.cpp" />
+    <ClCompile Include="TrackingFloat_moc.cpp" />
+    <ClCompile Include="Vec3Slider_moc.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ObjToBinaryWriter.exe" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

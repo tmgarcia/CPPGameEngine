@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Math">
+      <UniqueIdentifier>{adfc22b5-bc5d-4f6f-ad95-cf84bafdd2e8}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Engine.cpp" />
+    <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Renderer\GeneralGLWindow.cpp" />
+    <ClCompile Include="Renderer\GeneralGLWindow_moc.cpp" />
+    <ClCompile Include="DebugTools\Logger.cpp" />
+    <ClCompile Include="DebugTools\Profiler.cpp" />
+    <ClCompile Include="DebugTools\DebugShapes.cpp" />
+    <ClCompile Include="DebugTools\DebugShapes_moc.cpp" />
+    <ClCompile Include="AStarData\PathCreator.cpp" />
+    <ClCompile Include="AStarData\Path.cpp" />
+    <ClCompile Include="MathTools\Random.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="MathTools\TransformationMatrixMaker.cpp" />
+    <ClCompile Include="AStarDebugToolbar.cpp" />
+    <ClCompile Include="DebugTools\DebugSlider.cpp" />
+    <ClCompile Include="DebugTools\DebugSlider_moc.cpp" />
+    <ClCompile Include="AStarData\Nodes\DebugNode.cpp" />
+    <ClCompile Include="AStarData\Nodes\DebugNodeContainer.cpp" />
+    <ClCompile Include="AStarData\Nodes\EditorNode.cpp" />
+    <ClCompile Include="AStarData\Nodes\EditorNodeContainer.cpp" />
+    <ClCompile Include="AStarData\Nodes\GameNode.cpp" />
+    <ClCompile Include="AStarData\Nodes\GameNodeContainer.cpp" />
+    <ClCompile Include="AStarData\Nodes\Node.cpp" />
+    <ClCompile Include="AStarData\Nodes\NodeContainer.cpp" />
+    <ClCompile Include="BinReader.cpp" />
+    <ClCompile Include="DebugTools\DebugMenu\DebugMenu.cpp" />
+    <ClCompile Include="DebugTools\DebugMenu\DebugMenu_moc.cpp" />
+    <ClCompile Include="DebugTools\DebugMenu\FloatSlider_moc.cpp" />
+    <ClCompile Include="DebugTools\DebugMenu\IntSlider_moc.cpp" />
+    <ClCompile Include="DebugTools\DebugMenu\CheckBox_moc.cpp" />
+    <ClCompile Include="DebugTools\ConsolePrinter.cpp" />
+    <ClCompile Include="DebugTools\DebugMenu\Vec3Slider_moc.cpp" />
+    <ClCompile Include="DebugTools\DebugMenu\TrackingFloat_moc.cpp" />
+    <ClCompile Include="Renderer\RendererHelper.cpp" />
+    <ClCompile Include="DebugTools\DebugMenu\ComboBox_moc.cpp" />
+    <ClCompile Include="GameObjects\Entity.cpp" />
+    <ClCompile Include="GameObjects\Component.cpp" />
+    <ClCompile Include="GameObjects\Transform.cpp" />
+    <ClCompile Include="Assets\Material.cpp" />
+    <ClCompile Include="GameObjects\Components\PhysicsComponent.cpp" />
+    <ClCompile Include="GameObjects\Components\RendererComponent.cpp" />
+    <ClCompile Include="Input\KeyInput.cpp" />
+    <ClCompile Include="Time\GameClock.cpp" />
+    <ClCompile Include="Time\Clock.cpp" />
+    <ClCompile Include="Assets\Geometry.cpp" />
+    <ClCompile Include="Assets\Presets\Materials\LightingAndTextureMat.cpp" />
+    <ClCompile Include="Assets\Presets\Materials\PassThroughMat.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Engine.h" />
+    <ClInclude Include="ExportHeader.h" />
+    <ClInclude Include="Particle.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Renderer\GeneralGLWindow.h" />
+    <ClInclude Include="Renderer\ParameterType.h" />
+    <ClInclude Include="Renderer\RenderableInfo.h" />
+    <ClInclude Include="Renderer\ShaderInfo.h" />
+    <ClInclude Include="Renderer\ShaderUniformParameter.h" />
+    <ClInclude Include="Renderer\GeometryInfo.h" />
+    <ClInclude Include="Renderer\BufferInfo.h" />
+    <ClInclude Include="DebugTools\DebugMemory.h" />
+    <ClInclude Include="DebugTools\Logger.h" />
+    <ClInclude Include="DebugTools\Profiler.h" />
+    <ClInclude Include="DebugTools\List.h" />
+    <ClInclude Include="DebugTools\DebugShapes.h" />
+    <ClInclude Include="Renderer\PriorityLevel.h" />
+    <ClInclude Include="DebugTools\Asserter.h" />
+    <ClInclude Include="AStarData\PathCreator.h" />
+    <ClInclude Include="AStarData\Path.h" />
+    <ClInclude Include="MathTools\Random.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="MathTools\TransformationMatrixMaker.h" />
+    <ClInclude Include="AStarDebugToolbar.h" />
+    <ClInclude Include="DebugTools\DebugSlider.h" />
+    <ClInclude Include="AStarData\Nodes\DebugNode.h" />
+    <ClInclude Include="AStarData\Nodes\DebugNodeContainer.h" />
+    <ClInclude Include="AStarData\Nodes\EditorNode.h" />
+    <ClInclude Include="AStarData\Nodes\EditorNodeContainer.h" />
+    <ClInclude Include="AStarData\Nodes\GameNode.h" />
+    <ClInclude Include="AStarData\Nodes\GameNodeContainer.h" />
+    <ClInclude Include="AStarData\Nodes\Node.h" />
+    <ClInclude Include="AStarData\Nodes\PathingNode.h" />
+    <ClInclude Include="AStarData\Nodes\NodeContainer.h" />
+    <ClInclude Include="BinReader.h" />
+    <ClInclude Include="DebugTools\DebugMenu\DebugMenu.h" />
+    <ClInclude Include="DebugTools\DebugMenu\FloatSlider.h" />
+    <ClInclude Include="DebugTools\DebugMenu\IntSlider.h" />
+    <ClInclude Include="DebugTools\DebugMenu\CheckBox.h" />
+    <ClInclude Include="DebugTools\ConsolePrinter.h" />
+    <ClInclude Include="DebugTools\DebugMenu\Vec3Slider.h" />
+    <ClInclude Include="DebugTools\DebugMenu\TrackingFloat.h" />
+    <ClInclude Include="DebugTools\DebugMenu\MultipleFloatsSlider.h" />
+    <ClInclude Include="Renderer\RendererHelper.h" />
+    <ClInclude Include="Renderer\TextureInfo.h" />
+    <ClInclude Include="Renderer\PassInfo.h" />
+    <ClInclude Include="DebugTools\DebugMenu\ComboBox.h" />
+    <ClInclude Include="GameObjects\Entity.h" />
+    <ClInclude Include="GameObjects\Component.h" />
+    <ClInclude Include="GameObjects\Transform.h" />
+    <ClInclude Include="Assets\Material.h" />
+    <ClInclude Include="Input\IKeyMapper.h" />
+    <ClInclude Include="GameObjects\Components\PhysicsComponent.h" />
+    <ClInclude Include="GameObjects\Components\RendererComponent.h" />
+    <ClInclude Include="Input\KeyInput.h" />
+    <ClInclude Include="Time\GameClock.h" />
+    <ClInclude Include="Time\Clock.h" />
+    <ClInclude Include="Assets\Geometry.h" />
+    <ClInclude Include="Assets\Presets\Materials\LightingAndTextureMat.h" />
+    <ClInclude Include="Assets\Presets\Materials\PassThroughMat.h" />
+  </ItemGroup>
+</Project>

@@ -2,11 +2,11 @@
 
 void GameClock::newFrame()
 {
-	clock.lap();
+	clock->lap();
 }
 float GameClock::dt()
 {
-	return clock.lastLapTime();
+	return clock->lastLapTime();
 }
 
 GameClock* GameClock::theInstance;
@@ -18,4 +18,12 @@ GameClock& GameClock::getInstance()
 		theInstance = new GameClock();
 	}
 	return *theInstance;
+}
+void GameClock::cleanup()
+{
+	if(theInstance != 0)
+	{
+		delete theInstance->clock;
+		delete theInstance;
+	}
 }

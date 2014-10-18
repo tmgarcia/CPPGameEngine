@@ -45,7 +45,7 @@ Geometry* Geometry::Teapot(uint tess)
 }
 Geometry* Geometry::Torus(uint tess)
 {
-	Neumont::ShapeData geoData = Neumont::ShapeGenerator::makeTorus(10);
+	Neumont::ShapeData geoData = Neumont::ShapeGenerator::makeTorus(tess);
 	return setupPreset(geoData);
 }
 Geometry* Geometry::WireframePlane(uint dimensions)

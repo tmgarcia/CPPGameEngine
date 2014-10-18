@@ -74,7 +74,7 @@ void GeneralGLWindow::paintGL()
 	glViewport(0,0,width(), height());
 	if(currentPassIndex!=0)
 	{
-		for(int i = 0; i < currentPassIndex; i++)
+		for(GLuint i = 0; i < currentPassIndex; i++)
 		{
 			drawPass(passes[i]);
 		}
@@ -83,7 +83,6 @@ void GeneralGLWindow::paintGL()
 	{
 		drawRenderables(renderableInfos, currentRenderableIndex);
 	}
-
 }
 
 GeometryInfo* GeneralGLWindow::addGeometry(
@@ -123,7 +122,7 @@ GeometryInfo* GeneralGLWindow::addGeometry(
 GLuint GeneralGLWindow::getNextAvailableBufferIndex(GLuint dataSize)
 {
 	bool foundAvailableBuffer = false;
-	GLuint nextAvailableBufferIndex;
+	GLuint nextAvailableBufferIndex = 0;
 	if(currentNumBuffers!=0)
 	{
 		for(uint i=0; i<currentNumBuffers && !foundAvailableBuffer; i++)
@@ -456,7 +455,7 @@ void GeneralGLWindow::resizeEvent(QResizeEvent* event)
 
 	if(currentPassIndex > 0)
 	{
-		for(int i = 0; i < currentPassIndex; i++)
+		for(GLuint i = 0; i < currentPassIndex; i++)
 		{
 			setupFrameBuffer(passes[i]);
 		}
@@ -573,7 +572,7 @@ void GeneralGLWindow::sendRenderableToShader(RenderableInfo* renderable, PassInf
 		//cout << "Pass overriding uniforms" << endl;
 		if(pass->numOverridingUniformParameters >0)
 		{
-			for(uint i=0; i<pass->numOverridingUniformParameters;i++)
+			for(int i=0; i<pass->numOverridingUniformParameters;i++)
 			{
 				sendUniformParameter(programID, pass->overridingUniformParameters[i]);
 			}
@@ -588,7 +587,7 @@ PassInfo* GeneralGLWindow::addPass(bool addAllPreviousRenderables,bool setAsCurr
 	ret->index = currentPassIndex;
 	if(addAllPreviousRenderables)
 	{
-		for(int i = 0; i < currentRenderableIndex; i++)
+		for(uint i = 0; i < currentRenderableIndex; i++)
 		{
 			ret->renderables[i] = renderableInfos[i];
 			ret->numRenderables++;
@@ -654,4 +653,50 @@ GeneralGLWindow& GeneralGLWindow::getInstance()
 		theInstance = new GeneralGLWindow();
 	}
 	return *theInstance;
+}
+GeneralGLWindow::~GeneralGLWindow()
+{
+
+}
+void GeneralGLWindow::cleanup()
+{
+	if(theInstance !=0)
+	{
+		theInstance->freeMemmory();
+		delete theInstance;
+	}
+}
+void GeneralGLWindow::freeMemmory()
+{
+	//BufferInfo* bufferInfos[MAX_NUM_BUFFERS];
+	//GeometryInfo* geometryInfos[MAX_NUM_GEOMETRIES];
+	//ShaderInfo* shaderInfos[MAX_NUM_SHADERS];
+	//TextureInfo* textureInfos[MAX_NUM_TEXTURES];
+	//RenderableInfo* renderableInfos[MAX_NUM_RENDERABLES];
+	//PassInfo* passes[MAX_NUM_PASSES];
+
+	for(GLuint i = 0; i < currentNumBuffers; i++)
+	{
+		delete bufferInfos[i];
+	}
+	for(GLuint i = 0; i < currentGeometryIndex; i++)
+	{
+		delete geometryInfos[i];
+	}
+	for(GLuint i = 0; i < currentShaderIndex; i++)
+	{
+		delete shaderInfos[i];
+	}
+	for(GLuint i = 0; i < currentTextureIndex; i++)
+	{
+		delete textureInfos[i];
+	}
+	for(GLuint i = 0; i < currentRenderableIndex; i++)
+	{
+		delete renderableInfos[i];
+	}
+	for(GLuint i = 0; i < currentPassIndex; i++)
+	{
+		delete passes[i];
+	}
 }

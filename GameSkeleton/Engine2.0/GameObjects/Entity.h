@@ -18,12 +18,13 @@ class __declspec(dllexport) Entity
 		void update(mat4 worldToProjectionMatrix);
 		template<class T>
 		T* getComponent() const;
+		void cleanup();
 };
 
 template<class T>
 T* Entity::getComponent() const
 {
-	for(int i = 0; i < numComponents; i++)
+	for(GLuint i = 0; i < numComponents; i++)
 	{
 		T* ret = dynamic_cast<T*>(components[i]);
 		if(ret != 0)

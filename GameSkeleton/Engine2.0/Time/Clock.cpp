@@ -11,7 +11,7 @@ void Clock::stop()
 	QueryPerformanceCounter(&thisTime);
 	LARGE_INTEGER delta;
 	delta.QuadPart = thisTime.QuadPart - lastStartTime.QuadPart;
-	deltaTime = ((float)delta.QuadPart) / timeFrequency.QuadPart;
+	deltaTime = ((float)delta.QuadPart) / ((float)timeFrequency.QuadPart);
 	deltaLastLap.QuadPart = thisTime.QuadPart;
 }
 void Clock::lap()

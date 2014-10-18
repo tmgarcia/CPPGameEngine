@@ -8,6 +8,7 @@ void PhysicsComponent::clearForces()
 }
 void PhysicsComponent::addForce(vec3 force)
 {
+	ConsolePrinter::getInstance().print(velocity, "velocity: ");
 	forceAccum += force;
 }
 
@@ -19,10 +20,15 @@ void PhysicsComponent::update()
 	float inverseMass = 1/mass;
 
 	acceleration = forceAccum*inverseMass;
-	velocity += acceleration;
-	//velocity *= glm::pow(damping, dt);
+	velocity += acceleration * dt;
+	velocity *= glm::pow(damping, dt);
 
 	momentum = mass * velocity;
 
 	clearForces();
+}
+
+void PhysicsComponent::cleanup()
+{
+
 }

@@ -49,12 +49,15 @@ private:
 	GeneralGLWindow(GeneralGLWindow const&);
 	GeneralGLWindow& operator = (GeneralGLWindow const&);
 	static GeneralGLWindow* theInstance;
-
+	~GeneralGLWindow();
 public:
+	void freeMemmory();
+
 	void debugMethod();
 	GLuint WINDOW_WIDTH;
 	GLuint WINDOW_HEIGHT;
 	static GeneralGLWindow& getInstance();
+	static void cleanup();
 
 	GeometryInfo* addGeometry(
 		const void* verts, GLuint vertexDataSize,

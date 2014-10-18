@@ -34,6 +34,7 @@
 #include "type_int.hpp"
 #include "type_size.hpp"
 #include "_swizzle.hpp"
+#pragma warning( disable : 4201 4127 4100 )
 
 namespace glm{
 namespace detail

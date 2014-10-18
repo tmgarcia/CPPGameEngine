@@ -41,7 +41,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IntDir>$(Configuration)\Junk</IntDir>
+    <IntDir>$(Configuration)\Junk\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -50,10 +50,11 @@
     <ClCompile>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DEBUGSHAPES_ON;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)..\External Dependencies\libnoise\include;$(SolutionDir)..\External Dependencies\libnoise\include\noise;$(SolutionDir)..\External Dependencies\NeumontTools\include;$(SolutionDir)..\External Dependencies\glew\include;$(SolutionDir)..\External Dependencies\glm;$(SolutionDir)..\Engine2.0\DebugTools\DebugMenu;$(SolutionDir)..\Engine2.0\DebugTools;$(SolutionDir)..\Engine2.0\Renderer;$(SolutionDir)..\Engine2.0;$(SolutionDir)..\External Dependencies\Qt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

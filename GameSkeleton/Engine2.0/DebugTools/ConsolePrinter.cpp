@@ -10,6 +10,13 @@ ConsolePrinter& ConsolePrinter::getInstance()
 	}
 	return *theInstance;
 }
+void ConsolePrinter::cleanup()
+{
+	if(theInstance != 0)
+	{
+		delete theInstance;
+	}
+}
 void ConsolePrinter::print(float f, char* label = "")
 {
 	cout << label << f << endl;
@@ -36,7 +43,7 @@ void ConsolePrinter::print(vec4 v, char* label = "")
 }
 void ConsolePrinter::print(mat4 m, char* label = "")
 {
-	if(label!="")
+	if(strcmp(label,"")!=0)
 	{
 		cout << label << endl;
 	}

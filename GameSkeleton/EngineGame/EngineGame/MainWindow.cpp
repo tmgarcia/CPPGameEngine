@@ -7,6 +7,7 @@
 #include "GameObjects\Components\PhysicsComponent.h"
 #include "ControllerComponent.h"
 #include "ConsolePrinter.h"
+#include "Janitor.h"
 
 mat4 viewToProjectionMatrix;
 mat4 worldToViewMatrix;
@@ -43,12 +44,15 @@ void MainWindow::setup()
 	cubeEntity->addComponent(cubeRender);
 
 	cubeRender->setData(cube, true, true, PRIORITY_1, mat);
-
+	//dMenu->addFloatSlider("tab", &(control->speed), 1, 1000, "speed");
+	//dMenu->addDisplay("tab", &(fps), "FPS");
 }
-
 void MainWindow::update()
 {
 	GameClock::getInstance().newFrame();
+	//ConsolePrinter::getInstance().print(GameClock::getInstance().dt(), "dt: ");
+
+
 	vec3 eyePosition = camera.getPosition();
 	viewToProjectionMatrix = glm::perspective(60.0f, ((float)WINDOW_WIDTH) / WINDOW_HEIGHT, 0.1f, 90.0f);
 	worldToViewMatrix = camera.getWorldToViewMatrix();
@@ -65,6 +69,17 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 {
 	keyPressReaction(event);
 }
+
+void MainWindow::cleanup()
+{
+	updateTimer.stop();
+	cubeEntity->cleanup();
+	delete cubeEntity;
+	dMenu->cleanup();
+	delete dMenu;
+	Janitor::cleanupEngine();
+}
+
 void MainWindow::keyPressReaction(QKeyEvent* e)
 {
 	switch(e->key())

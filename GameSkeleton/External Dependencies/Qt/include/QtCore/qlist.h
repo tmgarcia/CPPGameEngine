@@ -58,6 +58,7 @@
 #include <new>
 #include <limits.h>
 #include <string.h>
+#pragma warning( disable : 4201 4127 4100 )
 
 QT_BEGIN_HEADER
 

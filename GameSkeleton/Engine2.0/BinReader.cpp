@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 using namespace std;
+#pragma warning( disable : 4996 )
 
 BinReader::ShapeData BinReader::readInShape(char* filename)
 {

@@ -41,6 +41,7 @@ public:
 			}
 
 			QLabel* label = new QLabel(trackingFloats[i]->label);
+			label;
 			float min = trackingFloats[i]->minimumValue;
 			float max = trackingFloats[i]->maximumValue;
 			DebugSlider* slider = new DebugSlider(min, max, false, (max-min)*10);

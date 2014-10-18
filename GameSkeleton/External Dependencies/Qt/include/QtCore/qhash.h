@@ -48,6 +48,8 @@
 #include <QtCore/qlist.h>
 #include <QtCore/qpair.h>
 
+#pragma warning( disable : 4201 4127 4100 )
+
 QT_BEGIN_HEADER
 
 QT_BEGIN_NAMESPACE

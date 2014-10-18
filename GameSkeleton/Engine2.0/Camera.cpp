@@ -7,7 +7,9 @@ Camera::Camera() :
 	viewDirection(0.0f, 0.0f, -1.0f),
 	UP(0.0f,1.0f,0.0f),
 	position(0.0f, 3.0f, 5.0f)
-{}
+{
+	
+}
 
 void Camera::resetPosition()
 {
@@ -30,7 +32,7 @@ glm::mat4 Camera::getWorldToViewMatrix() const
 	return glm::lookAt(position, position + viewDirection, UP);
 }
 
-glm::vec3 Camera::getPosition() const
+glm::vec3 Camera::getPosition()
 {
 	return position;
 }

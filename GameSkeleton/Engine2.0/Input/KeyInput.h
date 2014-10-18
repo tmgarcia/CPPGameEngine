@@ -13,6 +13,7 @@ class __declspec(dllexport) KeyInput
 	static KeyInput* theInstance;
 public:
 	static KeyInput& getInstance();
+	static void cleanup();
 
 	void initialize(IKeyMapper* keyMapper, int max)
 	{

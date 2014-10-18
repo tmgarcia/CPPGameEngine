@@ -9,5 +9,6 @@ public:
 	void setData(RenderableInfo* renderable);
 	void setData(Geometry* geometry,bool visible,bool enableDepth,PriorityLevel priority,Material* material);
 	void update();
+	void cleanup();
 };
 

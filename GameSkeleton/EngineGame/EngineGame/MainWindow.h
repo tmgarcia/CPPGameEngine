@@ -11,7 +11,9 @@
 #include "KeyMap.h"
 #include "InputActions.h"
 
+#include <Windows.h>
 #include <iostream>
+#include <sstream>
 
 using std::cout;
 using std::endl;
@@ -64,6 +66,12 @@ public:
 		this->resize(WINDOW_WIDTH, WINDOW_HEIGHT);
 		this->move(300, 0);
 	}
+
+	~MainWindow()
+	{
+		std::cout << "DELETING MAINWINDOW" << std::endl;
+		cleanup();
+	}
 	
 protected:
 
@@ -73,6 +81,7 @@ private:
 	Camera camera;
 	void keyPressEvent(QKeyEvent *event);
 	void keyMove();
+	void cleanup();
 private slots:
 	void update();
 

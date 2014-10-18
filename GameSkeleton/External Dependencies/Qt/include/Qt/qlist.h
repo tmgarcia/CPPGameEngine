@@ -45,6 +45,7 @@
 #include <QtCore/qiterator.h>
 #include <QtCore/qatomic.h>
 #include <QtCore/qalgorithms.h>
+#pragma warning( disable : 4201 4127 4100 )
 
 #ifndef QT_NO_STL
 #include <iterator>

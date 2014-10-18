@@ -11,7 +11,10 @@ public:
 	void start();
 	void stop();
 	void lap();
-	void tick();
 	float lastLapTime();
+	Clock()
+	{
+		QueryPerformanceCounter(&timeFrequency);
+	}
 };
 

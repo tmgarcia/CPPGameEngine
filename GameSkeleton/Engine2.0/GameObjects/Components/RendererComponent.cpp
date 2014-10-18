@@ -19,3 +19,8 @@ void RendererComponent::update()
 {
 	renderable->whereMatrix = parent->transform.fullTransformMatrix;
 }
+void RendererComponent::cleanup()
+{
+	delete renderable->material;
+	delete renderable->whatGeometry;
+}

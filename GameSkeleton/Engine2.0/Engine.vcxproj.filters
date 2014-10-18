@@ -41,7 +41,6 @@
     <ClCompile Include="DebugTools\ConsolePrinter.cpp" />
     <ClCompile Include="DebugTools\DebugMenu\Vec3Slider_moc.cpp" />
     <ClCompile Include="DebugTools\DebugMenu\TrackingFloat_moc.cpp" />
-    <ClCompile Include="Renderer\RendererHelper.cpp" />
     <ClCompile Include="DebugTools\DebugMenu\ComboBox_moc.cpp" />
     <ClCompile Include="GameObjects\Entity.cpp" />
     <ClCompile Include="GameObjects\Component.cpp" />
@@ -55,6 +54,7 @@
     <ClCompile Include="Assets\Geometry.cpp" />
     <ClCompile Include="Assets\Presets\Materials\LightingAndTextureMat.cpp" />
     <ClCompile Include="Assets\Presets\Materials\PassThroughMat.cpp" />
+    <ClCompile Include="Janitor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h" />
@@ -101,7 +101,6 @@
     <ClInclude Include="DebugTools\DebugMenu\Vec3Slider.h" />
     <ClInclude Include="DebugTools\DebugMenu\TrackingFloat.h" />
     <ClInclude Include="DebugTools\DebugMenu\MultipleFloatsSlider.h" />
-    <ClInclude Include="Renderer\RendererHelper.h" />
     <ClInclude Include="Renderer\TextureInfo.h" />
     <ClInclude Include="Renderer\PassInfo.h" />
     <ClInclude Include="DebugTools\DebugMenu\ComboBox.h" />
@@ -118,5 +117,6 @@
     <ClInclude Include="Assets\Geometry.h" />
     <ClInclude Include="Assets\Presets\Materials\LightingAndTextureMat.h" />
     <ClInclude Include="Assets\Presets\Materials\PassThroughMat.h" />
+    <ClInclude Include="Janitor.h" />
   </ItemGroup>
 </Project>

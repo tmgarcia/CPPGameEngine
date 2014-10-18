@@ -53,7 +53,7 @@ public:
 	//template<typename T> void addComboBox(QString tabName, QVariant variableToTrack, QMap<QString,QVariant>optionsList, QString labelText="");
 	void addPrintButton();
 	int tabExists(QString name);
-
+	void cleanup();
 	//template<typename T>
 	void addComboBox(QString tabName, GLuint* variableToTrack, QMap<QString,GLuint>optionsList, QString labelText);
 

@@ -133,10 +133,10 @@ void ScratchWindow::setupGameObjects()
 		trees.append(t);
 	}
 
-	reflector = renderHelper->addGameObject(vec3(0,-1.3f,0),vec3(1,2,1),0,0,0,worldToProjectionMatrix,"reflectingSphere");
-	reflector = renderHelper->setupGameObjectRenderable("reflectingSphere", "wall","cubeReflectionShader",true,PRIORITY_1,true,"","","","","skyMap");
-	GeneralGLWindow::getInstance().addRenderableUniformParameter(reflector->renderable,"reflectionFactor",PT_FLOAT,&reflectionFactor);
-	reflector->renderable->usingShadowMap = false;
+	//reflector = renderHelper->addGameObject(vec3(0,-1.3f,0),vec3(1,2,1),0,0,0,worldToProjectionMatrix,"reflectingSphere");
+	//reflector = renderHelper->setupGameObjectRenderable("reflectingSphere", "wall","cubeReflectionShader",true,PRIORITY_1,true,"","","","","skyMap");
+	//GeneralGLWindow::getInstance().addRenderableUniformParameter(reflector->renderable,"reflectionFactor",PT_FLOAT,&reflectionFactor);
+	//reflector->renderable->usingShadowMap = false;
 
 	map = renderHelper->addGameObject(vec3(0,0,0),vec3(15,15,15),0,0,0,worldToProjectionMatrix,"skyBox");
 	renderHelper->setupGameObjectRenderable(map, "NUCube","cubeMapShader",true,PRIORITY_1,true,"","","","","skyMap");
@@ -377,7 +377,7 @@ void ScratchWindow::setupTreeTextures(Tree* tree, bool creeping)
 		if(creeping)
 		{
 			int index = (int)Random::getInstance().randomFloatRange(0,4);
-			cout << index << endl;
+			//cout << index << endl;
 			tree->creepObject->renderable->visible = true;
 			switch(index)
 			{

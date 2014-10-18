@@ -20,6 +20,7 @@ private:
 	static ConsolePrinter* theInstance;
 
 public:
+	static void cleanup();
 	static ConsolePrinter& getInstance();
 	void print(float f, char* label);
 	void print(float f, QString label);

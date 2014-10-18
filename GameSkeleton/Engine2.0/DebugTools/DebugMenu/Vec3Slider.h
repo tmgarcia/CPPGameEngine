@@ -52,6 +52,7 @@ public:
 private slots:
 	void updateValue(float value)
 	{
+		value;
 		(*trackingVariable).x = sliderX->value();
 		(*trackingVariable).y = sliderY->value();
 		(*trackingVariable).z = sliderZ->value();

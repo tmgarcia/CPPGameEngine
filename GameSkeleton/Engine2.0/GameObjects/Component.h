@@ -8,5 +8,6 @@ protected:
 	Entity* parent;
 public:
 	virtual void update(){}
+	virtual void cleanup(){}
 };
 

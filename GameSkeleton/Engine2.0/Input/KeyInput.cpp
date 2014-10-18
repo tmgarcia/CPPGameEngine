@@ -29,3 +29,12 @@ KeyInput& KeyInput::getInstance()
 	}
 	return *theInstance;
 }
+
+void KeyInput::cleanup()
+{
+	if(theInstance != 0)
+	{
+		delete theInstance->keyMap;
+		delete theInstance;
+	}
+}

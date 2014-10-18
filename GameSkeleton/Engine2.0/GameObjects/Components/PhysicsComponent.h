@@ -30,5 +30,6 @@ public:
 	void clearForces();
 	void addForce(vec3 force);
 	void update();
+	void cleanup();
 };
 

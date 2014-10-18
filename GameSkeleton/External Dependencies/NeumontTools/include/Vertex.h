@@ -4,6 +4,7 @@
 #include "ExportImportHeader.h"
 #include "glm\glm.hpp"
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
+#pragma warning( disable : 4251 )
 
 namespace Neumont
 {

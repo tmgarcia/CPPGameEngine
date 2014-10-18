@@ -41,8 +41,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(ProjectDir)$(Configuration)</OutDir>
-    <IntDir>$(Configuration)\Junk</IntDir>
+    <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\Junk\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -55,7 +55,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;DEBUGSHAPES_ON;ASSERT_ON;LOG_ON;PROFILING_ON;WIN32;_WINDOWS;_USRDLL;ENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)..\External Dependencies\NeumontTools\include;$(SolutionDir)..\External Dependencies\glew\include;$(SolutionDir)..\External Dependencies\glm;$(SolutionDir)..\External Dependencies\Qt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <TreatWarningAsError>false</TreatWarningAsError>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -93,6 +93,7 @@
     <ClCompile Include="AStarData\Nodes\GameNodeContainer.cpp" />
     <ClCompile Include="AStarData\Nodes\Node.cpp" />
     <ClCompile Include="AStarDebugToolbar.cpp" />
+    <ClCompile Include="Janitor.cpp" />
     <ClCompile Include="Time\Clock.cpp" />
     <ClCompile Include="Time\GameClock.cpp" />
     <ClCompile Include="GameObjects\Component.cpp" />
@@ -125,7 +126,6 @@
     <ClCompile Include="AStarData\Nodes\NodeContainer.cpp" />
     <ClCompile Include="Assets\Material.cpp" />
     <ClCompile Include="Input\KeyInput.cpp" />
-    <ClCompile Include="Renderer\RendererHelper.cpp" />
     <ClCompile Include="Renderer\GeneralGLWindow.cpp" />
     <ClCompile Include="Renderer\GeneralGLWindow_moc.cpp" />
     <ClCompile Include="DebugTools\Logger.cpp" />
@@ -143,6 +143,7 @@
     <ClInclude Include="AStarData\Nodes\Node.h" />
     <ClInclude Include="AStarData\Nodes\PathingNode.h" />
     <ClInclude Include="AStarDebugToolbar.h" />
+    <ClInclude Include="Janitor.h" />
     <ClInclude Include="Time\Clock.h" />
     <ClInclude Include="Time\GameClock.h" />
     <ClInclude Include="GameObjects\Component.h" />
@@ -177,7 +178,6 @@
     <ClInclude Include="Input\IKeyMapper.h" />
     <ClInclude Include="Input\KeyInput.h" />
     <ClInclude Include="Renderer\PassInfo.h" />
-    <ClInclude Include="Renderer\RendererHelper.h" />
     <ClInclude Include="Renderer\BufferInfo.h" />
     <ClInclude Include="Renderer\GeneralGLWindow.h" />
     <ClInclude Include="Renderer\GeometryInfo.h" />

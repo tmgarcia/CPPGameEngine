@@ -4,6 +4,11 @@
 #include "CheckBox.h"
 #include "Vec3Slider.h"
 
+void DebugMenu::cleanup()
+{
+	delete printButton;
+}
+
 void DebugMenu::addPrintButton()
 {
 	this->setCornerWidget(printButton, Qt::TopRightCorner);
@@ -158,6 +163,7 @@ void DebugMenu::addCheckBox(QString tabName, bool* variable, QString labelText="
 
 void DebugMenu::addDisplay(QString tabName, float* variable, QString labelText="")
 {
+	variable;
 	DebugTab* tab = getTab(tabName);
 	QHBoxLayout* displayGroup = new QHBoxLayout();
 	if(tab->numDisplays == 0 || tab->numDisplays%4==0)

@@ -2,8 +2,9 @@
 #define DEBUG_PROFILER_H
 
 
+#include "ExportHeader.h"
 
-class _declspec(dllexport) Profiler
+class DECL_DLL_EXPORT Profiler
 {
 public: 
 	static const unsigned int MAX_FRAME_SAMPLES = 500;

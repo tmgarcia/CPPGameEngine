@@ -33,14 +33,14 @@
 using std::cout;
 using std::endl;
 
-
 using glm::vec3;
 using glm::vec4;
 using glm::mat3;
 using glm::mat4;
 
+#include "ExportHeader.h"
 
-class __declspec(dllexport) GeneralGLWindow: public QGLWidget
+class DECL_DLL_EXPORT GeneralGLWindow: public QGLWidget
 {
 	Q_OBJECT
 

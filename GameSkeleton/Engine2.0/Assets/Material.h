@@ -1,7 +1,9 @@
 #pragma once
 class TextureInfo;
 class ShaderInfo;
-class __declspec(dllexport) Material
+#include "ExportHeader.h"
+
+class DECL_DLL_EXPORT Material
 {
 public:
 	bool usingAlphaMap;

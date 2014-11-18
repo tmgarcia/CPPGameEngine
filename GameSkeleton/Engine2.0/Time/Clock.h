@@ -1,7 +1,8 @@
 #pragma once
 #include <Windows.h>
+#include "ExportHeader.h"
 
-class __declspec(dllexport) Clock
+class DECL_DLL_EXPORT Clock
 {
 	LARGE_INTEGER timeFrequency;
 	LARGE_INTEGER lastStartTime;

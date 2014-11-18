@@ -6,8 +6,9 @@
 
 using glm::vec3;
 using glm::mat4;
+#include "ExportHeader.h"
 
-class __declspec(dllexport) Transform
+class DECL_DLL_EXPORT Transform
 {
 public:
 	vec3 position;
@@ -25,10 +26,7 @@ public:
 	mat4 modelToWorldMatrix;
 	mat4 fullTransformMatrix;
 
-	mat4 worldToProjectionMatrix;
-
 	Transform();
-	Transform(mat4 worldToProjectionMatrix);
 
 	void rotateX(float angle);
 	void rotateY(float angle);
@@ -41,7 +39,7 @@ public:
 
 	void lerpPosition(vec3 start, vec3 end, float progress);
 
-	void update(mat4 worldToProjectionMatrix);
+	void update();
 
 private:
 	void initializeValues();

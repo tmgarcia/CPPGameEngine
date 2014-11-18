@@ -1,7 +1,9 @@
 #pragma once
 #include "IKeyMapper.h"
 #include "Windows.h"
-class __declspec(dllexport) KeyInput
+#include "ExportHeader.h"
+
+class DECL_DLL_EXPORT KeyInput
 {
 	IKeyMapper* keyMap;
 	int maxAction;

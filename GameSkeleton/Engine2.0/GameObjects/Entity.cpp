@@ -14,9 +14,9 @@ void Entity::addComponent(Component* c)
 	c->parent = this;
 }
 
-void Entity::update(mat4 worldToProjectionMatrix)
+void Entity::update()
 {
-	transform.update(worldToProjectionMatrix);
+	transform.update();
 	for(GLuint i = 0; i < numComponents; i++)
 	{
 		components[i]->update();

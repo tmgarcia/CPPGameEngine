@@ -10,6 +10,7 @@
 #include "Input\KeyInput.h"
 #include "KeyMap.h"
 #include "InputActions.h"
+#include "GridCellContainer.h"
 
 #include <Windows.h>
 #include <iostream>
@@ -31,19 +32,20 @@ class MainWindow : public QMainWindow
 public:
 	MainWindow()
 	{
+		cameraFrozen = false;
 		this->show();
 		connect(&updateTimer, SIGNAL(timeout()), this, SLOT(update()));
 		updateTimer.setInterval(1);
 		updateTimer.start(0);
 
-		QDockWidget* menuDock = new QDockWidget("Debug", this);
+		/*QDockWidget* menuDock = new QDockWidget("Debug", this);
 		menuDock->setAllowedAreas(Qt::TopDockWidgetArea);
 		menuDock->setFeatures(QDockWidget::NoDockWidgetFeatures);
 		dMenu = new DebugMenu();
 
 		dMenu->setParent(menuDock);
 		menuDock->setWidget(dMenu);
-		addDockWidget(Qt::TopDockWidgetArea, menuDock);
+		addDockWidget(Qt::TopDockWidgetArea, menuDock);*/
 		
 		GeneralGLWindow::getInstance();
 		setCentralWidget(&GeneralGLWindow::getInstance());
@@ -76,12 +78,13 @@ public:
 protected:
 
 private:
-	DebugMenu* dMenu;
+	//DebugMenu* dMenu;
+	GridCellContainer grid;
 	void setup();
-	Camera camera;
 	void keyPressEvent(QKeyEvent *event);
 	void keyMove();
 	void cleanup();
+	bool cameraFrozen;
 private slots:
 	void update();
 

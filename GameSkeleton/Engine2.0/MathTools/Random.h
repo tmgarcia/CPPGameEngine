@@ -3,7 +3,9 @@
 
 const float TWO_PI = 2 * 3.14159f;
 
-class __declspec(dllexport) Random
+#include "ExportHeader.h"
+
+class DECL_DLL_EXPORT Random
 {
 public:
 	static Random& getInstance();

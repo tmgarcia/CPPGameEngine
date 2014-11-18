@@ -9,8 +9,9 @@
 #include <fstream>
 using std::ofstream;
 using glm::vec3;
+#include "ExportHeader.h"
 
-class __declspec(dllexport) DebugNodeContainer: public NodeContainer
+class DECL_DLL_EXPORT DebugNodeContainer: public NodeContainer
 {
 
 public:

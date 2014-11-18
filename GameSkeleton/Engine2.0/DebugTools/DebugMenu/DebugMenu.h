@@ -28,7 +28,9 @@ using glm::vec2;
 using std::cout;
 using std::endl;
 
-class  __declspec(dllexport) DebugMenu: public QTabWidget
+#include "ExportHeader.h"
+
+class DECL_DLL_EXPORT DebugMenu: public QTabWidget
 {
 	Q_OBJECT
 

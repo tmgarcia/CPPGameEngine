@@ -6,8 +6,9 @@
 
 using glm::vec3;
 using glm::mat4;
+#include "ExportHeader.h"
 
-class __declspec(dllexport) PhysicsComponent : public Component
+class DECL_DLL_EXPORT PhysicsComponent : public Component
 {
 public:
 	vec3 velocity;

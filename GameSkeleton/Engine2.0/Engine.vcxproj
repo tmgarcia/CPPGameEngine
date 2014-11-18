@@ -34,9 +34,11 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\EngineGame\MainPropertySheet.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\EngineGame\MainPropertySheet.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -54,7 +56,7 @@
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;DEBUGSHAPES_ON;ASSERT_ON;LOG_ON;PROFILING_ON;WIN32;_WINDOWS;_USRDLL;ENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\External Dependencies\NeumontTools\include;$(SolutionDir)..\External Dependencies\glew\include;$(SolutionDir)..\External Dependencies\glm;$(SolutionDir)..\External Dependencies\Qt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\External Dependencies\NeumontTools\include;$(SolutionDir)..\External Dependencies\glew\include;$(SolutionDir)..\External Dependencies\glm;$(SolutionDir)..\External Dependencies\Qt\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -63,6 +65,9 @@
       <AdditionalLibraryDirectories>$(SolutionDir)..\External Dependencies\Qt\lib;$(SolutionDir)..\External Dependencies\NeumontTools\lib;$(SolutionDir)..\External Dependencies\glew\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;glew32.lib;glew32d.lib;NeumontTools.lib;QtCored4.lib;QtGuid4.lib;QtOpenGLd4.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command />
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -93,7 +98,10 @@
     <ClCompile Include="AStarData\Nodes\GameNodeContainer.cpp" />
     <ClCompile Include="AStarData\Nodes\Node.cpp" />
     <ClCompile Include="AStarDebugToolbar.cpp" />
+    <ClCompile Include="GameObjects\Components\ClickBoxComponent.cpp" />
+    <ClCompile Include="GameObjects\Components\ClickBoxComponent_moc.cpp" />
     <ClCompile Include="Janitor.cpp" />
+    <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Time\Clock.cpp" />
     <ClCompile Include="Time\GameClock.cpp" />
     <ClCompile Include="GameObjects\Component.cpp" />
@@ -143,7 +151,9 @@
     <ClInclude Include="AStarData\Nodes\Node.h" />
     <ClInclude Include="AStarData\Nodes\PathingNode.h" />
     <ClInclude Include="AStarDebugToolbar.h" />
+    <ClInclude Include="GameObjects\Components\ClickBoxComponent.h" />
     <ClInclude Include="Janitor.h" />
+    <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Time\Clock.h" />
     <ClInclude Include="Time\GameClock.h" />
     <ClInclude Include="GameObjects\Component.h" />

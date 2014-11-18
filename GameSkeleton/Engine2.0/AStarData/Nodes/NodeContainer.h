@@ -3,8 +3,9 @@
 
 #include <glm\glm.hpp>
 using glm::vec3;
+#include "ExportHeader.h"
 
-class __declspec(dllexport) NodeContainer
+class DECL_DLL_EXPORT NodeContainer
 {
 public:
 	int numNodes;

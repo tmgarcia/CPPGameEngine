@@ -7,8 +7,9 @@
 
 using std::list;
 using glm::vec3;
+#include "ExportHeader.h"
 
-class __declspec(dllexport) DebugNode : public Node
+class DECL_DLL_EXPORT DebugNode : public Node
 {
 public:
 	DebugShapes::DebugShapeInfo* nodeInfo;

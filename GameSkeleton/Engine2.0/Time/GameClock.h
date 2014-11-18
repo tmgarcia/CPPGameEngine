@@ -1,7 +1,9 @@
 #pragma once
 #include "Clock.h"
 
-class __declspec(dllexport) GameClock
+#include "ExportHeader.h"
+
+class DECL_DLL_EXPORT GameClock
 {
 	GameClock()
 	{

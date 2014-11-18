@@ -73,7 +73,7 @@ void DebugShapes::setup()
 	getInstance().timer.start(0);
 	connect(&getInstance().timer, SIGNAL(timeout()), &getInstance(), SLOT(tick()));
 	debugMat = new Material();
-	debugMat->shader = GeneralGLWindow::getInstance().createShaderInfo("../Resources/Shaders/debugVertexShader.glsl", "../Resources/Shaders/debugFragmentShader.glsl");
+	debugMat->shader = GeneralGLWindow::getInstance().createShaderInfo("Assets/Shaders/debugVertexShader.glsl", "Assets/Shaders/debugFragmentShader.glsl");
 	//debugShader = GeneralGLWindow::getInstance().createShaderInfo("../Resources/Shaders/debugVertexShader.glsl", "../Resources/Shaders/debugFragmentShader.glsl");
 }
 float notCross = 0.0f;

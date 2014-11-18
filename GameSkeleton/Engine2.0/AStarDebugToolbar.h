@@ -1,7 +1,9 @@
 #include <QtGui\qtoolbar.h>
 
 #pragma once
-class __declspec(dllexport) AStarDebugToolbar : public QToolBar
+#include "ExportHeader.h"
+
+class DECL_DLL_EXPORT AStarDebugToolbar : public QToolBar
 {
 public:
 	public:

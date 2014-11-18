@@ -8,7 +8,7 @@ Camera::Camera() :
 	UP(0.0f,1.0f,0.0f),
 	position(0.0f, 3.0f, 5.0f)
 {
-	
+	strafeDirection = glm::cross(viewDirection, UP);
 }
 
 void Camera::resetPosition()
@@ -25,6 +25,7 @@ void Camera::setPosition(glm::vec3 newPos)
 void Camera::setViewDirection(glm::vec3 newView)
 {
 	viewDirection = newView;
+	strafeDirection = glm::cross(viewDirection, UP);
 }
 
 glm::mat4 Camera::getWorldToViewMatrix() const

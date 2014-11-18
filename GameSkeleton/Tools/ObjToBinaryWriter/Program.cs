@@ -186,8 +186,8 @@ namespace ObjToBinaryWriter
 
             Console.WriteLine("Converting");
             ObjToBinaryConverter converter = new ObjToBinaryConverter();
-            converter.readInObj("../../../../Resources/Models/wall.obj");
-            converter.WriteToBinary("wall.bin");
+            converter.readInObj("../../../../Resources/Models/repeatFaceUnitCube.obj");
+            converter.WriteToBinary("repeatFaceUnitCube.bin");
 
             Console.WriteLine("Done");
         }

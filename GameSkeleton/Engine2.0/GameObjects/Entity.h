@@ -3,9 +3,10 @@
 #include "Transform.h"
 
 class Component;
-class __declspec(dllexport) Entity
-{
+#include "ExportHeader.h"
 
+class DECL_DLL_EXPORT Entity
+{
 	static const GLuint NUM_MAX_COMPONENTS = 10;
 
 	Component* components[NUM_MAX_COMPONENTS];
@@ -15,7 +16,7 @@ class __declspec(dllexport) Entity
 		Transform transform;
 		Entity();
 		void addComponent(Component* c);
-		void update(mat4 worldToProjectionMatrix);
+		void update();
 		template<class T>
 		T* getComponent() const;
 		void cleanup();

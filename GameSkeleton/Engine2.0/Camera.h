@@ -1,8 +1,9 @@
 #pragma once
 #pragma warning( disable : 4251 )
 #include <glm\glm.hpp>
+#include "ExportHeader.h"
 
-class __declspec(dllexport) Camera
+class DECL_DLL_EXPORT Camera
 {
 	glm::vec3 position;
 	glm::vec3 UP;

@@ -7,8 +7,9 @@
 #include <iostream>
 #include <fstream>
 using std::ofstream;
+#include "ExportHeader.h"
 
-class __declspec(dllexport)EditorNodeContainer : public NodeContainer
+class DECL_DLL_EXPORT EditorNodeContainer : public NodeContainer
 {
 public:
 	int numNodes;

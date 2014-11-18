@@ -55,6 +55,9 @@
     <ClCompile Include="Assets\Presets\Materials\LightingAndTextureMat.cpp" />
     <ClCompile Include="Assets\Presets\Materials\PassThroughMat.cpp" />
     <ClCompile Include="Janitor.cpp" />
+    <ClCompile Include="GameObjects\Components\ClickBoxComponent.cpp" />
+    <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="GameObjects\Components\ClickBoxComponent_moc.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h" />
@@ -118,5 +121,7 @@
     <ClInclude Include="Assets\Presets\Materials\LightingAndTextureMat.h" />
     <ClInclude Include="Assets\Presets\Materials\PassThroughMat.h" />
     <ClInclude Include="Janitor.h" />
+    <ClInclude Include="GameObjects\Components\ClickBoxComponent.h" />
+    <ClInclude Include="SceneManager.h" />
   </ItemGroup>
 </Project>

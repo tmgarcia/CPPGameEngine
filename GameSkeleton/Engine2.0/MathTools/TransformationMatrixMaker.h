@@ -6,8 +6,9 @@
 using glm::mat4;
 using glm::vec3;
 using glm::vec4;
+#include "ExportHeader.h"
 
-class __declspec(dllexport) TransformationMatrixMaker
+class DECL_DLL_EXPORT TransformationMatrixMaker
 {
 public:
 	static TransformationMatrixMaker& getInstance();

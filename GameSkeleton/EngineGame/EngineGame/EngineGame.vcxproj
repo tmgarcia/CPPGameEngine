@@ -34,14 +34,17 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\MainPropertySheet.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\MainPropertySheet.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IntDir>$(Configuration)\Junk\</IntDir>
+    <IntDir>$(IntermediateDir)</IntDir>
+    <OutDir>$(GameDir)</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -52,8 +55,8 @@
       </PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>DEBUGSHAPES_ON;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\External Dependencies\libnoise\include;$(SolutionDir)..\External Dependencies\libnoise\include\noise;$(SolutionDir)..\External Dependencies\NeumontTools\include;$(SolutionDir)..\External Dependencies\glew\include;$(SolutionDir)..\External Dependencies\glm;$(SolutionDir)..\Engine2.0\DebugTools\DebugMenu;$(SolutionDir)..\Engine2.0\DebugTools;$(SolutionDir)..\Engine2.0\Renderer;$(SolutionDir)..\Engine2.0;$(SolutionDir)..\External Dependencies\Qt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>DEBUGSHAPES_ON;DECL_DLL_EXPORT_OFF;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\External Dependencies\libnoise\include;$(SolutionDir)..\External Dependencies\libnoise\include\noise;$(SolutionDir)..\External Dependencies\NeumontTools\include;$(SolutionDir)..\External Dependencies\glew\include;$(SolutionDir)..\External Dependencies\glm;$(SolutionDir)..\Engine2.0\DebugTools\DebugMenu;$(SolutionDir)..\Engine2.0\DebugTools;$(SolutionDir)..\Engine2.0\Renderer;$(SolutionDir)..\Engine2.0\GameObjects;$(SolutionDir)..\Engine2.0\GameObjects\Components;$(SolutionDir)..\Engine2.0;$(SolutionDir)..\External Dependencies\Qt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -74,6 +77,7 @@ copy "$(SolutionDir)..\Engine2.0\DebugTools\DebugMenu\IntSlider_moc.cpp" "$(Proj
 copy "$(SolutionDir)..\Engine2.0\DebugTools\DebugMenu\TrackingFloat_moc.cpp" "$(ProjectDir)"
 copy "$(SolutionDir)..\Engine2.0\DebugTools\DebugMenu\CheckBox_moc.cpp" "$(ProjectDir)"
 copy "$(SolutionDir)..\Engine2.0\DebugTools\DebugMenu\ComboBox_moc.cpp" "$(ProjectDir)"
+copy "$(SolutionDir)..\Engine2.0\GameObjects\Components\ClickBoxComponent_moc.cpp" "$(ProjectDir)"
 copy "$(SolutionDir)..\Tools\ObjToBinaryWriter\bin\Debug\ObjToBinaryWriter.exe" "$(ProjectDir)"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -95,13 +99,18 @@ copy "$(SolutionDir)..\Tools\ObjToBinaryWriter\bin\Debug\ObjToBinaryWriter.exe" 
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CellStateComponent.h" />
     <ClInclude Include="ControllerComponent.h" />
+    <ClInclude Include="GridCellContainer.h" />
     <ClInclude Include="InputActions.h" />
     <ClInclude Include="KeyMap.h" />
     <ClInclude Include="MainWindow.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CellStateComponent.cpp" />
+    <ClCompile Include="CellStateComponent_moc.cpp" />
     <ClCompile Include="CheckBox_moc.cpp" />
+    <ClCompile Include="ClickBoxComponent_moc.cpp" />
     <ClCompile Include="ComboBox_moc.cpp" />
     <ClCompile Include="ControllerComponent.cpp" />
     <ClCompile Include="DebugMenu_moc.cpp" />
@@ -109,6 +118,8 @@ copy "$(SolutionDir)..\Tools\ObjToBinaryWriter\bin\Debug\ObjToBinaryWriter.exe" 
     <ClCompile Include="DebugSlider_moc.cpp" />
     <ClCompile Include="FloatSlider_moc.cpp" />
     <ClCompile Include="GeneralGLWindow_moc.cpp" />
+    <ClCompile Include="GridCellContainer.cpp" />
+    <ClCompile Include="GridCellContainer_moc.cpp" />
     <ClCompile Include="IntSlider_moc.cpp" />
     <ClCompile Include="KeyMap.cpp" />
     <ClCompile Include="Main.cpp" />

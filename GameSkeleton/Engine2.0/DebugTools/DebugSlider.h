@@ -3,8 +3,9 @@
 #include <QtGui\qwidget>
 class QSlider;
 class QLabel;
+#include "ExportHeader.h"
 
-class __declspec(dllexport) DebugSlider : public QWidget
+class DECL_DLL_EXPORT DebugSlider : public QWidget
 {
 	Q_OBJECT
 

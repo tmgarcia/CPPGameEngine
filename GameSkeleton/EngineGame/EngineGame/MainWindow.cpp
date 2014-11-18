@@ -2,34 +2,43 @@
 #include "Assets\Geometry.h"
 #include "Assets\Material.h"
 #include "Assets\Presets\Materials\PassThroughMat.h"
+#include "Assets\Presets\Materials\LightingAndTextureMat.h"
 #include "GameObjects\Entity.h"
 #include "GameObjects\Components\RendererComponent.h"
 #include "GameObjects\Components\PhysicsComponent.h"
+#include "GameObjects\Components\ClickBoxComponent.h"
+#include "CellStateComponent.h"
 #include "ControllerComponent.h"
 #include "ConsolePrinter.h"
 #include "Janitor.h"
+#include "SceneManager.h"
 
-mat4 viewToProjectionMatrix;
-mat4 worldToViewMatrix;
-mat4 worldToProjectionMatrix;
-Entity* cubeEntity;
-
+bool wDown=false;
+bool sDown=false;
+bool aDown=false;
+bool dDown=false;
+bool rDown=false;
+bool fDown=false;
 void MainWindow::setup()
 {
 	ConsolePrinter::getInstance();
 
-	camera.setPosition(vec3(0,5,5));
-	camera.setViewDirection(vec3(0,-1,-1));
-
 	GeneralGLWindow::getInstance().WINDOW_HEIGHT = WINDOW_HEIGHT;
 	GeneralGLWindow::getInstance().WINDOW_WIDTH = WINDOW_WIDTH;
 
-	vec3 eyePosition = camera.getPosition();
-	viewToProjectionMatrix = glm::perspective(60.0f, ((float)WINDOW_WIDTH) / WINDOW_HEIGHT, 0.1f, 90.0f);
-	worldToViewMatrix = camera.getWorldToViewMatrix();
-	worldToProjectionMatrix = viewToProjectionMatrix * worldToViewMatrix;
+	SceneManager::getInstance();
+	SceneManager::getInstance().camera.setPosition(vec3(0,10,1));
+	SceneManager::getInstance().camera.setViewDirection(vec3(0,-6,-1));
+	SceneManager::getInstance().WINDOW_HEIGHT = WINDOW_HEIGHT;
+	SceneManager::getInstance().WINDOW_WIDTH = WINDOW_WIDTH;
+	SceneManager::getInstance().LIGHT_POSITION = vec3(0,10,0);
+	SceneManager::getInstance().LIGHT_AMBIENTCOLOR = vec3(0.8f,0.8f,0.8f);
+	SceneManager::getInstance().LIGHT_DIFFUSIONINTENSITY = 1.0f;
+	SceneManager::getInstance().LIGHT_SPECULARCOLOR = vec4(1,1,1,1);
+	SceneManager::getInstance().LIGHT_SPECULAREXPONENT = 10;
+	SceneManager::getInstance().update();
 
-	Geometry* cube = Geometry::Cube();
+	/*Geometry* cube = Geometry::Cube();
 	Material* mat = new PassThroughMat();
 	RendererComponent* cubeRender = new RendererComponent();
 	PhysicsComponent* physics = new PhysicsComponent();
@@ -37,30 +46,44 @@ void MainWindow::setup()
 	ControllerComponent* control = new ControllerComponent();
 
 	cubeEntity = new Entity();
-	cubeEntity->update(worldToProjectionMatrix);
+	cubeEntity->update();
 
 	cubeEntity->addComponent(physics);
 	cubeEntity->addComponent(control);
 	cubeEntity->addComponent(cubeRender);
 
-	cubeRender->setData(cube, true, true, PRIORITY_1, mat);
-	//dMenu->addFloatSlider("tab", &(control->speed), 1, 1000, "speed");
-	//dMenu->addDisplay("tab", &(fps), "FPS");
+	cubeRender->setData(cube, true, true, PRIORITY_1, mat);*/
+
+	grid.setupGrid();
+
+	//dMenu->addFloatSlider("tab", &(SceneManager::getInstance().LIGHT_SPECULAREXPONENT), 0, 5, "Spec exp");
+	//dMenu->addFloatSlider("tab", &(SceneManager::getInstance().LIGHT_DIFFUSIONINTENSITY), 0, 5, "diffuse");
+	//dMenu->addVec3Slider("tab", &(SceneManager::getInstance().camera.viewDirection), -5,5,-5,5,-5,5,"Camera");
 }
+int frame = 0;
 void MainWindow::update()
 {
+	frame++;
 	GameClock::getInstance().newFrame();
 	//ConsolePrinter::getInstance().print(GameClock::getInstance().dt(), "dt: ");
 
-
-	vec3 eyePosition = camera.getPosition();
-	viewToProjectionMatrix = glm::perspective(60.0f, ((float)WINDOW_WIDTH) / WINDOW_HEIGHT, 0.1f, 90.0f);
-	worldToViewMatrix = camera.getWorldToViewMatrix();
-	worldToProjectionMatrix = viewToProjectionMatrix * worldToViewMatrix;
-
 	KeyInput::getInstance().update();
 
-	cubeEntity->update(worldToProjectionMatrix);
+	SceneManager::getInstance().update();
+
+	//cubeEntity->update();
+	keyMove();
+	//if(frame == 50)
+	//{
+	//	wDown=false;
+	//	sDown=false;
+	//	aDown=false;
+	//	dDown=false;
+	//	rDown=false;
+	//	fDown=false;
+	//}
+	
+	grid.update();
 
 	GeneralGLWindow::getInstance().repaint();
 }
@@ -73,97 +96,144 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 void MainWindow::cleanup()
 {
 	updateTimer.stop();
-	cubeEntity->cleanup();
-	delete cubeEntity;
-	dMenu->cleanup();
-	delete dMenu;
+	//dMenu->cleanup();
+	//delete dMenu;
 	Janitor::cleanupEngine();
 }
 
 void MainWindow::keyPressReaction(QKeyEvent* e)
 {
-	switch(e->key())
+	//switch(e->key())
+	//{
+	//case Qt::Key::Key_W:
+	//	SceneManager::getInstance().camera.moveForward();
+	if(!e->isAutoRepeat())
 	{
-	case Qt::Key::Key_W:
-		camera.moveForward();
-		break;
-	case Qt::Key::Key_S:
-		camera.moveBackward();
-		break;
-	case Qt::Key::Key_A:
-		camera.strafeLeft();
-		break;
-	case Qt::Key::Key_D:
-		camera.strafeRight();
-		break;
-	case Qt::Key::Key_R:
-		camera.moveUp();
-		break;
-	case Qt::Key::Key_F:
-		camera.moveDown();
-		break;
-	//case Qt::Key::Key_0:
-	//	cameraFrozen = !cameraFrozen;
-	//	break;
+		e->accept();
+		switch(e->key())
+		{
+		case Qt::Key::Key_W:
+			ConsolePrinter::getInstance().print("PRESS: W");
+			wDown = true;
+			sDown = false;
+			break;
+		case Qt::Key::Key_S:
+			ConsolePrinter::getInstance().print("PRESS: S");
+			sDown = true;
+			wDown = false;
+			break;
+		case Qt::Key::Key_A:
+			ConsolePrinter::getInstance().print("PRESS: A");
+			aDown = true;
+			dDown = false;
+			break;
+		case Qt::Key::Key_D:
+			ConsolePrinter::getInstance().print("PRESS: D");
+			dDown = true;
+			aDown = false;
+			break;
+		case Qt::Key::Key_R:
+			ConsolePrinter::getInstance().print("PRESS: R");
+			rDown = true;
+			fDown = false;
+			break;
+		case Qt::Key::Key_F:
+			ConsolePrinter::getInstance().print("PRESS: F");
+			fDown = true;
+			rDown = false;
+			break;
+		case Qt::Key::Key_0:
+			cameraFrozen = !cameraFrozen;
+			break;
+		}
+		update();
 	}
-	update();
 }
 void MainWindow::keyReleaseReaction(QKeyEvent* e)
 {
 	//ConsolePrinter::getInstance().print("key release reaction");
-	//switch(e->key())
-	//{
-	//case Qt::Key::Key_W:
-	//	wDown = false;
-	//	break;
-	//case Qt::Key::Key_S:
-	//	sDown = false;
-	//	break;
-	//case Qt::Key::Key_A:
-	//	aDown = false;
-	//	break;
-	//case Qt::Key::Key_D:
-	//	dDown = false;
-	//	break;
-	////case Qt::Key::Key_R:
-	////	rDown = false;
-	////	break;
-	////case Qt::Key::Key_F:
-	////	fDown = false;
-	////	break;
-	//}
-	//update();
+	
+	if(!e->isAutoRepeat())
+	{
+		e->accept();
+		switch(e->key())
+		{
+		case Qt::Key::Key_W:
+			ConsolePrinter::getInstance().print("RELEASE: W");
+			wDown = false;
+			break;
+		case Qt::Key::Key_S:
+			ConsolePrinter::getInstance().print("RELEASE: S");
+			sDown = false;
+			break;
+		case Qt::Key::Key_A:
+			ConsolePrinter::getInstance().print("RELEASE: A");
+			aDown = false;
+			break;
+		case Qt::Key::Key_D:
+			ConsolePrinter::getInstance().print("RELEASE: D");
+			dDown = false;
+			break;
+		case Qt::Key::Key_R:
+			ConsolePrinter::getInstance().print("RELEASE: R");
+			rDown = false;
+			break;
+		case Qt::Key::Key_F:
+			ConsolePrinter::getInstance().print("RELEASE: F");
+			fDown = false;
+			break;
+		}
+		update();
+	}
 }
 void MainWindow::keyMove()
 {
+	if(wDown && sDown)
+	{
+		wDown = false;
+		sDown = false;
+	}
+	if(aDown && dDown)
+	{
+		aDown = false;
+		dDown = false;
+	}
+	if(rDown && fDown)
+	{
+		rDown = false;
+		fDown = false;
+	}
 	//ConsolePrinter::getInstance().print("key move");
-	//if(wDown)
-	//{
-	//	camera.moveForward();
-	//}
-	//if(sDown)
-	//{
-	//	camera.moveBackward();
-	//}
-	//if(aDown)
-	//{
-	//	camera.strafeLeft();
-	//}
-	//if(dDown)
-	//{
-	//	camera.strafeRight();
-	//}
-	//if(rDown)
-	//{
-	//	camera.moveUp();
-	//}
-	//if(fDown)
-	//{
-	//	camera.moveDown();
-	//}
+	if(wDown)
+	{
+		SceneManager::getInstance().camera.moveForward();
+	}
+	if(sDown)
+	{
+		SceneManager::getInstance().camera.moveBackward();
+	}
+	if(aDown)
+	{
+		SceneManager::getInstance().camera.strafeLeft();
+	}
+	if(dDown)
+	{
+		SceneManager::getInstance().camera.strafeRight();
+	}
+	if(rDown)
+	{
+		SceneManager::getInstance().camera.moveUp();
+	}
+	if(fDown)
+	{
+		SceneManager::getInstance().camera.moveDown();
+	}
 }
 void MainWindow::mouseMoveReaction(QMouseEvent* e)
 {
-	camera.mouseUpdate(glm::vec2(e->x(), 0));
-	update();
+	if(cameraFrozen)
+	{
+		SceneManager::getInstance().camera.mouseUpdate(glm::vec2(e->x(), e->y()));
+		update();
+	}
 }

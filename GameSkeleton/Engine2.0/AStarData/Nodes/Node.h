@@ -4,8 +4,9 @@
 #include <glm\glm.hpp>
 
 using glm::vec3;
+#include "ExportHeader.h"
 
-class __declspec(dllexport) Node
+class DECL_DLL_EXPORT Node
 {
 public:
 	vec3 position;

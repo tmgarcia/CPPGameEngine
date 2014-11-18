@@ -1,12 +1,13 @@
 #include "RendererComponent.h"
-#include "../../Renderer/GeneralGLWindow.h"
+#include "Renderer/GeneralGLWindow.h"
+#include "SceneManager.h"
 
 void RendererComponent::setData(RenderableInfo* renderable)
 {
 	this->renderable = renderable;
 
 	GeneralGLWindow::getInstance().addRenderableUniformParameter(this->renderable, "fullTransformMatrix", PT_MAT4, &parent->transform.fullTransformMatrix[0][0]);
-	GeneralGLWindow::getInstance().addRenderableUniformParameter(this->renderable, "worldToProjectionMatrix", PT_MAT4, &parent->transform.worldToProjectionMatrix[0][0]);
+	GeneralGLWindow::getInstance().addRenderableUniformParameter(this->renderable, "worldToProjectionMatrix", PT_MAT4, &SceneManager::getInstance().WORLD_TO_PROJECTION[0][0]);
 	GeneralGLWindow::getInstance().addRenderableUniformParameter(this->renderable, "rotationMatrix", PT_MAT4, &parent->transform.rotationMatrix[0][0]);
 	GeneralGLWindow::getInstance().addRenderableUniformParameter(this->renderable, "modelToWorldMatrix", PT_MAT4, &parent->transform.modelToWorldMatrix[0][0]);
 }

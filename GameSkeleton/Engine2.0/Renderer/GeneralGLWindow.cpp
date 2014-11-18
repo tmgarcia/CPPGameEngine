@@ -16,6 +16,7 @@
 #include <qt\qtimer.h>
 #include <iostream>
 #include "../DebugTools/ConsolePrinter.h"
+#include "SceneManager.h"
 
 #pragma region OBJECT_VARIABLES
 GLuint currentNumBuffers = 0;
@@ -83,6 +84,7 @@ void GeneralGLWindow::paintGL()
 	{
 		drawRenderables(renderableInfos, currentRenderableIndex);
 	}
+
 }
 
 GeometryInfo* GeneralGLWindow::addGeometry(
@@ -452,7 +454,8 @@ void GeneralGLWindow::resizeEvent(QResizeEvent* event)
 	QSize newSize = event->size();
 	WINDOW_HEIGHT = newSize.height();
 	WINDOW_WIDTH = newSize.width();
-
+	SceneManager::getInstance().WINDOW_HEIGHT = WINDOW_HEIGHT;
+	SceneManager::getInstance().WINDOW_WIDTH = WINDOW_WIDTH;
 	if(currentPassIndex > 0)
 	{
 		for(GLuint i = 0; i < currentPassIndex; i++)
@@ -562,7 +565,7 @@ void GeneralGLWindow::sendRenderableToShader(RenderableInfo* renderable, PassInf
 	GLuint programID = renderable->material->shader->programID;
 	glUseProgram(programID);
 	renderable->material->bindAllTextures();
-
+	renderable->material->sendDownShaderParameters();
 	for(uint i=0; i<renderable->numUniformParameters;i++)
 	{
 		sendUniformParameter(programID, renderable->uniformParameters[i]);

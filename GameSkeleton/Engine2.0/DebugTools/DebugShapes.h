@@ -11,8 +11,9 @@
 using std::vector;
 using glm::vec3;
 using glm::mat4;
+#include "ExportHeader.h"
 
-class __declspec(dllexport) DebugShapes : public QObject
+class DECL_DLL_EXPORT DebugShapes : public QObject
 {
 	Q_OBJECT
 

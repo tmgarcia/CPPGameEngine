@@ -1,11 +1,15 @@
 #pragma once
 #include "../../Material.h"
 
-class __declspec(dllexport) LightingAndTextureMat : Material
+class RenderableInfo;
+class ShaderInfo;
+#include "ExportHeader.h"
+
+class DECL_DLL_EXPORT LightingAndTextureMat : public Material
 {
 public:
+	static ShaderInfo* LightTextureShader;
 	LightingAndTextureMat();
-
 	/*TextureInfo* diffuseMap;
 	TextureInfo* alphaMap;
 	TextureInfo* normalMap;
@@ -18,5 +22,6 @@ public:
 	void addAmbientOcclusionMap(const char* fileName);
 	void addCubeMap(const char* fileName);
 	void addShadowMap(const char* fileName);
+	void addLightingParameters(RenderableInfo* renderable);
 };
 

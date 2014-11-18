@@ -2,7 +2,9 @@
 #include "../BinReader.h"
 #include "ShapeData.h"
 class GeometryInfo;
-class __declspec(dllexport) Geometry
+#include "ExportHeader.h"
+
+class DECL_DLL_EXPORT Geometry
 {
 public:
 	static Geometry* Cube();

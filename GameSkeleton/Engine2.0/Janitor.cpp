@@ -3,6 +3,7 @@
 #include "Time\GameClock.h"
 #include "Input\KeyInput.h"
 #include "DebugTools\ConsolePrinter.h"
+#include "SceneManager.h"
 
 void Janitor::cleanupEngine()
 {
@@ -10,4 +11,5 @@ void Janitor::cleanupEngine()
 	GameClock::cleanup();
 	GeneralGLWindow::cleanup();
 	ConsolePrinter::cleanup();
+	SceneManager::cleanup();
 }

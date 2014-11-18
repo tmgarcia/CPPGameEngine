@@ -2,7 +2,9 @@
 #include "Nodes\PathingNode.h"
 #include "Path.h"
 #include "Nodes\DebugNode.h"
-class __declspec(dllexport)PathCreator
+#include "ExportHeader.h"
+
+class DECL_DLL_EXPORT PathCreator
 {
 public:
 	Path calculatePath(DebugNode* start, DebugNode* end);

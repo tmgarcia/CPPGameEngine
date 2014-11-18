@@ -1,5 +1,6 @@
 #include "Transform.h"
-#include "../DebugTools/ConsolePrinter.h"
+#include "DebugTools/ConsolePrinter.h"
+#include "SceneManager.h"
 
 Transform::Transform()
 {
@@ -15,17 +16,15 @@ void Transform::initializeValues()
 
 	project = true;
 
-	update(mat4());
+	update();
 }
-void Transform::update(mat4 worldToProjectionMatrix)
+void Transform::update()
 {
-	this->worldToProjectionMatrix = worldToProjectionMatrix;
-
 	translationMatrix = glm::translate(position);
 	rotationMatrix = glm::rotate(xRotationAngle, vec3(1,0,0)) * glm::rotate(yRotationAngle, vec3(0,1,0)) * glm::rotate(zRotationAngle, vec3(0,0,1));
 	scaleMatrix = glm::scale(scale);
 	modelToWorldMatrix = translationMatrix;
-	fullTransformMatrix = worldToProjectionMatrix * modelToWorldMatrix;
+	fullTransformMatrix = SceneManager::getInstance().WORLD_TO_PROJECTION* modelToWorldMatrix;
 }
 
 void Transform::rotateX(float angle)

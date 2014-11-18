@@ -10,8 +10,9 @@ using glm::mat4;
 
 using std::cout;
 using std::endl;
+#include "ExportHeader.h"
 
-class __declspec(dllexport) ConsolePrinter
+class DECL_DLL_EXPORT ConsolePrinter
 {
 private:
 	ConsolePrinter(){}

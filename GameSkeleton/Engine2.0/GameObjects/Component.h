@@ -1,7 +1,8 @@
 #pragma once
 #include "Entity.h"
+#include "ExportHeader.h"
 
-class __declspec(dllexport) Component
+class DECL_DLL_EXPORT Component
 {
 protected:
 	friend class Entity;

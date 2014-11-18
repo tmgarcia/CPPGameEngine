@@ -2,7 +2,9 @@
 
 #include "Nodes\DebugNode.h"
 using glm::mat4;
-class __declspec(dllexport)Path
+#include "ExportHeader.h"
+
+class DECL_DLL_EXPORT Path
 {
 public:
 	vec3 getNextPathPosition();

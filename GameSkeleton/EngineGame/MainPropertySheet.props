@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros">
+    <LibDir>$(SolutionDir)Temp\$(Configuration)\Lib\$(ProjectName)\</LibDir>
+    <BinDir>$(SolutionDir)Temp\$(Configuration)\Bin\$(ProjectName)\</BinDir>
+    <TempDir>$(SolutionDir)Temp\$(Configuration)\</TempDir>
+    <GameDir>$(SolutionDir)Temp\$(Configuration)\Game\</GameDir>
+    <IntermediateDir>$(SolutionDir)Temp\$(Configuration)\Intermediates\$(ProjectName)\</IntermediateDir>
+    <MiddlewareDir>$(SolutionDir)..\External Dependencies\</MiddlewareDir>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OutDir>$(BinDir)</OutDir>
+    <IntDir>$(IntermediateDir)</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <PostBuildEvent>
+      <Command>if not exist "$(LibDir)" mkdir "$(LibDir)"
+if exist "$(BinDir)*.lib" move /y "$(BinDir)*.lib" "$(LibDir)"
+if exist "$(BinDir)*.exp" move /y "$(BinDir)*.exp" "$(LibDir)"
+xcopy /y "$(MiddlewareDir)glew\bin\*.dll" "$(GameDir)"
+xcopy /y "$(MiddlewareDir)Qt\bin\*.dll" "$(GameDir)"
+xcopy /y "$(MiddlewareDir)NeumontTools\bin\*.dll" "$(GameDir)"
+xcopy /y "$(MiddlewareDir)*.dll" "$(GameDir)"
+if exist "$(BinDir)Engine.dll" xcopy /y "$(BinDir)Engine.dll" "$(GameDir)"
+if exist "$(GameDir)EngineGame.exe" xcopy /y "$(GameDir)EngineGame.exe" "$(TempDir)Bin\EngineGame\"
+if exist "$(GameDir)EngineGame.pdb" xcopy /y "$(GameDir)EngineGame.pdb" "$(TempDir)Bin\EngineGame\"
+if exist "$(GameDir)EngineGame.ilk" xcopy /y "$(GameDir)EngineGame.ilk" "$(TempDir)Bin\EngineGame\"
+if not exist "$(GameDir)Assets\" mkdir "$(GameDir)Assets\"
+xcopy /y /E "$(SolutionDir)EngineGame\Assets\*.*" "$(GameDir)Assets"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <BuildMacro Include="LibDir">
+      <Value>$(LibDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="BinDir">
+      <Value>$(BinDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="TempDir">
+      <Value>$(TempDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GameDir">
+      <Value>$(GameDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="IntermediateDir">
+      <Value>$(IntermediateDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="MiddlewareDir">
+      <Value>$(MiddlewareDir)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>

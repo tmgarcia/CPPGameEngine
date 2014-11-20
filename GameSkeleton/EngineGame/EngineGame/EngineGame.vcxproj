@@ -62,12 +62,11 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)..\External Dependencies\Qt\lib;$(SolutionDir)..\External Dependencies\NeumontTools\lib;$(SolutionDir)..\External Dependencies\glew\lib;$(SolutionDir)..\External Dependencies\libnoise\bin;$(SolutionDir)..\Engine2.0\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\External Dependencies\Qt\lib;$(SolutionDir)..\External Dependencies\NeumontTools\lib;$(SolutionDir)..\External Dependencies\glew\lib;$(SolutionDir)..\External Dependencies\libnoise\bin;$(TempDir)Lib\Engine\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>Engine.lib;opengl32.lib;glew32.lib;glew32d.lib;NeumontTools.lib;QtCored4.lib;QtGuid4.lib;QtOpenGLd4.lib;libnoise.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>copy "$(SolutionDir)..\Engine2.0\$(Configuration)\Engine.dll" "$(OutDir)"
-copy "$(SolutionDir)..\Engine2.0\Renderer\GeneralGLWindow_moc.cpp" "$(ProjectDir)"
+      <Command>copy "$(SolutionDir)..\Engine2.0\Renderer\GeneralGLWindow_moc.cpp" "$(ProjectDir)"
 copy "$(SolutionDir)..\Engine2.0\DebugTools\DebugShapes_moc.cpp" "$(ProjectDir)"
 copy "$(SolutionDir)..\Engine2.0\DebugTools\DebugSlider_moc.cpp" "$(ProjectDir)"
 copy "$(SolutionDir)..\Engine2.0\DebugTools\DebugMenu\DebugMenu_moc.cpp" "$(ProjectDir)"

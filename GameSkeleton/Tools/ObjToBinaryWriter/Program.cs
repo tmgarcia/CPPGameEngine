@@ -168,8 +168,6 @@ namespace ObjToBinaryWriter
     }
     class ObjToBinaryConverter
     {
-        //string inFilename = "metronome.obj";
-        //string outFilename = "ObjToBinaryResult.bin";
         static List<Vertex> vertices = new List<Vertex>();
         static List<ushort> indices = new List<ushort>();
 
@@ -179,15 +177,15 @@ namespace ObjToBinaryWriter
 
         static void Main(string[] args)
         {
-            //Console.WriteLine("Converting");
-            //ObjToBinaryConverter converter = new ObjToBinaryConverter();
-            //converter.readInObj(args[0]);
-            //converter.WriteToBinary(args[1]);
-
             Console.WriteLine("Converting");
             ObjToBinaryConverter converter = new ObjToBinaryConverter();
-            converter.readInObj("../../../../Resources/Models/repeatFaceUnitCube.obj");
-            converter.WriteToBinary("repeatFaceUnitCube.bin");
+            converter.readInObj(args[0]);
+            converter.WriteToBinary(args[1]);
+
+            //Console.WriteLine("Converting");
+            //ObjToBinaryConverter converter = new ObjToBinaryConverter();
+            //converter.readInObj("../../../../Resources/Models/repeatFaceUnitCube.obj");
+            //converter.WriteToBinary("repeatFaceUnitCube.bin");
 
             Console.WriteLine("Done");
         }
@@ -196,28 +194,31 @@ namespace ObjToBinaryWriter
         {
             StreamReader input = new StreamReader(inFileName);
 
-            input.ReadLine();
-            input.ReadLine();
+            //input.ReadLine();
+            //input.ReadLine();
             //input.ReadLine();
             string line;
             while ((line = input.ReadLine()) != null)
             {
                 //Console.WriteLine(line);
-                string[] lineParts = line.Split();
-                switch (lineParts[0])
+                if (!line.Contains('#') && !String.IsNullOrWhiteSpace(line))
                 {
-                    case "v":
-                        addPosition(lineParts);
-                        break;
-                    case "vt":
-                        addTextureCoord(lineParts);
-                        break;
-                    case "vn":
-                        addNormal(lineParts);
-                        break;
-                    case "f":
-                        MakeIndices(lineParts);
-                        break;
+                    string[] lineParts = line.Split();
+                    switch (lineParts[0])
+                    {
+                        case "v":
+                            addPosition(lineParts);
+                            break;
+                        case "vt":
+                            addTextureCoord(lineParts);
+                            break;
+                        case "vn":
+                            addNormal(lineParts);
+                            break;
+                        case "f":
+                            MakeIndices(lineParts);
+                            break;
+                    }
                 }
             }
             createTangents();

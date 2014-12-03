@@ -79,6 +79,10 @@ copy "$(SolutionDir)..\Engine2.0\DebugTools\DebugMenu\ComboBox_moc.cpp" "$(Proje
 copy "$(SolutionDir)..\Engine2.0\GameObjects\Components\ClickBoxComponent_moc.cpp" "$(ProjectDir)"
 copy "$(SolutionDir)..\Tools\ObjToBinaryWriter\bin\Debug\ObjToBinaryWriter.exe" "$(ProjectDir)"</Command>
     </PreBuildEvent>
+    <CustomBuildStep>
+      <Command>call "$(TempDir)Bin\AssetBuilder\AssetBuilder.exe"</Command>
+      <Outputs>string;%(Outputs)</Outputs>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>

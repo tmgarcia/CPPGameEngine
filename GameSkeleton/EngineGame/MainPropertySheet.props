@@ -8,6 +8,9 @@
     <GameDir>$(SolutionDir)Temp\$(Configuration)\Game\</GameDir>
     <IntermediateDir>$(SolutionDir)Temp\$(Configuration)\Intermediates\$(ProjectName)\</IntermediateDir>
     <MiddlewareDir>$(SolutionDir)..\External Dependencies\</MiddlewareDir>
+    <ObjToBinDir>$(SolutionDir)..\Tools\ObjToBinaryWriter\bin\Debug\</ObjToBinDir>
+    <WorkingAssetsDir>$(SolutionDir)Assets\</WorkingAssetsDir>
+    <OutAssetsDir>$(SolutionDir)Temp\$(Configuration)\Game\Assets\</OutAssetsDir>
   </PropertyGroup>
   <PropertyGroup>
     <OutDir>$(BinDir)</OutDir>
@@ -27,28 +30,50 @@ if exist "$(LibDir)Engine.lib" xcopy /y "$(LibDir)Engine.lib" "$(GameDir)"
 if exist "$(GameDir)EngineGame.exe" xcopy /y "$(GameDir)EngineGame.exe" "$(TempDir)Bin\EngineGame\"
 if exist "$(GameDir)EngineGame.pdb" xcopy /y "$(GameDir)EngineGame.pdb" "$(TempDir)Bin\EngineGame\"
 if exist "$(GameDir)EngineGame.ilk" xcopy /y "$(GameDir)EngineGame.ilk" "$(TempDir)Bin\EngineGame\"
-if not exist "$(GameDir)Assets\" mkdir "$(GameDir)Assets\"
-xcopy /y /E "$(SolutionDir)EngineGame\Assets\*.*" "$(GameDir)Assets"</Command>
+if not exist "$(GameDir)Assets\" mkdir "$(GameDir)Assets\"</Command>
     </PostBuildEvent>
+    <Link>
+      <AdditionalLibraryDirectories>$(MiddlewareDir)Qt\lib;$(MiddlewareDir)NeumontTools\lib;$(MiddlewareDir)glew\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;glew32d.lib;NeumontTools.lib;QtCored4.lib;QtGuid4.lib;QtOpenGLd4.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(MiddlewareDir)NeumontTools\include;$(MiddlewareDir)glew\include;$(MiddlewareDir)glm;$(MiddlewareDir)Qt\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
     <BuildMacro Include="LibDir">
       <Value>$(LibDir)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
     </BuildMacro>
     <BuildMacro Include="BinDir">
       <Value>$(BinDir)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
     </BuildMacro>
     <BuildMacro Include="TempDir">
       <Value>$(TempDir)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
     </BuildMacro>
     <BuildMacro Include="GameDir">
       <Value>$(GameDir)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
     </BuildMacro>
     <BuildMacro Include="IntermediateDir">
       <Value>$(IntermediateDir)</Value>
     </BuildMacro>
     <BuildMacro Include="MiddlewareDir">
       <Value>$(MiddlewareDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="ObjToBinDir">
+      <Value>$(ObjToBinDir)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+    <BuildMacro Include="WorkingAssetsDir">
+      <Value>$(WorkingAssetsDir)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+    <BuildMacro Include="OutAssetsDir">
+      <Value>$(OutAssetsDir)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
     </BuildMacro>
   </ItemGroup>
 </Project>

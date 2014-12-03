@@ -288,7 +288,7 @@ void GeneralGLWindow::loadTextureFromFile(const char* filename, GLenum target)
 {
 	int width, height;
 	QImage image = QImage(filename);
-	image = QGLWidget::convertToGLFormat(image);
+	//image = QGLWidget::convertToGLFormat(image);
 	width = image.width();
 	height = image.height();
 	uchar* imagePixels = image.bits();

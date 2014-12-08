@@ -1,9 +1,27 @@
 #include "CellStateComponent.h"
 #include "Components\RendererComponent.h"
+#include "Components\HoloRenderercomponent.h"
+#include "GameObjects\Entity.h"
 #include "ConsolePrinter.h"
 void CellStateComponent::update()
 {
-
+	if(!cleared)
+	{
+		this->coveredEntity->update();
+	}
+	else
+	{
+		this->clearedEntity->update();
+	}
+	if(flagged)
+	{
+		this->flaggedEntity->update();
+	}
+	//this->clearedEntity->update();
+	if((!containsMine && numAdjacentMines > 0) || containsMine)
+	{
+		this->clearedEntity->update();
+	}
 }
 void CellStateComponent::cleanup()
 {
@@ -26,12 +44,14 @@ void CellStateComponent::toggleFlag()
 		if(flagged)
 		{
 			flagged = false;
-			this->Component::parent->getComponent<RendererComponent>()->renderable->material->diffuseMap = coveredTexture;
+			this->flaggedEntity->getComponent<HoloRenderercomponent>()->renderable->visible = false;
+			//this->Component::parent->getComponent<RendererComponent>()->renderable->material->diffuseMap = coveredTexture;
 		}
 		else
 		{
 			flagged = true;
-			this->Component::parent->getComponent<RendererComponent>()->renderable->material->diffuseMap = flaggedTexture;
+			this->flaggedEntity->getComponent<HoloRenderercomponent>()->renderable->visible = true;
+			//this->Component::parent->getComponent<RendererComponent>()->renderable->material->diffuseMap = flaggedTexture;
 		}
 	}
 }
@@ -40,7 +60,13 @@ void CellStateComponent::clear()
 	if(!flagged && !cleared)
 	{
 		cleared = true;
-		this->Component::parent->getComponent<RendererComponent>()->renderable->material->diffuseMap = clearedTexture;
+		this->coveredEntity->getComponent<HoloRenderercomponent>()->renderable->visible = false;
+		//this->clearedEntity->getComponent<HoloRenderercomponent>()->renderable->visible = true;
+		if((!containsMine && numAdjacentMines > 0) || containsMine)
+		{
+			this->clearedEntity->getComponent<HoloRenderercomponent>()->renderable->visible = true;
+		}
+		this->Component::parent->getComponent<RendererComponent>()->renderable->visible = true;
 		emit CellCleared(this);
 	}
 }

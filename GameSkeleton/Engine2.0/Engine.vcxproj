@@ -96,7 +96,9 @@
     <ClCompile Include="AStarDebugToolbar.cpp" />
     <ClCompile Include="GameObjects\Components\ClickBoxComponent.cpp" />
     <ClCompile Include="GameObjects\Components\ClickBoxComponent_moc.cpp" />
+    <ClCompile Include="GameObjects\Components\HoloRenderercomponent.cpp" />
     <ClCompile Include="Janitor.cpp" />
+    <ClCompile Include="Assets\Presets\Materials\OffsetTextureMat.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Time\Clock.cpp" />
     <ClCompile Include="Time\GameClock.cpp" />
@@ -148,7 +150,9 @@
     <ClInclude Include="AStarData\Nodes\PathingNode.h" />
     <ClInclude Include="AStarDebugToolbar.h" />
     <ClInclude Include="GameObjects\Components\ClickBoxComponent.h" />
+    <ClInclude Include="GameObjects\Components\HoloRenderercomponent.h" />
     <ClInclude Include="Janitor.h" />
+    <ClInclude Include="Assets\Presets\Materials\OffsetTextureMat.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Time\Clock.h" />
     <ClInclude Include="Time\GameClock.h" />

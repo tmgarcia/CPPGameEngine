@@ -3,8 +3,10 @@
 #include "Assets\Material.h"
 #include "Assets\Presets\Materials\PassThroughMat.h"
 #include "Assets\Presets\Materials\LightingAndTextureMat.h"
+#include "Assets\Presets\Materials\OffsetTextureMat.h"
 #include "GameObjects\Entity.h"
 #include "GameObjects\Components\RendererComponent.h"
+#include "GameObjects\Components\HoloRenderercomponent.h"
 #include "GameObjects\Components\PhysicsComponent.h"
 #include "GameObjects\Components\ClickBoxComponent.h"
 #include "CellStateComponent.h"
@@ -19,7 +21,9 @@ bool aDown=false;
 bool dDown=false;
 bool rDown=false;
 bool fDown=false;
-void MainWindow::setup()
+
+//Entity* testEntity;
+void MainWindow::SetupGame()
 {
 	ConsolePrinter::getInstance();
 
@@ -38,23 +42,28 @@ void MainWindow::setup()
 	SceneManager::getInstance().LIGHT_SPECULAREXPONENT = 10;
 	SceneManager::getInstance().update();
 
-	/*Geometry* cube = Geometry::Cube();
-	Material* mat = new PassThroughMat();
-	RendererComponent* cubeRender = new RendererComponent();
-	PhysicsComponent* physics = new PhysicsComponent();
-	physics->damping = 0.001f;
-	ControllerComponent* control = new ControllerComponent();
-
-	cubeEntity = new Entity();
-	cubeEntity->update();
-
-	cubeEntity->addComponent(physics);
-	cubeEntity->addComponent(control);
-	cubeEntity->addComponent(cubeRender);
-
-	cubeRender->setData(cube, true, true, PRIORITY_1, mat);*/
-
 	grid.setupGrid();
+
+
+	//Geometry* cube = new Geometry("Assets/Models/CellCover.bin");
+	////RendererComponent* cubeRender = new RendererComponent();
+	//HoloRenderercomponent* holoRenderer = new HoloRenderercomponent();
+	//ControllerComponent* control = new ControllerComponent();
+
+	//testEntity = new Entity();
+	//testEntity->transform.position = vec3(0,0.501f,0);
+	//testEntity->update();
+
+	//testEntity->addComponent(control);
+	//testEntity->addComponent(holoRenderer);
+	////holoRenderer->useAlpha = false;
+	////holoRenderer->holoAlpha = false;
+	//holoRenderer->holoDiffuse = false;
+	//holoRenderer->holoIncrement = 0.001f;
+	//holoRenderer->diffuseMap = GeneralGLWindow::getInstance().addTexture("Assets/Textures/scrollingCodeDiffuse.png");
+	//holoRenderer->alphaMap = GeneralGLWindow::getInstance().addTexture("Assets/Textures/scrollingCodeAlpha.png");
+	//holoRenderer->setData(cube, true, true, PRIORITY_1);
+	
 
 	//dMenu->addFloatSlider("tab", &(SceneManager::getInstance().LIGHT_SPECULAREXPONENT), 0, 5, "Spec exp");
 	//dMenu->addFloatSlider("tab", &(SceneManager::getInstance().LIGHT_DIFFUSIONINTENSITY), 0, 5, "diffuse");
@@ -70,6 +79,9 @@ void MainWindow::update()
 	KeyInput::getInstance().update();
 
 	SceneManager::getInstance().update();
+
+	//mat->currentOffset.x += 0.01f;
+	//testEntity->update();
 
 	//cubeEntity->update();
 	keyMove();
@@ -237,3 +249,5 @@ void MainWindow::mouseMoveReaction(QMouseEvent* e)
 		update();
 	}
 }
+
+

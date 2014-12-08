@@ -10,12 +10,6 @@ class DECL_DLL_EXPORT LightingAndTextureMat : public Material
 public:
 	static ShaderInfo* LightTextureShader;
 	LightingAndTextureMat();
-	/*TextureInfo* diffuseMap;
-	TextureInfo* alphaMap;
-	TextureInfo* normalMap;
-	TextureInfo* ambientOcclusionMap;
-	TextureInfo* cubeMap;
-	TextureInfo* shadowMap;*/
 	void addDiffuseMap(const char* fileName);
 	void addAlphaMap(const char* fileName);
 	void addNormalMap(const char* fileName);

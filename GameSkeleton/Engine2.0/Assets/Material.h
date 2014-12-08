@@ -32,6 +32,6 @@ public:
 	}
 
 	void bindAllTextures();
-	void sendDownShaderParameters();
+	virtual void sendDownShaderParameters();
 };
 

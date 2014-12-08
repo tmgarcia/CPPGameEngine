@@ -10,7 +10,6 @@ ClickBoxComponent::ClickBoxComponent()
 
 void ClickBoxComponent::mouseClickReaction(QMouseEvent* e)
 {
-	
 	int xPX = e->x();
 	int yPX = e->y();
 	int windowWidth = SceneManager::getInstance().WINDOW_WIDTH;

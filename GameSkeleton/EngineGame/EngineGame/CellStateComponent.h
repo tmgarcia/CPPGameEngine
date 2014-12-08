@@ -4,6 +4,7 @@
 #include "GeneralGLWindow.h"
 #include <Qt\qobject.h>
 
+class Entity;
 class CellStateComponent : public QObject, public Component
 {
 	Q_OBJECT
@@ -19,6 +20,9 @@ public:
 	TextureInfo* coveredTexture;
 	TextureInfo* clearedTexture;
 	TextureInfo* flaggedTexture;
+	Entity* flaggedEntity;
+	Entity* coveredEntity;
+	Entity* clearedEntity;
 
 	CellStateComponent()
 	{

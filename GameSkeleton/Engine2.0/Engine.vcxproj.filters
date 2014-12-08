@@ -58,6 +58,8 @@
     <ClCompile Include="GameObjects\Components\ClickBoxComponent.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="GameObjects\Components\ClickBoxComponent_moc.cpp" />
+    <ClCompile Include="Assets\Presets\Materials\OffsetTextureMat.cpp" />
+    <ClCompile Include="GameObjects\Components\HoloRenderercomponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h" />
@@ -123,5 +125,7 @@
     <ClInclude Include="Janitor.h" />
     <ClInclude Include="GameObjects\Components\ClickBoxComponent.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="Assets\Presets\Materials\OffsetTextureMat.h" />
+    <ClInclude Include="GameObjects\Components\HoloRenderercomponent.h" />
   </ItemGroup>
 </Project>

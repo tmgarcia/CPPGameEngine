@@ -13,4 +13,3 @@ public:
         return lhs.textureID < rhs.textureID ;
     }
 };
- Q_DECLARE_METATYPE(TextureInfo)
